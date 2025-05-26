@@ -17,16 +17,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import type { News, NewsCategory } from "@/types/news";
 
-interface News {
-  id: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  category: string;
-  image_url: string | null;
-  created_at: string;
-}
-
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [recentNews, setRecentNews] = useState<News[]>([]);
