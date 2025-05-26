@@ -11,6 +11,9 @@ import Actualites from "./pages/Actualites";
 import ActualiteDetail from "./pages/ActualiteDetail";
 import ProjetDeveloppement from "./pages/ProjetDeveloppement";
 import Historique from "./pages/Historique";
+import Organisation from "./pages/Organisation";
+import LMDGuide from "./pages/LMDGuide";
+import EspaceEnseignants from "./pages/EspaceEnseignants";
 import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminActualites from "./pages/AdminActualites";
@@ -32,6 +35,9 @@ const App = () => (
           <Route path="/actualites/:id" element={<ActualiteDetail />} />
           <Route path="/projet-developpement" element={<ProjetDeveloppement />} />
           <Route path="/historique" element={<Historique />} />
+          <Route path="/organisation" element={<Organisation />} />
+          <Route path="/lmd-guide" element={<LMDGuide />} />
+          <Route path="/espace-enseignants" element={<EspaceEnseignants />} />
           <Route path="/admin" element={<Admin />}>
             <Route index element={<AdminDashboard />} />
             <Route path="actualites" element={<AdminActualites />} />
