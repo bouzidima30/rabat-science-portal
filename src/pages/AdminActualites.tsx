@@ -1,28 +1,14 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Search, Eye } from "lucide-react";
+import { Plus, Edit, Trash2, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import NewsForm from "@/components/NewsForm";
-
-interface News {
-  id: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  category: string;
-  image_url: string | null;
-  document_url: string | null;
-  document_name: string | null;
-  published: boolean;
-  created_at: string;
-  author_id: string;
-}
+import type { News } from "@/types/news";
 
 const AdminActualites = () => {
   const [news, setNews] = useState<News[]>([]);

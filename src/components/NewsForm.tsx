@@ -10,6 +10,7 @@ import { Upload, File, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import type { NewsCategory } from "@/types/news";
 
 interface NewsFormProps {
   news?: any;
@@ -22,7 +23,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
     title: "",
     content: "",
     excerpt: "",
-    category: "",
+    category: "" as NewsCategory,
     published: false,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -34,12 +35,12 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
   const categoryOptions = [
-    { value: "reunion_travail", label: "Réunion de travail" },
-    { value: "nouvelles_informations", label: "Nouvelles informations" },
-    { value: "activites_parauniversitaire", label: "Activités parauniversitaire" },
-    { value: "avis_etudiants", label: "Avis étudiants" },
-    { value: "avis_enseignants", label: "Avis enseignants" },
-    { value: "evenements_scientifique", label: "Événements scientifique" },
+    { value: "reunion_travail" as NewsCategory, label: "Réunion de travail" },
+    { value: "nouvelles_informations" as NewsCategory, label: "Nouvelles informations" },
+    { value: "activites_parauniversitaire" as NewsCategory, label: "Activités parauniversitaire" },
+    { value: "avis_etudiants" as NewsCategory, label: "Avis étudiants" },
+    { value: "avis_enseignants" as NewsCategory, label: "Avis enseignants" },
+    { value: "evenements_scientifique" as NewsCategory, label: "Événements scientifique" },
   ];
 
   useEffect(() => {
@@ -182,7 +183,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
           <Label htmlFor="category">Catégorie *</Label>
           <Select
             value={formData.category}
-            onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+            onValueChange={(value: NewsCategory) => setFormData(prev => ({ ...prev, category: value }))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Sélectionner une catégorie" />

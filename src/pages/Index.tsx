@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import type { News, NewsCategory } from "@/types/news";
 
 interface News {
   id: string;
@@ -30,7 +30,7 @@ interface News {
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [recentNews, setRecentNews] = useState<News[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<NewsCategory | null>(null);
 
   const carouselImages = [
     {
@@ -51,12 +51,12 @@ const Index = () => {
   ];
 
   const categoryOptions = [
-    { value: "reunion_travail", label: "Réunion de travail" },
-    { value: "nouvelles_informations", label: "Nouvelles informations" },
-    { value: "activites_parauniversitaire", label: "Activités parauniversitaire" },
-    { value: "avis_etudiants", label: "Avis étudiants" },
-    { value: "avis_enseignants", label: "Avis enseignants" },
-    { value: "evenements_scientifique", label: "Événements scientifique" },
+    { value: "reunion_travail" as NewsCategory, label: "Réunion de travail" },
+    { value: "nouvelles_informations" as NewsCategory, label: "Nouvelles informations" },
+    { value: "activites_parauniversitaire" as NewsCategory, label: "Activités parauniversitaire" },
+    { value: "avis_etudiants" as NewsCategory, label: "Avis étudiants" },
+    { value: "avis_enseignants" as NewsCategory, label: "Avis enseignants" },
+    { value: "evenements_scientifique" as NewsCategory, label: "Événements scientifique" },
   ];
 
   const fsrStats = [
