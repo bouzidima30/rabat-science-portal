@@ -1,11 +1,14 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -13,15 +16,43 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempt:", { email, password });
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        toast({
+          title: "Connexion réussie",
+          description: "Vous êtes maintenant connecté.",
+        });
+        navigate("/");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Erreur de connexion",
+        description: error.message || "Une erreur est survenue.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <TopBar />
       <Navbar />
       
       <div className="flex items-center justify-center py-12 px-4">
@@ -85,30 +116,12 @@ const Login = () => {
                 </div>
               </div>
               
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    className="rounded border-gray-300 text-[#006be5] focus:ring-[#006be5]"
-                  />
-                  <Label htmlFor="remember" className="text-sm text-gray-600 dark:text-gray-300">
-                    Se souvenir de moi
-                  </Label>
-                </div>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-[#006be5] hover:underline"
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-              
               <Button
                 type="submit"
                 className="w-full bg-[#006be5] hover:bg-[#0056b3] text-white"
+                disabled={loading}
               >
-                Se connecter
+                {loading ? "Connexion..." : "Se connecter"}
               </Button>
             </form>
             

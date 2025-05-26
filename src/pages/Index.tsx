@@ -12,11 +12,25 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Calendar, Users, BookOpen, Trophy, ArrowRight, GraduationCap, Microscope, Globe } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+interface News {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  category: string;
+  image_url: string | null;
+  created_at: string;
+}
+
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [recentNews, setRecentNews] = useState<News[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const carouselImages = [
     {
@@ -36,28 +50,13 @@ const Index = () => {
     }
   ];
 
-  const recentNews = [
-    {
-      id: 1,
-      title: "Nouvelle formation en Intelligence Artificielle",
-      excerpt: "Lancement d'un nouveau Master en IA pour répondre aux besoins du marché",
-      date: "15 Mars 2024",
-      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b"
-    },
-    {
-      id: 2,
-      title: "Partenariat international avec l'Université de Sorbonne",
-      excerpt: "Signature d'un accord de coopération scientifique",
-      date: "10 Mars 2024",
-      image: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3"
-    },
-    {
-      id: 3,
-      title: "Journée portes ouvertes 2024",
-      excerpt: "Découvrez nos formations et visitez nos laboratoires",
-      date: "05 Mars 2024",
-      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027"
-    }
+  const categoryOptions = [
+    { value: "reunion_travail", label: "Réunion de travail" },
+    { value: "nouvelles_informations", label: "Nouvelles informations" },
+    { value: "activites_parauniversitaire", label: "Activités parauniversitaire" },
+    { value: "avis_etudiants", label: "Avis étudiants" },
+    { value: "avis_enseignants", label: "Avis enseignants" },
+    { value: "evenements_scientifique", label: "Événements scientifique" },
   ];
 
   const fsrStats = [
@@ -119,8 +118,41 @@ const Index = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    fetchRecentNews();
+  }, [selectedCategory]);
+
+  const fetchRecentNews = async () => {
+    try {
+      let query = supabase
+        .from('news')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (selectedCategory) {
+        query = query.eq('category', selectedCategory);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      setRecentNews(data || []);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+    }
+  };
+
+  const formatContent = (content: string) => {
+    return content
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
+      <TopBar />
       <Navbar />
       
       {/* Hero Carousel Section */}
@@ -169,35 +201,71 @@ const Index = () => {
             Restez informés des dernières nouvelles de la faculté
           </p>
         </div>
+
+        {/* Category Filter */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <Button
+            variant={selectedCategory === null ? "default" : "outline"}
+            onClick={() => setSelectedCategory(null)}
+            className={selectedCategory === null ? "bg-[#006be5] hover:bg-[#0056b3]" : ""}
+            size="sm"
+          >
+            Toutes
+          </Button>
+          {categoryOptions.map((category) => (
+            <Button
+              key={category.value}
+              variant={selectedCategory === category.value ? "default" : "outline"}
+              onClick={() => setSelectedCategory(category.value)}
+              className={selectedCategory === category.value ? "bg-[#006be5] hover:bg-[#0056b3]" : ""}
+              size="sm"
+            >
+              {category.label}
+            </Button>
+          ))}
+        </div>
         
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {recentNews.map((news) => (
             <Card key={news.id} className="hover-scale cursor-pointer">
-              <div className="aspect-video overflow-hidden rounded-t-lg">
-                <img 
-                  src={news.image} 
-                  alt={news.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              {news.image_url && (
+                <div className="aspect-video overflow-hidden rounded-t-lg">
+                  <img 
+                    src={news.image_url} 
+                    alt={news.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <CardHeader>
                 <Badge variant="secondary" className="w-fit mb-2">
-                  {news.date}
+                  {new Date(news.created_at).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
                 </Badge>
                 <CardTitle className="text-lg">{news.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 dark:text-gray-300">{news.excerpt}</p>
+                <div 
+                  className="prose prose-sm max-w-none text-gray-600 dark:text-gray-300"
+                  dangerouslySetInnerHTML={{ 
+                    __html: formatContent(news.excerpt || news.content.substring(0, 150) + "...") 
+                  }}
+                />
               </CardContent>
             </Card>
           ))}
         </div>
         
         <div className="text-center">
-          <Button variant="outline" className="border-[#006be5] text-[#006be5] hover:bg-[#006be5] hover:text-white">
-            Toutes les actualités
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/actualites">
+            <Button variant="outline" className="border-[#006be5] text-[#006be5] hover:bg-[#006be5] hover:text-white">
+              Toutes les actualités
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </section>
 

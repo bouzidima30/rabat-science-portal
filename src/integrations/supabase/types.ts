@@ -9,7 +9,86 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      news: {
+        Row: {
+          author_id: string | null
+          category: Database["public"]["Enums"]["news_category"]
+          content: string
+          created_at: string
+          document_name: string | null
+          document_url: string | null
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          published: boolean | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          category: Database["public"]["Enums"]["news_category"]
+          content: string
+          created_at?: string
+          document_name?: string | null
+          document_url?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          published?: boolean | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          category?: Database["public"]["Enums"]["news_category"]
+          content?: string
+          created_at?: string
+          document_name?: string | null
+          document_url?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          published?: boolean | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          role: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +97,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      news_category:
+        | "reunion_travail"
+        | "nouvelles_informations"
+        | "activites_parauniversitaire"
+        | "avis_etudiants"
+        | "avis_enseignants"
+        | "evenements_scientifique"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +218,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      news_category: [
+        "reunion_travail",
+        "nouvelles_informations",
+        "activites_parauniversitaire",
+        "avis_etudiants",
+        "avis_enseignants",
+        "evenements_scientifique",
+      ],
+    },
   },
 } as const

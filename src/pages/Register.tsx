@@ -1,12 +1,14 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -14,19 +16,58 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
-    phone: "",
-    userType: "",
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log("Registration attempt:", formData);
+    
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        title: "Erreur",
+        description: "Les mots de passe ne correspondent pas.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            full_name: formData.fullName,
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        toast({
+          title: "Inscription réussie",
+          description: "Votre compte a été créé avec succès.",
+        });
+        navigate("/");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Erreur d'inscription",
+        description: error.message || "Une erreur est survenue.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -35,6 +76,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <TopBar />
       <Navbar />
       
       <div className="flex items-center justify-center py-12 px-4">
@@ -57,37 +99,19 @@ const Register = () => {
           
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">Prénom</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="firstName"
-                      type="text"
-                      placeholder="Prénom"
-                      value={formData.firstName}
-                      onChange={(e) => handleInputChange("firstName", e.target.value)}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Nom</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="lastName"
-                      type="text"
-                      placeholder="Nom"
-                      value={formData.lastName}
-                      onChange={(e) => handleInputChange("lastName", e.target.value)}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Nom complet</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="Votre nom complet"
+                    value={formData.fullName}
+                    onChange={(e) => handleInputChange("fullName", e.target.value)}
+                    className="pl-10"
+                    required
+                  />
                 </div>
               </div>
               
@@ -105,38 +129,6 @@ const Register = () => {
                     required
                   />
                 </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="phone">Téléphone</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+212 6 XX XX XX XX"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="userType">Type d'utilisateur</Label>
-                <Select onValueChange={(value) => handleInputChange("userType", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez votre statut" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="student">Étudiant</SelectItem>
-                    <SelectItem value="teacher">Enseignant</SelectItem>
-                    <SelectItem value="researcher">Chercheur</SelectItem>
-                    <SelectItem value="admin">Personnel administratif</SelectItem>
-                    <SelectItem value="external">Utilisateur externe</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
               
               <div className="space-y-2">
@@ -189,26 +181,12 @@ const Register = () => {
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  className="rounded border-gray-300 text-[#006be5] focus:ring-[#006be5]"
-                  required
-                />
-                <Label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-300">
-                  J'accepte les{" "}
-                  <Link to="/terms" className="text-[#006be5] hover:underline">
-                    conditions d'utilisation
-                  </Link>
-                </Label>
-              </div>
-              
               <Button
                 type="submit"
                 className="w-full bg-[#006be5] hover:bg-[#0056b3] text-white"
+                disabled={loading}
               >
-                Créer un compte
+                {loading ? "Création..." : "Créer un compte"}
               </Button>
             </form>
             

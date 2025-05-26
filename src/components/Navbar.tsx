@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,33 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
-  const [isDark, setIsDark] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const location = useLocation();
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setIsDark(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    if (!isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  };
 
   const menuItems = [
     { name: "Accueil", path: "/", hasDropdown: false },
@@ -89,6 +69,7 @@ const Navbar = () => {
         { name: "Coopération internationale", path: "/cooperation/internationale" },
       ],
     },
+    { name: "Actualités", path: "/actualites", hasDropdown: false },
     { name: "Contact", path: "/contact", hasDropdown: false },
   ];
 
@@ -97,16 +78,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center">
             <img 
               src="/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png" 
               alt="FSR Logo" 
               className="h-12 w-auto"
             />
-            <div className="hidden md:block">
-              <div className="text-[#006be5] font-bold text-lg">FSR</div>
-              <div className="text-sm text-gray-600 dark:text-gray-300">Faculté des Sciences Rabat</div>
-            </div>
           </Link>
 
           {/* Desktop Menu */}
@@ -159,40 +136,15 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Right Section */}
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="text-gray-700 dark:text-gray-200"
-            >
-              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-
-            <div className="hidden md:flex space-x-2">
-              <Link to="/login">
-                <Button variant="outline" className="border-[#006be5] text-[#006be5] hover:bg-[#006be5] hover:text-white">
-                  Connexion
-                </Button>
-              </Link>
-              <Link to="/register">
-                <Button className="bg-[#006be5] hover:bg-[#0056b3] text-white">
-                  Inscription
-                </Button>
-              </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden text-gray-700 dark:text-gray-200"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden text-gray-700 dark:text-gray-200"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
 
         {/* Mobile Menu */}
@@ -239,20 +191,6 @@ const Navbar = () => {
                 )}
               </div>
             ))}
-            <div className="pt-4 border-t border-gray-200 dark:border-gray-700 mt-4">
-              <div className="space-y-2">
-                <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full border-[#006be5] text-[#006be5]">
-                    Connexion
-                  </Button>
-                </Link>
-                <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Button className="w-full bg-[#006be5] hover:bg-[#0056b3] text-white">
-                    Inscription
-                  </Button>
-                </Link>
-              </div>
-            </div>
           </div>
         )}
       </div>
