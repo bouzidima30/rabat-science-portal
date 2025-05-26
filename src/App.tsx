@@ -8,6 +8,9 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Actualites from "./pages/Actualites";
+import ActualiteDetail from "./pages/ActualiteDetail";
+import ProjetDeveloppement from "./pages/ProjetDeveloppement";
+import Historique from "./pages/Historique";
 import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminActualites from "./pages/AdminActualites";
@@ -26,6 +29,9 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/actualites" element={<Actualites />} />
+          <Route path="/actualites/:id" element={<ActualiteDetail />} />
+          <Route path="/projet-developpement" element={<ProjetDeveloppement />} />
+          <Route path="/historique" element={<Historique />} />
           <Route path="/admin" element={<Admin />}>
             <Route index element={<AdminDashboard />} />
             <Route path="actualites" element={<AdminActualites />} />

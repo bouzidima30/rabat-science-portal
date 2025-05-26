@@ -1,10 +1,11 @@
 
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, Download, Calendar, User } from "lucide-react";
+import { Search, Download, Calendar, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
@@ -81,7 +82,6 @@ const Actualites = () => {
   };
 
   const formatContent = (content: string) => {
-    // Simple Markdown-like formatting
     return content
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -156,7 +156,7 @@ const Actualites = () => {
         {/* News Grid */}
         <div className="grid gap-6">
           {filteredNews.map((item) => (
-            <Card key={item.id} className="overflow-hidden">
+            <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <div className="md:flex">
                 {item.image_url && (
                   <div className="md:w-1/3">
@@ -192,18 +192,25 @@ const Actualites = () => {
                       }}
                     />
                     
-                    {item.document_url && (
-                      <div className="flex items-center mt-4">
+                    <div className="flex flex-wrap items-center gap-4">
+                      <Link to={`/actualites/${item.id}`}>
+                        <Button className="bg-[#006be5] hover:bg-[#0056b3]">
+                          Lire la suite
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </Button>
+                      </Link>
+                      
+                      {item.document_url && (
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => window.open(item.document_url!, '_blank')}
                         >
                           <Download className="h-4 w-4 mr-2" />
-                          {item.document_name || "Télécharger le document"}
+                          {item.document_name || "Document"}
                         </Button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </CardContent>
                 </div>
               </div>
