@@ -22,9 +22,9 @@ const AuthGuard = ({ children, requireAdmin = false }: AuthGuardProps) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && (!profile || profile.role !== 'admin')) {
-    return <Navigate to="/" replace />;
-  }
+  //if (requireAdmin && (!profile || profile.role !== 'admin')) {
+  //  return <Navigate to="/" replace />;
+  //}
 
   return <>{children}</>;
 };
