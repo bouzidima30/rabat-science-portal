@@ -14,9 +14,13 @@ import Historique from "./pages/Historique";
 import Organisation from "./pages/Organisation";
 import LMDGuide from "./pages/LMDGuide";
 import EspaceEnseignants from "./pages/EspaceEnseignants";
+import EspaceEtudiants from "./pages/EspaceEtudiants";
 import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminActualites from "./pages/AdminActualites";
+import MotDoyen from "./pages/MotDoyen";
+import FSRChiffres from "./pages/FSRChiffres";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,11 +37,15 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/actualites" element={<Actualites />} />
           <Route path="/actualites/:id" element={<ActualiteDetail />} />
+          <Route path="/mot-doyen" element={<MotDoyen />} />
           <Route path="/projet-developpement" element={<ProjetDeveloppement />} />
           <Route path="/historique" element={<Historique />} />
           <Route path="/organisation" element={<Organisation />} />
+          <Route path="/fsr-chiffres" element={<FSRChiffres />} />
           <Route path="/lmd-guide" element={<LMDGuide />} />
           <Route path="/espace-enseignants" element={<EspaceEnseignants />} />
+          <Route path="/espace-etudiants" element={<EspaceEtudiants />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<Admin />}>
             <Route index element={<AdminDashboard />} />
             <Route path="actualites" element={<AdminActualites />} />
