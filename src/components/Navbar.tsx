@@ -40,10 +40,10 @@ const Navbar = () => {
       hasDropdown: true,
       dropdownItems: [
         { name: "LMD : Mode d'emploi", path: "/lmd-guide" },
-        { name: "Formation licence", path: "/formations/licence" },
-        { name: "Formation master", path: "/formations/master" },
+        { name: "Formation licence", path: "/formation-licence" },
+        { name: "Formation master", path: "/formation-master" },
         { name: "Formation doctorat", path: "/formation-doctorat" },
-        { name: "Formation continue", path: "/formations/continue" },
+        { name: "Formation continue", path: "/formation-continue" },
       ],
     },
     {
@@ -65,8 +65,8 @@ const Navbar = () => {
       path: "/cooperation",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Coopération nationale", path: "/cooperation/nationale" },
-        { name: "Coopération internationale", path: "/cooperation/internationale" },
+        { name: "Coopération nationale", path: "/cooperation-nationale" },
+        { name: "Coopération internationale", path: "/cooperation-internationale" },
       ],
     },
     { name: "Actualités", path: "/actualites", hasDropdown: false },
