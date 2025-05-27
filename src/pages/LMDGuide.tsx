@@ -231,7 +231,7 @@ const LMDGuide = () => {
                 <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                   <li>• Note minimale : 10/20</li>
                   <li>• Compensation possible au sein du semestre</li>
-                  <li>• Rattrapage pour les modules < 10/20</li>
+                  <li>• Rattrapage pour les modules &lt; 10/20</li>
                   <li>• Conservation des notes ≥ 10/20</li>
                 </ul>
               </div>
