@@ -14,12 +14,19 @@ import EspaceEtudiants from "@/pages/EspaceEtudiants";
 import Admin from "@/pages/Admin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminActualites from "@/pages/AdminActualites";
+import AdminFormations from "@/pages/AdminFormations";
+import AdminCooperations from "@/pages/AdminCooperations";
+import AdminFichiers from "@/pages/AdminFichiers";
 import MotDoyen from "@/pages/MotDoyen";
 import FSRChiffres from "@/pages/FSRChiffres";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/NotFound";
 import Representants from "@/pages/Representants";
 import FormationDoctorat from "@/pages/FormationDoctorat";
+import FormationLicence from "@/pages/FormationLicence";
+import FormationMaster from "@/pages/FormationMaster";
+import FormationContinue from "@/pages/FormationContinue";
+import FormationDetail from "@/pages/FormationDetail";
 import EcoleDoctorale from "@/pages/EcoleDoctorale";
 import ValorisationRecherche from "@/pages/ValorisationRecherche";
 import PlateformesTechniques from "@/pages/PlateformesTechniques";
@@ -38,6 +45,9 @@ import CoursTdsTps from "@/pages/CoursTdsTps";
 import ListesExamens from "@/pages/ListesExamens";
 import PlanningEvaluations from "@/pages/PlanningEvaluations";
 import CalendrierEmploiTemps from "@/pages/CalendrierEmploiTemps";
+import CooperationNationale from "@/pages/CooperationNationale";
+import CooperationInternationale from "@/pages/CooperationInternationale";
+import CooperationDetail from "@/pages/CooperationDetail";
 
 const AppRoutes = () => {
   return (
@@ -55,9 +65,16 @@ const AppRoutes = () => {
       <Route path="/representants" element={<Representants />} />
       <Route path="/lmd-guide" element={<LMDGuide />} />
       <Route path="/formation-doctorat" element={<FormationDoctorat />} />
+      <Route path="/formation-licence" element={<FormationLicence />} />
+      <Route path="/formation-master" element={<FormationMaster />} />
+      <Route path="/formation-continue" element={<FormationContinue />} />
+      <Route path="/formation/:id" element={<FormationDetail />} />
       <Route path="/ecole-doctorale" element={<EcoleDoctorale />} />
       <Route path="/valorisation-recherche" element={<ValorisationRecherche />} />
       <Route path="/plateformes-techniques" element={<PlateformesTechniques />} />
+      <Route path="/cooperation-nationale" element={<CooperationNationale />} />
+      <Route path="/cooperation-internationale" element={<CooperationInternationale />} />
+      <Route path="/cooperation/:id" element={<CooperationDetail />} />
       <Route path="/espace-enseignants" element={<EspaceEnseignants />} />
       <Route path="/espace-etudiants" element={<EspaceEtudiants />} />
       <Route path="/procedures-numeriques" element={<ProceduresNumeriques />} />
@@ -79,6 +96,9 @@ const AppRoutes = () => {
       <Route path="/admin" element={<Admin />}>
         <Route index element={<AdminDashboard />} />
         <Route path="actualites" element={<AdminActualites />} />
+        <Route path="formations" element={<AdminFormations />} />
+        <Route path="cooperations" element={<AdminCooperations />} />
+        <Route path="fichiers" element={<AdminFichiers />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

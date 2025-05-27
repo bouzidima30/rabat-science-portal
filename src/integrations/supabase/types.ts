@@ -9,6 +9,143 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cooperations: {
+        Row: {
+          annee_debut: number | null
+          annee_fin: number | null
+          appel_offre: string | null
+          coordinateur: string | null
+          created_at: string
+          description: string | null
+          domaine_recherche: string | null
+          email_coordinateur: string | null
+          id: string
+          image_url: string | null
+          partenaires: string[] | null
+          pays: string[] | null
+          titre: string
+          type_cooperation: string
+          updated_at: string
+        }
+        Insert: {
+          annee_debut?: number | null
+          annee_fin?: number | null
+          appel_offre?: string | null
+          coordinateur?: string | null
+          created_at?: string
+          description?: string | null
+          domaine_recherche?: string | null
+          email_coordinateur?: string | null
+          id?: string
+          image_url?: string | null
+          partenaires?: string[] | null
+          pays?: string[] | null
+          titre: string
+          type_cooperation: string
+          updated_at?: string
+        }
+        Update: {
+          annee_debut?: number | null
+          annee_fin?: number | null
+          appel_offre?: string | null
+          coordinateur?: string | null
+          created_at?: string
+          description?: string | null
+          domaine_recherche?: string | null
+          email_coordinateur?: string | null
+          id?: string
+          image_url?: string | null
+          partenaires?: string[] | null
+          pays?: string[] | null
+          titre?: string
+          type_cooperation?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      file_manager: {
+        Row: {
+          created_at: string
+          file_size: number | null
+          file_url: string | null
+          id: string
+          mime_type: string | null
+          name: string
+          parent_id: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          mime_type?: string | null
+          name: string
+          parent_id?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          mime_type?: string | null
+          name?: string
+          parent_id?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "file_manager_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "file_manager"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      formations: {
+        Row: {
+          created_at: string
+          departement: string | null
+          description: string | null
+          document_name: string | null
+          document_url: string | null
+          id: string
+          image_url: string | null
+          titre: string
+          type_formation: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          departement?: string | null
+          description?: string | null
+          document_name?: string | null
+          document_url?: string | null
+          id?: string
+          image_url?: string | null
+          titre: string
+          type_formation: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          departement?: string | null
+          description?: string | null
+          document_name?: string | null
+          document_url?: string | null
+          id?: string
+          image_url?: string | null
+          titre?: string
+          type_formation?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       news: {
         Row: {
           author_id: string | null

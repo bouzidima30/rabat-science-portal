@@ -11,7 +11,9 @@ import {
   File, 
   Users,
   Menu,
-  X
+  X,
+  BookOpen,
+  HandHeart
 } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 import TopBar from "@/components/TopBar";
@@ -25,7 +27,7 @@ const Admin = () => {
     { name: "Actualités", path: "/admin/actualites", icon: FileText },
     { name: "Événements", path: "/admin/evenements", icon: Calendar },
     { name: "Formations", path: "/admin/formations", icon: GraduationCap },
-    { name: "Coopérations", path: "/admin/cooperations", icon: Globe },
+    { name: "Coopérations", path: "/admin/cooperations", icon: HandHeart },
     { name: "Pages", path: "/admin/pages", icon: File },
     { name: "Fichiers", path: "/admin/fichiers", icon: File },
     { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users },
