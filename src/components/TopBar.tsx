@@ -44,44 +44,44 @@ const TopBar = () => {
 
   return (
     <>
-      <div className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 border-b border-blue-200 dark:border-gray-600">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center h-10 text-sm">
-            <div className="flex items-center text-gray-600 dark:text-gray-300">
-              <MapPin className="h-4 w-4 mr-1" />
-              <span>Avenue Ibn Battouta, B.P. 1014 RP, Rabat, Maroc</span>
+          <div className="flex justify-between items-center h-12 text-sm">
+            <div className="flex items-center text-blue-700 dark:text-blue-300">
+              <MapPin className="h-4 w-4 mr-2" />
+              <span className="font-medium">Avenue Ibn Battouta, B.P. 1014 RP, Rabat, Maroc</span>
             </div>
             
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className="h-8 gap-2"
+                className="h-8 gap-2 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-600"
               >
                 <Search className="h-4 w-4" />
                 <span className="hidden md:inline">Rechercher</span>
-                <span className="hidden md:inline text-xs text-gray-500">(Ctrl+K)</span>
+                <span className="hidden md:inline text-xs opacity-70">(Ctrl+K)</span>
               </Button>
               
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={toggleTheme}
-                className="h-8 w-8 p-0"
+                className="h-8 w-8 p-0 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-600"
               >
                 {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
               
               {profile ? (
                 <>
-                  <span className="text-gray-700 dark:text-gray-200">
+                  <span className="text-blue-800 dark:text-blue-200 font-medium">
                     {profile.full_name || profile.email}
                   </span>
                   
                   {isAdmin && (
                     <Link to="/admin">
-                      <Button variant="ghost" size="sm" className="h-8">
+                      <Button variant="ghost" size="sm" className="h-8 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-600">
                         <Settings className="h-4 w-4 mr-1" />
                         Admin
                       </Button>
@@ -92,7 +92,7 @@ const TopBar = () => {
                     variant="ghost"
                     size="sm"
                     onClick={signOut}
-                    className="h-8"
+                    className="h-8 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-600"
                   >
                     <LogOut className="h-4 w-4 mr-1" />
                     Déconnexion
@@ -101,12 +101,12 @@ const TopBar = () => {
               ) : (
                 <div className="flex space-x-2">
                   <Link to="/login">
-                    <Button variant="ghost" size="sm" className="h-8">
+                    <Button variant="ghost" size="sm" className="h-8 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-600">
                       Connexion
                     </Button>
                   </Link>
                   <Link to="/register">
-                    <Button size="sm" className="h-8 bg-[#006be5] hover:bg-[#0056b3]">
+                    <Button size="sm" className="h-8 bg-blue-600 hover:bg-blue-700 text-white">
                       Inscription
                     </Button>
                   </Link>

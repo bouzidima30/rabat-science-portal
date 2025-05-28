@@ -70,24 +70,21 @@ const ModernNavbar = () => {
       ],
     },
     { name: "Actualités", path: "/actualites", hasDropdown: false },
+    { name: "Événements", path: "/evenements", hasDropdown: false },
     { name: "Contact", path: "/contact", hasDropdown: false },
   ];
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b-2 border-blue-600 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-4">
             <img 
-              src="/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png" 
+              src="/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png" 
               alt="FSR Logo" 
-              className="h-10 w-auto"
+              className="h-16 w-auto"
             />
-            <div className="hidden md:block">
-              <h1 className="text-lg font-bold text-[#006be5]">FSR</h1>
-              <p className="text-xs text-gray-600 dark:text-gray-300">Faculté des Sciences</p>
-            </div>
           </Link>
 
           {/* Desktop Menu */}
@@ -103,20 +100,20 @@ const ModernNavbar = () => {
                   <>
                     <Button
                       variant="ghost"
-                      className={`text-gray-700 dark:text-gray-200 hover:text-[#006be5] dark:hover:text-[#006be5] text-sm font-medium ${
-                        location.pathname.startsWith(item.path) ? "text-[#006be5]" : ""
+                      className={`text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 text-sm font-semibold transition-colors duration-200 ${
+                        location.pathname.startsWith(item.path) ? "text-blue-600 dark:text-blue-400" : ""
                       }`}
                     >
                       {item.name}
-                      <ChevronDown className="ml-1 h-3 w-3" />
+                      <ChevronDown className="ml-1 h-4 w-4" />
                     </Button>
                     {hoveredMenu === item.name && (
-                      <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                      <div className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
                         {item.dropdownItems?.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.name}
                             to={dropdownItem.path}
-                            className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-[#006be5] dark:hover:text-[#006be5] first:rounded-t-lg last:rounded-b-lg transition-colors"
+                            className="block px-6 py-4 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                           >
                             {dropdownItem.name}
                           </Link>
@@ -128,8 +125,8 @@ const ModernNavbar = () => {
                   <Link to={item.path}>
                     <Button
                       variant="ghost"
-                      className={`text-gray-700 dark:text-gray-200 hover:text-[#006be5] dark:hover:text-[#006be5] text-sm font-medium ${
-                        location.pathname === item.path ? "text-[#006be5] bg-blue-50 dark:bg-blue-900/20" : ""
+                      className={`text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 text-sm font-semibold transition-colors duration-200 ${
+                        location.pathname === item.path ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20" : ""
                       }`}
                     >
                       {item.name}
@@ -144,24 +141,24 @@ const ModernNavbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden text-gray-700 dark:text-gray-200"
+            className="lg:hidden text-gray-700 dark:text-gray-200 hover:text-blue-600"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="lg:hidden py-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
             {menuItems.map((item) => (
-              <div key={item.name} className="py-1">
+              <div key={item.name} className="py-2">
                 {item.hasDropdown ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="w-full justify-between text-left text-gray-700 dark:text-gray-200"
+                        className="w-full justify-between text-left text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-blue-50"
                       >
                         {item.name}
                         <ChevronDown className="h-4 w-4" />
@@ -173,6 +170,7 @@ const ModernNavbar = () => {
                           <Link
                             to={dropdownItem.path}
                             onClick={() => setIsMobileMenuOpen(false)}
+                            className="w-full"
                           >
                             {dropdownItem.name}
                           </Link>
@@ -187,7 +185,7 @@ const ModernNavbar = () => {
                   >
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-gray-700 dark:text-gray-200"
+                      className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-blue-50"
                     >
                       {item.name}
                     </Button>
