@@ -9,8 +9,8 @@ const Footer = () => {
             <div className="flex items-center space-x-3 mb-6">
               <img src="/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png" alt="FSR Logo" className="h-12 w-auto" />
               <div>
-                <div className="text-[#006be5] font-bold text-lg">FSR</div>
-                <div className="text-sm text-gray-300">Faculté des Sciences Rabat</div>
+                
+                
               </div>
             </div>
             <p className="text-gray-300 text-sm leading-6">
