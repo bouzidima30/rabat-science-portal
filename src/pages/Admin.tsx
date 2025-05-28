@@ -124,7 +124,7 @@ const Admin = () => {
               <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
                 FSR Administration
               </p>
-              <p className="text-xs text-gray-500">Version 2.0 • © 2024</p>
+              <p className="text-xs text-gray-500">© 2025</p>
             </div>
           </div>
         </div>
