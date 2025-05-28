@@ -13,7 +13,7 @@ import {
 import { Calendar, Users, BookOpen, Trophy, ArrowRight, GraduationCap, Microscope, Globe } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import type { News, NewsCategory } from "@/types/news";
 
