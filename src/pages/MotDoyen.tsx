@@ -1,6 +1,6 @@
 
 import TopBar from "@/components/TopBar";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Quote } from "lucide-react";
