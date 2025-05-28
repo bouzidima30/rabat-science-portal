@@ -9,7 +9,7 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import TopBar from "@/components/TopBar";
-import Navbar from "@/components/Navbar";
+import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 
 const Login = () => {
@@ -53,7 +53,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
-      <Navbar />
+      <ModernNavbar />
       
       <div className="flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md">
