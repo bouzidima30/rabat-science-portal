@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Folder, File, Plus, Edit, Trash2, Upload, Download, FolderOpen, ArrowLeft } from "lucide-react";
+import { Folder, File, Plus, Trash2, Upload, Download, FolderOpen, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const AdminFichiers = () => {
@@ -28,7 +28,7 @@ const AdminFichiers = () => {
         .order('name', { ascending: true });
       
       if (error) throw error;
-      return data;
+      return data || [];
     }
   });
 
@@ -66,7 +66,7 @@ const AdminFichiers = () => {
     mutationFn: async (file: File) => {
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const filePath = fileName;
 
       const { error: uploadError } = await supabase.storage
         .from('file-manager')
@@ -137,6 +137,8 @@ const AdminFichiers = () => {
     if (file) {
       uploadFileMutation.mutate(file);
     }
+    // Reset input
+    e.target.value = '';
   };
 
   const navigateToFolder = (folder: any) => {
@@ -252,7 +254,7 @@ const AdminFichiers = () => {
       )}
 
       <div className="grid gap-4">
-        {files?.map((item) => (
+        {files && files.length > 0 ? files.map((item) => (
           <Card key={item.id} className="hover:shadow-md transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -279,12 +281,14 @@ const AdminFichiers = () => {
                       Ouvrir
                     </Button>
                   ) : (
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={item.file_url} target="_blank" rel="noopener noreferrer">
-                        <Download className="h-4 w-4 mr-1" />
-                        Télécharger
-                      </a>
-                    </Button>
+                    item.file_url && (
+                      <Button size="sm" variant="outline" asChild>
+                        <a href={item.file_url} target="_blank" rel="noopener noreferrer">
+                          <Download className="h-4 w-4 mr-1" />
+                          Télécharger
+                        </a>
+                      </Button>
+                    )
                   )}
                   <Button 
                     size="sm" 
@@ -298,8 +302,7 @@ const AdminFichiers = () => {
               </div>
             </CardContent>
           </Card>
-        ))}
-        {!files?.length && (
+        )) : (
           <div className="text-center py-12">
             <Folder className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">

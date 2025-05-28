@@ -14,8 +14,10 @@ import EspaceEtudiants from "@/pages/EspaceEtudiants";
 import Admin from "@/pages/Admin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminActualites from "@/pages/AdminActualites";
+import AdminEvenements from "@/pages/AdminEvenements";
 import AdminFormations from "@/pages/AdminFormations";
 import AdminCooperations from "@/pages/AdminCooperations";
+import AdminPages from "@/pages/AdminPages";
 import AdminFichiers from "@/pages/AdminFichiers";
 import MotDoyen from "@/pages/MotDoyen";
 import FSRChiffres from "@/pages/FSRChiffres";
@@ -48,6 +50,11 @@ import CalendrierEmploiTemps from "@/pages/CalendrierEmploiTemps";
 import CooperationNationale from "@/pages/CooperationNationale";
 import CooperationInternationale from "@/pages/CooperationInternationale";
 import CooperationDetail from "@/pages/CooperationDetail";
+import Evenements from "@/pages/Evenements";
+import EvenementDetail from "@/pages/EvenementDetail";
+import StructuresRecherche from "@/pages/StructuresRecherche";
+import DomainesRecherche from "@/pages/DomainesRecherche";
+import DynamicPage from "@/pages/[slug]";
 
 const AppRoutes = () => {
   return (
@@ -57,6 +64,8 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/actualites" element={<Actualites />} />
       <Route path="/actualites/:id" element={<ActualiteDetail />} />
+      <Route path="/evenements" element={<Evenements />} />
+      <Route path="/evenements/:id" element={<EvenementDetail />} />
       <Route path="/mot-doyen" element={<MotDoyen />} />
       <Route path="/projet-developpement" element={<ProjetDeveloppement />} />
       <Route path="/historique" element={<Historique />} />
@@ -72,6 +81,8 @@ const AppRoutes = () => {
       <Route path="/ecole-doctorale" element={<EcoleDoctorale />} />
       <Route path="/valorisation-recherche" element={<ValorisationRecherche />} />
       <Route path="/plateformes-techniques" element={<PlateformesTechniques />} />
+      <Route path="/recherche/structures" element={<StructuresRecherche />} />
+      <Route path="/recherche/domaines" element={<DomainesRecherche />} />
       <Route path="/cooperation-nationale" element={<CooperationNationale />} />
       <Route path="/cooperation-internationale" element={<CooperationInternationale />} />
       <Route path="/cooperation/:id" element={<CooperationDetail />} />
@@ -96,10 +107,13 @@ const AppRoutes = () => {
       <Route path="/admin" element={<Admin />}>
         <Route index element={<AdminDashboard />} />
         <Route path="actualites" element={<AdminActualites />} />
+        <Route path="evenements" element={<AdminEvenements />} />
         <Route path="formations" element={<AdminFormations />} />
         <Route path="cooperations" element={<AdminCooperations />} />
+        <Route path="pages" element={<AdminPages />} />
         <Route path="fichiers" element={<AdminFichiers />} />
       </Route>
+      <Route path="/:slug" element={<DynamicPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

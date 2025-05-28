@@ -63,6 +63,48 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          created_at: string
+          date_debut: string
+          date_fin: string | null
+          description: string | null
+          heure_debut: string | null
+          heure_fin: string | null
+          id: string
+          image_url: string | null
+          lieu: string | null
+          titre: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date_debut: string
+          date_fin?: string | null
+          description?: string | null
+          heure_debut?: string | null
+          heure_fin?: string | null
+          id?: string
+          image_url?: string | null
+          lieu?: string | null
+          titre: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date_debut?: string
+          date_fin?: string | null
+          description?: string | null
+          heure_debut?: string | null
+          heure_fin?: string | null
+          id?: string
+          image_url?: string | null
+          lieu?: string | null
+          titre?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       file_manager: {
         Row: {
           created_at: string
@@ -198,6 +240,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pages: {
+        Row: {
+          contenu: string
+          created_at: string
+          fichiers: string[] | null
+          id: string
+          image_url: string | null
+          slug: string
+          titre: string
+          updated_at: string
+        }
+        Insert: {
+          contenu: string
+          created_at?: string
+          fichiers?: string[] | null
+          id?: string
+          image_url?: string | null
+          slug: string
+          titre: string
+          updated_at?: string
+        }
+        Update: {
+          contenu?: string
+          created_at?: string
+          fichiers?: string[] | null
+          id?: string
+          image_url?: string | null
+          slug?: string
+          titre?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
