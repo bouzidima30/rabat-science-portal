@@ -45,7 +45,7 @@ const Admin = () => {
         } transition-all duration-300 ease-out lg:translate-x-0 border-r border-gray-200 dark:border-gray-800`}>
           
           {/* Sidebar Header */}
-          <div className="h-20 px-6 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-600 to-blue-700">
+          <div className="h-16 px-6 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-600 to-blue-700">
             <div className="flex items-center justify-between h-full">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
