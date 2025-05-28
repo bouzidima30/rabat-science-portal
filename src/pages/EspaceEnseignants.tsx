@@ -1,6 +1,6 @@
 
 import TopBar from "@/components/TopBar";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
