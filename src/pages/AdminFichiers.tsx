@@ -1,3 +1,4 @@
+
 import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,12 +18,21 @@ import {
   FileText,
   Search,
   Grid,
-  List,
-  SortAsc,
-  MoreVertical
+  List
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
+
+interface FileItem {
+  id: string;
+  name: string;
+  type: 'folder' | 'file';
+  parent_id: string | null;
+  file_url?: string;
+  file_size?: number;
+  mime_type?: string;
+  created_at: string;
+}
 
 const AdminFichiers = () => {
   const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
@@ -38,9 +48,11 @@ const AdminFichiers = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: files, isLoading } = useQuery({
+  const { data: files = [], isLoading, error } = useQuery({
     queryKey: ['admin-files', currentFolderId],
     queryFn: async () => {
+      console.log('Fetching files for folder:', currentFolderId);
+      
       const { data, error } = await supabase
         .from('file_manager')
         .select('*')
@@ -50,26 +62,31 @@ const AdminFichiers = () => {
       
       if (error) {
         console.error('Error fetching files:', error);
-        return [];
+        throw error;
       }
-      return data || [];
+      
+      console.log('Fetched files:', data);
+      return data as FileItem[] || [];
     }
   });
 
   const createFolderMutation = useMutation({
     mutationFn: async (name: string) => {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('file_manager')
         .insert([{
           name,
           type: 'folder',
           parent_id: currentFolderId
-        }]);
+        }])
+        .select()
+        .single();
       
       if (error) throw error;
+      return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-files', currentFolderId] });
+      queryClient.invalidateQueries({ queryKey: ['admin-files'] });
       setFolderName('');
       setIsCreatingFolder(false);
       toast({
@@ -94,29 +111,40 @@ const AdminFichiers = () => {
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = fileName;
-
-      // Simulate upload progress
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-          return prev + 10;
-        });
-      }, 200);
-
+      
       try {
+        // Create storage bucket if it doesn't exist
+        const { data: buckets } = await supabase.storage.listBuckets();
+        const bucketExists = buckets?.some(bucket => bucket.name === 'file-manager');
+        
+        if (!bucketExists) {
+          await supabase.storage.createBucket('file-manager', {
+            public: true,
+            allowedMimeTypes: null,
+            fileSizeLimit: null
+          });
+        }
+
+        // Simulate upload progress
+        const progressInterval = setInterval(() => {
+          setUploadProgress(prev => {
+            if (prev >= 90) {
+              clearInterval(progressInterval);
+              return 90;
+            }
+            return prev + 10;
+          });
+        }, 200);
+
         const { error: uploadError } = await supabase.storage
           .from('file-manager')
-          .upload(filePath, file);
+          .upload(fileName, file);
 
         if (uploadError) throw uploadError;
 
         const { data } = supabase.storage
           .from('file-manager')
-          .getPublicUrl(filePath);
+          .getPublicUrl(fileName);
 
         const { error: dbError } = await supabase
           .from('file_manager')
@@ -140,14 +168,13 @@ const AdminFichiers = () => {
         }, 1000);
 
       } catch (error) {
-        clearInterval(progressInterval);
         setIsUploading(false);
         setUploadProgress(0);
         throw error;
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-files', currentFolderId] });
+      queryClient.invalidateQueries({ queryKey: ['admin-files'] });
       toast({
         title: "Fichier téléchargé",
         description: "Le fichier a été téléchargé avec succès",
@@ -167,7 +194,7 @@ const AdminFichiers = () => {
   });
 
   const deleteItemMutation = useMutation({
-    mutationFn: async (item: any) => {
+    mutationFn: async (item: FileItem) => {
       if (item.type === 'file' && item.file_url) {
         const fileName = item.file_url.split('/').pop();
         if (fileName) {
@@ -189,7 +216,7 @@ const AdminFichiers = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-files', currentFolderId] });
+      queryClient.invalidateQueries({ queryKey: ['admin-files'] });
       toast({
         title: "Élément supprimé",
         description: "L'élément a été supprimé avec succès",
@@ -205,14 +232,7 @@ const AdminFichiers = () => {
     }
   });
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      uploadFileMutation.mutate(file);
-    }
-  };
-
-  const navigateToFolder = (folder: any) => {
+  const navigateToFolder = (folder: FileItem) => {
     setCurrentFolderId(folder.id);
     setFolderPath([...folderPath, { id: folder.id, name: folder.name }]);
   };
@@ -226,20 +246,15 @@ const AdminFichiers = () => {
     }
   };
 
-  const navigateToRoot = () => {
-    setCurrentFolderId(null);
-    setFolderPath([]);
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+  const formatFileSize = (bytes?: number) => {
+    if (!bytes || bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const getFileIcon = (mimeType: string) => {
+  const getFileIcon = (mimeType?: string) => {
     if (mimeType?.startsWith('image/')) {
       return <Image className="h-8 w-8 text-green-500" />;
     } else if (mimeType?.includes('pdf')) {
@@ -249,9 +264,21 @@ const AdminFichiers = () => {
     }
   };
 
-  const filteredFiles = files?.filter(file => 
+  const filteredFiles = files.filter(file => 
     file.name.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
+  );
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="p-6">
+            <p className="text-red-800">Erreur lors du chargement des fichiers: {error.message}</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -265,12 +292,12 @@ const AdminFichiers = () => {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-      {/* Modern Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Gestionnaire de Fichiers
             </h1>
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-2">
@@ -278,7 +305,7 @@ const AdminFichiers = () => {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => {setCurrentFolderId(null); setFolderPath([])}} 
-                className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2"
+                className="text-blue-600 hover:text-blue-800 px-2"
               >
                 📁 Racine
               </Button>
@@ -293,31 +320,19 @@ const AdminFichiers = () => {
           
           <div className="flex items-center gap-3">
             {folderPath.length > 0 && (
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  const newPath = [...folderPath];
-                  newPath.pop();
-                  setFolderPath(newPath);
-                  setCurrentFolderId(newPath.length > 0 ? newPath[newPath.length - 1].id : null);
-                }}
-                className="bg-white hover:bg-gray-50 border-gray-300"
-              >
+              <Button variant="outline" onClick={navigateBack}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Retour
               </Button>
             )}
-            <Button 
-              onClick={() => setIsCreatingFolder(true)} 
-              className="bg-blue-600 hover:bg-blue-700 shadow-lg"
-            >
+            <Button onClick={() => setIsCreatingFolder(true)} className="bg-blue-600 hover:bg-blue-700">
               <Plus className="h-4 w-4 mr-2" />
               Dossier
             </Button>
             <Button 
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="bg-green-600 hover:bg-green-700 shadow-lg"
+              className="bg-green-600 hover:bg-green-700"
             >
               <Upload className="h-4 w-4 mr-2" />
               {isUploading ? "Upload..." : "Fichier"}
@@ -330,13 +345,12 @@ const AdminFichiers = () => {
                 const file = e.target.files?.[0];
                 if (file) uploadFileMutation.mutate(file);
               }}
-              multiple={false}
             />
           </div>
         </div>
 
         {/* Search and View Controls */}
-        <div className="flex items-center gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-4 mt-6 pt-6 border-t">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
@@ -367,11 +381,11 @@ const AdminFichiers = () => {
 
       {/* Upload Progress */}
       {isUploading && (
-        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-800">
+        <Card className="border-blue-200 bg-blue-50">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Upload en cours...</span>
-              <span className="text-sm text-blue-600 dark:text-blue-400">{uploadProgress}%</span>
+              <span className="text-sm font-medium text-blue-800">Upload en cours...</span>
+              <span className="text-sm text-blue-600">{uploadProgress}%</span>
             </div>
             <Progress value={uploadProgress} className="w-full" />
           </CardContent>
@@ -380,11 +394,8 @@ const AdminFichiers = () => {
 
       {/* Create Folder */}
       {isCreatingFolder && (
-        <Card className="border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-800">
-          <CardHeader>
-            <CardTitle className="text-lg text-green-800 dark:text-green-200">Nouveau Dossier</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <Card className="border-green-200 bg-green-50">
+          <CardContent className="p-6">
             <div className="flex gap-3">
               <Input
                 value={folderName}
@@ -422,51 +433,33 @@ const AdminFichiers = () => {
       {filteredFiles.length > 0 ? (
         <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "space-y-3"}>
           {filteredFiles.map((item) => (
-            <Card 
-              key={item.id} 
-              className={`group hover:shadow-lg transition-all duration-300 border-0 shadow-md hover:scale-[1.02] ${
-                viewMode === 'list' ? 'hover:bg-gray-50 dark:hover:bg-gray-800' : ''
-              }`}
-            >
+            <Card key={item.id} className="group hover:shadow-lg transition-all duration-300">
               <CardContent className={viewMode === 'grid' ? "p-6 text-center" : "p-4"}>
                 {viewMode === 'grid' ? (
                   <>
                     <div className="mb-4">
                       {item.type === 'folder' ? (
-                        <div className="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Folder className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                        <div className="w-16 h-16 mx-auto bg-blue-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Folder className="h-8 w-8 text-blue-600" />
                         </div>
                       ) : (
-                        <div className="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                          {item.mime_type?.startsWith('image/') ? (
-                            <Image className="h-8 w-8 text-green-600" />
-                          ) : item.mime_type?.includes('pdf') ? (
-                            <FileText className="h-8 w-8 text-red-600" />
-                          ) : (
-                            <File className="h-8 w-8 text-gray-600" />
-                          )}
+                        <div className="w-16 h-16 mx-auto bg-gray-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                          {getFileIcon(item.mime_type)}
                         </div>
                       )}
                     </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2 truncate">
+                    <h3 className="font-semibold text-gray-900 text-sm mb-2 truncate">
                       {item.name}
                     </h3>
                     {item.type === 'file' && (
                       <div className="text-xs text-gray-500 mb-4">
-                        {item.file_size && <div>{(item.file_size / 1024).toFixed(1)} KB</div>}
+                        {item.file_size && <div>{formatFileSize(item.file_size)}</div>}
                         <div>{new Date(item.created_at).toLocaleDateString('fr-FR')}</div>
                       </div>
                     )}
                     <div className="flex gap-2 justify-center">
                       {item.type === 'folder' ? (
-                        <Button 
-                          size="sm" 
-                          onClick={() => {
-                            setCurrentFolderId(item.id);
-                            setFolderPath([...folderPath, { id: item.id, name: item.name }]);
-                          }}
-                          className="bg-blue-600 hover:bg-blue-700"
-                        >
+                        <Button size="sm" onClick={() => navigateToFolder(item)}>
                           <FolderOpen className="h-4 w-4 mr-1" />
                           Ouvrir
                         </Button>
@@ -494,24 +487,18 @@ const AdminFichiers = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       {item.type === 'folder' ? (
-                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                          <Folder className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <Folder className="h-5 w-5 text-blue-600" />
                         </div>
                       ) : (
-                        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                          {item.mime_type?.startsWith('image/') ? (
-                            <Image className="h-5 w-5 text-green-600" />
-                          ) : (
-                            <File className="h-5 w-5 text-gray-600" />
-                          )}
+                        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                          {getFileIcon(item.mime_type)}
                         </div>
                       )}
                       <div>
-                        <h3 className="font-medium text-gray-900 dark:text-white">
-                          {item.name}
-                        </h3>
+                        <h3 className="font-medium text-gray-900">{item.name}</h3>
                         <div className="text-sm text-gray-500">
-                          {item.type === 'file' && item.file_size && `${(item.file_size / 1024).toFixed(1)} KB • `}
+                          {item.type === 'file' && item.file_size && `${formatFileSize(item.file_size)} • `}
                           {new Date(item.created_at).toLocaleDateString('fr-FR')}
                         </div>
                       </div>
@@ -519,13 +506,7 @@ const AdminFichiers = () => {
                     
                     <div className="flex gap-2">
                       {item.type === 'folder' ? (
-                        <Button 
-                          size="sm" 
-                          onClick={() => {
-                            setCurrentFolderId(item.id);
-                            setFolderPath([...folderPath, { id: item.id, name: item.name }]);
-                          }}
-                        >
+                        <Button size="sm" onClick={() => navigateToFolder(item)}>
                           Ouvrir
                         </Button>
                       ) : (
@@ -553,15 +534,15 @@ const AdminFichiers = () => {
           ))}
         </div>
       ) : (
-        <Card className="border-dashed border-2 border-gray-300 dark:border-gray-600">
+        <Card className="border-dashed border-2 border-gray-300">
           <CardContent className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Folder className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-400 mb-3">
+            <h3 className="text-2xl font-semibold text-gray-600 mb-3">
               {searchQuery ? 'Aucun résultat' : 'Dossier vide'}
             </h3>
-            <p className="text-gray-500 dark:text-gray-500 mb-6">
+            <p className="text-gray-500 mb-6">
               {searchQuery 
                 ? 'Aucun fichier ne correspond à votre recherche'
                 : 'Ajoutez des dossiers ou téléchargez des fichiers pour commencer'

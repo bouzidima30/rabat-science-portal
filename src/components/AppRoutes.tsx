@@ -19,6 +19,7 @@ import AdminFormations from "@/pages/AdminFormations";
 import AdminCooperations from "@/pages/AdminCooperations";
 import AdminPages from "@/pages/AdminPages";
 import AdminFichiers from "@/pages/AdminFichiers";
+import AdminUtilisateurs from "@/pages/AdminUtilisateurs";
 import MotDoyen from "@/pages/MotDoyen";
 import FSRChiffres from "@/pages/FSRChiffres";
 import Contact from "@/pages/Contact";
@@ -112,6 +113,7 @@ const AppRoutes = () => {
         <Route path="cooperations" element={<AdminCooperations />} />
         <Route path="pages" element={<AdminPages />} />
         <Route path="fichiers" element={<AdminFichiers />} />
+        <Route path="utilisateurs" element={<AdminUtilisateurs />} />
       </Route>
       <Route path="/:slug" element={<DynamicPage />} />
       <Route path="*" element={<NotFound />} />
