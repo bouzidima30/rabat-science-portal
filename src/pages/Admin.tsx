@@ -53,7 +53,7 @@ const Admin = () => {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-white">Administration</h2>
-                  <p className="text-xs text-blue-100">Panneau FSR</p>
+                  {/*<p className="text-xs text-blue-100">Panneau FSR</p>*/}
                 </div>
               </div>
               <Button
@@ -67,7 +67,7 @@ const Admin = () => {
             </div>
           </div>
           
-          {/* Current Page Info */}
+          {/* Current Page Info 
           {currentPage && (
             <div className="px-6 py-4 bg-blue-50 dark:bg-blue-950/30 border-b border-gray-200 dark:border-gray-800">
               <div className="flex items-center space-x-3">
@@ -83,6 +83,7 @@ const Admin = () => {
               </div>
             </div>
           )}
+          */}
           
           {/* Navigation */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
