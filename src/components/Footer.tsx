@@ -1,20 +1,13 @@
-
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Youtube } from "lucide-react";
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white">
+  return <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           {/* FSR Info */}
           <div className="md:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
-              <img 
-                src="/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png" 
-                alt="FSR Logo" 
-                className="h-12 w-auto"
-              />
+              <img src="/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png" alt="FSR Logo" className="h-12 w-auto" />
               <div>
                 <div className="text-[#006be5] font-bold text-lg">FSR</div>
                 <div className="text-sm text-gray-300">Faculté des Sciences Rabat</div>
@@ -129,9 +122,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-300 text-sm">
-              © 2024 Faculté des Sciences de Rabat. Tous droits réservés.
-            </div>
+            <div className="text-gray-300 text-sm">© 2025 Faculté des Sciences de Rabat. Tous droits réservés.</div>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link to="/privacy" className="text-gray-300 hover:text-[#006be5] text-sm transition-colors">
                 Politique de confidentialité
@@ -143,8 +134,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
