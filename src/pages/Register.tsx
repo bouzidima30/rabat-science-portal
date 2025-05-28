@@ -9,7 +9,7 @@ import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import TopBar from "@/components/TopBar";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 
 const Register = () => {
