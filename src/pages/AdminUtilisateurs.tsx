@@ -3,76 +3,76 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { User, Mail, Shield, Search, Trash2, Edit } from "lucide-react";
+import { 
+  Users, 
+  Search, 
+  Filter, 
+  MoreVertical, 
+  UserCheck, 
+  UserX, 
+  Mail,
+  Calendar,
+  Shield,
+  User,
+  Plus,
+  Download,
+  Trash2
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const AdminUtilisateurs = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editForm, setEditForm] = useState({ full_name: "", role: "" });
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'user'>('all');
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: users, isLoading } = useQuery({
-    queryKey: ['admin-users', searchTerm],
+    queryKey: ['admin-users'],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
       
-      if (searchTerm) {
-        query = query.or(`full_name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%`);
+      if (error) {
+        console.error('Error fetching users:', error);
+        throw error;
       }
-      
-      const { data, error } = await query;
-      if (error) throw error;
       return data || [];
     }
   });
 
-  const updateUserMutation = useMutation({
-    mutationFn: async ({ userId, updates }: { userId: string; updates: any }) => {
+  const updateUserRoleMutation = useMutation({
+    mutationFn: async ({ userId, role }: { userId: string; role: string }) => {
       const { error } = await supabase
         .from('profiles')
-        .update(updates)
+        .update({ role })
         .eq('id', userId);
       
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-      setIsEditDialogOpen(false);
       toast({
-        title: "Utilisateur mis à jour",
-        description: "Les informations de l'utilisateur ont été mises à jour avec succès",
+        title: "Rôle mis à jour",
+        description: "Le rôle de l'utilisateur a été modifié avec succès",
       });
     },
     onError: (error) => {
+      console.error('Error updating user role:', error);
       toast({
         title: "Erreur",
-        description: "Erreur lors de la mise à jour de l'utilisateur",
+        description: "Erreur lors de la mise à jour du rôle",
         variant: "destructive",
       });
     }
@@ -80,7 +80,11 @@ const AdminUtilisateurs = () => {
 
   const deleteUserMutation = useMutation({
     mutationFn: async (userId: string) => {
-      const { error } = await supabase.auth.admin.deleteUser(userId);
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+      
       if (error) throw error;
     },
     onSuccess: () => {
@@ -91,6 +95,7 @@ const AdminUtilisateurs = () => {
       });
     },
     onError: (error) => {
+      console.error('Error deleting user:', error);
       toast({
         title: "Erreur",
         description: "Erreur lors de la suppression de l'utilisateur",
@@ -99,192 +104,262 @@ const AdminUtilisateurs = () => {
     }
   });
 
-  const handleEditUser = (user: any) => {
-    setSelectedUser(user);
-    setEditForm({
-      full_name: user.full_name || "",
-      role: user.role || "user"
-    });
-    setIsEditDialogOpen(true);
-  };
-
-  const handleUpdateUser = () => {
-    if (selectedUser) {
-      updateUserMutation.mutate({
-        userId: selectedUser.id,
-        updates: editForm
-      });
-    }
-  };
-
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case 'admin':
-        return <Shield className="h-4 w-4 text-red-500" />;
-      default:
-        return <User className="h-4 w-4 text-gray-500" />;
-    }
-  };
+  const filteredUsers = users?.filter(user => {
+    const matchesSearch = user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+    return matchesSearch && matchesRole;
+  }) || [];
 
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'admin':
-        return <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">Admin</span>;
+        return <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Admin</Badge>;
+      case 'user':
+        return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Utilisateur</Badge>;
       default:
-        return <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300">Utilisateur</span>;
+        return <Badge variant="secondary">Inconnu</Badge>;
     }
   };
 
+  const stats = {
+    total: users?.length || 0,
+    admins: users?.filter(u => u.role === 'admin').length || 0,
+    users: users?.filter(u => u.role === 'user').length || 0,
+    recent: users?.filter(u => {
+      const createdAt = new Date(u.created_at);
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      return createdAt > weekAgo;
+    }).length || 0
+  };
+
   if (isLoading) {
-    return <div className="p-6">Chargement...</div>;
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Chargement des utilisateurs...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Gestion des Utilisateurs
-        </h1>
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Gestion des Utilisateurs
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
+              Administration et gestion des comptes utilisateurs
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button className="bg-blue-600 hover:bg-blue-700 shadow-lg">
+              <Plus className="h-4 w-4 mr-2" />
+              Inviter
+            </Button>
+            <Button variant="outline" className="bg-white hover:bg-gray-50">
+              <Download className="h-4 w-4 mr-2" />
+              Exporter
+            </Button>
+          </div>
+        </div>
       </div>
 
-      {/* Search */}
-      <Card className="mb-6">
-        <CardContent className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Rechercher par nom ou email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+      {/* Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card className="shadow-md border-0">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
+              </div>
+              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+                <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md border-0">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Administrateurs</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.admins}</p>
+              </div>
+              <div className="p-3 bg-red-100 dark:bg-red-900 rounded-full">
+                <Shield className="h-6 w-6 text-red-600 dark:text-red-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md border-0">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Utilisateurs</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.users}</p>
+              </div>
+              <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
+                <User className="h-6 w-6 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md border-0">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Cette semaine</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.recent}</p>
+              </div>
+              <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
+                <Calendar className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
+      <Card className="shadow-md border-0">
+        <CardContent className="p-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Rechercher par nom ou email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant={roleFilter === 'all' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setRoleFilter('all')}
+              >
+                Tous
+              </Button>
+              <Button
+                variant={roleFilter === 'admin' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setRoleFilter('admin')}
+              >
+                Admins
+              </Button>
+              <Button
+                variant={roleFilter === 'user' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setRoleFilter('user')}
+              >
+                Utilisateurs
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Users List */}
-      <div className="grid gap-4">
-        {users && users.length > 0 ? users.map((user) => (
-          <Card key={user.id} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                    <User className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {user.full_name || "Nom non défini"}
-                    </h3>
-                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-                      <Mail className="h-4 w-4" />
-                      <span>{user.email}</span>
+      <Card className="shadow-md border-0">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Utilisateurs ({filteredUsers.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {filteredUsers.length > 0 ? (
+            <div className="space-y-4">
+              {filteredUsers.map((user) => (
+                <div
+                  key={user.id}
+                  className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                      {user.full_name ? user.full_name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
                     </div>
-                    <div className="flex items-center space-x-2 mt-1">
-                      {getRoleIcon(user.role)}
-                      {getRoleBadge(user.role)}
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        {user.full_name || 'Sans nom'}
+                      </h3>
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <Mail className="h-4 w-4" />
+                        {user.email}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                        <Calendar className="h-3 w-3" />
+                        Inscrit le {new Date(user.created_at).toLocaleDateString('fr-FR')}
+                      </div>
                     </div>
                   </div>
+                  
+                  <div className="flex items-center gap-3">
+                    {getRoleBadge(user.role || 'user')}
+                    
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem 
+                          onClick={() => updateUserRoleMutation.mutate({
+                            userId: user.id, 
+                            role: user.role === 'admin' ? 'user' : 'admin'
+                          })}
+                        >
+                          {user.role === 'admin' ? (
+                            <>
+                              <UserX className="h-4 w-4 mr-2" />
+                              Retirer admin
+                            </>
+                          ) : (
+                            <>
+                              <UserCheck className="h-4 w-4 mr-2" />
+                              Promouvoir admin
+                            </>
+                          )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => deleteUserMutation.mutate(user.id)}
+                          className="text-red-600 dark:text-red-400"
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Supprimer
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
-                
-                <div className="flex space-x-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleEditUser(user)}
-                  >
-                    <Edit className="h-4 w-4 mr-1" />
-                    Modifier
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => deleteUserMutation.mutate(user.id)}
-                    disabled={deleteUserMutation.isPending}
-                  >
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    Supprimer
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-500 dark:text-gray-400">Créé le:</span>
-                  <span className="ml-2 text-gray-900 dark:text-white">
-                    {new Date(user.created_at).toLocaleDateString('fr-FR')}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-500 dark:text-gray-400">Mis à jour:</span>
-                  <span className="ml-2 text-gray-900 dark:text-white">
-                    {new Date(user.updated_at).toLocaleDateString('fr-FR')}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )) : (
-          <div className="text-center py-12">
-            <User className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
-              Aucun utilisateur trouvé
-            </h3>
-            <p className="text-gray-500 dark:text-gray-500">
-              {searchTerm ? "Aucun utilisateur ne correspond à votre recherche." : "Aucun utilisateur enregistré."}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Edit User Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Modifier l'utilisateur</DialogTitle>
-            <DialogDescription>
-              Modifiez les informations de l'utilisateur sélectionné.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="full_name" className="text-right">
-                Nom complet
-              </Label>
-              <Input
-                id="full_name"
-                value={editForm.full_name}
-                onChange={(e) => setEditForm(prev => ({ ...prev, full_name: e.target.value }))}
-                className="col-span-3"
-              />
+              ))}
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="role" className="text-right">
-                Rôle
-              </Label>
-              <Select
-                value={editForm.role}
-                onValueChange={(value) => setEditForm(prev => ({ ...prev, role: value }))}
-              >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Sélectionner un rôle" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="user">Utilisateur</SelectItem>
-                  <SelectItem value="admin">Administrateur</SelectItem>
-                </SelectContent>
-              </Select>
+          ) : (
+            <div className="text-center py-12">
+              <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                Aucun utilisateur trouvé
+              </h3>
+              <p className="text-gray-500 dark:text-gray-500">
+                {searchQuery ? 'Modifiez vos critères de recherche' : 'Aucun utilisateur enregistré'}
+              </p>
             </div>
-          </div>
-          
-          <DialogFooter>
-            <Button type="submit" onClick={handleUpdateUser} disabled={updateUserMutation.isPending}>
-              {updateUserMutation.isPending ? "Mise à jour..." : "Sauvegarder"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, X } from "lucide-react";
+import { Search, X, FileText, Calendar, File, Users, GraduationCap } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -130,7 +130,11 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      return () => document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.removeEventListener('keydown', handleEscape);
+        document.body.style.overflow = 'unset';
+      };
     }
   }, [isOpen, onClose]);
 
@@ -147,34 +151,45 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
     }
   };
 
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'actualite': return <FileText className="h-4 w-4" />;
+      case 'evenement': return <Calendar className="h-4 w-4" />;
+      case 'page': return <File className="h-4 w-4" />;
+      case 'cooperation': return <Users className="h-4 w-4" />;
+      case 'formation': return <GraduationCap className="h-4 w-4" />;
+      default: return <File className="h-4 w-4" />;
+    }
+  };
+
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'actualite': return 'bg-blue-100 text-blue-800';
-      case 'evenement': return 'bg-green-100 text-green-800';
-      case 'page': return 'bg-purple-100 text-purple-800';
-      case 'cooperation': return 'bg-orange-100 text-orange-800';
-      case 'formation': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'actualite': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case 'evenement': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'page': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+      case 'cooperation': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+      case 'formation': return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-2xl mx-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-start justify-center pt-20">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 border border-gray-200 dark:border-gray-700">
         <div className="p-6">
           <div className="flex items-center gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Rechercher..."
+                placeholder="Rechercher dans tout le site..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-12 text-lg border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
                 autoFocus
               />
             </div>
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-4 w-4" />
+            <Button variant="ghost" size="icon" onClick={onClose} className="h-12 w-12">
+              <X className="h-5 w-5" />
             </Button>
           </div>
 
@@ -182,7 +197,8 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
             <div className="max-h-96 overflow-y-auto">
               {isLoading ? (
                 <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#006be5] mx-auto"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto"></div>
+                  <p className="text-sm text-gray-500 mt-2">Recherche en cours...</p>
                 </div>
               ) : searchResults && searchResults.length > 0 ? (
                 <div className="space-y-2">
@@ -191,14 +207,15 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
                       key={`${result.type}-${result.id}`}
                       to={result.url}
                       onClick={onClose}
-                      className="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      className="block p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700"
                     >
                       <div className="flex items-start gap-3">
-                        <span className={`px-2 py-1 text-xs rounded-full ${getTypeColor(result.type)}`}>
+                        <div className={`flex items-center gap-2 px-3 py-1 text-xs font-medium rounded-full ${getTypeColor(result.type)}`}>
+                          {getTypeIcon(result.type)}
                           {getTypeLabel(result.type)}
-                        </span>
-                        <div className="flex-1">
-                          <h3 className="font-medium text-gray-900 dark:text-white">
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-medium text-gray-900 dark:text-white truncate">
                             {result.title}
                           </h3>
                           {result.description && (
@@ -212,16 +229,26 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  Aucun résultat trouvé
+                <div className="text-center py-8">
+                  <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500 dark:text-gray-400">Aucun résultat trouvé</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                    Essayez avec d'autres mots-clés
+                  </p>
                 </div>
               )}
             </div>
           )}
 
           {searchQuery.length < 2 && (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              Tapez au moins 2 caractères pour rechercher
+            <div className="text-center py-8">
+              <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 dark:text-gray-400 mb-2">
+                Rechercher dans tout le contenu
+              </p>
+              <p className="text-sm text-gray-400 dark:text-gray-500">
+                Actualités • Événements • Pages • Coopérations • Formations
+              </p>
             </div>
           )}
         </div>
