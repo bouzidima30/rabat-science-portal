@@ -55,9 +55,7 @@ const TopBar = () => {
             <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(true)} className="hidden sm:flex items-center space-x-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
               <Search className="h-4 w-4" />
               <span>Rechercher</span>
-              <kbd className="hidden md:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                <span className="text-xs">⌘</span>K
-              </kbd>
+              
             </Button>
 
             <Button variant="ghost" size="sm" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
