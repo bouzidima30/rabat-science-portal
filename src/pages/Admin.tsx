@@ -15,7 +15,8 @@ import {
   FileStack,
   Settings,
   Bell,
-  Home
+  Home,
+  Upload
 } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
@@ -31,6 +32,7 @@ const Admin = () => {
     { name: "Coopérations", path: "/admin/cooperations", icon: HandHeart, description: "Partenariats" },
     { name: "Pages", path: "/admin/pages", icon: FileStack, description: "Gestion des pages" },
     { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
+    { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
     { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
   ];
 
@@ -53,7 +55,6 @@ const Admin = () => {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-white">Administration</h2>
-                  {/*<p className="text-xs text-blue-100">Panneau FSR</p>*/}
                 </div>
               </div>
               <Button
@@ -66,24 +67,6 @@ const Admin = () => {
               </Button>
             </div>
           </div>
-          
-          {/* Current Page Info 
-          {currentPage && (
-            <div className="px-6 py-4 bg-blue-50 dark:bg-blue-950/30 border-b border-gray-200 dark:border-gray-800">
-              <div className="flex items-center space-x-3">
-                <currentPage.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                <div>
-                  <div className="font-semibold text-gray-900 dark:text-white text-sm">
-                    {currentPage.name}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                    {currentPage.description}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          */}
           
           {/* Navigation */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
@@ -155,7 +138,7 @@ const Admin = () => {
               
               <div className="flex items-center space-x-3">
                 <Link to="/">
-                  <Button variant="outline" size="sm" className="hidden sm:flex">
+                  <Button variant="outline" size="sm" className="hidden sm:flex shadow-sm">
                     <Home className="h-4 w-4 mr-2" />
                     Accueil
                   </Button>
