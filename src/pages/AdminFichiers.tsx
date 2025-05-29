@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +21,6 @@ import {
   List
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Progress } from "@/components/ui/progress";
 
 interface FileItem {
   id: string;
@@ -39,11 +38,8 @@ const AdminFichiers = () => {
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [folderPath, setFolderPath] = useState<Array<{ id: string; name: string }>>([]);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -56,7 +52,7 @@ const AdminFichiers = () => {
       const { data, error } = await supabase
         .from('file_manager')
         .select('*')
-        .eq('parent_id', currentFolderId)
+        .eq('parent_id', currentFolderId || null)
         .order('type', { ascending: true })
         .order('name', { ascending: true });
       
@@ -99,95 +95,6 @@ const AdminFichiers = () => {
       toast({
         title: "Erreur",
         description: "Erreur lors de la création du dossier",
-        variant: "destructive",
-      });
-    }
-  });
-
-  const uploadFileMutation = useMutation({
-    mutationFn: async (file: File) => {
-      setIsUploading(true);
-      setUploadProgress(0);
-
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      
-      try {
-        // Create storage bucket if it doesn't exist
-        const { data: buckets } = await supabase.storage.listBuckets();
-        const bucketExists = buckets?.some(bucket => bucket.name === 'file-manager');
-        
-        if (!bucketExists) {
-          await supabase.storage.createBucket('file-manager', {
-            public: true,
-            allowedMimeTypes: null,
-            fileSizeLimit: null
-          });
-        }
-
-        // Simulate upload progress
-        const progressInterval = setInterval(() => {
-          setUploadProgress(prev => {
-            if (prev >= 90) {
-              clearInterval(progressInterval);
-              return 90;
-            }
-            return prev + 10;
-          });
-        }, 200);
-
-        const { error: uploadError } = await supabase.storage
-          .from('file-manager')
-          .upload(fileName, file);
-
-        if (uploadError) throw uploadError;
-
-        const { data } = supabase.storage
-          .from('file-manager')
-          .getPublicUrl(fileName);
-
-        const { error: dbError } = await supabase
-          .from('file_manager')
-          .insert([{
-            name: file.name,
-            type: 'file',
-            parent_id: currentFolderId,
-            file_url: data.publicUrl,
-            file_size: file.size,
-            mime_type: file.type
-          }]);
-
-        if (dbError) throw dbError;
-
-        clearInterval(progressInterval);
-        setUploadProgress(100);
-        
-        setTimeout(() => {
-          setIsUploading(false);
-          setUploadProgress(0);
-        }, 1000);
-
-      } catch (error) {
-        setIsUploading(false);
-        setUploadProgress(0);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-files'] });
-      toast({
-        title: "Fichier téléchargé",
-        description: "Le fichier a été téléchargé avec succès",
-      });
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    },
-    onError: (error) => {
-      console.error('Error uploading file:', error);
-      toast({
-        title: "Erreur",
-        description: "Erreur lors du téléchargement du fichier",
         variant: "destructive",
       });
     }
@@ -329,23 +236,6 @@ const AdminFichiers = () => {
               <Plus className="h-4 w-4 mr-2" />
               Dossier
             </Button>
-            <Button 
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              {isUploading ? "Upload..." : "Fichier"}
-            </Button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) uploadFileMutation.mutate(file);
-              }}
-            />
           </div>
         </div>
 
@@ -378,19 +268,6 @@ const AdminFichiers = () => {
           </div>
         </div>
       </div>
-
-      {/* Upload Progress */}
-      {isUploading && (
-        <Card className="border-blue-200 bg-blue-50">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-blue-800">Upload en cours...</span>
-              <span className="text-sm text-blue-600">{uploadProgress}%</span>
-            </div>
-            <Progress value={uploadProgress} className="w-full" />
-          </CardContent>
-        </Card>
-      )}
 
       {/* Create Folder */}
       {isCreatingFolder && (
@@ -545,7 +422,7 @@ const AdminFichiers = () => {
             <p className="text-gray-500 mb-6">
               {searchQuery 
                 ? 'Aucun fichier ne correspond à votre recherche'
-                : 'Ajoutez des dossiers ou téléchargez des fichiers pour commencer'
+                : 'Ajoutez des dossiers pour commencer'
               }
             </p>
             {!searchQuery && (
@@ -553,10 +430,6 @@ const AdminFichiers = () => {
                 <Button onClick={() => setIsCreatingFolder(true)} variant="outline">
                   <Folder className="h-4 w-4 mr-2" />
                   Créer un dossier
-                </Button>
-                <Button onClick={() => fileInputRef.current?.click()}>
-                  <Upload className="h-4 w-4 mr-2" />
-                  Télécharger un fichier
                 </Button>
               </div>
             )}
