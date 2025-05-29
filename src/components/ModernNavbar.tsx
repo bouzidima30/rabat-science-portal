@@ -126,7 +126,7 @@ const ModernNavbar = () => {
                       <ChevronDown className="ml-1 h-4 w-4" />
                     </Button>
                     {hoveredMenu === item.name && <div className="absolute top-full left-0 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
-                        {item.dropdownItems?.map(dropdownItem => <Link key={dropdownItem.name} to={dropdownItem.path} className="block text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 py-[12px] px-[20px]">
+                        {item.dropdownItems?.map(dropdownItem => <Link key={dropdownItem.name} to={dropdownItem.path} className="block text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 py-[10px] px-[16px]">
                             {dropdownItem.name}
                           </Link>)}
                       </div>}
