@@ -2,6 +2,11 @@
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "next-themes";
 import { 
   LayoutDashboard, 
   FileText, 
@@ -16,13 +21,41 @@ import {
   Settings,
   Bell,
   Home,
-  Upload
+  Upload,
+  LogOut,
+  User,
+  Moon,
+  Sun
 } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
 const Admin = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error logging out:', error);
+      toast({
+        title: "Erreur de déconnexion",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Déconnecté",
+        description: "Vous avez été déconnecté avec succès"
+      });
+    }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const sidebarItems = [
     { name: "Dashboard", path: "/admin", icon: LayoutDashboard, description: "Vue d'ensemble" },
@@ -143,11 +176,40 @@ const Admin = () => {
                     Accueil
                   </Button>
                 </Link>
+                
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={toggleTheme}
+                  className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                >
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
+
+                {user && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
+                        <User className="h-4 w-4" />
+                        <span className="hidden sm:inline text-sm">{user.email}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuItem>
+                        <Settings className="h-4 w-4 mr-2" />
+                        Paramètres
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Déconnexion
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+
                 <Button variant="ghost" size="icon" className="text-gray-600 hover:text-blue-600">
                   <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" className="text-gray-600 hover:text-blue-600">
-                  <Settings className="h-4 w-4" />
                 </Button>
               </div>
             </div>
