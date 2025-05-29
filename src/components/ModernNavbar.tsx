@@ -46,16 +46,16 @@ const ModernNavbar = () => {
       path: "/lmd-guide"
     }, {
       name: "Formation licence",
-      path: "/formations/licence"
+      path: "/formation-licence"
     }, {
       name: "Formation master",
-      path: "/formations/master"
+      path: "/formation-master"
     }, {
       name: "Formation doctorat",
       path: "/formation-doctorat"
     }, {
       name: "Formation continue",
-      path: "/formations/continue"
+      path: "/formation-continue"
     }]
   }, {
     name: "Recherche",
@@ -91,10 +91,10 @@ const ModernNavbar = () => {
     hasDropdown: true,
     dropdownItems: [{
       name: "Coopération nationale",
-      path: "/cooperation/nationale"
+      path: "/cooperation-nationale"
     }, {
       name: "Coopération internationale",
-      path: "/cooperation/internationale"
+      path: "/cooperation-internationale"
     }]
   }, {
     name: "Actualités",
