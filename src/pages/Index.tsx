@@ -1,285 +1,359 @@
-
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Calendar, MapPin, Clock, BookOpen, Users, Award, Globe } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Calendar, Users, BookOpen, Trophy, ArrowRight, GraduationCap, Microscope, Globe } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
-import ModernNavbar from "@/components/ModernNavbar";
+import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
+import type { News, NewsCategory } from "@/types/news";
 
 const Index = () => {
-  // Fetch recent news
-  const { data: recentNews = [] } = useQuery({
-    queryKey: ['recent-news'],
-    queryFn: async () => {
-      const { data, error } = await supabase
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [recentNews, setRecentNews] = useState<News[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<NewsCategory | null>(null);
+
+  const carouselImages = [
+    {
+      url: "https://images.unsplash.com/photo-1472396961693-142e6e269027",
+      title: "Excellence Académique",
+      description: "La Faculté des Sciences de Rabat, un centre d'excellence pour l'enseignement supérieur et la recherche scientifique"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1433086966358-54859d0ed716",
+      title: "Innovation et Recherche",
+      description: "Des laboratoires de pointe pour une recherche scientifique d'excellence"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+      title: "Campus Moderne",
+      description: "Un environnement d'apprentissage moderne et stimulant"
+    }
+  ];
+
+  const categoryOptions = [
+    { value: "reunion_travail" as NewsCategory, label: "Réunion de travail" },
+    { value: "nouvelles_informations" as NewsCategory, label: "Nouvelles informations" },
+    { value: "activites_parauniversitaire" as NewsCategory, label: "Activités parauniversitaire" },
+    { value: "avis_etudiants" as NewsCategory, label: "Avis étudiants" },
+    { value: "avis_enseignants" as NewsCategory, label: "Avis enseignants" },
+    { value: "evenements_scientifique" as NewsCategory, label: "Événements scientifique" },
+  ];
+
+  const fsrStats = [
+    { label: "Étudiants", value: "8,500+", icon: Users },
+    { label: "Enseignants", value: "350+", icon: GraduationCap },
+    { label: "Formations", value: "120+", icon: BookOpen },
+    { label: "Laboratoires", value: "25+", icon: Microscope }
+  ];
+
+  const academicPrograms = [
+    {
+      title: "Licence",
+      description: "Formations de base dans diverses disciplines scientifiques",
+      icon: BookOpen,
+      color: "bg-blue-100 text-blue-600"
+    },
+    {
+      title: "Master",
+      description: "Spécialisations avancées et recherche appliquée",
+      icon: GraduationCap,
+      color: "bg-green-100 text-green-600"
+    },
+    {
+      title: "Doctorat",
+      description: "Formation doctorale et recherche de pointe",
+      icon: Trophy,
+      color: "bg-purple-100 text-purple-600"
+    },
+    {
+      title: "Formation Continue",
+      description: "Programmes de perfectionnement professionnel",
+      icon: Globe,
+      color: "bg-orange-100 text-orange-600"
+    }
+  ];
+
+  const upcomingEvents = [
+    {
+      title: "Conférence Internationale sur l'IA",
+      date: "25-27 Avril 2024",
+      location: "Amphithéâtre Principal"
+    },
+    {
+      title: "Soutenance de Thèse - Physique Quantique",
+      date: "30 Mars 2024",
+      location: "Salle de Conférence"
+    },
+    {
+      title: "Workshop - Biotechnologies",
+      date: "15 Avril 2024",
+      location: "Laboratoire de Biologie"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    fetchRecentNews();
+  }, [selectedCategory]);
+
+  const fetchRecentNews = async () => {
+    try {
+      let query = supabase
         .from('news')
         .select('*')
         .eq('published', true)
         .order('created_at', { ascending: false })
         .limit(3);
-      
-      if (error) throw error;
-      return data || [];
-    }
-  });
 
-  // Fetch upcoming events
-  const { data: upcomingEvents = [] } = useQuery({
-    queryKey: ['upcoming-events'],
-    queryFn: async () => {
-      const today = new Date().toISOString().split('T')[0];
-      const { data, error } = await supabase
-        .from('events')
-        .select('*')
-        .gte('date_debut', today)
-        .order('date_debut', { ascending: true })
-        .limit(3);
-      
-      if (error) throw error;
-      return data || [];
-    }
-  });
+      if (selectedCategory) {
+        query = query.eq('category', selectedCategory);
+      }
 
-  const categoryLabels = {
-    reunion_travail: "Réunion de travail",
-    nouvelles_informations: "Nouvelles informations",
-    activites_parauniversitaire: "Activités parauniversitaire",
-    avis_etudiants: "Avis étudiants",
-    avis_enseignants: "Avis enseignants",
-    evenements_scientifique: "Événements scientifique"
+      const { data, error } = await query;
+      if (error) throw error;
+      setRecentNews(data || []);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+    }
   };
 
-  const stats = [
-    { icon: Users, label: "Étudiants", value: "12,000+", color: "text-blue-600" },
-    { icon: BookOpen, label: "Programmes", value: "45+", color: "text-green-600" },
-    { icon: Award, label: "Laboratoires", value: "25+", color: "text-purple-600" },
-    { icon: Globe, label: "Partenariats", value: "100+", color: "text-orange-600" }
-  ];
+  const formatContent = (content: string) => {
+    return content
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <TopBar />
-      <ModernNavbar />
+      <Navbar />
       
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white">
-        <div className="container mx-auto px-4 py-20">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Bienvenue à la 
-              <span className="block text-blue-300">Faculté des Sciences</span>
-              <span className="block">de Rabat</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
-              Un établissement d'excellence en enseignement supérieur et recherche scientifique, 
-              formant les leaders de demain dans les sciences et technologies.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/formations">
-                <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8 py-3">
-                  Découvrir nos formations
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/recherche">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900 text-lg px-8 py-3">
-                  Nos recherches
-                </Button>
-              </Link>
-            </div>
-          </div>
+      {/* Hero Carousel Section */}
+      <section className="relative h-[600px] overflow-hidden">
+        <Carousel className="w-full h-full">
+          <CarouselContent>
+            {carouselImages.map((slide, index) => (
+              <CarouselItem key={index} className="relative">
+                <div 
+                  className="w-full h-[600px] bg-cover bg-center relative"
+                  style={{ backgroundImage: `url(${slide.url})` }}
+                >
+                  <div className="absolute inset-0 bg-black/50" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center text-white max-w-4xl px-4">
+                      <h1 className="text-5xl font-bold mb-4 animate-fade-in">
+                        {slide.title}
+                      </h1>
+                      <p className="text-xl mb-8 animate-fade-in">
+                        {slide.description}
+                      </p>
+                      <Button 
+                        size="lg" 
+                        className="bg-[#006be5] hover:bg-[#0056b3] text-white animate-fade-in"
+                      >
+                        Découvrir la FSR
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-8" />
+          <CarouselNext className="right-8" />
+        </Carousel>
+      </section>
+
+      {/* Recent News Section */}
+      <section className="py-16 px-4 max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Actualités Récentes
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Restez informés des dernières nouvelles de la faculté
+          </p>
+        </div>
+
+        {/* Category Filter */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <Button
+            variant={selectedCategory === null ? "default" : "outline"}
+            onClick={() => setSelectedCategory(null)}
+            className={selectedCategory === null ? "bg-[#006be5] hover:bg-[#0056b3]" : ""}
+            size="sm"
+          >
+            Toutes
+          </Button>
+          {categoryOptions.map((category) => (
+            <Button
+              key={category.value}
+              variant={selectedCategory === category.value ? "default" : "outline"}
+              onClick={() => setSelectedCategory(category.value)}
+              className={selectedCategory === category.value ? "bg-[#006be5] hover:bg-[#0056b3]" : ""}
+              size="sm"
+            >
+              {category.label}
+            </Button>
+          ))}
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          {recentNews.map((news) => (
+            <Card key={news.id} className="hover-scale cursor-pointer">
+              {news.image_url && (
+                <div className="aspect-video overflow-hidden rounded-t-lg">
+                  <img 
+                    src={news.image_url} 
+                    alt={news.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              <CardHeader>
+                <Badge variant="secondary" className="w-fit mb-2">
+                  {new Date(news.created_at).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </Badge>
+                <CardTitle className="text-lg">{news.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div 
+                  className="prose prose-sm max-w-none text-gray-600 dark:text-gray-300"
+                  dangerouslySetInnerHTML={{ 
+                    __html: formatContent(news.excerpt || news.content.substring(0, 150) + "...") 
+                  }}
+                />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        
+        <div className="text-center">
+          <Link to="/actualites">
+            <Button variant="outline" className="border-[#006be5] text-[#006be5] hover:bg-[#006be5] hover:text-white">
+              Toutes les actualités
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => {
+      {/* FSR Stats Section */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              La FSR en Chiffres
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Notre impact en quelques statistiques clés
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-4 gap-6">
+            {fsrStats.map((stat, index) => {
               const IconComponent = stat.icon;
               return (
-                <div key={index} className="text-center">
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4 ${stat.color}`}>
-                    <IconComponent className="h-8 w-8" />
-                  </div>
-                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                  <div className="text-gray-600">{stat.label}</div>
-                </div>
+                <Card key={index} className="text-center">
+                  <CardContent className="pt-6">
+                    <IconComponent className="h-12 w-12 text-[#006be5] mx-auto mb-4" />
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                      {stat.value}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-300">
+                      {stat.label}
+                    </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* Recent News Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Actualités Récentes</h2>
-            <p className="text-xl text-gray-600">Restez informé des dernières nouvelles de notre faculté</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-            {recentNews.map((news) => (
-              <Link key={news.id} to={`/actualite/${news.id}`}>
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300 group">
-                  {news.image_url && (
-                    <div className="h-48 overflow-hidden rounded-t-lg">
-                      <img 
-                        src={news.image_url} 
-                        alt={news.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  )}
-                  <CardContent className="p-6">
-                    <Badge variant="secondary" className="mb-3">
-                      {categoryLabels[news.category as keyof typeof categoryLabels]}
-                    </Badge>
-                    <CardTitle className="text-lg mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                      {news.title}
-                    </CardTitle>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                      {news.excerpt || news.content.substring(0, 120) + "..."}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {new Date(news.created_at).toLocaleDateString('fr-FR')}
-                      </div>
-                      <div className="flex items-center text-blue-600 text-sm font-medium group-hover:gap-2 transition-all">
-                        Lire plus
-                        <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-          
-          <div className="text-center">
-            <Link to="/actualites">
-              <Button size="lg" variant="outline">
-                Voir toutes les actualités
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
+      {/* Academic Programs Section */}
+      <section className="py-16 px-4 max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Nos Programmes Académiques
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Découvrez notre offre de formation complète
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {academicPrograms.map((program, index) => {
+            const IconComponent = program.icon;
+            return (
+              <Card key={index} className="hover-scale cursor-pointer">
+                <CardHeader className="text-center">
+                  <div className={`w-16 h-16 rounded-full ${program.color} flex items-center justify-center mx-auto mb-4`}>
+                    <IconComponent className="h-8 w-8" />
+                  </div>
+                  <CardTitle className="text-xl">{program.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-300 text-center">
+                    {program.description}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
       {/* Upcoming Events Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Événements à Venir</h2>
-            <p className="text-xl text-gray-600">Découvrez les prochains événements de notre faculté</p>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Événements à Venir
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Ne manquez pas nos prochains événements
+            </p>
           </div>
           
-          {upcomingEvents.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-              {upcomingEvents.map((event) => (
-                <Link key={event.id} to={`/evenement/${event.id}`}>
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300 group">
-                    {event.image_url && (
-                      <div className="h-48 overflow-hidden rounded-t-lg">
-                        <img 
-                          src={event.image_url} 
-                          alt={event.titre}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
-                    <CardContent className="p-6">
-                      <CardTitle className="text-lg mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                        {event.titre}
-                      </CardTitle>
-                      {event.description && (
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                          {event.description}
-                        </p>
-                      )}
-                      <div className="space-y-2 text-sm text-gray-500">
-                        <div className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-2" />
-                          {new Date(event.date_debut).toLocaleDateString('fr-FR')}
-                          {event.date_fin && event.date_fin !== event.date_debut && (
-                            <span> - {new Date(event.date_fin).toLocaleDateString('fr-FR')}</span>
-                          )}
-                        </div>
-                        {event.heure_debut && (
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-2" />
-                            {event.heure_debut}
-                            {event.heure_fin && <span> - {event.heure_fin}</span>}
-                          </div>
-                        )}
-                        {event.lieu && (
-                          <div className="flex items-center">
-                            <MapPin className="h-4 w-4 mr-2" />
-                            {event.lieu}
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucun événement à venir</h3>
-              <p className="text-gray-500">Les prochains événements seront annoncés bientôt.</p>
-            </div>
-          )}
-          
-          <div className="text-center">
-            <Link to="/evenements">
-              <Button size="lg" variant="outline">
-                Voir tous les événements
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Quick Links Section */}
-      <section className="py-16 bg-blue-900 text-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Accès Rapide</h2>
-            <p className="text-xl text-blue-100">Trouvez rapidement ce que vous cherchez</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: "Formations", description: "Découvrez nos programmes", path: "/formations", icon: BookOpen },
-              { title: "Recherche", description: "Nos domaines d'expertise", path: "/recherche", icon: Award },
-              { title: "Espace Étudiants", description: "Services aux étudiants", path: "/espace-etudiants", icon: Users },
-              { title: "Coopération", description: "Nos partenariats", path: "/cooperation", icon: Globe }
-            ].map((link, index) => {
-              const IconComponent = link.icon;
-              return (
-                <Link key={index} to={link.path}>
-                  <Card className="bg-white/10 border-white/20 hover:bg-white/20 transition-all duration-300 group">
-                    <CardContent className="p-6 text-center">
-                      <IconComponent className="h-12 w-12 text-blue-300 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-                      <CardTitle className="text-white mb-2 group-hover:text-blue-200 transition-colors">
-                        {link.title}
-                      </CardTitle>
-                      <p className="text-blue-100 text-sm">{link.description}</p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              );
-            })}
+          <div className="grid md:grid-cols-3 gap-6">
+            {upcomingEvents.map((event, index) => (
+              <Card key={index} className="hover-scale cursor-pointer">
+                <CardHeader>
+                  <div className="flex items-center mb-2">
+                    <Calendar className="h-5 w-5 text-[#006be5] mr-2" />
+                    <Badge variant="outline">{event.date}</Badge>
+                  </div>
+                  <CardTitle className="text-lg">{event.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    📍 {event.location}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
