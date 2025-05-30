@@ -1,18 +1,19 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Edit, Trash2, X } from "lucide-react";
+import { Plus, Edit, Trash2, X, Globe, MapPin, Users, Calendar, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const AdminCooperations = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     titre: '',
     type_cooperation: '',
@@ -247,47 +248,131 @@ const AdminCooperations = () => {
     }
   };
 
+  const filteredCooperations = cooperations?.filter(cooperation =>
+    cooperation.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    cooperation.type_cooperation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (cooperation.domaine_recherche && cooperation.domaine_recherche.toLowerCase().includes(searchQuery.toLowerCase()))
+  ) || [];
+
   if (isLoading) {
-    return <div className="p-6">Chargement...</div>;
+    return (
+      <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Gestion des Coopérations
-        </h1>
-        <Button onClick={() => setIsEditing(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Nouvelle Coopération
-        </Button>
+    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-xl">
+              <Globe className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Gestion des Coopérations
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">
+                Gérez les partenariats nationaux et internationaux
+              </p>
+            </div>
+          </div>
+          <Button onClick={() => setIsEditing(true)} className="bg-purple-600 hover:bg-purple-700 shadow-lg">
+            <Plus className="h-4 w-4 mr-2" />
+            Nouvelle Coopération
+          </Button>
+        </div>
       </div>
 
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Total Coopérations</p>
+                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{cooperations?.length || 0}</p>
+              </div>
+              <Globe className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Internationales</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                  {cooperations?.filter(c => c.type_cooperation === 'Internationale').length || 0}
+                </p>
+              </div>
+              <MapPin className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-600 dark:text-green-400 text-sm font-medium">Nationales</p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">
+                  {cooperations?.filter(c => c.type_cooperation === 'Nationale').length || 0}
+                </p>
+              </div>
+              <Users className="h-8 w-8 text-green-600 dark:text-green-400" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Search Bar */}
+      <Card className="mb-8 border-0 shadow-lg">
+        <CardContent className="p-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <Input
+              placeholder="Rechercher une coopération..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Form */}
       {isEditing && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>
+        <Card className="mb-8 border-0 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5" />
               {editingId ? 'Modifier la Coopération' : 'Nouvelle Coopération'}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
+          <CardContent className="p-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Titre *</label>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Titre *</label>
                   <Input
                     value={formData.titre}
                     onChange={(e) => setFormData(prev => ({ ...prev, titre: e.target.value }))}
                     required
+                    className="h-12"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Type *</label>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Type *</label>
                   <Select 
                     value={formData.type_cooperation} 
                     onValueChange={(value) => setFormData(prev => ({ ...prev, type_cooperation: value }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="h-12">
                       <SelectValue placeholder="Sélectionner le type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -429,8 +514,8 @@ const AdminCooperations = () => {
                 )}
               </div>
 
-              <div className="flex gap-2">
-                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+              <div className="flex gap-4">
+                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending} className="bg-purple-600 hover:bg-purple-700">
                   {editingId ? 'Modifier' : 'Créer'}
                 </Button>
                 <Button type="button" variant="outline" onClick={resetForm}>
@@ -442,40 +527,92 @@ const AdminCooperations = () => {
         </Card>
       )}
 
-      <div className="grid gap-4">
-        {cooperations?.map((cooperation) => (
-          <Card key={cooperation.id}>
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start">
+      {/* Cooperations List */}
+      <div className="space-y-6">
+        {filteredCooperations.map((cooperation) => (
+          <Card key={cooperation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{cooperation.titre}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {cooperation.type_cooperation} - {cooperation.domaine_recherche}
-                  </p>
-                  <p className="text-gray-700 dark:text-gray-300 mt-2 line-clamp-2">
-                    {cooperation.description}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {cooperation.annee_debut} {cooperation.annee_fin && `- ${cooperation.annee_fin}`}
-                  </p>
-                </div>
-                <div className="flex gap-2 ml-4">
-                  <Button size="sm" variant="outline" onClick={() => handleEdit(cooperation)}>
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="destructive" 
-                    onClick={() => deleteMutation.mutate(cooperation.id)}
-                    disabled={deleteMutation.isPending}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                        {cooperation.titre}
+                      </h3>
+                      <div className="flex items-center gap-3 mb-3">
+                        <Badge 
+                          variant="outline" 
+                          className={cooperation.type_cooperation === 'Internationale' ? 
+                            'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300' : 
+                            'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300'
+                          }
+                        >
+                          {cooperation.type_cooperation}
+                        </Badge>
+                        {cooperation.domaine_recherche && (
+                          <Badge variant="outline">
+                            {cooperation.domaine_recherche}
+                          </Badge>
+                        )}
+                        {cooperation.annee_debut && (
+                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            {cooperation.annee_debut} {cooperation.annee_fin && `- ${cooperation.annee_fin}`}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={() => handleEdit(cooperation)}>
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="destructive" 
+                        onClick={() => deleteMutation.mutate(cooperation.id)}
+                        disabled={deleteMutation.isPending}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {cooperation.description && (
+                    <p className="text-gray-700 dark:text-gray-300 mb-3 line-clamp-2">
+                      {cooperation.description}
+                    </p>
+                  )}
+                  
+                  {cooperation.coordinateur && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <strong>Coordinateur:</strong> {cooperation.coordinateur}
+                    </p>
+                  )}
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
+
+        {filteredCooperations.length === 0 && (
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-12 text-center">
+              <Globe className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                Aucune coopération trouvée
+              </h3>
+              <p className="text-gray-500 mb-6">
+                {searchQuery ? "Aucun résultat pour votre recherche." : "Créez votre première coopération pour commencer."}
+              </p>
+              {!searchQuery && (
+                <Button onClick={() => setIsEditing(true)} className="bg-purple-600 hover:bg-purple-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nouvelle Coopération
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

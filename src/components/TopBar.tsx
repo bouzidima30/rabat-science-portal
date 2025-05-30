@@ -36,7 +36,8 @@ const TopBar = () => {
   };
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
   };
 
   return (
@@ -63,7 +64,7 @@ const TopBar = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={toggleTheme} 
+              onClick={toggleTheme}
               className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
