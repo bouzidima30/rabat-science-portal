@@ -80,7 +80,7 @@ const FormationDetail = () => {
 
         <Card className="shadow-lg">
           {formation.image_url && (
-            <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+            <div className="{bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
               <img 
                 src={formation.image_url} 
                 alt={formation.titre}
