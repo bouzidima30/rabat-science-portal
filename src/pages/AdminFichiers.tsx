@@ -1,561 +1,316 @@
-import { useState, useRef } from "react";
+
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { 
-  Folder, 
-  File, 
-  Plus, 
-  Trash2, 
-  Upload, 
-  Download, 
-  FolderOpen, 
-  ArrowLeft, 
-  Image, 
-  FileText,
-  Search,
-  Grid,
-  List
-} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Progress } from "@/components/ui/progress";
+import { supabase } from "@/integrations/supabase/client";
+import { FileText, Download, Trash2, Upload, Search, FolderOpen, Eye, Calendar } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 interface FileItem {
   id: string;
   name: string;
-  type: 'folder' | 'file';
-  parent_id: string | null;
-  file_url?: string;
-  file_size?: number;
-  mime_type?: string;
+  file_path: string;
+  file_size: number;
+  file_type: string;
+  uploaded_by: string;
   created_at: string;
 }
 
 const AdminFichiers = () => {
-  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
-  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
-  const [folderName, setFolderName] = useState('');
-  const [folderPath, setFolderPath] = useState<Array<{ id: string; name: string }>>([]);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [searchQuery, setSearchQuery] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [files, setFiles] = useState<FileItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  const { data: files = [], isLoading, error } = useQuery({
-    queryKey: ['admin-files', currentFolderId],
-    queryFn: async () => {
-      console.log('Fetching files for folder:', currentFolderId);
-      
+  useEffect(() => {
+    fetchFiles();
+  }, []);
+
+  const fetchFiles = async () => {
+    try {
       const { data, error } = await supabase
-        .from('file_manager')
+        .from('file_uploads')
         .select('*')
-        .eq('parent_id', currentFolderId === null ? null : currentFolderId)
-        .order('type', { ascending: true })
-        .order('name', { ascending: true });
-      
-      if (error) {
-        console.error('Error fetching files:', error);
-        throw error;
-      }
-      
-      console.log('Fetched files:', data);
-      return data as FileItem[] || [];
-    }
-  });
+        .order('created_at', { ascending: false });
 
-  const createFolderMutation = useMutation({
-    mutationFn: async (name: string) => {
-      const { data, error } = await supabase
-        .from('file_manager')
-        .insert([{
-          name,
-          type: 'folder',
-          parent_id: currentFolderId
-        }])
-        .select()
-        .single();
-      
       if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-files'] });
-      setFolderName('');
-      setIsCreatingFolder(false);
-      toast({
-        title: "Dossier créé",
-        description: "Le dossier a été créé avec succès",
-      });
-    },
-    onError: (error) => {
-      console.error('Error creating folder:', error);
+      setFiles(data || []);
+    } catch (error: any) {
+      console.error('Error fetching files:', error);
       toast({
         title: "Erreur",
-        description: "Erreur lors de la création du dossier",
+        description: "Erreur lors du chargement des fichiers",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteFile = async (fileId: string, filePath: string) => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce fichier ?")) return;
+
+    try {
+      // Delete from storage
+      const { error: storageError } = await supabase.storage
+        .from('files')
+        .remove([filePath]);
+
+      if (storageError) throw storageError;
+
+      // Delete from database
+      const { error: dbError } = await supabase
+        .from('file_uploads')
+        .delete()
+        .eq('id', fileId);
+
+      if (dbError) throw dbError;
+
+      toast({
+        title: "Succès",
+        description: "Fichier supprimé avec succès",
+      });
+
+      fetchFiles();
+    } catch (error: any) {
+      console.error('Error deleting file:', error);
+      toast({
+        title: "Erreur",
+        description: "Erreur lors de la suppression du fichier",
         variant: "destructive",
       });
     }
-  });
+  };
 
-  const uploadFileMutation = useMutation({
-    mutationFn: async (file: File) => {
-      setIsUploading(true);
-      setUploadProgress(0);
+  const downloadFile = async (filePath: string, fileName: string) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('files')
+        .download(filePath);
 
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      
-      try {
-        const progressInterval = setInterval(() => {
-          setUploadProgress(prev => {
-            if (prev >= 90) {
-              clearInterval(progressInterval);
-              return 90;
-            }
-            return prev + 10;
-          });
-        }, 200);
+      if (error) throw error;
 
-        const { error: uploadError } = await supabase.storage
-          .from('file-manager')
-          .upload(fileName, file);
-
-        if (uploadError) throw uploadError;
-
-        const { data } = supabase.storage
-          .from('file-manager')
-          .getPublicUrl(fileName);
-
-        const { error: dbError } = await supabase
-          .from('file_manager')
-          .insert([{
-            name: file.name,
-            type: 'file',
-            parent_id: currentFolderId,
-            file_url: data.publicUrl,
-            file_size: file.size,
-            mime_type: file.type
-          }]);
-
-        if (dbError) throw dbError;
-
-        clearInterval(progressInterval);
-        setUploadProgress(100);
-        
-        setTimeout(() => {
-          setIsUploading(false);
-          setUploadProgress(0);
-        }, 1000);
-
-      } catch (error) {
-        setIsUploading(false);
-        setUploadProgress(0);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-files'] });
-      toast({
-        title: "Fichier téléchargé",
-        description: "Le fichier a été téléchargé avec succès",
-      });
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    },
-    onError: (error) => {
-      console.error('Error uploading file:', error);
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error: any) {
+      console.error('Error downloading file:', error);
       toast({
         title: "Erreur",
         description: "Erreur lors du téléchargement du fichier",
         variant: "destructive",
       });
     }
-  });
-
-  const deleteItemMutation = useMutation({
-    mutationFn: async (item: FileItem) => {
-      if (item.type === 'file' && item.file_url) {
-        const fileName = item.file_url.split('/').pop();
-        if (fileName) {
-          const { error: storageError } = await supabase.storage
-            .from('file-manager')
-            .remove([fileName]);
-          
-          if (storageError) {
-            console.error('Storage deletion error:', storageError);
-          }
-        }
-      }
-
-      const { error } = await supabase
-        .from('file_manager')
-        .delete()
-        .eq('id', item.id);
-      
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-files'] });
-      toast({
-        title: "Élément supprimé",
-        description: "L'élément a été supprimé avec succès",
-      });
-    },
-    onError: (error) => {
-      console.error('Error deleting item:', error);
-      toast({
-        title: "Erreur",
-        description: "Erreur lors de la suppression",
-        variant: "destructive",
-      });
-    }
-  });
-
-  const navigateToFolder = (folder: FileItem) => {
-    setCurrentFolderId(folder.id);
-    setFolderPath([...folderPath, { id: folder.id, name: folder.name }]);
   };
 
-  const navigateBack = () => {
-    if (folderPath.length > 0) {
-      const newPath = [...folderPath];
-      newPath.pop();
-      setFolderPath(newPath);
-      setCurrentFolderId(newPath.length > 0 ? newPath[newPath.length - 1].id : null);
-    }
-  };
-
-  const formatFileSize = (bytes?: number) => {
-    if (!bytes || bytes === 0) return '0 Bytes';
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const getFileIcon = (mimeType?: string) => {
-    if (mimeType?.startsWith('image/')) {
-      return <Image className="h-8 w-8 text-green-500" />;
-    } else if (mimeType?.includes('pdf')) {
-      return <FileText className="h-8 w-8 text-red-500" />;
-    } else {
-      return <File className="h-8 w-8 text-gray-500" />;
-    }
+  const getFileIcon = (fileType: string) => {
+    if (fileType.includes('image')) return '🖼️';
+    if (fileType.includes('pdf')) return '📄';
+    if (fileType.includes('word')) return '📝';
+    if (fileType.includes('excel') || fileType.includes('spreadsheet')) return '📊';
+    if (fileType.includes('powerpoint') || fileType.includes('presentation')) return '📺';
+    return '📎';
   };
 
-  const filteredFiles = files.filter(file => 
-    file.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredFiles = files.filter(file =>
+    file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    file.file_type.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (error) {
-    return (
-      <div className="p-8">
-        <Card className="border-red-200 bg-red-50 dark:bg-red-950/20">
-          <CardContent className="p-6">
-            <p className="text-red-800 dark:text-red-200">Erreur lors du chargement des fichiers: {error.message}</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const totalFiles = files.length;
+  const totalSize = files.reduce((acc, file) => acc + file.file_size, 0);
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="flex items-center justify-center p-12">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement des fichiers...</p>
+      <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8 space-y-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
-                <Folder className="h-7 w-7 text-blue-600 dark:text-blue-400" />
-              </div>
-              Gestionnaire de Fichiers
-            </h1>
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-3">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => {setCurrentFolderId(null); setFolderPath([])}} 
-                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 px-2"
-              >
-                📁 Racine
-              </Button>
-              {folderPath.map((folder, index) => (
-                <span key={folder.id} className="flex items-center gap-2">
-                  <span className="text-gray-400">/</span>
-                  <span className="font-medium">{folder.name}</span>
-                </span>
-              ))}
+    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl">
+              <FolderOpen className="h-8 w-8 text-green-600 dark:text-green-400" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Gestion des Fichiers
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">
+                Organisez et gérez tous vos documents
+              </p>
             </div>
           </div>
-          
-          <div className="flex items-center gap-3">
-            {folderPath.length > 0 && (
-              <Button variant="outline" onClick={navigateBack} className="shadow-sm border-gray-300 dark:border-gray-600">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour
-              </Button>
-            )}
-            <Button onClick={() => setIsCreatingFolder(true)} className="bg-blue-600 hover:bg-blue-700 shadow-sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Dossier
-            </Button>
-            <Button 
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              className="bg-green-600 hover:bg-green-700 shadow-sm"
-            >
+          <Link to="/admin/upload-files">
+            <Button className="bg-green-600 hover:bg-green-700 shadow-lg">
               <Upload className="h-4 w-4 mr-2" />
-              {isUploading ? "Upload..." : "Fichier"}
+              Télécharger des fichiers
             </Button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) uploadFileMutation.mutate(file);
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Search and View Controls */}
-        <div className="flex items-center gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Rechercher des fichiers..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 shadow-sm bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('grid')}
-              className="shadow-sm"
-            >
-              <Grid className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className="shadow-sm"
-            >
-              <List className="h-4 w-4" />
-            </Button>
-          </div>
+          </Link>
         </div>
       </div>
 
-      {/* Upload Progress */}
-      {isUploading && (
-        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/20 dark:border-blue-800 shadow-sm">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
           <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Upload en cours...</span>
-              <span className="text-sm text-blue-600 dark:text-blue-400">{uploadProgress}%</span>
-            </div>
-            <Progress value={uploadProgress} className="w-full" />
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Create Folder */}
-      {isCreatingFolder && (
-        <Card className="border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-800 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex gap-3">
-              <Input
-                value={folderName}
-                onChange={(e) => setFolderName(e.target.value)}
-                placeholder="Nom du dossier"
-                className="flex-1 bg-white dark:bg-gray-700"
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter' && folderName.trim()) {
-                    createFolderMutation.mutate(folderName.trim());
-                  }
-                }}
-              />
-              <Button 
-                onClick={() => createFolderMutation.mutate(folderName.trim())}
-                disabled={!folderName.trim() || createFolderMutation.isPending}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                Créer
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  setIsCreatingFolder(false);
-                  setFolderName('');
-                }}
-              >
-                Annuler
-              </Button>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-600 dark:text-green-400 text-sm font-medium">Total Fichiers</p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{totalFiles}</p>
+              </div>
+              <FileText className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
           </CardContent>
         </Card>
-      )}
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Espace Utilisé</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{formatFileSize(totalSize)}</p>
+              </div>
+              <Upload className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Types</p>
+                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+                  {new Set(files.map(f => f.file_type.split('/')[0])).size}
+                </p>
+              </div>
+              <Eye className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-      {/* Files Display */}
-      {filteredFiles.length > 0 ? (
-        <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "space-y-3"}>
-          {filteredFiles.map((item) => (
-            <Card key={item.id} className="group hover:shadow-lg transition-all duration-300 border-0 shadow-sm bg-white dark:bg-gray-800">
-              <CardContent className={viewMode === 'grid' ? "p-6 text-center" : "p-4"}>
-                {viewMode === 'grid' ? (
-                  <>
-                    <div className="mb-4">
-                      {item.type === 'folder' ? (
-                        <div className="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Folder className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                        </div>
-                      ) : (
-                        <div className="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                          {getFileIcon(item.mime_type)}
-                        </div>
-                      )}
-                    </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2 truncate">
-                      {item.name}
-                    </h3>
-                    {item.type === 'file' && (
-                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                        {item.file_size && <div>{formatFileSize(item.file_size)}</div>}
-                        <div>{new Date(item.created_at).toLocaleDateString('fr-FR')}</div>
-                      </div>
-                    )}
-                    <div className="flex gap-2 justify-center">
-                      {item.type === 'folder' ? (
-                        <Button size="sm" onClick={() => navigateToFolder(item)} className="shadow-sm">
-                          <FolderOpen className="h-4 w-4 mr-1" />
-                          Ouvrir
+      {/* Search Bar */}
+      <Card className="mb-8 border-0 shadow-lg">
+        <CardContent className="p-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <Input
+              placeholder="Rechercher un fichier..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Files List */}
+      <div className="space-y-6">
+        {filteredFiles.map((file) => (
+          <Card key={file.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4 flex-1">
+                  <div className="text-4xl">
+                    {getFileIcon(file.file_type)}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {file.name}
+                      </h3>
+                      <div className="flex space-x-2 ml-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => downloadFile(file.file_path, file.name)}
+                          className="hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-900/20"
+                        >
+                          <Download className="h-4 w-4" />
                         </Button>
-                      ) : (
-                        item.file_url && (
-                          <Button size="sm" variant="outline" asChild className="shadow-sm">
-                            <a href={item.file_url} target="_blank" rel="noopener noreferrer">
-                              <Download className="h-4 w-4 mr-1" />
-                              Voir
-                            </a>
-                          </Button>
-                        )
-                      )}
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
-                        onClick={() => deleteItemMutation.mutate(item)}
-                        disabled={deleteItemMutation.isPending}
-                        className="shadow-sm"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      {item.type === 'folder' ? (
-                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                          <Folder className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                        </div>
-                      ) : (
-                        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                          {getFileIcon(item.mime_type)}
-                        </div>
-                      )}
-                      <div>
-                        <h3 className="font-medium text-gray-900 dark:text-white">{item.name}</h3>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {item.type === 'file' && item.file_size && `${formatFileSize(item.file_size)} • `}
-                          {new Date(item.created_at).toLocaleDateString('fr-FR')}
-                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => deleteFile(file.id, file.file_path)}
+                          className="hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20 text-red-600"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
-                      {item.type === 'folder' ? (
-                        <Button size="sm" onClick={() => navigateToFolder(item)} className="shadow-sm">
-                          Ouvrir
-                        </Button>
-                      ) : (
-                        item.file_url && (
-                          <Button size="sm" variant="outline" asChild className="shadow-sm">
-                            <a href={item.file_url} target="_blank" rel="noopener noreferrer">
-                              <Download className="h-4 w-4" />
-                            </a>
-                          </Button>
-                        )
-                      )}
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
-                        onClick={() => deleteItemMutation.mutate(item)}
-                        disabled={deleteItemMutation.isPending}
-                        className="shadow-sm"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                    <div className="flex items-center space-x-3 mb-2">
+                      <Badge variant="secondary" className="bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                        {file.file_type}
+                      </Badge>
+                      <Badge variant="outline">
+                        {formatFileSize(file.file_size)}
+                      </Badge>
+                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        {new Date(file.created_at).toLocaleDateString('fr-FR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </div>
                     </div>
+                    
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Téléchargé par: {file.uploaded_by}
+                    </p>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <Card className="border-dashed border-2 border-gray-300 dark:border-gray-600 shadow-sm bg-white dark:bg-gray-800">
-          <CardContent className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Folder className="h-12 w-12 text-gray-400" />
-            </div>
-            <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-300 mb-3">
-              {searchQuery ? 'Aucun résultat' : 'Dossier vide'}
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">
-              {searchQuery 
-                ? 'Aucun fichier ne correspond à votre recherche'
-                : 'Ajoutez des dossiers ou téléchargez des fichiers pour commencer'
-              }
-            </p>
-            {!searchQuery && (
-              <div className="flex gap-3 justify-center">
-                <Button onClick={() => setIsCreatingFolder(true)} variant="outline" className="shadow-sm">
-                  <Folder className="h-4 w-4 mr-2" />
-                  Créer un dossier
-                </Button>
-                <Button onClick={() => fileInputRef.current?.click()} className="shadow-sm">
-                  <Upload className="h-4 w-4 mr-2" />
-                  Télécharger un fichier
-                </Button>
+                </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
+            </CardContent>
+          </Card>
+        ))}
+
+        {filteredFiles.length === 0 && (
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-12 text-center">
+              <FolderOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                Aucun fichier trouvé
+              </h3>
+              <p className="text-gray-500 mb-6">
+                {searchQuery ? "Aucun résultat pour votre recherche." : "Téléchargez votre premier fichier pour commencer."}
+              </p>
+              {!searchQuery && (
+                <Link to="/admin/upload-files">
+                  <Button className="bg-green-600 hover:bg-green-700">
+                    <Upload className="h-4 w-4 mr-2" />
+                    Télécharger des fichiers
+                  </Button>
+                </Link>
+              )}
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
 };

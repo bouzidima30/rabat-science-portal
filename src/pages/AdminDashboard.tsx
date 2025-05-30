@@ -14,7 +14,8 @@ import {
   BarChart3,
   PieChart,
   ArrowUpRight,
-  Clock
+  Clock,
+  Home
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -141,33 +142,39 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Tableau de Bord
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg">
-            Vue d'ensemble de votre administration FSR
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-            <Clock className="h-4 w-4 mr-1" />
-            Mis à jour il y a quelques secondes
+    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-xl">
+              <Home className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Tableau de Bord
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">
+                Vue d'ensemble de votre administration FSR
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+              <Clock className="h-4 w-4 mr-1" />
+              Mis à jour il y a quelques secondes
+            </div>
           </div>
         </div>
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {dashboardCards.map((card, index) => {
           const IconComponent = card.icon;
           return (
             <Link key={index} to={card.link}>
-              <Card className="relative overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer border-0 shadow-md">
-                <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800 group cursor-pointer">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     {card.title}
@@ -199,7 +206,7 @@ const AdminDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Actions */}
-        <Card className="lg:col-span-2 shadow-md border-0">
+        <Card className="lg:col-span-2 border-0 shadow-lg bg-white dark:bg-gray-800">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl font-semibold flex items-center gap-2">
@@ -238,7 +245,7 @@ const AdminDashboard = () => {
         </Card>
 
         {/* Recent Activity */}
-        <Card className="shadow-md border-0">
+        <Card className="border-0 shadow-lg bg-white dark:bg-gray-800">
           <CardHeader className="pb-4">
             <CardTitle className="text-xl font-semibold flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-green-500" />
@@ -248,7 +255,7 @@ const AdminDashboard = () => {
           <CardContent>
             <div className="space-y-4">
               {recentNews?.slice(0, 3).map((news) => (
-                <div key={news.id} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <div key={news.id} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
@@ -262,7 +269,7 @@ const AdminDashboard = () => {
               ))}
               
               {recentEvents?.slice(0, 2).map((event) => (
-                <div key={event.id} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <div key={event.id} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
@@ -286,8 +293,8 @@ const AdminDashboard = () => {
         </Card>
       </div>
 
-      {/* Overview Chart Placeholder */}
-      <Card className="shadow-md border-0">
+      {/* Overview Chart */}
+      <Card className="mt-6 border-0 shadow-lg bg-white dark:bg-gray-800">
         <CardHeader>
           <CardTitle className="text-xl font-semibold flex items-center gap-2">
             <PieChart className="h-5 w-5 text-purple-500" />

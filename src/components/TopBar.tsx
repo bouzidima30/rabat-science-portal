@@ -84,9 +84,11 @@ const TopBar = () => {
                       Administration
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="h-4 w-4 mr-2" />
-                    Paramètres
+                  <DropdownMenuItem asChild>
+                    <Link to="/parametres" className="flex items-center">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Paramètres
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
