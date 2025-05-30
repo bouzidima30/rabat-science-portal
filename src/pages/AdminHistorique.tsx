@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,27 +25,46 @@ interface ActivityLog {
   profiles?: {
     full_name: string | null;
     email: string;
-  };
+  } | null;
 }
 
 const AdminHistorique = () => {
   const { data: activities = [], isLoading } = useQuery({
     queryKey: ['admin-activity-logs'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // First get activity logs
+      const { data: activityData, error: activityError } = await supabase
         .from('activity_logs')
-        .select(`
-          *,
-          profiles:user_id (
-            full_name,
-            email
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
       
-      if (error) throw error;
-      return data as ActivityLog[];
+      if (activityError) throw activityError;
+      
+      if (!activityData || activityData.length === 0) {
+        return [];
+      }
+
+      // Get unique user IDs
+      const userIds = [...new Set(activityData.map(activity => activity.user_id))];
+      
+      // Get profiles for these users
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, full_name, email')
+        .in('id', userIds);
+      
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+      }
+
+      // Combine the data
+      const activitiesWithProfiles = activityData.map(activity => ({
+        ...activity,
+        profiles: profilesData?.find(profile => profile.id === activity.user_id) || null
+      }));
+
+      return activitiesWithProfiles as ActivityLog[];
     }
   });
 
@@ -216,7 +234,7 @@ const AdminHistorique = () => {
                         {activity.profiles?.full_name || 'Utilisateur inconnu'}
                       </span>
                       <span className="text-sm text-gray-500 dark:text-gray-400">
-                        ({activity.profiles?.email})
+                        ({activity.profiles?.email || 'Email non trouvé'})
                       </span>
                     </div>
                     
