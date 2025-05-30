@@ -13,6 +13,7 @@ import AdminCooperations from "../pages/AdminCooperations";
 import AdminPages from "../pages/AdminPages";
 import AdminFichiers from "../pages/AdminFichiers";
 import AdminUploadFiles from "../pages/AdminUploadFiles";
+import AdminHistorique from "../pages/AdminHistorique";
 import Actualites from "../pages/Actualites";
 import ActualiteDetail from "../pages/ActualiteDetail";
 import Evenements from "../pages/Evenements";
@@ -56,6 +57,7 @@ import Resultats from "../pages/Resultats";
 import Preselection from "../pages/Preselection";
 import ActivitesParaUniversitaires from "../pages/ActivitesParaUniversitaires";
 import Parametres from "../pages/Parametres";
+import Profil from "../pages/Profil";
 import NotFound from "../pages/NotFound";
 import DynamicPage from "../pages/[slug]";
 import AuthGuard from "./AuthGuard";
@@ -67,6 +69,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/parametres" element={<Parametres />} />
+      <Route path="/profil" element={<AuthGuard><Profil /></AuthGuard>} />
       
       {/* Admin Routes */}
       <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>}>
@@ -79,6 +82,7 @@ const AppRoutes = () => {
         <Route path="pages" element={<AdminPages />} />
         <Route path="fichiers" element={<AdminFichiers />} />
         <Route path="upload-files" element={<AdminUploadFiles />} />
+        <Route path="historique" element={<AdminHistorique />} />
       </Route>
 
       {/* Public Pages */}

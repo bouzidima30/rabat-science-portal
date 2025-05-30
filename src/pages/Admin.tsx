@@ -6,7 +6,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useTheme } from "next-themes";
 import { 
   LayoutDashboard, 
   FileText, 
@@ -25,7 +24,8 @@ import {
   LogOut,
   User,
   Moon,
-  Sun
+  Sun,
+  Activity
 } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
@@ -34,7 +34,14 @@ const Admin = () => {
   const location = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
-  const { theme, setTheme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark') || 
+             localStorage.getItem('theme') === 'dark' ||
+             (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    return false;
+  });
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -54,7 +61,16 @@ const Admin = () => {
   };
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    
+    if (newTheme) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   };
 
   const sidebarItems = [
@@ -66,6 +82,7 @@ const Admin = () => {
     { name: "Pages", path: "/admin/pages", icon: FileStack, description: "Gestion des pages" },
     { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
     { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
+    { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
     { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
   ];
 
@@ -77,10 +94,10 @@ const Admin = () => {
         {/* Fixed Sidebar */}
         <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-white dark:bg-gray-900 shadow-xl transform ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-all duration-300 ease-out lg:translate-x-0 border-r border-gray-200 dark:border-gray-800`}>
+        } transition-all duration-300 ease-out lg:translate-x-0 border-r border-gray-200 dark:border-gray-800 flex flex-col`}>
           
           {/* Sidebar Header */}
-          <div className="h-16 px-6 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-600 to-blue-700">
+          <div className="h-16 px-6 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-600 to-blue-700 flex-shrink-0">
             <div className="flex items-center justify-between h-full">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -101,7 +118,7 @@ const Admin = () => {
             </div>
           </div>
           
-          {/* Navigation */}
+          {/* Navigation - Scrollable */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             {sidebarItems.map((item) => {
               const IconComponent = item.icon;
@@ -135,7 +152,7 @@ const Admin = () => {
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="p-4 border-t border-gray-200 dark:border-gray-800 flex-shrink-0">
             <div className="text-center space-y-1">
               <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
                 FSR Administration
@@ -183,7 +200,7 @@ const Admin = () => {
                   onClick={toggleTheme}
                   className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
                 >
-                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </Button>
 
                 {user && (
@@ -195,9 +212,11 @@ const Admin = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuItem>
-                        <Settings className="h-4 w-4 mr-2" />
-                        Paramètres
+                      <DropdownMenuItem asChild>
+                        <Link to="/profil" className="flex items-center">
+                          <Settings className="h-4 w-4 mr-2" />
+                          Mon Profil
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleLogout}>

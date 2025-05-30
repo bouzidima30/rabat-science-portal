@@ -7,15 +7,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, User, Search, Moon, Sun, Settings, Shield } from "lucide-react";
 import GlobalSearch from "./GlobalSearch";
-import { useTheme } from "next-themes";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const TopBar = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { theme, setTheme } = useTheme();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark') || 
+             localStorage.getItem('theme') === 'dark' ||
+             (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    return false;
+  });
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -36,8 +42,16 @@ const TopBar = () => {
   };
 
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    
+    if (newTheme) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   };
 
   return (
@@ -67,7 +81,7 @@ const TopBar = () => {
               onClick={toggleTheme}
               className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
             >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
             {user ? (
@@ -86,9 +100,9 @@ const TopBar = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/parametres" className="flex items-center">
+                    <Link to="/profil" className="flex items-center">
                       <Settings className="h-4 w-4 mr-2" />
-                      Paramètres
+                      Mon Profil
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
