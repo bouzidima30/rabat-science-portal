@@ -97,14 +97,6 @@ const ModernNavbar = () => {
       path: "/cooperation-internationale"
     }]
   }, {
-    name: "Actualités",
-    path: "/actualites",
-    hasDropdown: false
-  }, {
-    name: "Événements",
-    path: "/evenements",
-    hasDropdown: false
-  }, {
     name: "Contact",
     path: "/contact",
     hasDropdown: false
