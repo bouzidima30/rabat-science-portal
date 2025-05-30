@@ -12,11 +12,14 @@ import { Link } from "react-router-dom";
 interface FileItem {
   id: string;
   name: string;
-  file_path: string;
-  file_size: number;
-  file_type: string;
-  uploaded_by: string;
+  original_name: string;
+  file_url: string;
+  file_size: number | null;
+  mime_type: string | null;
+  category: string | null;
+  description: string | null;
   created_at: string;
+  updated_at: string;
 }
 
 const AdminFichiers = () => {
@@ -32,7 +35,7 @@ const AdminFichiers = () => {
   const fetchFiles = async () => {
     try {
       const { data, error } = await supabase
-        .from('file_uploads')
+        .from('files')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -50,20 +53,27 @@ const AdminFichiers = () => {
     }
   };
 
-  const deleteFile = async (fileId: string, filePath: string) => {
+  const deleteFile = async (fileId: string, fileUrl: string) => {
     if (!confirm("Êtes-vous sûr de vouloir supprimer ce fichier ?")) return;
 
     try {
+      // Extract file path from URL for storage deletion
+      const urlParts = fileUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+      const filePath = `files/${fileName}`;
+
       // Delete from storage
       const { error: storageError } = await supabase.storage
         .from('files')
         .remove([filePath]);
 
-      if (storageError) throw storageError;
+      if (storageError) {
+        console.error('Storage deletion error:', storageError);
+      }
 
       // Delete from database
       const { error: dbError } = await supabase
-        .from('file_uploads')
+        .from('files')
         .delete()
         .eq('id', fileId);
 
@@ -85,15 +95,13 @@ const AdminFichiers = () => {
     }
   };
 
-  const downloadFile = async (filePath: string, fileName: string) => {
+  const downloadFile = async (fileUrl: string, fileName: string) => {
     try {
-      const { data, error } = await supabase.storage
-        .from('files')
-        .download(filePath);
-
-      if (error) throw error;
-
-      const url = URL.createObjectURL(data);
+      const response = await fetch(fileUrl);
+      if (!response.ok) throw new Error('Network response was not ok');
+      
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = fileName;
@@ -111,30 +119,32 @@ const AdminFichiers = () => {
     }
   };
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+  const formatFileSize = (bytes: number | null) => {
+    if (!bytes || bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const getFileIcon = (fileType: string) => {
-    if (fileType.includes('image')) return '🖼️';
-    if (fileType.includes('pdf')) return '📄';
-    if (fileType.includes('word')) return '📝';
-    if (fileType.includes('excel') || fileType.includes('spreadsheet')) return '📊';
-    if (fileType.includes('powerpoint') || fileType.includes('presentation')) return '📺';
+  const getFileIcon = (mimeType: string | null) => {
+    if (!mimeType) return '📎';
+    if (mimeType.includes('image')) return '🖼️';
+    if (mimeType.includes('pdf')) return '📄';
+    if (mimeType.includes('word') || mimeType.includes('document')) return '📝';
+    if (mimeType.includes('excel') || mimeType.includes('spreadsheet')) return '📊';
+    if (mimeType.includes('powerpoint') || mimeType.includes('presentation')) return '📺';
     return '📎';
   };
 
   const filteredFiles = files.filter(file =>
     file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    file.file_type.toLowerCase().includes(searchQuery.toLowerCase())
+    (file.mime_type && file.mime_type.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (file.category && file.category.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const totalFiles = files.length;
-  const totalSize = files.reduce((acc, file) => acc + file.file_size, 0);
+  const totalSize = files.reduce((acc, file) => acc + (file.file_size || 0), 0);
 
   if (loading) {
     return (
@@ -203,7 +213,7 @@ const AdminFichiers = () => {
               <div>
                 <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Types</p>
                 <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">
-                  {new Set(files.map(f => f.file_type.split('/')[0])).size}
+                  {new Set(files.map(f => f.mime_type?.split('/')[0]).filter(Boolean)).size}
                 </p>
               </div>
               <Eye className="h-8 w-8 text-purple-600 dark:text-purple-400" />
@@ -235,7 +245,7 @@ const AdminFichiers = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4 flex-1">
                   <div className="text-4xl">
-                    {getFileIcon(file.file_type)}
+                    {getFileIcon(file.mime_type)}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
@@ -246,7 +256,7 @@ const AdminFichiers = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => downloadFile(file.file_path, file.name)}
+                          onClick={() => downloadFile(file.file_url, file.original_name)}
                           className="hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-900/20"
                         >
                           <Download className="h-4 w-4" />
@@ -254,7 +264,7 @@ const AdminFichiers = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => deleteFile(file.id, file.file_path)}
+                          onClick={() => deleteFile(file.id, file.file_url)}
                           className="hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20 text-red-600"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -263,12 +273,19 @@ const AdminFichiers = () => {
                     </div>
                     
                     <div className="flex items-center space-x-3 mb-2">
-                      <Badge variant="secondary" className="bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        {file.file_type}
-                      </Badge>
+                      {file.mime_type && (
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                          {file.mime_type}
+                        </Badge>
+                      )}
                       <Badge variant="outline">
                         {formatFileSize(file.file_size)}
                       </Badge>
+                      {file.category && (
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
+                          {file.category}
+                        </Badge>
+                      )}
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(file.created_at).toLocaleDateString('fr-FR', {
@@ -279,9 +296,11 @@ const AdminFichiers = () => {
                       </div>
                     </div>
                     
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Téléchargé par: {file.uploaded_by}
-                    </p>
+                    {file.description && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {file.description}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
