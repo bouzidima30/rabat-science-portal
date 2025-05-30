@@ -80,7 +80,7 @@ const CooperationDetail = () => {
 
         <Card className="shadow-lg">
           {cooperation.image_url && (
-            <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+            <div className="bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
               <img 
                 src={cooperation.image_url} 
                 alt={cooperation.titre}
