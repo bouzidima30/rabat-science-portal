@@ -16,6 +16,28 @@ export const useAuth = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const logActivity = useCallback(async (action: string, details?: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('activity_logs')
+        .insert({
+          user_id: user.id,
+          action,
+          details,
+          ip_address: null,
+          user_agent: navigator.userAgent
+        });
+
+      if (error) {
+        console.error('Error logging activity:', error);
+      }
+    } catch (error) {
+      console.error('Error logging activity:', error);
+    }
+  }, [user]);
+
   const fetchProfile = useCallback(async (userId: string) => {
     try {
       const { data: profileData, error } = await supabase
@@ -28,6 +50,23 @@ export const useAuth = () => {
         console.error('Error fetching profile:', error);
       } else if (profileData) {
         setProfile(profileData);
+        
+        // Log successful login
+        setTimeout(async () => {
+          try {
+            await supabase
+              .from('activity_logs')
+              .insert({
+                user_id: userId,
+                action: 'login',
+                details: `Connexion réussie: ${profileData.full_name || profileData.email}`,
+                ip_address: null,
+                user_agent: navigator.userAgent
+              });
+          } catch (error) {
+            console.error('Error logging login:', error);
+          }
+        }, 1000);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -91,6 +130,11 @@ export const useAuth = () => {
 
   const signOut = useCallback(async () => {
     try {
+      // Log logout before signing out
+      if (user) {
+        await logActivity('logout', `Déconnexion: ${profile?.full_name || profile?.email || 'Utilisateur'}`);
+      }
+      
       setUser(null);
       setSession(null);
       setProfile(null);
@@ -100,7 +144,7 @@ export const useAuth = () => {
     } catch (error) {
       console.error('Error signing out:', error);
     }
-  }, []);
+  }, [user, profile, logActivity]);
 
   return {
     user,

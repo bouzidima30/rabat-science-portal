@@ -1,262 +1,227 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Plus, Edit, Trash2, Search, Globe, Users, Calendar, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Edit, Trash2, X, Globe, MapPin, Users, Calendar, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useActivityLogger } from "@/hooks/useActivityLogger";
+
+interface Cooperation {
+  id: string;
+  titre: string;
+  description: string | null;
+  type_cooperation: string;
+  coordinateur: string | null;
+  email_coordinateur: string | null;
+  partenaires: string[] | null;
+  pays: string[] | null;
+  domaine_recherche: string | null;
+  appel_offre: string | null;
+  annee_debut: number | null;
+  annee_fin: number | null;
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 const AdminCooperations = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [cooperations, setCooperations] = useState<Cooperation[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCooperation, setSelectedCooperation] = useState<Cooperation | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [formData, setFormData] = useState({
     titre: '',
-    type_cooperation: '',
+    description: '',
+    type_cooperation: 'internationale',
+    coordinateur: '',
+    email_coordinateur: '',
+    partenaires: '',
+    pays: '',
     domaine_recherche: '',
-    pays: [] as string[],
     appel_offre: '',
     annee_debut: '',
     annee_fin: '',
-    coordinateur: '',
-    email_coordinateur: '',
-    description: '',
-    partenaires: [] as string[],
     image_url: ''
   });
-  const [newPays, setNewPays] = useState('');
-  const [newPartenaire, setNewPartenaire] = useState('');
-
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const { logActivity } = useActivityLogger();
 
-  const { data: cooperations, isLoading } = useQuery({
-    queryKey: ['admin-cooperations'],
-    queryFn: async () => {
+  const typeCooperationLabels = {
+    internationale: "Internationale",
+    nationale: "Nationale"
+  };
+
+  useEffect(() => {
+    fetchCooperations();
+  }, []);
+
+  const fetchCooperations = async () => {
+    try {
       const { data, error } = await supabase
         .from('cooperations')
         .select('*')
         .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return data;
-    }
-  });
 
-  const createMutation = useMutation({
-    mutationFn: async (data: any) => {
-      const { error } = await supabase
-        .from('cooperations')
-        .insert([{
-          ...data,
-          annee_debut: data.annee_debut ? parseInt(data.annee_debut) : null,
-          annee_fin: data.annee_fin ? parseInt(data.annee_fin) : null
-        }]);
-      
       if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-cooperations'] });
-      resetForm();
-      toast({
-        title: "Coopération créée",
-        description: "La coopération a été créée avec succès",
-      });
-    },
-    onError: (error) => {
+      setCooperations(data || []);
+    } catch (error: any) {
       toast({
         title: "Erreur",
-        description: "Erreur lors de la création de la coopération",
+        description: "Impossible de charger les coopérations.",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
-  });
+  };
 
-  const updateMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: any }) => {
-      const { error } = await supabase
-        .from('cooperations')
-        .update({
-          ...data,
-          annee_debut: data.annee_debut ? parseInt(data.annee_debut) : null,
-          annee_fin: data.annee_fin ? parseInt(data.annee_fin) : null
-        })
-        .eq('id', id);
-      
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-cooperations'] });
-      resetForm();
-      toast({
-        title: "Coopération modifiée",
-        description: "La coopération a été modifiée avec succès",
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const cooperationData = {
+        titre: formData.titre,
+        description: formData.description || null,
+        type_cooperation: formData.type_cooperation,
+        coordinateur: formData.coordinateur || null,
+        email_coordinateur: formData.email_coordinateur || null,
+        partenaires: formData.partenaires ? formData.partenaires.split(',').map(p => p.trim()) : null,
+        pays: formData.pays ? formData.pays.split(',').map(p => p.trim()) : null,
+        domaine_recherche: formData.domaine_recherche || null,
+        appel_offre: formData.appel_offre || null,
+        annee_debut: formData.annee_debut ? parseInt(formData.annee_debut) : null,
+        annee_fin: formData.annee_fin ? parseInt(formData.annee_fin) : null,
+        image_url: formData.image_url || null
+      };
+
+      if (selectedCooperation) {
+        // Update existing cooperation
+        const { error } = await supabase
+          .from('cooperations')
+          .update(cooperationData)
+          .eq('id', selectedCooperation.id);
+
+        if (error) throw error;
+
+        await logActivity('update_cooperation', `Coopération modifiée: ${formData.titre}`);
+
+        toast({
+          title: "Succès",
+          description: "La coopération a été mise à jour.",
+        });
+      } else {
+        // Create new cooperation
+        const { error } = await supabase
+          .from('cooperations')
+          .insert(cooperationData);
+
+        if (error) throw error;
+
+        await logActivity('create_cooperation', `Coopération créée: ${formData.titre} (${typeCooperationLabels[formData.type_cooperation as keyof typeof typeCooperationLabels]})`);
+
+        toast({
+          title: "Succès",
+          description: "La coopération a été créée.",
+        });
+      }
+
+      setIsFormOpen(false);
+      setSelectedCooperation(null);
+      setFormData({
+        titre: '',
+        description: '',
+        type_cooperation: 'internationale',
+        coordinateur: '',
+        email_coordinateur: '',
+        partenaires: '',
+        pays: '',
+        domaine_recherche: '',
+        appel_offre: '',
+        annee_debut: '',
+        annee_fin: '',
+        image_url: ''
       });
-    },
-    onError: (error) => {
+      fetchCooperations();
+    } catch (error: any) {
       toast({
         title: "Erreur",
-        description: "Erreur lors de la modification de la coopération",
+        description: "Erreur lors de la sauvegarde de la coopération.",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
-  });
+  };
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
+  const handleDelete = async (id: string) => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer cette coopération ?")) return;
+
+    try {
+      const cooperation = cooperations.find(c => c.id === id);
       const { error } = await supabase
         .from('cooperations')
         .delete()
         .eq('id', id);
-      
+
       if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-cooperations'] });
+
+      await logActivity('delete_cooperation', `Coopération supprimée: ${cooperation?.titre || 'ID: ' + id}`);
+
       toast({
-        title: "Coopération supprimée",
-        description: "La coopération a été supprimée avec succès",
+        title: "Succès",
+        description: "La coopération a été supprimée.",
       });
-    },
-    onError: (error) => {
+
+      fetchCooperations();
+    } catch (error: any) {
       toast({
         title: "Erreur",
-        description: "Erreur lors de la suppression de la coopération",
+        description: "Impossible de supprimer la coopération.",
         variant: "destructive",
       });
     }
-  });
-
-  const resetForm = () => {
-    setFormData({
-      titre: '',
-      type_cooperation: '',
-      domaine_recherche: '',
-      pays: [],
-      appel_offre: '',
-      annee_debut: '',
-      annee_fin: '',
-      coordinateur: '',
-      email_coordinateur: '',
-      description: '',
-      partenaires: [],
-      image_url: ''
-    });
-    setIsEditing(false);
-    setEditingId(null);
-    setNewPays('');
-    setNewPartenaire('');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editingId) {
-      updateMutation.mutate({ id: editingId, data: formData });
-    } else {
-      createMutation.mutate(formData);
-    }
-  };
-
-  const handleEdit = (cooperation: any) => {
+  const openEditDialog = (cooperation: Cooperation) => {
+    setSelectedCooperation(cooperation);
     setFormData({
       titre: cooperation.titre,
+      description: cooperation.description || '',
       type_cooperation: cooperation.type_cooperation,
-      domaine_recherche: cooperation.domaine_recherche || '',
-      pays: cooperation.pays || [],
-      appel_offre: cooperation.appel_offre || '',
-      annee_debut: cooperation.annee_debut?.toString() || '',
-      annee_fin: cooperation.annee_fin?.toString() || '',
       coordinateur: cooperation.coordinateur || '',
       email_coordinateur: cooperation.email_coordinateur || '',
-      description: cooperation.description || '',
-      partenaires: cooperation.partenaires || [],
+      partenaires: cooperation.partenaires ? cooperation.partenaires.join(', ') : '',
+      pays: cooperation.pays ? cooperation.pays.join(', ') : '',
+      domaine_recherche: cooperation.domaine_recherche || '',
+      appel_offre: cooperation.appel_offre || '',
+      annee_debut: cooperation.annee_debut ? cooperation.annee_debut.toString() : '',
+      annee_fin: cooperation.annee_fin ? cooperation.annee_fin.toString() : '',
       image_url: cooperation.image_url || ''
     });
-    setEditingId(cooperation.id);
-    setIsEditing(true);
+    setIsFormOpen(true);
   };
 
-  const addPays = () => {
-    if (newPays.trim()) {
-      setFormData(prev => ({ 
-        ...prev, 
-        pays: [...prev.pays, newPays.trim()] 
-      }));
-      setNewPays('');
-    }
-  };
-
-  const removePays = (index: number) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      pays: prev.pays.filter((_, i) => i !== index) 
-    }));
-  };
-
-  const addPartenaire = () => {
-    if (newPartenaire.trim()) {
-      setFormData(prev => ({ 
-        ...prev, 
-        partenaires: [...prev.partenaires, newPartenaire.trim()] 
-      }));
-      setNewPartenaire('');
-    }
-  };
-
-  const removePartenaire = (index: number) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      partenaires: prev.partenaires.filter((_, i) => i !== index) 
-    }));
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('cooperation-images')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage
-        .from('cooperation-images')
-        .getPublicUrl(filePath);
-
-      setFormData(prev => ({ ...prev, image_url: data.publicUrl }));
-
-      toast({
-        title: "Image téléchargée",
-        description: "L'image a été téléchargée avec succès",
-      });
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Erreur lors du téléchargement de l'image",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const filteredCooperations = cooperations?.filter(cooperation =>
+  const filteredCooperations = cooperations.filter(cooperation =>
     cooperation.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
     cooperation.type_cooperation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (cooperation.domaine_recherche && cooperation.domaine_recherche.toLowerCase().includes(searchQuery.toLowerCase()))
-  ) || [];
+    (cooperation.coordinateur && cooperation.coordinateur.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
-  if (isLoading) {
+  const cooperationsByType = cooperations.reduce((acc, cooperation) => {
+    acc[cooperation.type_cooperation] = (acc[cooperation.type_cooperation] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  if (loading) {
     return (
-      <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="p-8">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -265,7 +230,7 @@ const AdminCooperations = () => {
   }
 
   return (
-    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-8">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -275,16 +240,36 @@ const AdminCooperations = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Gestion des Coopérations
+                Coopérations
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">
-                Gérez les partenariats nationaux et internationaux
+                Gérez les partenariats et coopérations de la faculté
               </p>
             </div>
           </div>
-          <Button onClick={() => setIsEditing(true)} className="bg-purple-600 hover:bg-purple-700 shadow-lg">
+          <Button
+            onClick={() => {
+              setSelectedCooperation(null);
+              setFormData({
+                titre: '',
+                description: '',
+                type_cooperation: 'internationale',
+                coordinateur: '',
+                email_coordinateur: '',
+                partenaires: '',
+                pays: '',
+                domaine_recherche: '',
+                appel_offre: '',
+                annee_debut: '',
+                annee_fin: '',
+                image_url: ''
+              });
+              setIsFormOpen(true);
+            }}
+            className="bg-purple-600 hover:bg-purple-700 shadow-lg"
+          >
             <Plus className="h-4 w-4 mr-2" />
-            Nouvelle Coopération
+            Nouvelle coopération
           </Button>
         </div>
       </div>
@@ -295,8 +280,8 @@ const AdminCooperations = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Total Coopérations</p>
-                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{cooperations?.length || 0}</p>
+                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Total</p>
+                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{cooperations.length}</p>
               </div>
               <Globe className="h-8 w-8 text-purple-600 dark:text-purple-400" />
             </div>
@@ -307,9 +292,7 @@ const AdminCooperations = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Internationales</p>
-                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                  {cooperations?.filter(c => c.type_cooperation === 'Internationale').length || 0}
-                </p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cooperationsByType.internationale || 0}</p>
               </div>
               <MapPin className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
@@ -320,9 +303,7 @@ const AdminCooperations = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-600 dark:text-green-400 text-sm font-medium">Nationales</p>
-                <p className="text-2xl font-bold text-green-700 dark:text-green-300">
-                  {cooperations?.filter(c => c.type_cooperation === 'Nationale').length || 0}
-                </p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cooperationsByType.nationale || 0}</p>
               </div>
               <Users className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
@@ -345,249 +326,90 @@ const AdminCooperations = () => {
         </CardContent>
       </Card>
 
-      {/* Form */}
-      {isEditing && (
-        <Card className="mb-8 border-0 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
-            <CardTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5" />
-              {editingId ? 'Modifier la Coopération' : 'Nouvelle Coopération'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Titre *</label>
-                  <Input
-                    value={formData.titre}
-                    onChange={(e) => setFormData(prev => ({ ...prev, titre: e.target.value }))}
-                    required
-                    className="h-12"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Type *</label>
-                  <Select 
-                    value={formData.type_cooperation} 
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, type_cooperation: value }))}
-                  >
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Sélectionner le type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Nationale">Nationale</SelectItem>
-                      <SelectItem value="Internationale">Internationale</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Domaine de recherche</label>
-                  <Input
-                    value={formData.domaine_recherche}
-                    onChange={(e) => setFormData(prev => ({ ...prev, domaine_recherche: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Coordinateur</label>
-                  <Input
-                    value={formData.coordinateur}
-                    onChange={(e) => setFormData(prev => ({ ...prev, coordinateur: e.target.value }))}
-                  />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email coordinateur</label>
-                  <Input
-                    type="email"
-                    value={formData.email_coordinateur}
-                    onChange={(e) => setFormData(prev => ({ ...prev, email_coordinateur: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Appel d'offre</label>
-                  <Input
-                    value={formData.appel_offre}
-                    onChange={(e) => setFormData(prev => ({ ...prev, appel_offre: e.target.value }))}
-                  />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Année début</label>
-                  <Input
-                    type="number"
-                    value={formData.annee_debut}
-                    onChange={(e) => setFormData(prev => ({ ...prev, annee_debut: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Année fin (optionnel)</label>
-                  <Input
-                    type="number"
-                    value={formData.annee_fin}
-                    onChange={(e) => setFormData(prev => ({ ...prev, annee_fin: e.target.value }))}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Description</label>
-                <Textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  rows={4}
-                />
-              </div>
-
-              {formData.type_cooperation === 'Internationale' && (
-                <div>
-                  <label className="block text-sm font-medium mb-2">Pays</label>
-                  <div className="flex gap-2 mb-2">
-                    <Input
-                      value={newPays}
-                      onChange={(e) => setNewPays(e.target.value)}
-                      placeholder="Ajouter un pays"
-                    />
-                    <Button type="button" onClick={addPays}>Ajouter</Button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {formData.pays.map((pays, index) => (
-                      <div key={index} className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full flex items-center gap-2">
-                        <span>{pays}</span>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => removePays(index)}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Partenaires</label>
-                <div className="flex gap-2 mb-2">
-                  <Input
-                    value={newPartenaire}
-                    onChange={(e) => setNewPartenaire(e.target.value)}
-                    placeholder="Ajouter un partenaire"
-                  />
-                  <Button type="button" onClick={addPartenaire}>Ajouter</Button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {formData.partenaires.map((partenaire, index) => (
-                    <div key={index} className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full flex items-center gap-2">
-                      <span>{partenaire}</span>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => removePartenaire(index)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Image</label>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-                {formData.image_url && (
-                  <img src={formData.image_url} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded" />
-                )}
-              </div>
-
-              <div className="flex gap-4">
-                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending} className="bg-purple-600 hover:bg-purple-700">
-                  {editingId ? 'Modifier' : 'Créer'}
-                </Button>
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  Annuler
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Cooperations List */}
       <div className="space-y-6">
         {filteredCooperations.map((cooperation) => (
           <Card key={cooperation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              <div className="flex items-start justify-between">
+                <div className="flex space-x-4 flex-1">
+                  {cooperation.image_url && (
+                    <img 
+                      src={cooperation.image_url} 
+                      alt={cooperation.titre}
+                      className="w-24 h-24 object-cover rounded-xl shadow-md"
+                    />
+                  )}
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                         {cooperation.titre}
                       </h3>
-                      <div className="flex items-center gap-3 mb-3">
-                        <Badge 
-                          variant="outline" 
-                          className={cooperation.type_cooperation === 'Internationale' ? 
-                            'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300' : 
-                            'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300'
-                          }
+                      <div className="flex space-x-2 ml-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openEditDialog(cooperation)}
+                          className="hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-900/20"
                         >
-                          {cooperation.type_cooperation}
-                        </Badge>
-                        {cooperation.domaine_recherche && (
-                          <Badge variant="outline">
-                            {cooperation.domaine_recherche}
-                          </Badge>
-                        )}
-                        {cooperation.annee_debut && (
-                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            {cooperation.annee_debut} {cooperation.annee_fin && `- ${cooperation.annee_fin}`}
-                          </div>
-                        )}
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(cooperation.id)}
+                          className="hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20 text-red-600"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => handleEdit(cooperation)}>
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
-                        onClick={() => deleteMutation.mutate(cooperation.id)}
-                        disabled={deleteMutation.isPending}
+                    
+                    <div className="flex items-center space-x-3 mb-3">
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300"
                       >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                        {typeCooperationLabels[cooperation.type_cooperation as keyof typeof typeCooperationLabels]}
+                      </Badge>
+                      {cooperation.coordinateur && (
+                        <Badge variant="outline">
+                          {cooperation.coordinateur}
+                        </Badge>
+                      )}
+                      {cooperation.annee_debut && (
+                        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                          <Calendar className="h-4 w-4 mr-1" />
+                          {cooperation.annee_debut}
+                          {cooperation.annee_fin && ` - ${cooperation.annee_fin}`}
+                        </div>
+                      )}
                     </div>
+                    
+                    {cooperation.description && (
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-3">
+                        {cooperation.description.length > 200 
+                          ? cooperation.description.substring(0, 200) + "..." 
+                          : cooperation.description
+                        }
+                      </p>
+                    )}
+
+                    {cooperation.partenaires && cooperation.partenaires.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {cooperation.partenaires.slice(0, 3).map((partenaire, index) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {partenaire}
+                          </Badge>
+                        ))}
+                        {cooperation.partenaires.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{cooperation.partenaires.length - 3} autres
+                          </Badge>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  
-                  {cooperation.description && (
-                    <p className="text-gray-700 dark:text-gray-300 mb-3 line-clamp-2">
-                      {cooperation.description}
-                    </p>
-                  )}
-                  
-                  {cooperation.coordinateur && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <strong>Coordinateur:</strong> {cooperation.coordinateur}
-                    </p>
-                  )}
                 </div>
               </div>
             </CardContent>
@@ -605,15 +427,110 @@ const AdminCooperations = () => {
                 {searchQuery ? "Aucun résultat pour votre recherche." : "Créez votre première coopération pour commencer."}
               </p>
               {!searchQuery && (
-                <Button onClick={() => setIsEditing(true)} className="bg-purple-600 hover:bg-purple-700">
+                <Button 
+                  onClick={() => setIsFormOpen(true)}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
                   <Plus className="h-4 w-4 mr-2" />
-                  Nouvelle Coopération
+                  Nouvelle coopération
                 </Button>
               )}
             </CardContent>
           </Card>
         )}
       </div>
+
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">
+              {selectedCooperation ? "Modifier la coopération" : "Nouvelle coopération"}
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input 
+              placeholder="Titre de la coopération" 
+              value={formData.titre} 
+              onChange={(e) => setFormData({...formData, titre: e.target.value})} 
+              required 
+            />
+            <Textarea 
+              placeholder="Description de la coopération..." 
+              value={formData.description} 
+              onChange={(e) => setFormData({...formData, description: e.target.value})} 
+              rows={4}
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Type de coopération</label>
+                <select
+                  value={formData.type_cooperation}
+                  onChange={(e) => setFormData({...formData, type_cooperation: e.target.value})}
+                  className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+                >
+                  <option value="internationale">Internationale</option>
+                  <option value="nationale">Nationale</option>
+                </select>
+              </div>
+              <Input 
+                placeholder="Coordinateur" 
+                value={formData.coordinateur} 
+                onChange={(e) => setFormData({...formData, coordinateur: e.target.value})} 
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input 
+                placeholder="Email coordinateur" 
+                type="email"
+                value={formData.email_coordinateur} 
+                onChange={(e) => setFormData({...formData, email_coordinateur: e.target.value})} 
+              />
+              <Input 
+                placeholder="Domaine de recherche" 
+                value={formData.domaine_recherche} 
+                onChange={(e) => setFormData({...formData, domaine_recherche: e.target.value})} 
+              />
+            </div>
+            <Input 
+              placeholder="Partenaires (séparés par des virgules)" 
+              value={formData.partenaires} 
+              onChange={(e) => setFormData({...formData, partenaires: e.target.value})} 
+            />
+            <Input 
+              placeholder="Pays (séparés par des virgules)" 
+              value={formData.pays} 
+              onChange={(e) => setFormData({...formData, pays: e.target.value})} 
+            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Input 
+                placeholder="Appel d'offre" 
+                value={formData.appel_offre} 
+                onChange={(e) => setFormData({...formData, appel_offre: e.target.value})} 
+              />
+              <Input 
+                placeholder="Année début" 
+                type="number"
+                value={formData.annee_debut} 
+                onChange={(e) => setFormData({...formData, annee_debut: e.target.value})} 
+              />
+              <Input 
+                placeholder="Année fin" 
+                type="number"
+                value={formData.annee_fin} 
+                onChange={(e) => setFormData({...formData, annee_fin: e.target.value})} 
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button type="submit" disabled={loading}>
+                {selectedCooperation ? "Modifier" : "Créer"}
+              </Button>
+              <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)}>
+                Annuler
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -2,13 +2,15 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { File, Plus, Edit, Trash2, Upload, LinkIcon, FileText, Search, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useActivityLogger } from "@/hooks/useActivityLogger";
+import QuillEditor from "@/components/QuillEditor";
+
 const AdminPages = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPage, setEditingPage] = useState<any>(null);
@@ -20,10 +22,10 @@ const AdminPages = () => {
     image_url: '',
     fichiers: [] as string[]
   });
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLogger();
+
   const {
     data: pages,
     isLoading
@@ -40,6 +42,7 @@ const AdminPages = () => {
       return data;
     }
   });
+
   const pageMutation = useMutation({
     mutationFn: async (pageData: any) => {
       if (editingPage) {
@@ -54,10 +57,17 @@ const AdminPages = () => {
         if (error) throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['admin-pages']
       });
+      
+      // Add activity logging
+      await logActivity(
+        editingPage ? 'update_page' : 'create_page',
+        `Page ${editingPage ? 'modifiée' : 'créée'}: ${formData.titre}`
+      );
+      
       setIsDialogOpen(false);
       setEditingPage(null);
       setFormData({
@@ -80,6 +90,7 @@ const AdminPages = () => {
       });
     }
   });
+
   const deletePageMutation = useMutation({
     mutationFn: async (id: string) => {
       const {
@@ -87,16 +98,22 @@ const AdminPages = () => {
       } = await supabase.from('pages').delete().eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: async (_, id) => {
       queryClient.invalidateQueries({
         queryKey: ['admin-pages']
       });
+      
+      // Add activity logging
+      const deletedPage = pages?.find(p => p.id === id);
+      await logActivity('delete_page', `Page supprimée: ${deletedPage?.titre || 'ID: ' + id}`);
+      
       toast({
         title: "Page supprimée",
         description: "La page a été supprimée avec succès"
       });
     }
   });
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -127,6 +144,7 @@ const AdminPages = () => {
       });
     }
   };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
@@ -161,17 +179,27 @@ const AdminPages = () => {
       });
     }
   };
+
   const generateSlug = (titre: string) => {
-    return titre.toLowerCase().replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u').replace(/[ç]/g, 'c').replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    return titre
+      .toLowerCase()
+      .replace(/[àáâãäå]/g, 'a')
+      .replace(/[èéêë]/g, 'e')
+      .replace(/[ìíîï]/g, 'i')
+      .replace(/[òóôõö]/g, 'o')
+      .replace(/[ùúûü]/g, 'u')
+      .replace(/[ç]/g, 'c')
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const slug = formData.slug || generateSlug(formData.titre);
-    pageMutation.mutate({
-      ...formData,
-      slug
-    });
+    pageMutation.mutate({ ...formData, slug });
   };
+
   const openEditDialog = (page: any) => {
     setEditingPage(page);
     setFormData({
@@ -183,6 +211,7 @@ const AdminPages = () => {
     });
     setIsDialogOpen(true);
   };
+
   const removeFile = (index: number) => {
     const newFiles = [...formData.fichiers];
     newFiles.splice(index, 1);
@@ -191,15 +220,24 @@ const AdminPages = () => {
       fichiers: newFiles
     });
   };
-  const filteredPages = pages?.filter(page => page.titre.toLowerCase().includes(searchQuery.toLowerCase()) || page.slug.toLowerCase().includes(searchQuery.toLowerCase())) || [];
+
+  const filteredPages = pages?.filter(page => 
+    page.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    page.slug.toLowerCase().includes(searchQuery.toLowerCase())
+  ) || [];
+
   if (isLoading) {
-    return <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    return (
+      <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
-      </div>;
+      </div>
+    );
   }
-  return <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+
+  return (
+    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -219,15 +257,15 @@ const AdminPages = () => {
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button onClick={() => {
-              setEditingPage(null);
-              setFormData({
-                titre: '',
-                contenu: '',
-                slug: '',
-                image_url: '',
-                fichiers: []
-              });
-            }} className="shadow-lg bg-blue-600 hover:bg-blue-500">
+                setEditingPage(null);
+                setFormData({
+                  titre: '',
+                  contenu: '',
+                  slug: '',
+                  image_url: '',
+                  fichiers: []
+                });
+              }} className="shadow-lg bg-blue-600 hover:bg-blue-500">
                 <Plus className="h-4 w-4 mr-2" />
                 Nouvelle Page
               </Button>
@@ -239,37 +277,63 @@ const AdminPages = () => {
                 </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <Input placeholder="Titre de la page" value={formData.titre} onChange={e => setFormData({
-                ...formData,
-                titre: e.target.value
-              })} required />
-                <Input placeholder="Slug (URL) - laissez vide pour générer automatiquement" value={formData.slug} onChange={e => setFormData({
-                ...formData,
-                slug: e.target.value
-              })} />
+                <Input
+                  placeholder="Titre de la page"
+                  value={formData.titre}
+                  onChange={(e) => setFormData({ ...formData, titre: e.target.value })}
+                  required
+                />
+                <Input
+                  placeholder="Slug (URL) - laissez vide pour générer automatiquement"
+                  value={formData.slug}
+                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                />
                 <div>
                   <label className="block text-sm font-medium mb-2">Contenu HTML</label>
-                  <Textarea placeholder="Contenu en HTML..." value={formData.contenu} onChange={e => setFormData({
-                  ...formData,
-                  contenu: e.target.value
-                })} rows={10} required />
+                  <QuillEditor
+                    value={formData.contenu}
+                    onChange={(value) => setFormData({ ...formData, contenu: value })}
+                    placeholder="Rédigez le contenu de votre page..."
+                    className="mb-4"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Image</label>
-                  <input type="file" accept="image/*" onChange={handleImageUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                  {formData.image_url && <img src={formData.image_url} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded" />}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                  {formData.image_url && (
+                    <img src={formData.image_url} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded" />
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Fichiers</label>
-                  <input type="file" multiple onChange={handleFileUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                  {formData.fichiers.length > 0 && <div className="mt-2 space-y-2">
-                      {formData.fichiers.map((file, index) => <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded">
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFileUpload}
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                  {formData.fichiers.length > 0 && (
+                    <div className="mt-2 space-y-2">
+                      {formData.fichiers.map((file, index) => (
+                        <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded">
                           <span className="text-sm truncate">{file}</span>
-                          <Button type="button" size="sm" variant="destructive" onClick={() => removeFile(index)}>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => removeFile(index)}
+                          >
                             <Trash2 className="h-4 w-4" />
                           </Button>
-                        </div>)}
-                    </div>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <Button type="submit" disabled={pageMutation.isPending}>
@@ -318,18 +382,26 @@ const AdminPages = () => {
         <CardContent className="p-6">
           <div className="relative">
             <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <Input placeholder="Rechercher une page..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors" />
+            <Input
+              placeholder="Rechercher une page..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+            />
           </div>
         </CardContent>
       </Card>
 
       {/* Pages List */}
       <div className="space-y-6">
-        {filteredPages.map(page => <Card key={page.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
+        {filteredPages.map((page) => (
+          <Card key={page.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex gap-4 flex-1">
-                  {page.image_url && <img src={page.image_url} alt={page.titre} className="w-24 h-24 object-cover rounded-lg" />}
+                  {page.image_url && (
+                    <img src={page.image_url} alt={page.titre} className="w-24 h-24 object-cover rounded-lg" />
+                  )}
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                       {page.titre}
@@ -339,22 +411,24 @@ const AdminPages = () => {
                         <LinkIcon className="h-3 w-3 mr-1" />
                         /{page.slug}
                       </Badge>
-                      {page.fichiers && page.fichiers.length > 0 && <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300">
+                      {page.fichiers && page.fichiers.length > 0 && (
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300">
                           <Upload className="h-3 w-3 mr-1" />
                           {page.fichiers.length} fichier(s)
-                        </Badge>}
+                        </Badge>
+                      )}
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(page.created_at).toLocaleDateString('fr-FR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
                       </div>
                     </div>
                     <div className="text-gray-700 dark:text-gray-300 line-clamp-3" dangerouslySetInnerHTML={{
-                  __html: page.contenu.substring(0, 200) + '...'
-                }} />
+                      __html: page.contenu.substring(0, 200) + '...'
+                    }} />
                   </div>
                 </div>
                 <div className="flex gap-2 ml-4">
@@ -367,9 +441,11 @@ const AdminPages = () => {
                 </div>
               </div>
             </CardContent>
-          </Card>)}
+          </Card>
+        ))}
 
-        {filteredPages.length === 0 && <Card className="border-0 shadow-lg">
+        {filteredPages.length === 0 && (
+          <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
@@ -378,13 +454,18 @@ const AdminPages = () => {
               <p className="text-gray-500 mb-6">
                 {searchQuery ? "Aucun résultat pour votre recherche." : "Créez votre première page pour commencer."}
               </p>
-              {!searchQuery && <Button onClick={() => setIsDialogOpen(true)} className="bg-orange-600 hover:bg-orange-700">
+              {!searchQuery && (
+                <Button onClick={() => setIsDialogOpen(true)} className="bg-orange-600 hover:bg-orange-700">
                   <Plus className="h-4 w-4 mr-2" />
                   Nouvelle Page
-                </Button>}
+                </Button>
+              )}
             </CardContent>
-          </Card>}
+          </Card>
+        )}
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default AdminPages;

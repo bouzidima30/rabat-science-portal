@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,11 +17,13 @@ interface NewsFormProps {
   onCancel: () => void;
 }
 
+type NewsCategory = "reunion_travail" | "nouvelles_informations" | "activites_parauniversitaire" | "avis_etudiants" | "avis_enseignants" | "evenements_scientifique";
+
 const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
-  const [category, setCategory] = useState<string>("nouvelles_informations");
+  const [category, setCategory] = useState<NewsCategory>("nouvelles_informations");
   const [published, setPublished] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -32,12 +33,12 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
   const { logActivity } = useActivityLogger();
 
   const categories = [
-    { value: "reunion_travail", label: "Réunion de travail" },
-    { value: "nouvelles_informations", label: "Nouvelles informations" },
-    { value: "activites_parauniversitaire", label: "Activités parauniversitaire" },
-    { value: "avis_etudiants", label: "Avis étudiants" },
-    { value: "avis_enseignants", label: "Avis enseignants" },
-    { value: "evenements_scientifique", label: "Événements scientifique" }
+    { value: "reunion_travail" as NewsCategory, label: "Réunion de travail" },
+    { value: "nouvelles_informations" as NewsCategory, label: "Nouvelles informations" },
+    { value: "activites_parauniversitaire" as NewsCategory, label: "Activités parauniversitaire" },
+    { value: "avis_etudiants" as NewsCategory, label: "Avis étudiants" },
+    { value: "avis_enseignants" as NewsCategory, label: "Avis enseignants" },
+    { value: "evenements_scientifique" as NewsCategory, label: "Événements scientifique" }
   ];
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
       setTitle(news.title);
       setContent(news.content);
       setExcerpt(news.excerpt || "");
-      setCategory(news.category);
+      setCategory(news.category as NewsCategory);
       setPublished(news.published);
       setImagePreview(news.image_url || "");
     }
@@ -198,7 +199,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
               <label className="block text-sm font-medium mb-2">Catégorie *</label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(e.target.value as NewsCategory)}
                 className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
                 required
               >

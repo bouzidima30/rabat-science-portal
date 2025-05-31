@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,6 +35,7 @@ interface ActivityLog {
 
 const AdminHistorique = () => {
   const [selectedAction, setSelectedAction] = useState<string>("all");
+  const [selectedUser, setSelectedUser] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: activities = [], isLoading } = useQuery({
@@ -77,23 +77,37 @@ const AdminHistorique = () => {
     }
   });
 
+  // Get unique users for filter
+  const users = activities.reduce((acc, activity) => {
+    if (activity.profiles && !acc.find(u => u.id === activity.user_id)) {
+      acc.push({
+        id: activity.user_id,
+        name: activity.profiles.full_name || 'Utilisateur inconnu',
+        email: activity.profiles.email
+      });
+    }
+    return acc;
+  }, [] as Array<{id: string, name: string, email: string}>);
+
   const actionTypes = [
     { id: 'all', label: 'Toutes les actions' },
     { id: 'create', label: 'Créations' },
     { id: 'update', label: 'Modifications' },
     { id: 'delete', label: 'Suppressions' },
     { id: 'upload', label: 'Téléchargements' },
-    { id: 'login', label: 'Connexions' }
+    { id: 'login', label: 'Connexions' },
+    { id: 'access', label: 'Accès' }
   ];
 
   const filteredActivities = activities.filter(activity => {
     const matchesAction = selectedAction === 'all' || activity.action.toLowerCase().includes(selectedAction);
+    const matchesUser = selectedUser === 'all' || activity.user_id === selectedUser;
     const matchesSearch = searchQuery === '' || 
       activity.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (activity.details && activity.details.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (activity.profiles?.full_name && activity.profiles.full_name.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    return matchesAction && matchesSearch;
+    return matchesAction && matchesUser && matchesSearch;
   });
 
   const getActionIcon = (action: string) => {
@@ -186,7 +200,7 @@ const AdminHistorique = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* Action Filter */}
             <div>
               <label className="block text-sm font-medium mb-3">Type d'action</label>
@@ -203,6 +217,23 @@ const AdminHistorique = () => {
                   </Button>
                 ))}
               </div>
+            </div>
+
+            {/* User Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-3">Utilisateur</label>
+              <select
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+              >
+                <option value="all">Tous les utilisateurs</option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name} ({user.email})
+                  </option>
+                ))}
+              </select>
             </div>
             
             {/* Search Filter */}
@@ -350,7 +381,7 @@ const AdminHistorique = () => {
                 Aucune activité trouvée
               </h3>
               <p className="text-gray-500">
-                {searchQuery || selectedAction !== 'all' 
+                {searchQuery || selectedAction !== 'all' || selectedUser !== 'all'
                   ? "Aucun résultat pour les filtres sélectionnés" 
                   : "Les activités des utilisateurs apparaîtront ici"
                 }
