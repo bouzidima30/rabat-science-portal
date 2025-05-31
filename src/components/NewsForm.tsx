@@ -1,93 +1,91 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Upload, File, X } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
-import type { NewsCategory } from "@/types/news";
+import { Upload, X, Save, FileText } from "lucide-react";
+import type { News } from "@/types/news";
+import { useActivityLogger } from "@/hooks/useActivityLogger";
+import QuillEditor from "./QuillEditor";
 
 interface NewsFormProps {
-  news?: any;
+  news?: News | null;
   onSuccess: () => void;
   onCancel: () => void;
 }
 
 const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    excerpt: "",
-    category: "" as NewsCategory,
-    published: false,
-  });
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [excerpt, setExcerpt] = useState("");
+  const [category, setCategory] = useState<string>("nouvelles_informations");
+  const [published, setPublished] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
   const [documentFile, setDocumentFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { toast } = useToast();
-  const { profile } = useAuth();
-  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const { logActivity } = useActivityLogger();
 
-  const categoryOptions = [
-    { value: "reunion_travail" as NewsCategory, label: "Réunion de travail" },
-    { value: "nouvelles_informations" as NewsCategory, label: "Nouvelles informations" },
-    { value: "activites_parauniversitaire" as NewsCategory, label: "Activités parauniversitaire" },
-    { value: "avis_etudiants" as NewsCategory, label: "Avis étudiants" },
-    { value: "avis_enseignants" as NewsCategory, label: "Avis enseignants" },
-    { value: "evenements_scientifique" as NewsCategory, label: "Événements scientifique" },
+  const categories = [
+    { value: "reunion_travail", label: "Réunion de travail" },
+    { value: "nouvelles_informations", label: "Nouvelles informations" },
+    { value: "activites_parauniversitaire", label: "Activités parauniversitaire" },
+    { value: "avis_etudiants", label: "Avis étudiants" },
+    { value: "avis_enseignants", label: "Avis enseignants" },
+    { value: "evenements_scientifique", label: "Événements scientifique" }
   ];
 
   useEffect(() => {
     if (news) {
-      setFormData({
-        title: news.title || "",
-        content: news.content || "",
-        excerpt: news.excerpt || "",
-        category: news.category || "",
-        published: news.published || false,
-      });
-      setImagePreview(news.image_url);
+      setTitle(news.title);
+      setContent(news.content);
+      setExcerpt(news.excerpt || "");
+      setCategory(news.category);
+      setPublished(news.published);
+      setImagePreview(news.image_url || "");
     }
   }, [news]);
 
-  const handleImageUpload = async (file: File) => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    
-    const { error: uploadError } = await supabase.storage
-      .from('news-images')
-      .upload(fileName, file);
-
-    if (uploadError) throw uploadError;
-
-    const { data: { publicUrl } } = supabase.storage
-      .from('news-images')
-      .getPublicUrl(fileName);
-
-    return publicUrl;
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleDocumentUpload = async (file: File) => {
+  const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setDocumentFile(file);
+    }
+  };
+
+  const uploadFile = async (file: File, bucket: string, folder: string) => {
     const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    const filePath = `${folder}/${fileName}`;
+
     const { error: uploadError } = await supabase.storage
-      .from('news-documents')
-      .upload(fileName, file);
+      .from(bucket)
+      .upload(filePath, file);
 
     if (uploadError) throw uploadError;
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('news-documents')
-      .getPublicUrl(fileName);
+    const { data } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
 
-    return { url: publicUrl, name: file.name };
+    return data.publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -95,51 +93,69 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
     setLoading(true);
 
     try {
-      let imageUrl = news?.image_url || null;
-      let documentUrl = news?.document_url || null;
-      let documentName = news?.document_name || null;
+      let imageUrl = news?.image_url || "";
+      let documentUrl = news?.document_url || "";
+      let documentName = news?.document_name || "";
 
+      // Upload new image if provided
       if (imageFile) {
-        imageUrl = await handleImageUpload(imageFile);
+        imageUrl = await uploadFile(imageFile, 'images', 'news');
       }
 
+      // Upload new document if provided
       if (documentFile) {
-        const docData = await handleDocumentUpload(documentFile);
-        documentUrl = docData.url;
-        documentName = docData.name;
+        documentUrl = await uploadFile(documentFile, 'documents', 'news');
+        documentName = documentFile.name;
       }
 
       const newsData = {
-        ...formData,
-        image_url: imageUrl,
-        document_url: documentUrl,
-        document_name: documentName,
-        author_id: profile?.id,
+        title,
+        content,
+        excerpt: excerpt || null,
+        category,
+        published,
+        image_url: imageUrl || null,
+        document_url: documentUrl || null,
+        document_name: documentName || null,
       };
 
       if (news) {
+        // Update existing news
         const { error } = await supabase
           .from('news')
           .update(newsData)
           .eq('id', news.id);
+
         if (error) throw error;
+
+        await logActivity('update_news', `Actualité modifiée: ${title}`);
+
+        toast({
+          title: "Succès",
+          description: "L'actualité a été mise à jour.",
+        });
       } else {
+        // Create new news
         const { error } = await supabase
           .from('news')
-          .insert([newsData]);
-        if (error) throw error;
-      }
+          .insert(newsData);
 
-      toast({
-        title: "Succès",
-        description: news ? "L'actualité a été modifiée." : "L'actualité a été créée.",
-      });
+        if (error) throw error;
+
+        await logActivity('create_news', `Actualité créée: ${title} (${published ? 'publiée' : 'brouillon'})`);
+
+        toast({
+          title: "Succès",
+          description: "L'actualité a été créée.",
+        });
+      }
 
       onSuccess();
     } catch (error: any) {
+      console.error('Error saving news:', error);
       toast({
         title: "Erreur",
-        description: error.message || "Une erreur est survenue.",
+        description: "Erreur lors de la sauvegarde de l'actualité.",
         variant: "destructive",
       });
     } finally {
@@ -147,243 +163,154 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
     }
   };
 
-  const insertTextAtCursor = (text: string) => {
-    if (contentRef.current) {
-      const start = contentRef.current.selectionStart;
-      const end = contentRef.current.selectionEnd;
-      const content = formData.content;
-      const newContent = content.substring(0, start) + text + content.substring(end);
-      
-      setFormData(prev => ({ ...prev, content: newContent }));
-      
-      // Restore cursor position
-      setTimeout(() => {
-        if (contentRef.current) {
-          contentRef.current.focus();
-          contentRef.current.setSelectionRange(start + text.length, start + text.length);
-        }
-      }, 0);
-    }
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Titre *</Label>
-          <Input
-            id="title"
-            value={formData.title}
-            onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="category">Catégorie *</Label>
-          <Select
-            value={formData.category}
-            onValueChange={(value: NewsCategory) => setFormData(prev => ({ ...prev, category: value }))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Sélectionner une catégorie" />
-            </SelectTrigger>
-            <SelectContent>
-              {categoryOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="excerpt">Extrait</Label>
-        <Textarea
-          id="excerpt"
-          value={formData.excerpt}
-          onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
-          placeholder="Résumé court de l'actualité..."
-          rows={2}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="content">Contenu *</Label>
-        <div className="border rounded-lg">
-          {/* Text formatting toolbar */}
-          <div className="flex flex-wrap gap-2 p-3 border-b bg-gray-50 dark:bg-gray-800">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => insertTextAtCursor("**Texte en gras**")}
-            >
-              <strong>B</strong>
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => insertTextAtCursor("*Texte en italique*")}
-            >
-              <em>I</em>
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => insertTextAtCursor("# Titre principal\n")}
-            >
-              H1
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => insertTextAtCursor("## Sous-titre\n")}
-            >
-              H2
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => insertTextAtCursor("- Élément de liste\n")}
-            >
-              Liste
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => insertTextAtCursor("[Texte du lien](https://exemple.com)")}
-            >
-              Lien
-            </Button>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Informations générales
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Titre *</label>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Titre de l'actualité"
+              required
+            />
           </div>
-          
-          <Textarea
-            ref={contentRef}
-            id="content"
-            value={formData.content}
-            onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-            placeholder="Contenu complet de l'actualité... Utilisez Markdown pour le formatage."
-            rows={10}
-            className="border-0 focus:ring-0"
-            required
-          />
-        </div>
-        <p className="text-xs text-gray-500">
-          Vous pouvez utiliser Markdown pour le formatage (ex: **gras**, *italique*, # titre, etc.)
-        </p>
-      </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Image</Label>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-            {imagePreview ? (
-              <div className="relative">
-                <img 
-                  src={imagePreview} 
-                  alt="Preview" 
-                  className="w-full h-32 object-cover rounded"
-                />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  className="absolute top-2 right-2"
-                  onClick={() => {
-                    setImagePreview(null);
-                    setImageFile(null);
-                  }}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="text-center">
-                <Upload className="mx-auto h-8 w-8 text-gray-400" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setImageFile(file);
-                      const reader = new FileReader();
-                      reader.onload = (e) => setImagePreview(e.target?.result as string);
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="mt-2"
-                />
-              </div>
-            )}
+          <div>
+            <label className="block text-sm font-medium mb-2">Extrait</label>
+            <Textarea
+              value={excerpt}
+              onChange={(e) => setExcerpt(e.target.value)}
+              placeholder="Résumé court de l'actualité"
+              rows={3}
+            />
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label>Document (PDF, DOC, XLS, etc.)</Label>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-            {documentFile || news?.document_name ? (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <File className="h-6 w-6 text-gray-400 mr-2" />
-                  <span className="text-sm">
-                    {documentFile?.name || news?.document_name}
-                  </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Catégorie *</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+                required
+              >
+                {categories.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="published"
+                checked={published}
+                onChange={(e) => setPublished(e.target.checked)}
+                className="rounded"
+              />
+              <label htmlFor="published" className="text-sm font-medium">
+                Publier immédiatement
+              </label>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Contenu *</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <QuillEditor
+            value={content}
+            onChange={setContent}
+            placeholder="Rédigez le contenu de votre actualité..."
+            className="mb-4"
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Médias</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Image</label>
+            <div className="flex items-center space-x-4">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              {imagePreview && (
+                <div className="relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-20 h-20 object-cover rounded-lg"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0"
+                    onClick={() => {
+                      setImagePreview("");
+                      setImageFile(null);
+                    }}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
                 </div>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => setDocumentFile(null)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="text-center">
-                <File className="mx-auto h-8 w-8 text-gray-400" />
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) setDocumentFile(file);
-                  }}
-                  className="mt-2"
-                />
-              </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Document (PDF, Word, etc.)</label>
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+              onChange={handleDocumentChange}
+              className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+            />
+            {documentFile && (
+              <Badge variant="outline" className="mt-2">
+                {documentFile.name}
+              </Badge>
+            )}
+            {news?.document_url && !documentFile && (
+              <Badge variant="outline" className="mt-2">
+                {news.document_name || "Document existant"}
+              </Badge>
             )}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="published"
-          checked={formData.published}
-          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, published: checked }))}
-        />
-        <Label htmlFor="published">Publier immédiatement</Label>
-      </div>
-
-      <div className="flex justify-end space-x-2">
+      <div className="flex justify-end space-x-4">
         <Button type="button" variant="outline" onClick={onCancel}>
           Annuler
         </Button>
-        <Button
-          type="submit"
-          disabled={loading}
-          className="bg-[#006be5] hover:bg-[#0056b3]"
-        >
-          {loading ? "Enregistrement..." : (news ? "Modifier" : "Créer")}
+        <Button type="submit" disabled={loading}>
+          {loading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+          ) : (
+            <Save className="h-4 w-4 mr-2" />
+          )}
+          {news ? "Mettre à jour" : "Créer"}
         </Button>
       </div>
     </form>

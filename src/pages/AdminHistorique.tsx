@@ -1,7 +1,10 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { 
   Activity, 
   Clock, 
@@ -11,8 +14,11 @@ import {
   Plus,
   Edit,
   Trash,
-  Globe
+  Globe,
+  Filter,
+  Search
 } from "lucide-react";
+import { useState } from "react";
 
 interface ActivityLog {
   id: string;
@@ -29,6 +35,9 @@ interface ActivityLog {
 }
 
 const AdminHistorique = () => {
+  const [selectedAction, setSelectedAction] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const { data: activities = [], isLoading } = useQuery({
     queryKey: ['admin-activity-logs'],
     queryFn: async () => {
@@ -37,7 +46,7 @@ const AdminHistorique = () => {
         .from('activity_logs')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(100);
+        .limit(500);
       
       if (activityError) throw activityError;
       
@@ -68,16 +77,46 @@ const AdminHistorique = () => {
     }
   });
 
+  const actionTypes = [
+    { id: 'all', label: 'Toutes les actions' },
+    { id: 'create', label: 'Créations' },
+    { id: 'update', label: 'Modifications' },
+    { id: 'delete', label: 'Suppressions' },
+    { id: 'upload', label: 'Téléchargements' },
+    { id: 'login', label: 'Connexions' }
+  ];
+
+  const filteredActivities = activities.filter(activity => {
+    const matchesAction = selectedAction === 'all' || activity.action.toLowerCase().includes(selectedAction);
+    const matchesSearch = searchQuery === '' || 
+      activity.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (activity.details && activity.details.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (activity.profiles?.full_name && activity.profiles.full_name.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    return matchesAction && matchesSearch;
+  });
+
   const getActionIcon = (action: string) => {
     switch (action.toLowerCase()) {
-      case 'create':
-      case 'add':
+      case 'create_news':
+      case 'create_event':
+      case 'create_formation':
+      case 'create_cooperation':
+      case 'create_page':
+      case 'upload_file':
         return <Plus className="h-4 w-4 text-green-600" />;
-      case 'update':
-      case 'edit':
+      case 'update_news':
+      case 'update_event':
+      case 'update_formation':
+      case 'update_cooperation':
+      case 'update_page':
         return <Edit className="h-4 w-4 text-blue-600" />;
-      case 'delete':
-      case 'remove':
+      case 'delete_news':
+      case 'delete_event':
+      case 'delete_formation':
+      case 'delete_cooperation':
+      case 'delete_page':
+      case 'delete_file':
         return <Trash className="h-4 w-4 text-red-600" />;
       case 'view':
       case 'access':
@@ -91,25 +130,22 @@ const AdminHistorique = () => {
   };
 
   const getActionColor = (action: string) => {
-    switch (action.toLowerCase()) {
-      case 'create':
-      case 'add':
-        return 'bg-green-100 text-green-800 hover:bg-green-200';
-      case 'update':
-      case 'edit':
-        return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
-      case 'delete':
-      case 'remove':
-        return 'bg-red-100 text-red-800 hover:bg-red-200';
-      case 'view':
-      case 'access':
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
-      case 'login':
-      case 'logout':
-        return 'bg-purple-100 text-purple-800 hover:bg-purple-200';
-      default:
-        return 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200';
+    if (action.includes('create') || action.includes('upload')) {
+      return 'bg-green-100 text-green-800 hover:bg-green-200';
     }
+    if (action.includes('update')) {
+      return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
+    }
+    if (action.includes('delete')) {
+      return 'bg-red-100 text-red-800 hover:bg-red-200';
+    }
+    if (action.includes('view') || action.includes('access')) {
+      return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+    }
+    if (action.includes('login') || action.includes('logout')) {
+      return 'bg-purple-100 text-purple-800 hover:bg-purple-200';
+    }
+    return 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200';
   };
 
   if (isLoading) {
@@ -141,6 +177,51 @@ const AdminHistorique = () => {
         </div>
       </div>
 
+      {/* Filters Section */}
+      <Card className="mb-8 border-0 shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            Filtres
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Action Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-3">Type d'action</label>
+              <div className="flex flex-wrap gap-2">
+                {actionTypes.map((type) => (
+                  <Button
+                    key={type.id}
+                    variant={selectedAction === type.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedAction(type.id)}
+                    className="rounded-full"
+                  >
+                    {type.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Search Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-3">Recherche</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Rechercher dans les activités..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <Card className="border-0 shadow-lg bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
@@ -148,7 +229,7 @@ const AdminHistorique = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-indigo-600 dark:text-indigo-400 text-sm font-medium">Total Activités</p>
-                <p className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">{activities.length}</p>
+                <p className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">{filteredActivities.length}</p>
               </div>
               <Activity className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
             </div>
@@ -161,7 +242,7 @@ const AdminHistorique = () => {
               <div>
                 <p className="text-green-600 dark:text-green-400 text-sm font-medium">Créations</p>
                 <p className="text-2xl font-bold text-green-700 dark:text-green-300">
-                  {activities.filter(a => a.action.toLowerCase().includes('create') || a.action.toLowerCase().includes('add')).length}
+                  {filteredActivities.filter(a => a.action.includes('create') || a.action.includes('upload')).length}
                 </p>
               </div>
               <Plus className="h-8 w-8 text-green-600 dark:text-green-400" />
@@ -175,7 +256,7 @@ const AdminHistorique = () => {
               <div>
                 <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Modifications</p>
                 <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                  {activities.filter(a => a.action.toLowerCase().includes('update') || a.action.toLowerCase().includes('edit')).length}
+                  {filteredActivities.filter(a => a.action.includes('update')).length}
                 </p>
               </div>
               <Edit className="h-8 w-8 text-blue-600 dark:text-blue-400" />
@@ -189,7 +270,7 @@ const AdminHistorique = () => {
               <div>
                 <p className="text-red-600 dark:text-red-400 text-sm font-medium">Suppressions</p>
                 <p className="text-2xl font-bold text-red-700 dark:text-red-300">
-                  {activities.filter(a => a.action.toLowerCase().includes('delete') || a.action.toLowerCase().includes('remove')).length}
+                  {filteredActivities.filter(a => a.action.includes('delete')).length}
                 </p>
               </div>
               <Trash className="h-8 w-8 text-red-600 dark:text-red-400" />
@@ -203,13 +284,13 @@ const AdminHistorique = () => {
         <CardHeader className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20">
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            Activités Récentes
+            Activités ({filteredActivities.length})
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          {activities.length > 0 ? (
+          {filteredActivities.length > 0 ? (
             <div className="space-y-4">
-              {activities.map((activity) => (
+              {filteredActivities.map((activity) => (
                 <div 
                   key={activity.id} 
                   className="flex items-start gap-4 p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 shadow-sm hover:shadow-md"
@@ -266,10 +347,13 @@ const AdminHistorique = () => {
             <div className="text-center py-12">
               <Activity className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
-                Aucune activité
+                Aucune activité trouvée
               </h3>
               <p className="text-gray-500">
-                Les activités des utilisateurs apparaîtront ici
+                {searchQuery || selectedAction !== 'all' 
+                  ? "Aucun résultat pour les filtres sélectionnés" 
+                  : "Les activités des utilisateurs apparaîtront ici"
+                }
               </p>
             </div>
           )}

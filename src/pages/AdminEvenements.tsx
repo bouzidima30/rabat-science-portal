@@ -1,180 +1,101 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Plus, Edit, Trash2, Search, Calendar, MapPin, Clock, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Plus, Edit, Trash2, Upload, MapPin, Clock, Search, CalendarDays, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useActivityLogger } from "@/hooks/useActivityLogger";
+
+interface Event {
+  id: string;
+  titre: string;
+  description: string | null;
+  date_debut: string;
+  date_fin: string | null;
+  heure_debut: string | null;
+  heure_fin: string | null;
+  lieu: string | null;
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 const AdminEvenements = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingEvent, setEditingEvent] = useState<any>(null);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [formData, setFormData] = useState({
-    titre: '',
-    description: '',
-    date_debut: '',
-    heure_debut: '',
-    date_fin: '',
-    heure_fin: '',
-    lieu: '',
-    image_url: ''
-  });
-
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const { logActivity } = useActivityLogger();
 
-  const { data: events, isLoading } = useQuery({
-    queryKey: ['admin-events'],
-    queryFn: async () => {
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
       const { data, error } = await supabase
         .from('events')
         .select('*')
         .order('date_debut', { ascending: false });
-      
-      if (error) throw error;
-      return data;
-    }
-  });
 
-  const eventMutation = useMutation({
-    mutationFn: async (eventData: any) => {
-      if (editingEvent) {
-        const { error } = await supabase
-          .from('events')
-          .update(eventData)
-          .eq('id', editingEvent.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('events')
-          .insert([eventData]);
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-events'] });
-      setIsDialogOpen(false);
-      setEditingEvent(null);
-      setFormData({
-        titre: '',
-        description: '',
-        date_debut: '',
-        heure_debut: '',
-        date_fin: '',
-        heure_fin: '',
-        lieu: '',
-        image_url: ''
-      });
-      toast({
-        title: editingEvent ? "Événement modifié" : "Événement créé",
-        description: `L'événement a été ${editingEvent ? "modifié" : "créé"} avec succès`,
-      });
-    },
-    onError: (error) => {
+      if (error) throw error;
+      setEvents(data || []);
+    } catch (error: any) {
       toast({
         title: "Erreur",
-        description: "Une erreur est survenue",
+        description: "Impossible de charger les événements.",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
-  });
+  };
 
-  const deleteEventMutation = useMutation({
-    mutationFn: async (id: string) => {
+  const handleDelete = async (id: string) => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer cet événement ?")) return;
+
+    try {
+      const event = events.find(e => e.id === id);
       const { error } = await supabase
         .from('events')
         .delete()
         .eq('id', id);
-      
+
       if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-events'] });
+
+      await logActivity('delete_event', `Événement supprimé: ${event?.titre || 'ID: ' + id}`);
+
       toast({
-        title: "Événement supprimé",
-        description: "L'événement a été supprimé avec succès",
+        title: "Succès",
+        description: "L'événement a été supprimé.",
       });
-    }
-  });
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = fileName;
-
-      const { error: uploadError } = await supabase.storage
-        .from('event-images')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage
-        .from('event-images')
-        .getPublicUrl(filePath);
-
-      setFormData({ ...formData, image_url: data.publicUrl });
-      
-      toast({
-        title: "Image téléchargée",
-        description: "L'image a été téléchargée avec succès",
-      });
-    } catch (error) {
+      fetchEvents();
+    } catch (error: any) {
       toast({
         title: "Erreur",
-        description: "Erreur lors du téléchargement de l'image",
+        description: "Impossible de supprimer l'événement.",
         variant: "destructive",
       });
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    eventMutation.mutate(formData);
-  };
-
-  const openEditDialog = (event: any) => {
-    setEditingEvent(event);
-    setFormData({
-      titre: event.titre,
-      description: event.description || '',
-      date_debut: event.date_debut,
-      heure_debut: event.heure_debut || '',
-      date_fin: event.date_fin || '',
-      heure_fin: event.heure_fin || '',
-      lieu: event.lieu || '',
-      image_url: event.image_url || ''
-    });
-    setIsDialogOpen(true);
-  };
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('fr-FR');
-  };
-
-  const filteredEvents = events?.filter(event =>
+  const filteredEvents = events.filter(event =>
     event.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    event.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    event.lieu?.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
+    (event.description && event.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (event.lieu && event.lieu.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
-  const upcomingEvents = events?.filter(event => new Date(event.date_debut) >= new Date()).length || 0;
-  const pastEvents = events?.filter(event => new Date(event.date_debut) < new Date()).length || 0;
+  const upcomingEvents = events.filter(event => new Date(event.date_debut) >= new Date());
+  const pastEvents = events.filter(event => new Date(event.date_debut) < new Date());
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="p-8">
         <div className="flex items-center justify-center h-64">
@@ -190,136 +111,41 @@ const AdminEvenements = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-xl">
-              <CalendarDays className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+            <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl">
+              <Calendar className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Événements
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">
-                Planifiez et gérez les événements de la faculté
+                Gérez et organisez les événements de la faculté
               </p>
             </div>
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={() => {
-                setEditingEvent(null);
-                setFormData({
-                  titre: '',
-                  description: '',
-                  date_debut: '',
-                  heure_debut: '',
-                  date_fin: '',
-                  heure_fin: '',
-                  lieu: '',
-                  image_url: ''
-                });
-              }} className="bg-purple-600 hover:bg-purple-700 shadow-lg">
-                <Plus className="h-4 w-4 mr-2" />
-                Nouvel Événement
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold">
-                  {editingEvent ? "Modifier l'événement" : "Créer un événement"}
-                </DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <Input
-                  placeholder="Titre de l'événement"
-                  value={formData.titre}
-                  onChange={(e) => setFormData({ ...formData, titre: e.target.value })}
-                  required
-                  className="h-12"
-                />
-                <Textarea
-                  placeholder="Description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Date de début</label>
-                    <Input
-                      type="date"
-                      value={formData.date_debut}
-                      onChange={(e) => setFormData({ ...formData, date_debut: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Heure de début</label>
-                    <Input
-                      type="time"
-                      value={formData.heure_debut}
-                      onChange={(e) => setFormData({ ...formData, heure_debut: e.target.value })}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Date de fin</label>
-                    <Input
-                      type="date"
-                      value={formData.date_fin}
-                      onChange={(e) => setFormData({ ...formData, date_fin: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Heure de fin</label>
-                    <Input
-                      type="time"
-                      value={formData.heure_fin}
-                      onChange={(e) => setFormData({ ...formData, heure_fin: e.target.value })}
-                    />
-                  </div>
-                </div>
-                <Input
-                  placeholder="Lieu"
-                  value={formData.lieu}
-                  onChange={(e) => setFormData({ ...formData, lieu: e.target.value })}
-                  className="h-12"
-                />
-                <div>
-                  <label className="block text-sm font-medium mb-2">Image</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
-                  />
-                  {formData.image_url && (
-                    <img src={formData.image_url} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded-xl shadow-md" />
-                  )}
-                </div>
-                <div className="flex gap-2 pt-4">
-                  <Button type="submit" disabled={eventMutation.isPending} className="bg-purple-600 hover:bg-purple-700">
-                    {editingEvent ? "Modifier" : "Créer"}
-                  </Button>
-                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Annuler
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <Button
+            onClick={() => {
+              setSelectedEvent(null);
+              setIsFormOpen(true);
+            }}
+            className="bg-green-600 hover:bg-green-700 shadow-lg"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Nouvel événement
+          </Button>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card className="border-0 shadow-lg bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Total</p>
-                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{events?.length || 0}</p>
+                <p className="text-green-600 dark:text-green-400 text-sm font-medium">Total</p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{events.length}</p>
               </div>
-              <CalendarDays className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+              <Calendar className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
           </CardContent>
         </Card>
@@ -328,20 +154,20 @@ const AdminEvenements = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">À venir</p>
-                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{upcomingEvents}</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{upcomingEvents.length}</p>
               </div>
-              <Calendar className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <Clock className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-lg bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/20 dark:to-gray-700/20">
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/20 dark:to-gray-800/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Passés</p>
-                <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{pastEvents}</p>
+                <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{pastEvents.length}</p>
               </div>
-              <Clock className="h-8 w-8 text-gray-600 dark:text-gray-400" />
+              <Eye className="h-8 w-8 text-gray-600 dark:text-gray-400" />
             </div>
           </CardContent>
         </Card>
@@ -368,7 +194,7 @@ const AdminEvenements = () => {
           <Card key={event.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
-                <div className="flex gap-4 flex-1">
+                <div className="flex space-x-4 flex-1">
                   {event.image_url && (
                     <img 
                       src={event.image_url} 
@@ -381,20 +207,22 @@ const AdminEvenements = () => {
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                         {event.titre}
                       </h3>
-                      <div className="flex gap-2 ml-4">
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          onClick={() => openEditDialog(event)}
-                          className="hover:bg-purple-50 hover:border-purple-300 dark:hover:bg-purple-900/20"
+                      <div className="flex space-x-2 ml-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedEvent(event);
+                            setIsFormOpen(true);
+                          }}
+                          className="hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-900/20"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          onClick={() => deleteEventMutation.mutate(event.id)}
-                          disabled={deleteEventMutation.isPending}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(event.id)}
                           className="hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20 text-red-600"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -402,32 +230,35 @@ const AdminEvenements = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        {formatDate(event.date_debut)}
+                    <div className="flex items-center space-x-4 mb-3">
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        {new Date(event.date_debut).toLocaleDateString('fr-FR')}
                         {event.date_fin && event.date_fin !== event.date_debut && (
-                          <span> - {formatDate(event.date_fin)}</span>
+                          <span> - {new Date(event.date_fin).toLocaleDateString('fr-FR')}</span>
                         )}
                       </div>
                       {event.heure_debut && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
+                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                          <Clock className="h-4 w-4 mr-1" />
                           {event.heure_debut}
-                          {event.heure_fin && <span> - {event.heure_fin}</span>}
+                          {event.heure_fin && ` - ${event.heure_fin}`}
                         </div>
                       )}
                       {event.lieu && (
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4" />
+                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                          <MapPin className="h-4 w-4 mr-1" />
                           {event.lieu}
                         </div>
                       )}
                     </div>
                     
                     {event.description && (
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {event.description}
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        {event.description.length > 200 
+                          ? event.description.substring(0, 200) + "..." 
+                          : event.description
+                        }
                       </p>
                     )}
                   </div>
@@ -436,11 +267,11 @@ const AdminEvenements = () => {
             </CardContent>
           </Card>
         ))}
-        
+
         {filteredEvents.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
-              <CalendarDays className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
                 Aucun événement trouvé
               </h3>
@@ -450,23 +281,13 @@ const AdminEvenements = () => {
               {!searchQuery && (
                 <Button 
                   onClick={() => {
-                    setEditingEvent(null);
-                    setFormData({
-                      titre: '',
-                      description: '',
-                      date_debut: '',
-                      heure_debut: '',
-                      date_fin: '',
-                      heure_fin: '',
-                      lieu: '',
-                      image_url: ''
-                    });
-                    setIsDialogOpen(true);
+                    setSelectedEvent(null);
+                    setIsFormOpen(true);
                   }}
-                  className="bg-purple-600 hover:bg-purple-700"
+                  className="bg-green-600 hover:bg-green-700"
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Nouvel Événement
+                  Nouvel événement
                 </Button>
               )}
             </CardContent>
