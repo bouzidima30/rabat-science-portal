@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Upload, File, Plus, X, FileText, Image, Video, Music, Download, Trash2, Search, Filter } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface FileWithMetadata {
   file: File;
@@ -35,6 +36,7 @@ const AdminUploadFiles = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
@@ -271,18 +273,27 @@ const AdminUploadFiles = () => {
     <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
-        <div className="flex items-center space-x-4">
-          <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl">
-            <Upload className="h-8 w-8 text-green-600 dark:text-green-400" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl">
+              <Upload className="h-8 w-8 text-green-600 dark:text-green-400" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Gestion des Fichiers
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">
+                Téléchargez et gérez vos fichiers
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Gestion des Fichiers
-            </h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">
-              Téléchargez et gérez vos fichiers
-            </p>
-          </div>
+          <Button
+            onClick={() => setIsUploadDialogOpen(true)}
+            className="bg-green-600 hover:bg-green-700 shadow-lg"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Télécharger des fichiers
+          </Button>
         </div>
       </div>
 
@@ -324,123 +335,6 @@ const AdminUploadFiles = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Upload Section */}
-      <Card className="mb-8 border-0 shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Plus className="h-5 w-5" />
-            Télécharger de nouveaux fichiers
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div 
-            className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-green-400 transition-colors cursor-pointer"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-lg font-medium text-gray-600 dark:text-gray-300">
-              Cliquez pour sélectionner des fichiers
-            </p>
-            <p className="text-sm text-gray-500 mt-2">
-              Ou glissez-déposez vos fichiers ici
-            </p>
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Files to Upload */}
-      {files.length > 0 && (
-        <Card className="mb-8 border-0 shadow-lg">
-          <CardHeader>
-            <CardTitle>Fichiers à télécharger ({files.length})</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4 mb-6">
-              {files.map((fileItem) => (
-                <div key={fileItem.id} className="flex items-start gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-                  <div className="flex-shrink-0">
-                    {getFileIcon(fileItem.file.type)}
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-gray-900 dark:text-white">
-                          {fileItem.file.name}
-                        </h4>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline">
-                            {formatFileSize(fileItem.file.size)}
-                          </Badge>
-                          <Badge variant="secondary">
-                            {fileItem.file.type}
-                          </Badge>
-                        </div>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeFile(fileItem.id)}
-                        className="text-red-600 hover:bg-red-50"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Catégorie</label>
-                        <select
-                          value={fileItem.category}
-                          onChange={(e) => updateFile(fileItem.id, 'category', e.target.value)}
-                          className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
-                        >
-                          {categories.map((cat) => (
-                            <option key={cat} value={cat}>{cat}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Description (optionnelle)</label>
-                        <Input
-                          value={fileItem.description}
-                          onChange={(e) => updateFile(fileItem.id, 'description', e.target.value)}
-                          placeholder="Description du fichier..."
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex justify-end gap-4">
-              <Button
-                variant="outline"
-                onClick={() => setFiles([])}
-                disabled={uploading}
-              >
-                Tout supprimer
-              </Button>
-              <Button
-                onClick={uploadFiles}
-                disabled={uploading}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                {uploading ? "Téléchargement..." : `Télécharger ${files.length} fichier(s)`}
-                <Upload className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Filters Section */}
       <Card className="mb-8 border-0 shadow-lg">
@@ -571,6 +465,122 @@ const AdminUploadFiles = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Upload Dialog */}
+      <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">
+              Télécharger des fichiers
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            {/* Upload Section */}
+            <div 
+              className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-green-400 transition-colors cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-600 dark:text-gray-300">
+                Cliquez pour sélectionner des fichiers
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                Ou glissez-déposez vos fichiers ici
+              </p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+            </div>
+
+            {/* Files to Upload */}
+            {files.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Fichiers à télécharger ({files.length})</h3>
+                <div className="space-y-4">
+                  {files.map((fileItem) => (
+                    <div key={fileItem.id} className="flex items-start gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                      <div className="flex-shrink-0">
+                        {getFileIcon(fileItem.file.type)}
+                      </div>
+                      <div className="flex-1 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-medium text-gray-900 dark:text-white">
+                              {fileItem.file.name}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge variant="outline">
+                                {formatFileSize(fileItem.file.size)}
+                              </Badge>
+                              <Badge variant="secondary">
+                                {fileItem.file.type}
+                              </Badge>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeFile(fileItem.id)}
+                            className="text-red-600 hover:bg-red-50"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Catégorie</label>
+                            <select
+                              value={fileItem.category}
+                              onChange={(e) => updateFile(fileItem.id, 'category', e.target.value)}
+                              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+                            >
+                              {categories.map((cat) => (
+                                <option key={cat} value={cat}>{cat}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Description (optionnelle)</label>
+                            <Input
+                              value={fileItem.description}
+                              onChange={(e) => updateFile(fileItem.id, 'description', e.target.value)}
+                              placeholder="Description du fichier..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="flex justify-end gap-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setFiles([])}
+                    disabled={uploading}
+                  >
+                    Tout supprimer
+                  </Button>
+                  <Button
+                    onClick={uploadFiles}
+                    disabled={uploading}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    {uploading ? "Téléchargement..." : `Télécharger ${files.length} fichier(s)`}
+                    <Upload className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
