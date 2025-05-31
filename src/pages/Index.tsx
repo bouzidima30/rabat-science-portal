@@ -99,7 +99,7 @@ const Index = () => {
             </div>)}
         </div>
         
-        <div className="relative z-10 flex items-center justify-between h-full max-w-5xl mx-auto px-4">
+        <div className="relative z-10 flex items-center justify-between h-full max-w-7xl mx-auto px-4">
           <button onClick={prevSlide} className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
             <ChevronRight className="h-6 w-6 text-white rotate-180" />
           </button>
