@@ -91,7 +91,7 @@ const Index = () => {
       <Navbar />
       
       {/* Hero Carousel */}
-      <section className="relative h-[600px] overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+      <section className="relative h-[500px] overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
         <div className="absolute inset-0">
           {carouselImages.map((image, index) => <div key={index} className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}>
               <img src={image.src} alt={image.title} className="w-full h-full object-cover" />
