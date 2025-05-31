@@ -16,7 +16,7 @@ export const useActivityLogger = () => {
           user_id: user.id,
           action,
           details,
-          ip_address: null, // You could get this from an API if needed
+          ip_address: null,
           user_agent: navigator.userAgent
         });
 

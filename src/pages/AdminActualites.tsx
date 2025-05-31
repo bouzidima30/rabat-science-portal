@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import NewsForm from "@/components/NewsForm";
 import type { News } from "@/types/news";
+import { useActivityLogger } from "@/hooks/useActivityLogger";
 
 const AdminActualites = () => {
   const [news, setNews] = useState<News[]>([]);
@@ -18,6 +18,7 @@ const AdminActualites = () => {
   const [selectedNews, setSelectedNews] = useState<News | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const { toast } = useToast();
+  const { logActivity } = useActivityLogger();
 
   const categoryLabels = {
     reunion_travail: "Réunion de travail",
@@ -56,12 +57,15 @@ const AdminActualites = () => {
     if (!confirm("Êtes-vous sûr de vouloir supprimer cette actualité ?")) return;
 
     try {
+      const newsItem = news.find(n => n.id === id);
       const { error } = await supabase
         .from('news')
         .delete()
         .eq('id', id);
 
       if (error) throw error;
+
+      await logActivity('delete_news', `Actualité supprimée: ${newsItem?.title || 'ID: ' + id}`);
 
       toast({
         title: "Succès",
@@ -78,7 +82,7 @@ const AdminActualites = () => {
     }
   };
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = async () => {
     setIsFormOpen(false);
     setSelectedNews(null);
     fetchNews();
