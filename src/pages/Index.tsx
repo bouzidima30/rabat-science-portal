@@ -8,6 +8,8 @@ import { useState } from "react";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
+import { NewsCategory } from "@/types/news";
+
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
@@ -20,9 +22,11 @@ const Index = () => {
       let query = supabase.from('news').select('*').eq('published', true).order('created_at', {
         ascending: false
       });
+      
       if (selectedCategory !== 'all') {
-        query = query.eq('category', selectedCategory);
+        query = query.eq('category', selectedCategory as NewsCategory);
       }
+      
       const {
         data,
         error
