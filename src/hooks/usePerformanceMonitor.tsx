@@ -25,9 +25,10 @@ export const usePerformanceMonitor = (componentName: string) => {
     const connection = (navigator as any).connection;
     const connectionType = connection?.effectiveType;
 
-    // Measure load time from navigation start
-    const navigationStart = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    const loadTime = navigationStart ? navigationStart.loadEventEnd - navigationStart.navigationStart : 0;
+    // Measure load time from navigation start - using correct property
+    const navigationEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+    const loadTime = navigationEntries.length > 0 ? 
+      navigationEntries[0].loadEventEnd - navigationEntries[0].fetchStart : 0;
 
     const performanceMetrics: PerformanceMetrics = {
       loadTime,

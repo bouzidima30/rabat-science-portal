@@ -9,8 +9,11 @@ export interface PaginationOptions {
   sortOrder?: 'asc' | 'desc';
 }
 
+// Define table names type based on actual Supabase tables
+type TableName = 'news' | 'events' | 'formations' | 'cooperations' | 'pages' | 'files';
+
 export const paginatedQuery = async <T>(
-  tableName: string,
+  tableName: TableName,
   options: PaginationOptions,
   additionalFilters?: any
 ): Promise<{
@@ -57,7 +60,7 @@ export const paginatedQuery = async <T>(
 
 // Batch operations for better performance
 export const batchInsert = async <T>(
-  tableName: string,
+  tableName: TableName,
   records: T[],
   batchSize = 100
 ): Promise<void> => {
@@ -78,7 +81,7 @@ export const batchInsert = async <T>(
 // Optimized search with debouncing
 export const searchContent = async (
   query: string,
-  tables: string[],
+  tables: TableName[],
   searchFields: Record<string, string[]>
 ): Promise<any[]> => {
   if (!query.trim()) return [];

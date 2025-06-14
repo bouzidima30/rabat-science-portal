@@ -6,13 +6,19 @@ import { Card, CardContent } from "@/components/ui/card";
 interface ErrorStateProps {
   title?: string;
   message?: string;
+  description?: string;
+  actionLabel?: string;
+  onAction?: () => void;
   onRetry?: () => void;
   fullPage?: boolean;
 }
 
 const ErrorState = ({ 
   title = "Une erreur est survenue", 
-  message = "Impossible de charger les données. Veuillez réessayer.", 
+  message = "Impossible de charger les données. Veuillez réessayer.",
+  description,
+  actionLabel,
+  onAction,
   onRetry,
   fullPage = false 
 }: ErrorStateProps) => {
@@ -26,14 +32,23 @@ const ErrorState = ({
           {title}
         </h3>
         <p className="text-gray-600 dark:text-gray-300 mb-4">
-          {message}
+          {description || message}
         </p>
       </div>
-      {onRetry && (
-        <Button onClick={onRetry} variant="outline" className="flex items-center gap-2">
-          <RefreshCw className="h-4 w-4" />
-          Réessayer
-        </Button>
+      {(onRetry || onAction) && (
+        <div className="flex gap-2">
+          {onRetry && (
+            <Button onClick={onRetry} variant="outline" className="flex items-center gap-2">
+              <RefreshCw className="h-4 w-4" />
+              Réessayer
+            </Button>
+          )}
+          {onAction && actionLabel && (
+            <Button onClick={onAction} className="flex items-center gap-2">
+              {actionLabel}
+            </Button>
+          )}
+        </div>
       )}
     </div>
   );
