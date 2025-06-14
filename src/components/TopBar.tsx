@@ -56,35 +56,34 @@ const TopBar = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 relative z-40 py-[8px]">
+      <div className="bg-slate-50 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-700/60 px-6 relative z-40 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:block text-sm text-gray-600 dark:text-gray-400 ml-8">
+          <div className="flex items-center">
+            <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">
               Avenue Ibn Battouta, B.P. 1014 RP, Rabat – Maroc
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => setIsSearchOpen(true)} 
-              className="hidden sm:flex items-center space-x-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+              className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
             >
-              <Search className="h-4 w-4" />
-              <span>Rechercher</span>
+              <Search className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Rechercher</span>
             </Button>
 
-            {/* Add security test link for development */}
             {process.env.NODE_ENV === 'development' && (
               <Link to="/security-test">
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-orange-600 hover:text-orange-700 dark:text-orange-400"
+                  className="text-orange-600 hover:text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20"
                 >
                   <Shield className="h-4 w-4 mr-1" />
-                  Security Test
+                  Security
                 </Button>
               </Link>
             )}
@@ -93,7 +92,7 @@ const TopBar = () => {
               variant="ghost" 
               size="sm" 
               onClick={toggleTheme}
-              className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+              className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -101,12 +100,14 @@ const TopBar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                    <User className="h-4 w-4" />
-                    <span className="hidden sm:inline">{user.email}</span>
+                  <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                      <User className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="hidden sm:inline font-medium">{user.email}</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
                   <DropdownMenuItem asChild>
                     <Link to="/admin" className="flex items-center">
                       <Shield className="h-4 w-4 mr-2" />
@@ -120,21 +121,21 @@ const TopBar = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-600 dark:text-red-400">
                     <LogOut className="h-4 w-4 mr-2" />
                     Déconnexion
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Link to="/login">
-                  <Button variant="outline" size="sm">
+                  <Button variant="ghost" size="sm" className="text-slate-600 hover:text-blue-600 dark:text-slate-300">
                     Connexion
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                  <Button size="sm" className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-sm">
                     Inscription
                   </Button>
                 </Link>
