@@ -1,19 +1,21 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
 
   // Fetch latest news with category filter
   const {
@@ -83,6 +85,19 @@ const Index = () => {
     }
   ];
 
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+  }, [api]);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
@@ -91,7 +106,11 @@ const Index = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Enhanced Modern Carousel */}
         <div className="mb-16">
-          <Carousel className="w-full max-w-6xl mx-auto" opts={{ align: "start", loop: true }}>
+          <Carousel 
+            className="w-full max-w-6xl mx-auto" 
+            opts={{ align: "start", loop: true }}
+            setApi={setApi}
+          >
             <CarouselContent className="-ml-2 md:-ml-4">
               {carouselHighlights.map((highlight, index) => (
                 <CarouselItem key={index} className="pl-2 md:pl-4">
@@ -144,13 +163,19 @@ const Index = () => {
             <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
             <CarouselNext className="right-2 md:-right-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
             
-            {/* Dots indicator */}
+            {/* Interactive Dots indicator */}
             <div className="flex justify-center mt-8 space-x-3">
               {carouselHighlights.map((_, index) => (
-                <div 
-                  key={index} 
-                  className="w-3 h-3 rounded-full bg-gray-300 hover:bg-[#006be5] transition-colors duration-300 cursor-pointer"
-                ></div>
+                <button
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
+                    current === index + 1 
+                      ? 'bg-[#006be5] w-8' 
+                      : 'bg-gray-300 hover:bg-[#006be5]/50'
+                  }`}
+                  onClick={() => api?.scrollTo(index)}
+                  aria-label={`Aller à la diapositive ${index + 1}`}
+                />
               ))}
             </div>
           </Carousel>
