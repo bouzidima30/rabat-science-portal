@@ -7,10 +7,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Shield, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
+import LoadingState from "@/components/LoadingState";
+import ErrorState from "@/components/ErrorState";
+import { useToastNotifications } from "@/hooks/useToastNotifications";
+import { useAsyncOperation } from "@/hooks/useAsyncOperation";
 import { formatContent } from "@/utils/sanitize";
 import { validateFile } from "@/utils/fileValidation";
 
@@ -21,10 +24,10 @@ interface TestResult {
 }
 
 const SecurityTest = () => {
-  const { user, profile } = useAuth();
-  const { toast } = useToast();
+  const { user, profile, loading: authLoading } = useAuth();
+  const { showSuccess, showError, showInfo } = useToastNotifications();
+  const { loading: testing, execute } = useAsyncOperation();
   const [testResults, setTestResults] = useState<TestResult[]>([]);
-  const [testing, setTesting] = useState(false);
 
   const updateResult = (name: string, status: 'pass' | 'fail' | 'warning', message: string) => {
     setTestResults(prev => {
@@ -172,27 +175,21 @@ const SecurityTest = () => {
   };
 
   const runAllTests = async () => {
-    setTesting(true);
     setTestResults([]);
     
-    try {
+    const result = await execute(async () => {
       await testAuthenticationFlow();
       await testRLSPolicies();
       testInputSanitization();
       testFileValidation();
-      
-      toast({
-        title: "Security tests completed",
-        description: "Check the results below",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Testing error",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setTesting(false);
+    }, {
+      successMessage: "Tests de sécurité terminés",
+      errorMessage: "Erreur lors des tests",
+      loadingMessage: "Exécution des tests de sécurité..."
+    });
+
+    if (result !== null) {
+      showInfo("Tests terminés", "Consultez les résultats ci-dessous");
     }
   };
 
@@ -222,6 +219,10 @@ const SecurityTest = () => {
     }
   };
 
+  if (authLoading) {
+    return <LoadingState fullPage message="Chargement de l'authentification..." />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
@@ -247,8 +248,8 @@ const SecurityTest = () => {
         <Alert className="mb-8">
           <Shield className="h-4 w-4" />
           <AlertDescription>
-            This page helps you test the security implementation. Run the tests below to verify that 
-            RLS policies, input sanitization, file validation, and authentication are working properly.
+            Cette page vous aide à tester l'implémentation de la sécurité. Exécutez les tests ci-dessous pour vérifier que 
+            les politiques RLS, la sanitisation des entrées, la validation des fichiers et l'authentification fonctionnent correctement.
           </AlertDescription>
         </Alert>
 
@@ -256,13 +257,13 @@ const SecurityTest = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Security Test Suite
+                Suite de tests de sécurité
                 <Button 
                   onClick={runAllTests} 
                   disabled={testing}
                   className="bg-blue-600 hover:bg-blue-700"
                 >
-                  {testing ? 'Running Tests...' : 'Run All Tests'}
+                  {testing ? 'Tests en cours...' : 'Exécuter tous les tests'}
                 </Button>
               </CardTitle>
             </CardHeader>
@@ -270,8 +271,12 @@ const SecurityTest = () => {
               <div className="space-y-4">
                 {testResults.length === 0 && !testing && (
                   <p className="text-gray-500 text-center py-8">
-                    Click "Run All Tests" to start testing the security implementation
+                    Cliquez sur "Exécuter tous les tests" pour commencer à tester l'implémentation de la sécurité
                   </p>
+                )}
+                
+                {testing && testResults.length === 0 && (
+                  <LoadingState message="Exécution des tests de sécurité..." />
                 )}
                 
                 {testResults.map((result, index) => (
