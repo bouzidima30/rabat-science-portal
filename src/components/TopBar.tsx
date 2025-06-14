@@ -56,10 +56,10 @@ const TopBar = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 relative z-40 py-[8px]">
+      <div className="bg-[#016BE5] shadow-lg px-4 relative z-40 py-[12px]">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="hidden md:block text-sm text-gray-600 dark:text-gray-400 ml-8">
+            <div className="hidden md:block text-sm text-white/80 ml-8">
               Avenue Ibn Battouta, B.P. 1014 RP, Rabat – Maroc
             </div>
           </div>
@@ -69,7 +69,7 @@ const TopBar = () => {
               variant="ghost" 
               size="sm" 
               onClick={() => setIsSearchOpen(true)} 
-              className="hidden sm:flex items-center space-x-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+              className="hidden sm:flex items-center space-x-2 text-white/80 hover:text-white hover:bg-white/10 border-0"
             >
               <Search className="h-4 w-4" />
               <span>Rechercher</span>
@@ -81,7 +81,7 @@ const TopBar = () => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-orange-600 hover:text-orange-700 dark:text-orange-400"
+                  className="text-white/80 hover:text-white hover:bg-white/10 border-0"
                 >
                   <Shield className="h-4 w-4 mr-1" />
                   Security Test
@@ -93,7 +93,7 @@ const TopBar = () => {
               variant="ghost" 
               size="sm" 
               onClick={toggleTheme}
-              className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+              className="text-white/80 hover:text-white hover:bg-white/10 border-0"
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -101,7 +101,7 @@ const TopBar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-white/80 hover:text-white hover:bg-white/10 border-0">
                     <User className="h-4 w-4" />
                     <span className="hidden sm:inline">{user.email}</span>
                   </Button>
@@ -129,12 +129,12 @@ const TopBar = () => {
             ) : (
               <div className="flex items-center space-x-2">
                 <Link to="/login">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="text-white border-white/30 hover:bg-white/10 hover:text-white">
                     Connexion
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                  <Button size="sm" className="bg-white text-[#016BE5] hover:bg-white/90 hover:text-[#016BE5]">
                     Inscription
                   </Button>
                 </Link>
