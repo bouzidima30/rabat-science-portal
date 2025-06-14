@@ -21,7 +21,7 @@ const AdminActualites = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedNews, setSelectedNews] = useState<News | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [moderationItem, setModerationItem] = useState<any>(null);
+  const [moderationItem, setModerationItem] = useState<News | null>(null);
   const [versionHistoryItem, setVersionHistoryItem] = useState<any>(null);
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
@@ -285,12 +285,7 @@ const AdminActualites = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setModerationItem({
-                            id: item.id,
-                            title: item.title,
-                            status: (item as any).status || 'draft',
-                            type: 'news'
-                          })}
+                          onClick={() => setModerationItem(item)}
                           className="hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-900/20"
                           title="Modérer"
                         >
@@ -392,7 +387,10 @@ const AdminActualites = () => {
         <ContentModerationDialog
           isOpen={!!moderationItem}
           onClose={() => setModerationItem(null)}
-          content={moderationItem}
+          contentId={moderationItem.id}
+          contentType="news"
+          contentTitle={moderationItem.title}
+          currentStatus={(moderationItem as any).status || (moderationItem.published ? 'published' : 'draft')}
           onStatusUpdate={fetchNews}
         />
       )}
