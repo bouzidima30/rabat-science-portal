@@ -7,38 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, User, FileText } from "lucide-react";
 
-interface VersionData {
-  id: string;
-  version_number: number;
-  status: string;
-  created_at: string;
-  created_by: string;
-  change_summary: string | null;
-  created_by_profile?: {
-    full_name?: string;
-    email?: string;
-  };
-  // News fields
-  news_id?: string;
-  title?: string;
-  content?: string;
-  excerpt?: string;
-  category?: string;
-  image_url?: string;
-  document_url?: string;
-  document_name?: string;
-  author_id?: string;
-  // Event fields
-  event_id?: string;
-  titre?: string;
-  description?: string;
-  date_debut?: string;
-  date_fin?: string;
-  heure_debut?: string;
-  heure_fin?: string;
-  lieu?: string;
-}
-
 interface VersionHistoryDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -54,7 +22,7 @@ const VersionHistoryDialog = ({
   contentType, 
   contentTitle 
 }: VersionHistoryDialogProps) => {
-  const [versions, setVersions] = useState<VersionData[]>([]);
+  const [versions, setVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -80,7 +48,7 @@ const VersionHistoryDialog = ({
         .order('version_number', { ascending: false });
 
       if (error) throw error;
-      setVersions((data as VersionData[]) || []);
+      setVersions(data || []);
     } catch (error: any) {
       console.error('Error fetching versions:', error);
       toast({
@@ -103,11 +71,11 @@ const VersionHistoryDialog = ({
     });
   };
 
-  const getVersionTitle = (version: VersionData) => {
+  const getVersionTitle = (version: any) => {
     return version.title || version.titre || '';
   };
 
-  const getVersionContent = (version: VersionData) => {
+  const getVersionContent = (version: any) => {
     return version.content || version.description || '';
   };
 
