@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,19 +66,19 @@ const Index = () => {
     {
       title: "Excellence Académique",
       description: "Plus de 50 formations d'excellence de la licence au doctorat",
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=600&fit=crop",
       link: "/formations"
     },
     {
       title: "Recherche de Pointe",
       description: "12 laboratoires de recherche et innovation scientifique",
-      image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=600&fit=crop",
       link: "/recherche"
     },
     {
       title: "Partenariats Internationaux",
       description: "Coopération avec les meilleures universités mondiales",
-      image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=600&fit=crop",
       link: "/cooperation"
     }
   ];
@@ -88,43 +89,70 @@ const Index = () => {
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Modern Carousel */}
-        <div className="mb-12">
-          <Carousel className="w-full max-w-5xl mx-auto">
-            <CarouselContent>
+        {/* Enhanced Modern Carousel */}
+        <div className="mb-16">
+          <Carousel className="w-full max-w-6xl mx-auto" opts={{ align: "start", loop: true }}>
+            <CarouselContent className="-ml-2 md:-ml-4">
               {carouselHighlights.map((highlight, index) => (
-                <CarouselItem key={index}>
-                  <Link to={highlight.link}>
-                    <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                      <div className="relative h-80">
+                <CarouselItem key={index} className="pl-2 md:pl-4">
+                  <Link to={highlight.link} className="block group">
+                    <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] bg-white/90 backdrop-blur-sm">
+                      <div className="relative h-96 md:h-[32rem]">
                         <img 
                           src={highlight.image} 
                           alt={highlight.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#006be5]/80 to-[#0056b3]/60"></div>
-                        <div className="relative z-10 h-full flex items-center justify-center p-8">
-                          <div className="text-center text-white">
-                            <h3 className="text-3xl font-bold mb-4">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#006be5]/60 to-transparent"></div>
+                        
+                        {/* Content overlay */}
+                        <div className="absolute inset-0 flex items-end p-8 md:p-12">
+                          <div className="text-white max-w-2xl">
+                            <div className="mb-4">
+                              <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium border border-white/30">
+                                FSR Mohammed V
+                              </span>
+                            </div>
+                            <h3 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
                               {highlight.title}
                             </h3>
-                            <p className="text-lg opacity-90 max-w-2xl">
+                            <p className="text-lg md:text-xl opacity-90 mb-6 leading-relaxed">
                               {highlight.description}
                             </p>
-                            <Button variant="secondary" className="mt-6">
+                            <Button 
+                              size="lg" 
+                              className="bg-white text-[#006be5] hover:bg-gray-100 font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group-hover:translate-x-2"
+                            >
                               Découvrir
-                              <ArrowRight className="ml-2 h-4 w-4" />
+                              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                             </Button>
                           </div>
                         </div>
+
+                        {/* Decorative elements */}
+                        <div className="absolute top-8 right-8 w-20 h-20 border-2 border-white/30 rounded-full backdrop-blur-sm"></div>
+                        <div className="absolute bottom-8 right-16 w-12 h-12 bg-white/20 rounded-full backdrop-blur-sm"></div>
                       </div>
                     </Card>
                   </Link>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-4" />
-            <CarouselNext className="right-4" />
+            
+            {/* Enhanced Navigation */}
+            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
+            <CarouselNext className="right-2 md:-right-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
+            
+            {/* Dots indicator */}
+            <div className="flex justify-center mt-8 space-x-3">
+              {carouselHighlights.map((_, index) => (
+                <div 
+                  key={index} 
+                  className="w-3 h-3 rounded-full bg-gray-300 hover:bg-[#006be5] transition-colors duration-300 cursor-pointer"
+                ></div>
+              ))}
+            </div>
           </Carousel>
         </div>
 
