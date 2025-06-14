@@ -74,13 +74,13 @@ const VersionHistoryDialog = ({
         .from(table)
         .select(`
           *,
-          created_by_profile:created_by(full_name, email)
+          created_by_profile:profiles!created_by(full_name, email)
         `)
         .eq(idField, contentId)
         .order('version_number', { ascending: false });
 
       if (error) throw error;
-      setVersions(data || []);
+      setVersions((data as VersionData[]) || []);
     } catch (error: any) {
       console.error('Error fetching versions:', error);
       toast({
