@@ -7,40 +7,37 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, User, FileText } from "lucide-react";
 
-interface BaseVersion {
+interface VersionData {
   id: string;
   version_number: number;
   status: string;
   created_at: string;
   created_by: string;
   change_summary: string | null;
-}
-
-interface NewsVersion extends BaseVersion {
-  news_id: string;
-  title: string;
-  content: string;
+  created_by_profile?: {
+    full_name?: string;
+    email?: string;
+  };
+  // News fields
+  news_id?: string;
+  title?: string;
+  content?: string;
   excerpt?: string;
-  category: string;
+  category?: string;
   image_url?: string;
   document_url?: string;
   document_name?: string;
   author_id?: string;
-}
-
-interface EventVersion extends BaseVersion {
-  event_id: string;
-  titre: string;
+  // Event fields
+  event_id?: string;
+  titre?: string;
   description?: string;
-  date_debut: string;
+  date_debut?: string;
   date_fin?: string;
   heure_debut?: string;
   heure_fin?: string;
   lieu?: string;
-  image_url?: string;
 }
-
-type Version = NewsVersion | EventVersion;
 
 interface VersionHistoryDialogProps {
   isOpen: boolean;
@@ -57,7 +54,7 @@ const VersionHistoryDialog = ({
   contentType, 
   contentTitle 
 }: VersionHistoryDialogProps) => {
-  const [versions, setVersions] = useState<Version[]>([]);
+  const [versions, setVersions] = useState<VersionData[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -106,18 +103,12 @@ const VersionHistoryDialog = ({
     });
   };
 
-  const getVersionTitle = (version: Version) => {
-    if ('title' in version) {
-      return version.title;
-    }
-    return version.titre;
+  const getVersionTitle = (version: VersionData) => {
+    return version.title || version.titre || '';
   };
 
-  const getVersionContent = (version: Version) => {
-    if ('content' in version) {
-      return version.content;
-    }
-    return version.description || '';
+  const getVersionContent = (version: VersionData) => {
+    return version.content || version.description || '';
   };
 
   return (
@@ -188,7 +179,7 @@ const VersionHistoryDialog = ({
                   
                   <div className="flex items-center gap-1 text-xs text-gray-400 mt-2">
                     <User className="h-3 w-3" />
-                    Modifié par {(version as any).created_by_profile?.full_name || (version as any).created_by_profile?.email || 'Utilisateur inconnu'}
+                    Modifié par {version.created_by_profile?.full_name || version.created_by_profile?.email || 'Utilisateur inconnu'}
                   </div>
                 </CardContent>
               </Card>
