@@ -11,6 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
+import { formatContent } from "@/utils/sanitize";
+import { validateFile } from "@/utils/fileValidation";
 
 interface TestResult {
   name: string;
@@ -131,7 +133,6 @@ const SecurityTest = () => {
     
     // Test XSS protection
     const xssInput = '<script>alert("xss")</script><p>Safe content</p>';
-    const { formatContent } = require('@/utils/sanitize');
     
     try {
       const sanitized = formatContent(xssInput);
@@ -149,8 +150,6 @@ const SecurityTest = () => {
 
   const testFileValidation = () => {
     console.log('Testing file validation...');
-    
-    const { validateFile } = require('@/utils/fileValidation');
     
     // Test valid file
     const validFile = new File(['test'], 'test.pdf', { type: 'application/pdf' });
