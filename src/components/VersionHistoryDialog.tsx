@@ -7,20 +7,40 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, User, FileText } from "lucide-react";
 
-interface Version {
+interface BaseVersion {
   id: string;
   version_number: number;
-  title: string;
-  content?: string;
   status: string;
   created_at: string;
   created_by: string;
   change_summary: string | null;
-  // For events
-  titre?: string;
-  description?: string;
-  date_debut?: string;
 }
+
+interface NewsVersion extends BaseVersion {
+  news_id: string;
+  title: string;
+  content: string;
+  excerpt?: string;
+  category: string;
+  image_url?: string;
+  document_url?: string;
+  document_name?: string;
+  author_id?: string;
+}
+
+interface EventVersion extends BaseVersion {
+  event_id: string;
+  titre: string;
+  description?: string;
+  date_debut: string;
+  date_fin?: string;
+  heure_debut?: string;
+  heure_fin?: string;
+  lieu?: string;
+  image_url?: string;
+}
+
+type Version = NewsVersion | EventVersion;
 
 interface VersionHistoryDialogProps {
   isOpen: boolean;
@@ -86,6 +106,20 @@ const VersionHistoryDialog = ({
     });
   };
 
+  const getVersionTitle = (version: Version) => {
+    if ('title' in version) {
+      return version.title;
+    }
+    return version.titre;
+  };
+
+  const getVersionContent = (version: Version) => {
+    if ('content' in version) {
+      return version.content;
+    }
+    return version.description || '';
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -132,7 +166,7 @@ const VersionHistoryDialog = ({
                   </div>
                   
                   <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                    {contentType === 'news' ? version.title : version.titre}
+                    {getVersionTitle(version)}
                   </h4>
                   
                   {version.change_summary && (
@@ -142,19 +176,11 @@ const VersionHistoryDialog = ({
                   )}
                   
                   <div className="text-sm text-gray-500">
-                    {contentType === 'news' && version.content && (
+                    {getVersionContent(version) && (
                       <p className="mb-2">
-                        {version.content.length > 200 
-                          ? version.content.substring(0, 200) + "..." 
-                          : version.content
-                        }
-                      </p>
-                    )}
-                    {contentType === 'event' && version.description && (
-                      <p className="mb-2">
-                        {version.description.length > 200 
-                          ? version.description.substring(0, 200) + "..." 
-                          : version.description
+                        {getVersionContent(version).length > 200 
+                          ? getVersionContent(version).substring(0, 200) + "..." 
+                          : getVersionContent(version)
                         }
                       </p>
                     )}
