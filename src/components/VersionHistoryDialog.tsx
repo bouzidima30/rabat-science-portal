@@ -11,7 +11,7 @@ interface VersionHistoryDialogProps {
   isOpen: boolean;
   onClose: () => void;
   contentId: string;
-  contentType: 'news' | 'event';
+  contentType: 'news' | 'event' | 'formation' | 'cooperation' | 'page';
   contentTitle: string;
 }
 
@@ -35,73 +35,93 @@ const VersionHistoryDialog = ({
   const fetchVersions = async () => {
     setLoading(true);
     try {
+      let data: any[] = [];
+      
       if (contentType === 'news') {
-        const { data, error } = await supabase
+        const { data: newsData, error } = await supabase
           .from('news_versions')
           .select(`
-            id,
-            news_id,
-            version_number,
-            title,
-            content,
-            excerpt,
-            category,
-            image_url,
-            document_url,
-            document_name,
-            status,
-            author_id,
-            created_at,
-            created_by,
-            change_summary
+            id, news_id, version_number, title, content, excerpt, category,
+            image_url, document_url, document_name, status, author_id,
+            created_at, created_by, change_summary
           `)
           .eq('news_id', contentId)
           .order('version_number', { ascending: false });
 
         if (error) throw error;
-        setVersions(data || []);
-      } else {
-        const { data, error } = await supabase
+        data = newsData || [];
+      } else if (contentType === 'event') {
+        const { data: eventData, error } = await supabase
           .from('events_versions')
           .select(`
-            id,
-            event_id,
-            version_number,
-            titre,
-            description,
-            date_debut,
-            date_fin,
-            heure_debut,
-            heure_fin,
-            lieu,
-            image_url,
-            status,
-            created_at,
-            created_by,
-            change_summary
+            id, event_id, version_number, titre, description, date_debut, date_fin,
+            heure_debut, heure_fin, lieu, image_url, status,
+            created_at, created_by, change_summary
           `)
           .eq('event_id', contentId)
           .order('version_number', { ascending: false });
 
         if (error) throw error;
-        setVersions(data || []);
+        data = eventData || [];
+      } else if (contentType === 'formation') {
+        const { data: formationData, error } = await supabase
+          .from('formations_versions')
+          .select(`
+            id, formation_id, version_number, titre, description, type_formation,
+            departement, image_url, document_url, document_name, status,
+            created_at, created_by, change_summary
+          `)
+          .eq('formation_id', contentId)
+          .order('version_number', { ascending: false });
+
+        if (error) throw error;
+        data = formationData || [];
+      } else if (contentType === 'cooperation') {
+        const { data: cooperationData, error } = await supabase
+          .from('cooperations_versions')
+          .select(`
+            id, cooperation_id, version_number, titre, description, type_cooperation,
+            domaine_recherche, pays, annee_debut, annee_fin, coordinateur,
+            email_coordinateur, appel_offre, partenaires, image_url, status,
+            created_at, created_by, change_summary
+          `)
+          .eq('cooperation_id', contentId)
+          .order('version_number', { ascending: false });
+
+        if (error) throw error;
+        data = cooperationData || [];
+      } else if (contentType === 'page') {
+        const { data: pageData, error } = await supabase
+          .from('pages_versions')
+          .select(`
+            id, page_id, version_number, titre, contenu, slug,
+            image_url, fichiers, status,
+            created_at, created_by, change_summary
+          `)
+          .eq('page_id', contentId)
+          .order('version_number', { ascending: false });
+
+        if (error) throw error;
+        data = pageData || [];
       }
 
       // Fetch profile info separately for each version
-      if (versions.length > 0) {
-        const createdByIds = [...new Set(versions.map(v => v.created_by))];
+      if (data.length > 0) {
+        const createdByIds = [...new Set(data.map(v => v.created_by))];
         const { data: profiles } = await supabase
           .from('profiles')
           .select('id, full_name, email')
           .in('id', createdByIds);
 
         // Add profile info to versions
-        const versionsWithProfiles = versions.map(version => ({
+        const versionsWithProfiles = data.map(version => ({
           ...version,
           created_by_profile: profiles?.find(p => p.id === version.created_by)
         }));
         
         setVersions(versionsWithProfiles);
+      } else {
+        setVersions([]);
       }
     } catch (error: any) {
       console.error('Error fetching versions:', error);
@@ -130,7 +150,7 @@ const VersionHistoryDialog = ({
   };
 
   const getVersionContent = (version: any) => {
-    return version.content || version.description || '';
+    return version.content || version.description || version.contenu || '';
   };
 
   return (

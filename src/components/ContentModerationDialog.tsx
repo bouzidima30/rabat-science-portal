@@ -1,207 +1,182 @@
 
 import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useActivityLogger } from "@/hooks/useActivityLogger";
-import { CheckCircle, XCircle, Send, Clock } from "lucide-react";
+import { CheckCircle, XCircle, Eye, Send } from "lucide-react";
+import ContentStatusBadge from "./ContentStatusBadge";
 
 interface ContentModerationDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  content: {
-    id: string;
-    title: string;
-    status: string;
-    type: 'news' | 'event';
-  };
+  contentId: string;
+  contentType: 'formation' | 'cooperation' | 'page';
+  contentTitle: string;
+  currentStatus: string;
   onStatusUpdate: () => void;
 }
 
 const ContentModerationDialog = ({ 
   isOpen, 
   onClose, 
-  content, 
-  onStatusUpdate 
+  contentId, 
+  contentType, 
+  contentTitle,
+  currentStatus,
+  onStatusUpdate
 }: ContentModerationDialogProps) => {
   const [reviewNotes, setReviewNotes] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { logActivity } = useActivityLogger();
 
-  const handleStatusChange = async (newStatus: string) => {
-    setSubmitting(true);
-    
+  const handleStatusUpdate = async (newStatus: string) => {
+    setLoading(true);
     try {
-      const table = content.type === 'news' ? 'news' : 'events';
-      const updateData = {
+      const updates: any = {
         status: newStatus,
         reviewed_at: new Date().toISOString(),
-        review_notes: reviewNotes || null,
+        reviewer_id: (await supabase.auth.getUser()).data.user?.id
       };
 
+      if (reviewNotes.trim()) {
+        updates.review_notes = reviewNotes.trim();
+      }
+
       const { error } = await supabase
-        .from(table)
-        .update(updateData)
-        .eq('id', content.id);
+        .from(getTableName(contentType))
+        .update(updates)
+        .eq('id', contentId);
 
       if (error) throw error;
 
-      await logActivity(
-        `${content.type}_moderation`,
-        `${content.type === 'news' ? 'Actualité' : 'Événement'} "${content.title}" ${newStatus === 'approved' ? 'approuvé' : newStatus === 'rejected' ? 'rejeté' : 'mis à jour'}`
-      );
-
       toast({
-        title: "Succès",
-        description: `Le contenu a été ${newStatus === 'approved' ? 'approuvé' : newStatus === 'rejected' ? 'rejeté' : 'mis à jour'}.`,
+        title: "Statut mis à jour",
+        description: `Le contenu a été ${getStatusLabel(newStatus)}.`,
       });
 
       onStatusUpdate();
       onClose();
     } catch (error: any) {
-      console.error('Error updating content status:', error);
+      console.error('Error updating status:', error);
       toast({
         title: "Erreur",
         description: "Impossible de mettre à jour le statut.",
         variant: "destructive",
       });
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   };
 
-  const handlePublish = async () => {
-    setSubmitting(true);
-    
-    try {
-      const table = content.type === 'news' ? 'news' : 'events';
-      const updateData = {
-        status: 'published',
-        published: true,
-        reviewed_at: new Date().toISOString(),
-        review_notes: reviewNotes || null,
-      };
-
-      const { error } = await supabase
-        .from(table)
-        .update(updateData)
-        .eq('id', content.id);
-
-      if (error) throw error;
-
-      await logActivity(
-        `${content.type}_publish`,
-        `${content.type === 'news' ? 'Actualité' : 'Événement'} "${content.title}" publié`
-      );
-
-      toast({
-        title: "Succès",
-        description: "Le contenu a été publié avec succès.",
-      });
-
-      onStatusUpdate();
-      onClose();
-    } catch (error: any) {
-      console.error('Error publishing content:', error);
-      toast({
-        title: "Erreur",
-        description: "Impossible de publier le contenu.",
-        variant: "destructive",
-      });
-    } finally {
-      setSubmitting(false);
+  const getTableName = (type: string) => {
+    switch (type) {
+      case 'formation': return 'formations';
+      case 'cooperation': return 'cooperations';
+      case 'page': return 'pages';
+      default: return 'formations';
     }
   };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'pending_review': return 'soumis pour révision';
+      case 'approved': return 'approuvé';
+      case 'rejected': return 'rejeté';
+      case 'published': return 'publié';
+      default: return status;
+    }
+  };
+
+  const canSubmitForReview = currentStatus === 'draft';
+  const canApprove = currentStatus === 'pending_review';
+  const canReject = currentStatus === 'pending_review';
+  const canPublish = currentStatus === 'approved';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            Modération du contenu
-            <Badge variant="outline">{content.type === 'news' ? 'Actualité' : 'Événement'}</Badge>
+            <Eye className="h-5 w-5" />
+            Modération du contenu - {contentTitle}
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4">
-          <div>
-            <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-              {content.title}
-            </h4>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">Statut actuel:</span>
-              <Badge variant={content.status === 'approved' ? 'default' : 'secondary'}>
-                {content.status === 'draft' && 'Brouillon'}
-                {content.status === 'pending_review' && 'En attente'}
-                {content.status === 'approved' && 'Approuvé'}
-                {content.status === 'rejected' && 'Rejeté'}
-                {content.status === 'published' && 'Publié'}
-              </Badge>
-            </div>
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <span className="font-medium">Statut actuel:</span>
+            <ContentStatusBadge status={currentStatus} />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">
+          <div className="space-y-4">
+            <label className="block text-sm font-medium">
               Notes de révision (optionnel)
             </label>
             <Textarea
+              placeholder="Ajoutez des commentaires sur cette révision..."
               value={reviewNotes}
               onChange={(e) => setReviewNotes(e.target.value)}
-              placeholder="Ajoutez des commentaires sur cette révision..."
-              rows={3}
+              rows={4}
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            {content.status !== 'approved' && (
+          <div className="grid grid-cols-1 gap-3">
+            {canSubmitForReview && (
               <Button
-                onClick={() => handleStatusChange('approved')}
-                disabled={submitting}
-                className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
+                onClick={() => handleStatusUpdate('pending_review')}
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700"
               >
-                <CheckCircle className="h-4 w-4" />
+                <Send className="h-4 w-4 mr-2" />
+                Soumettre pour révision
+              </Button>
+            )}
+
+            {canApprove && (
+              <Button
+                onClick={() => handleStatusUpdate('approved')}
+                disabled={loading}
+                className="w-full bg-green-600 hover:bg-green-700"
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
                 Approuver
               </Button>
             )}
 
-            {content.status !== 'rejected' && (
+            {canReject && (
               <Button
-                onClick={() => handleStatusChange('rejected')}
-                disabled={submitting}
+                onClick={() => handleStatusUpdate('rejected')}
+                disabled={loading}
                 variant="destructive"
-                className="flex items-center gap-2"
+                className="w-full"
               >
-                <XCircle className="h-4 w-4" />
+                <XCircle className="h-4 w-4 mr-2" />
                 Rejeter
               </Button>
             )}
 
-            {content.status === 'approved' && (
+            {canPublish && (
               <Button
-                onClick={handlePublish}
-                disabled={submitting}
-                className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                onClick={() => handleStatusUpdate('published')}
+                disabled={loading}
+                className="w-full bg-purple-600 hover:bg-purple-700"
               >
-                <Send className="h-4 w-4" />
+                <CheckCircle className="h-4 w-4 mr-2" />
                 Publier
               </Button>
             )}
 
-            {content.status !== 'pending_review' && content.status !== 'published' && (
-              <Button
-                onClick={() => handleStatusChange('pending_review')}
-                disabled={submitting}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <Clock className="h-4 w-4" />
-                Soumettre pour révision
-              </Button>
-            )}
+            <Button
+              onClick={onClose}
+              variant="outline"
+              className="w-full"
+              disabled={loading}
+            >
+              Annuler
+            </Button>
           </div>
         </div>
       </DialogContent>

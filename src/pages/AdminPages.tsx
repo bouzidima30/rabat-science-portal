@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -5,16 +6,23 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { File, Plus, Edit, Trash2, Upload, LinkIcon, FileText, Search, Calendar } from "lucide-react";
+import { File, Plus, Edit, Trash2, Upload, LinkIcon, FileText, Search, Calendar, Eye, History } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
 import QuillEditor from "@/components/QuillEditor";
+import ContentStatusBadge from "@/components/ContentStatusBadge";
+import ContentModerationDialog from "@/components/ContentModerationDialog";
+import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 
 const AdminPages = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPage, setEditingPage] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isModerationOpen, setIsModerationOpen] = useState(false);
+  const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
+  const [moderationPage, setModerationPage] = useState<any>(null);
+  const [versionHistoryPage, setVersionHistoryPage] = useState<any>(null);
   const [formData, setFormData] = useState({
     titre: '',
     contenu: '',
@@ -48,12 +56,18 @@ const AdminPages = () => {
       if (editingPage) {
         const {
           error
-        } = await supabase.from('pages').update(pageData).eq('id', editingPage.id);
+        } = await supabase.from('pages').update({
+          ...pageData,
+          status: 'draft' // Reset to draft when editing
+        }).eq('id', editingPage.id);
         if (error) throw error;
       } else {
         const {
           error
-        } = await supabase.from('pages').insert([pageData]);
+        } = await supabase.from('pages').insert([{
+          ...pageData,
+          status: 'draft'
+        }]);
         if (error) throw error;
       }
     },
@@ -210,6 +224,16 @@ const AdminPages = () => {
       fichiers: page.fichiers || []
     });
     setIsDialogOpen(true);
+  };
+
+  const openModerationDialog = (page: any) => {
+    setModerationPage(page);
+    setIsModerationOpen(true);
+  };
+
+  const openVersionHistoryDialog = (page: any) => {
+    setVersionHistoryPage(page);
+    setIsVersionHistoryOpen(true);
   };
 
   const removeFile = (index: number) => {
@@ -417,6 +441,7 @@ const AdminPages = () => {
                           {page.fichiers.length} fichier(s)
                         </Badge>
                       )}
+                      <ContentStatusBadge status={page.status || 'draft'} />
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(page.created_at).toLocaleDateString('fr-FR', {
@@ -434,6 +459,12 @@ const AdminPages = () => {
                 <div className="flex gap-2 ml-4">
                   <Button size="sm" variant="outline" onClick={() => openEditDialog(page)}>
                     <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => openModerationDialog(page)}>
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => openVersionHistoryDialog(page)}>
+                    <History className="h-4 w-4" />
                   </Button>
                   <Button size="sm" variant="destructive" onClick={() => deletePageMutation.mutate(page.id)} disabled={deletePageMutation.isPending}>
                     <Trash2 className="h-4 w-4" />
@@ -464,6 +495,28 @@ const AdminPages = () => {
           </Card>
         )}
       </div>
+
+      {moderationPage && (
+        <ContentModerationDialog
+          isOpen={isModerationOpen}
+          onClose={() => setIsModerationOpen(false)}
+          contentId={moderationPage.id}
+          contentType="page"
+          contentTitle={moderationPage.titre}
+          currentStatus={moderationPage.status || 'draft'}
+          onStatusUpdate={() => queryClient.invalidateQueries({ queryKey: ['admin-pages'] })}
+        />
+      )}
+
+      {versionHistoryPage && (
+        <VersionHistoryDialog
+          isOpen={isVersionHistoryOpen}
+          onClose={() => setIsVersionHistoryOpen(false)}
+          contentId={versionHistoryPage.id}
+          contentType="page"
+          contentTitle={versionHistoryPage.titre}
+        />
+      )}
     </div>
   );
 };

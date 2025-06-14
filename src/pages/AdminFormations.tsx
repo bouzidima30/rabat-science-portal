@@ -5,11 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Search, GraduationCap, BookOpen, Users, Calendar } from "lucide-react";
+import { Plus, Edit, Trash2, Search, GraduationCap, BookOpen, Users, Calendar, Eye, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
+import ContentStatusBadge from "@/components/ContentStatusBadge";
+import ContentModerationDialog from "@/components/ContentModerationDialog";
+import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 
 interface Formation {
   id: string;
@@ -20,6 +23,10 @@ interface Formation {
   image_url: string | null;
   document_url: string | null;
   document_name: string | null;
+  status: string | null;
+  reviewer_id: string | null;
+  reviewed_at: string | null;
+  review_notes: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -30,6 +37,10 @@ const AdminFormations = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFormation, setSelectedFormation] = useState<Formation | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isModerationOpen, setIsModerationOpen] = useState(false);
+  const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
+  const [moderationFormation, setModerationFormation] = useState<Formation | null>(null);
+  const [versionHistoryFormation, setVersionHistoryFormation] = useState<Formation | null>(null);
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
@@ -82,7 +93,10 @@ const AdminFormations = () => {
         // Update existing formation
         const { error } = await supabase
           .from('formations')
-          .update(formData)
+          .update({
+            ...formData,
+            status: 'draft' // Reset to draft when editing
+          })
           .eq('id', selectedFormation.id);
 
         if (error) throw error;
@@ -97,7 +111,10 @@ const AdminFormations = () => {
         // Create new formation
         const { error } = await supabase
           .from('formations')
-          .insert(formData);
+          .insert({
+            ...formData,
+            status: 'draft'
+          });
 
         if (error) throw error;
 
@@ -173,6 +190,16 @@ const AdminFormations = () => {
       document_name: formation.document_name || ''
     });
     setIsFormOpen(true);
+  };
+
+  const openModerationDialog = (formation: Formation) => {
+    setModerationFormation(formation);
+    setIsModerationOpen(true);
+  };
+
+  const openVersionHistoryDialog = (formation: Formation) => {
+    setVersionHistoryFormation(formation);
+    setIsVersionHistoryOpen(true);
   };
 
   const filteredFormations = formations.filter(formation =>
@@ -330,6 +357,22 @@ const AdminFormations = () => {
                         <Button
                           variant="outline"
                           size="sm"
+                          onClick={() => openModerationDialog(formation)}
+                          className="hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-900/20"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openVersionHistoryDialog(formation)}
+                          className="hover:bg-purple-50 hover:border-purple-300 dark:hover:bg-purple-900/20"
+                        >
+                          <History className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleDelete(formation.id)}
                           className="hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20 text-red-600"
                         >
@@ -350,6 +393,7 @@ const AdminFormations = () => {
                           {formation.departement}
                         </Badge>
                       )}
+                      <ContentStatusBadge status={formation.status || 'draft'} />
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(formation.created_at).toLocaleDateString('fr-FR')}
@@ -446,6 +490,28 @@ const AdminFormations = () => {
           </form>
         </DialogContent>
       </Dialog>
+
+      {moderationFormation && (
+        <ContentModerationDialog
+          isOpen={isModerationOpen}
+          onClose={() => setIsModerationOpen(false)}
+          contentId={moderationFormation.id}
+          contentType="formation"
+          contentTitle={moderationFormation.titre}
+          currentStatus={moderationFormation.status || 'draft'}
+          onStatusUpdate={fetchFormations}
+        />
+      )}
+
+      {versionHistoryFormation && (
+        <VersionHistoryDialog
+          isOpen={isVersionHistoryOpen}
+          onClose={() => setIsVersionHistoryOpen(false)}
+          contentId={versionHistoryFormation.id}
+          contentType="formation"
+          contentTitle={versionHistoryFormation.titre}
+        />
+      )}
     </div>
   );
 };

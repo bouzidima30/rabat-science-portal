@@ -53,6 +53,10 @@ export type Database = {
           image_url: string | null
           partenaires: string[] | null
           pays: string[] | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          status: string | null
           titre: string
           type_cooperation: string
           updated_at: string
@@ -70,6 +74,10 @@ export type Database = {
           image_url?: string | null
           partenaires?: string[] | null
           pays?: string[] | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           titre: string
           type_cooperation: string
           updated_at?: string
@@ -87,11 +95,97 @@ export type Database = {
           image_url?: string | null
           partenaires?: string[] | null
           pays?: string[] | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           titre?: string
           type_cooperation?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "cooperations_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cooperations_versions: {
+        Row: {
+          annee_debut: number | null
+          annee_fin: number | null
+          appel_offre: string | null
+          change_summary: string | null
+          cooperation_id: string
+          coordinateur: string | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          domaine_recherche: string | null
+          email_coordinateur: string | null
+          id: string
+          image_url: string | null
+          partenaires: string[] | null
+          pays: string[] | null
+          status: string
+          titre: string
+          type_cooperation: string
+          version_number: number
+        }
+        Insert: {
+          annee_debut?: number | null
+          annee_fin?: number | null
+          appel_offre?: string | null
+          change_summary?: string | null
+          cooperation_id: string
+          coordinateur?: string | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          domaine_recherche?: string | null
+          email_coordinateur?: string | null
+          id?: string
+          image_url?: string | null
+          partenaires?: string[] | null
+          pays?: string[] | null
+          status: string
+          titre: string
+          type_cooperation: string
+          version_number: number
+        }
+        Update: {
+          annee_debut?: number | null
+          annee_fin?: number | null
+          appel_offre?: string | null
+          change_summary?: string | null
+          cooperation_id?: string
+          coordinateur?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          domaine_recherche?: string | null
+          email_coordinateur?: string | null
+          id?: string
+          image_url?: string | null
+          partenaires?: string[] | null
+          pays?: string[] | null
+          status?: string
+          titre?: string
+          type_cooperation?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooperations_versions_cooperation_id_fkey"
+            columns: ["cooperation_id"]
+            isOneToOne: false
+            referencedRelation: "cooperations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       events: {
         Row: {
@@ -316,6 +410,10 @@ export type Database = {
           document_url: string | null
           id: string
           image_url: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          status: string | null
           titre: string
           type_formation: string
           updated_at: string
@@ -328,6 +426,10 @@ export type Database = {
           document_url?: string | null
           id?: string
           image_url?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           titre: string
           type_formation: string
           updated_at?: string
@@ -340,11 +442,82 @@ export type Database = {
           document_url?: string | null
           id?: string
           image_url?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           titre?: string
           type_formation?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "formations_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      formations_versions: {
+        Row: {
+          change_summary: string | null
+          created_at: string | null
+          created_by: string
+          departement: string | null
+          description: string | null
+          document_name: string | null
+          document_url: string | null
+          formation_id: string
+          id: string
+          image_url: string | null
+          status: string
+          titre: string
+          type_formation: string
+          version_number: number
+        }
+        Insert: {
+          change_summary?: string | null
+          created_at?: string | null
+          created_by: string
+          departement?: string | null
+          description?: string | null
+          document_name?: string | null
+          document_url?: string | null
+          formation_id: string
+          id?: string
+          image_url?: string | null
+          status: string
+          titre: string
+          type_formation: string
+          version_number: number
+        }
+        Update: {
+          change_summary?: string | null
+          created_at?: string | null
+          created_by?: string
+          departement?: string | null
+          description?: string | null
+          document_name?: string | null
+          document_url?: string | null
+          formation_id?: string
+          id?: string
+          image_url?: string | null
+          status?: string
+          titre?: string
+          type_formation?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formations_versions_formation_id_fkey"
+            columns: ["formation_id"]
+            isOneToOne: false
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       news: {
         Row: {
@@ -501,7 +674,11 @@ export type Database = {
           fichiers: string[] | null
           id: string
           image_url: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
           slug: string
+          status: string | null
           titre: string
           updated_at: string
         }
@@ -511,7 +688,11 @@ export type Database = {
           fichiers?: string[] | null
           id?: string
           image_url?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
           slug: string
+          status?: string | null
           titre: string
           updated_at?: string
         }
@@ -521,11 +702,76 @@ export type Database = {
           fichiers?: string[] | null
           id?: string
           image_url?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
           slug?: string
+          status?: string | null
           titre?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pages_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pages_versions: {
+        Row: {
+          change_summary: string | null
+          contenu: string
+          created_at: string | null
+          created_by: string
+          fichiers: string[] | null
+          id: string
+          image_url: string | null
+          page_id: string
+          slug: string
+          status: string
+          titre: string
+          version_number: number
+        }
+        Insert: {
+          change_summary?: string | null
+          contenu: string
+          created_at?: string | null
+          created_by: string
+          fichiers?: string[] | null
+          id?: string
+          image_url?: string | null
+          page_id: string
+          slug: string
+          status: string
+          titre: string
+          version_number: number
+        }
+        Update: {
+          change_summary?: string | null
+          contenu?: string
+          created_at?: string | null
+          created_by?: string
+          fichiers?: string[] | null
+          id?: string
+          image_url?: string | null
+          page_id?: string
+          slug?: string
+          status?: string
+          titre?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pages_versions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
