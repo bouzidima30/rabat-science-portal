@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import ContentStatusBadge from "@/components/ContentStatusBadge";
 import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
+import EventForm from "@/components/EventForm";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
 
 interface Event {
@@ -90,6 +91,12 @@ const AdminEvenements = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleFormSuccess = async () => {
+    setIsFormOpen(false);
+    setSelectedEvent(null);
+    fetchEvents();
   };
 
   const filteredEvents = events.filter(event => {
@@ -366,6 +373,43 @@ const AdminEvenements = () => {
           </Card>
         )}
       </div>
+
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">
+              {selectedEvent ? "Modifier l'événement" : "Nouvel événement"}
+            </DialogTitle>
+          </DialogHeader>
+          <EventForm
+            event={selectedEvent}
+            onSuccess={handleFormSuccess}
+            onCancel={() => setIsFormOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {moderationItem && (
+        <ContentModerationDialog
+          isOpen={!!moderationItem}
+          onClose={() => setModerationItem(null)}
+          contentId={moderationItem.id}
+          contentType="event"
+          contentTitle={moderationItem.title}
+          currentStatus={moderationItem.status || 'draft'}
+          onStatusUpdate={fetchEvents}
+        />
+      )}
+
+      {versionHistoryItem && (
+        <VersionHistoryDialog
+          isOpen={!!versionHistoryItem}
+          onClose={() => setVersionHistoryItem(null)}
+          contentId={versionHistoryItem.id}
+          contentType="event"
+          contentTitle={versionHistoryItem.titre}
+        />
+      )}
     </div>
   );
 };

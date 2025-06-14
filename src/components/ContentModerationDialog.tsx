@@ -13,7 +13,7 @@ interface ContentModerationDialogProps {
   isOpen: boolean;
   onClose: () => void;
   contentId: string;
-  contentType: 'news' | 'formation' | 'cooperation' | 'page';
+  contentType: 'news' | 'formation' | 'cooperation' | 'page' | 'event';
   contentTitle: string;
   currentStatus: string;
   onStatusUpdate: () => void;
@@ -77,6 +77,7 @@ const ContentModerationDialog = ({
       case 'formation': return 'formations';
       case 'cooperation': return 'cooperations';
       case 'page': return 'pages';
+      case 'event': return 'events';
       default: return 'formations';
     }
   };
