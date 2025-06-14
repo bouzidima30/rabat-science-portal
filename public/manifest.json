@@ -1,0 +1,29 @@
+
+{
+  "name": "Faculté des Sciences de Rabat",
+  "short_name": "FSR",
+  "description": "Portail officiel de la Faculté des Sciences de Rabat",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#006be5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "scope": "/",
+  "categories": ["education", "university"],
+  "lang": "fr",
+  "dir": "ltr"
+}
