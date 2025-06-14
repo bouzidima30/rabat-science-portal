@@ -1,7 +1,6 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -61,142 +60,179 @@ const Index = () => {
     { id: 'evenements_scientifique', label: 'Événements' }
   ];
 
-  const carouselImages = [
-    {
-      src: "/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png",
-      title: "Campus de la Faculté des Sciences",
-      description: "Un environnement d'apprentissage moderne et innovant"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1562774053-701939374585",
-      title: "Laboratoires de Recherche",
-      description: "Des équipements de pointe pour la recherche scientifique"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1",
-      title: "Vie Étudiante",
-      description: "Une communauté dynamique et engagée"
-    }
-  ];
-
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="relative h-[500px] overflow-hidden">
-        <div className="absolute inset-0">
-          {carouselImages.map((image, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-500 ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <img 
-                src={image.src} 
-                alt={image.title} 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-900/60 via-indigo-900/50 to-purple-900/40"></div>
-            </div>
-          ))}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Faculté des Sciences de Rabat
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Un environnement d'apprentissage moderne et innovant pour l'excellence académique et scientifique
+          </p>
         </div>
-        
-        <div className="relative z-10 flex items-center justify-between h-full max-w-7xl mx-auto px-4">
-          <button 
-            onClick={prevSlide}
-            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm"
-          >
-            <ChevronRight className="h-5 w-5 text-white rotate-180" />
-          </button>
-          
-          <div className="text-center text-white max-w-3xl mx-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Faculté des Sciences
-              <br />
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-                de Rabat
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl mb-8 text-gray-100">
-              {carouselImages[currentSlide].description}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/formations">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
-                  Découvrir nos Formations
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link to="/recherche">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 backdrop-blur-sm transition-all duration-300">
-                  Explorer la Recherche
-                </Button>
-              </Link>
-            </div>
-          </div>
-          
-          <button 
-            onClick={nextSlide}
-            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm"
-          >
-            <ChevronRight className="h-5 w-5 text-white" />
-          </button>
-        </div>
-        
-        {/* Slide indicators */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {carouselImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                index === currentSlide 
-                  ? 'w-6 bg-gradient-to-r from-blue-400 to-cyan-300' 
-                  : 'w-2 bg-white/50 hover:bg-white/70'
-              }`}
-            />
-          ))}
-        </div>
-      </section>
 
-      {/* News Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent mb-4">
-              Dernières Nouvelles
-            </h2>
-            <p className="text-lg text-gray-600">
-              Restez informés des dernières nouvelles de notre faculté
+        {/* Vision Section */}
+        <Card className="mb-12">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center text-[#006be5]">
+              Notre Mission
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-lg text-gray-700 dark:text-gray-300 text-center leading-relaxed">
+              Former les scientifiques de demain et contribuer activement au développement socio-économique 
+              du Maroc grâce à l'excellence académique, la recherche de pointe et l'innovation technologique.
             </p>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+          <Link to="/formations">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="pt-6">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mr-4">
+                    <BookOpen className="h-6 w-6 text-[#006be5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      Découvrir nos Formations
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Programmes d'excellence de la licence au doctorat
+                    </p>
+                  </div>
+                  <ArrowRight className="ml-auto h-5 w-5 text-[#006be5]" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+          
+          <Link to="/recherche">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="pt-6">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mr-4">
+                    <Microscope className="h-6 w-6 text-[#006be5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      Explorer la Recherche
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Innovation scientifique et partenariats internationaux
+                    </p>
+                  </div>
+                  <ArrowRight className="ml-auto h-5 w-5 text-[#006be5]" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+
+        {/* FSR Stats */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            La FSR en Chiffres
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Users, value: "15,000+", label: "Étudiants" },
+              { icon: BookOpen, value: "50+", label: "Formations" },
+              { icon: Award, value: "200+", label: "Enseignants" },
+              { icon: Building, value: "12", label: "Laboratoires" }
+            ].map((stat, index) => (
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                <CardContent className="pt-6">
+                  <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <stat.icon className="h-6 w-6 text-[#006be5]" />
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    {stat.label}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
+        </div>
+
+        {/* Academic Programs */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            Nos Programmes Académiques
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "Formation Licence",
+                description: "Programmes de premier cycle dans toutes les disciplines scientifiques",
+                icon: BookOpen,
+                link: "/formations/licence"
+              },
+              {
+                title: "Formation Master", 
+                description: "Spécialisations avancées et recherche appliquée",
+                icon: GraduationCap,
+                link: "/formations/master"
+              },
+              {
+                title: "Formation Doctorat",
+                description: "Recherche de pointe et innovation scientifique", 
+                icon: Microscope,
+                link: "/formations/doctorat"
+              },
+              {
+                title: "Formation Continue",
+                description: "Perfectionnement professionnel et mise à jour des compétences",
+                icon: Award,
+                link: "/formations/continue"
+              }
+            ].map((program, index) => (
+              <Link key={index} to={program.link}>
+                <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
+                  <CardHeader>
+                    <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mb-4">
+                      <program.icon className="h-6 w-6 text-[#006be5]" />
+                    </div>
+                    <CardTitle className="text-xl">
+                      {program.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">
+                      {program.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* News Section */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            Dernières Nouvelles
+          </h2>
 
           {/* News Filter */}
-          <div className="flex flex-wrap gap-2 mb-10 justify-center">
+          <div className="flex flex-wrap gap-2 mb-8 justify-center">
             {newsCategories.map((category) => (
               <Button
                 key={category.id}
                 variant={selectedCategory === category.id ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory(category.id)}
-                className={
-                  selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md'
-                    : 'border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300'
-                }
+                className={selectedCategory === category.id ? 'bg-[#006be5] hover:bg-[#005bb5]' : ''}
               >
                 {category.label}
               </Button>
@@ -206,30 +242,30 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {news.slice(0, 3).map((article) => (
               <Link key={article.id} to={`/actualite/${article.id}`}>
-                <Card className="hover:shadow-xl transition-all duration-300 h-full cursor-pointer group border-l-4 border-l-blue-500 hover:border-l-indigo-500">
-                  <div className="aspect-video bg-gradient-to-br from-blue-100 to-indigo-100 overflow-hidden">
+                <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
+                  <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
                     {article.image_url ? (
                       <img 
                         src={article.image_url} 
                         alt={article.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                        className="w-full h-full object-cover" 
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <BookOpen className="h-10 w-10 text-blue-400" />
+                        <BookOpen className="h-10 w-10 text-gray-400" />
                       </div>
                     )}
                   </div>
                   <CardContent className="p-6">
-                    <div className="flex items-center gap-2 text-sm text-blue-600 mb-3">
+                    <div className="flex items-center gap-2 text-sm text-[#006be5] mb-3">
                       <Calendar className="h-4 w-4" />
                       {new Date(article.created_at).toLocaleDateString('fr-FR')}
                     </div>
-                    <h3 className="font-bold text-lg text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-700 transition-colors">
+                    <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
                       {article.title}
                     </h3>
                     {article.excerpt && (
-                      <p className="text-gray-600 line-clamp-3">
+                      <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
                         {article.excerpt}
                       </p>
                     )}
@@ -239,147 +275,40 @@ const Index = () => {
             ))}
           </div>
 
-          <div className="text-center mt-10">
+          <div className="text-center mt-8">
             <Link to="/actualites">
-              <Button variant="outline" className="border-2 border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg">
+              <Button variant="outline">
                 Voir toutes les actualités
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* FSR Stats */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              La FSR en Chiffres
-            </h2>
-            <p className="text-lg text-blue-100">
-              45 années d'excellence académique et scientifique
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, value: "15,000+", label: "Étudiants", color: "from-cyan-400 to-blue-500" },
-              { icon: BookOpen, value: "50+", label: "Formations", color: "from-green-400 to-cyan-500" },
-              { icon: Award, value: "200+", label: "Enseignants", color: "from-purple-400 to-pink-500" },
-              { icon: Building, value: "12", label: "Laboratoires", color: "from-orange-400 to-red-500" }
-            ].map((stat, index) => (
-              <Card key={index} className="text-center hover:shadow-2xl transition-all duration-300 bg-white/95 backdrop-blur-sm hover:scale-105">
-                <CardContent className="p-6">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${stat.color} rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg`}>
-                    <stat.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-gray-600 font-medium">
-                    {stat.label}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Academic Programs */}
-      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent mb-4">
-              Nos Programmes Académiques
-            </h2>
-            <p className="text-lg text-gray-600">
-              Des formations d'excellence pour tous les niveaux
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                title: "Formation Licence",
-                description: "Programmes de premier cycle dans toutes les disciplines scientifiques",
-                icon: BookOpen,
-                link: "/formations/licence",
-                color: "from-blue-500 to-cyan-500"
-              },
-              {
-                title: "Formation Master", 
-                description: "Spécialisations avancées et recherche appliquée",
-                icon: GraduationCap,
-                link: "/formations/master",
-                color: "from-green-500 to-emerald-500"
-              },
-              {
-                title: "Formation Doctorat",
-                description: "Recherche de pointe et innovation scientifique", 
-                icon: Microscope,
-                link: "/formations/doctorat",
-                color: "from-purple-500 to-violet-500"
-              },
-              {
-                title: "Formation Continue",
-                description: "Perfectionnement professionnel et mise à jour des compétences",
-                icon: Award,
-                link: "/formations/continue",
-                color: "from-orange-500 to-red-500"
-              }
-            ].map((program, index) => (
-              <Link key={index} to={program.link}>
-                <Card className="hover:shadow-xl transition-all duration-300 h-full cursor-pointer group border-t-4 border-t-blue-500 hover:border-t-indigo-500">
-                  <CardContent className="p-6 text-center">
-                    <div className={`w-16 h-16 bg-gradient-to-r ${program.color} rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                      <program.icon className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors">
-                      {program.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      {program.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Events Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-blue-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent mb-4">
-              Événements à Venir
-            </h2>
-            <p className="text-lg text-gray-600">
-              Découvrez nos prochains événements et activités
-            </p>
-          </div>
+        {/* Events Section */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            Événements à Venir
+          </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.slice(0, 3).map((event) => (
-              <Card key={event.id} className="hover:shadow-xl transition-all duration-300 overflow-hidden group border-l-4 border-l-green-500 hover:border-l-emerald-500">
-                <div className="aspect-video bg-gradient-to-br from-green-100 to-emerald-100 overflow-hidden">
+              <Card key={event.id} className="hover:shadow-lg transition-shadow">
+                <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
                   {event.image_url ? (
                     <img 
                       src={event.image_url} 
                       alt={event.titre} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                      className="w-full h-full object-cover" 
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Calendar className="h-10 w-10 text-green-400" />
+                      <Calendar className="h-10 w-10 text-gray-400" />
                     </div>
                   )}
                 </div>
                 <CardContent className="p-6">
-                  <div className="flex items-center gap-4 text-sm text-green-600 mb-3">
+                  <div className="flex items-center gap-4 text-sm text-[#006be5] mb-3">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
                       {new Date(event.date_debut).toLocaleDateString('fr-FR')}
@@ -391,17 +320,17 @@ const Index = () => {
                       </div>
                     )}
                   </div>
-                  <h3 className="font-bold text-lg text-gray-900 mb-3 line-clamp-2 group-hover:text-green-700 transition-colors">
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
                     {event.titre}
                   </h3>
                   {event.lieu && (
-                    <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
-                      <MapPin className="h-4 w-4 text-green-500" />
+                    <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 mb-3">
+                      <MapPin className="h-4 w-4 text-[#006be5]" />
                       {event.lieu}
                     </div>
                   )}
                   {event.description && (
-                    <p className="text-gray-600 line-clamp-3 text-sm">
+                    <p className="text-gray-600 dark:text-gray-300 line-clamp-3 text-sm">
                       {event.description}
                     </p>
                   )}
@@ -410,17 +339,17 @@ const Index = () => {
             ))}
           </div>
 
-          <div className="text-center mt-10">
+          <div className="text-center mt-8">
             <Link to="/evenements">
-              <Button variant="outline" className="border-2 border-green-500 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg">
+              <Button variant="outline">
                 Voir tous les événements
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
         </div>
-      </section>
-
+      </div>
+      
       <Footer />
     </div>
   );
