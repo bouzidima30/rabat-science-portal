@@ -3,11 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Search, FileText, Calendar, Eye } from "lucide-react";
+import { Plus, Edit, Trash2, Search, FileText, Calendar, Eye, Shield, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import NewsForm from "@/components/NewsForm";
+import ContentStatusBadge from "@/components/ContentStatusBadge";
+import ContentModerationDialog from "@/components/ContentModerationDialog";
+import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 import type { News } from "@/types/news";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
 
@@ -15,8 +18,11 @@ const AdminActualites = () => {
   const [news, setNews] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedNews, setSelectedNews] = useState<News | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [moderationItem, setModerationItem] = useState<any>(null);
+  const [versionHistoryItem, setVersionHistoryItem] = useState<any>(null);
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
 
@@ -88,10 +94,29 @@ const AdminActualites = () => {
     fetchNews();
   };
 
-  const filteredNews = news.filter(item =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.content.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredNews = news.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.content.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesStatus = statusFilter === "all" || 
+      (item as any).status === statusFilter ||
+      (statusFilter === "published" && item.published);
+    
+    return matchesSearch && matchesStatus;
+  });
+
+  const getStatusCounts = () => {
+    return {
+      total: news.length,
+      draft: news.filter(item => (item as any).status === 'draft').length,
+      pending: news.filter(item => (item as any).status === 'pending_review').length,
+      approved: news.filter(item => (item as any).status === 'approved').length,
+      published: news.filter(item => item.published).length,
+      rejected: news.filter(item => (item as any).status === 'rejected').length,
+    };
+  };
+
+  const statusCounts = getStatusCounts();
 
   if (loading) {
     return (
@@ -134,58 +159,96 @@ const AdminActualites = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* Enhanced Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
-          <CardContent className="p-6">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Total</p>
-                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{news.length}</p>
+                <p className="text-xl font-bold text-blue-700 dark:text-blue-300">{statusCounts.total}</p>
               </div>
-              <FileText className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
           </CardContent>
         </Card>
+        
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/20 dark:to-gray-800/20">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Brouillons</p>
+                <p className="text-xl font-bold text-gray-700 dark:text-gray-300">{statusCounts.draft}</p>
+              </div>
+              <Edit className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-600 dark:text-yellow-400 text-sm font-medium">En attente</p>
+                <p className="text-xl font-bold text-yellow-700 dark:text-yellow-300">{statusCounts.pending}</p>
+              </div>
+              <Eye className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="border-0 shadow-lg bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
-          <CardContent className="p-6">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-600 dark:text-green-400 text-sm font-medium">Publiées</p>
-                <p className="text-2xl font-bold text-green-700 dark:text-green-300">
-                  {news.filter(item => item.published).length}
-                </p>
+                <p className="text-green-600 dark:text-green-400 text-sm font-medium">Approuvés</p>
+                <p className="text-xl font-bold text-green-700 dark:text-green-300">{statusCounts.approved}</p>
               </div>
-              <Eye className="h-8 w-8 text-green-600 dark:text-green-400" />
+              <Shield className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-lg bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
-          <CardContent className="p-6">
+
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-600 dark:text-orange-400 text-sm font-medium">Brouillons</p>
-                <p className="text-2xl font-bold text-orange-700 dark:text-orange-300">
-                  {news.filter(item => !item.published).length}
-                </p>
+                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Publiés</p>
+                <p className="text-xl font-bold text-purple-700 dark:text-purple-300">{statusCounts.published}</p>
               </div>
-              <Edit className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+              <Calendar className="h-6 w-6 text-purple-600 dark:text-purple-400" />
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Search Bar */}
+      {/* Search and Filter Bar */}
       <Card className="mb-8 border-0 shadow-lg">
         <CardContent className="p-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <Input
-              placeholder="Rechercher une actualité..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Input
+                placeholder="Rechercher une actualité..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+              />
+            </div>
+            <div>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full h-12 px-3 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 rounded-md transition-colors"
+              >
+                <option value="all">Tous les statuts</option>
+                <option value="draft">Brouillons</option>
+                <option value="pending_review">En attente de révision</option>
+                <option value="approved">Approuvés</option>
+                <option value="published">Publiés</option>
+                <option value="rejected">Rejetés</option>
+              </select>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -210,6 +273,29 @@ const AdminActualites = () => {
                         {item.title}
                       </h3>
                       <div className="flex space-x-2 ml-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setVersionHistoryItem(item)}
+                          className="hover:bg-purple-50 hover:border-purple-300 dark:hover:bg-purple-900/20"
+                          title="Voir l'historique"
+                        >
+                          <History className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setModerationItem({
+                            id: item.id,
+                            title: item.title,
+                            status: (item as any).status || 'draft',
+                            type: 'news'
+                          })}
+                          className="hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-900/20"
+                          title="Modérer"
+                        >
+                          <Shield className="h-4 w-4" />
+                        </Button>
                         <Button
                           variant="outline"
                           size="sm"
@@ -239,9 +325,7 @@ const AdminActualites = () => {
                       >
                         {categoryLabels[item.category as keyof typeof categoryLabels]}
                       </Badge>
-                      <Badge variant={item.published ? "default" : "destructive"}>
-                        {item.published ? "Publié" : "Brouillon"}
-                      </Badge>
+                      <ContentStatusBadge status={(item as any).status || (item.published ? 'published' : 'draft')} />
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(item.created_at).toLocaleDateString('fr-FR', {
@@ -303,6 +387,25 @@ const AdminActualites = () => {
           />
         </DialogContent>
       </Dialog>
+
+      {moderationItem && (
+        <ContentModerationDialog
+          isOpen={!!moderationItem}
+          onClose={() => setModerationItem(null)}
+          content={moderationItem}
+          onStatusUpdate={fetchNews}
+        />
+      )}
+
+      {versionHistoryItem && (
+        <VersionHistoryDialog
+          isOpen={!!versionHistoryItem}
+          onClose={() => setVersionHistoryItem(null)}
+          contentId={versionHistoryItem.id}
+          contentType="news"
+          contentTitle={versionHistoryItem.title}
+        />
+      )}
     </div>
   );
 };

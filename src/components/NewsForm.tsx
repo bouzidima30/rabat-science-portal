@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, X, Save, FileText } from "lucide-react";
+import { Upload, X, Save, FileText, Send } from "lucide-react";
 import type { News } from "@/types/news";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
 import QuillEditor from "./QuillEditor";
@@ -25,6 +25,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
   const [excerpt, setExcerpt] = useState("");
   const [category, setCategory] = useState<NewsCategory>("nouvelles_informations");
   const [published, setPublished] = useState(false);
+  const [status, setStatus] = useState<string>("draft");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [documentFile, setDocumentFile] = useState<File | null>(null);
@@ -48,6 +49,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
       setExcerpt(news.excerpt || "");
       setCategory(news.category as NewsCategory);
       setPublished(news.published);
+      setStatus((news as any).status || (news.published ? 'published' : 'draft'));
       setImagePreview(news.image_url || "");
     }
   }, [news]);
@@ -89,7 +91,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
     return data.publicUrl;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, submitStatus?: string) => {
     e.preventDefault();
     setLoading(true);
 
@@ -109,12 +111,16 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
         documentName = documentFile.name;
       }
 
+      const finalStatus = submitStatus || status;
+      const isPublished = finalStatus === 'published' || (finalStatus === 'approved' && published);
+
       const newsData = {
         title,
         content,
         excerpt: excerpt || null,
         category,
-        published,
+        published: isPublished,
+        status: finalStatus,
         image_url: imageUrl || null,
         document_url: documentUrl || null,
         document_name: documentName || null,
@@ -129,7 +135,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
 
         if (error) throw error;
 
-        await logActivity('update_news', `Actualité modifiée: ${title}`);
+        await logActivity('update_news', `Actualité modifiée: ${title} (${finalStatus})`);
 
         toast({
           title: "Succès",
@@ -143,7 +149,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
 
         if (error) throw error;
 
-        await logActivity('create_news', `Actualité créée: ${title} (${published ? 'publiée' : 'brouillon'})`);
+        await logActivity('create_news', `Actualité créée: ${title} (${finalStatus})`);
 
         toast({
           title: "Succès",
@@ -165,7 +171,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -211,18 +217,33 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
               </select>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="published"
-                checked={published}
-                onChange={(e) => setPublished(e.target.checked)}
-                className="rounded"
-              />
-              <label htmlFor="published" className="text-sm font-medium">
-                Publier immédiatement
-              </label>
+            <div>
+              <label className="block text-sm font-medium mb-2">Statut</label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+              >
+                <option value="draft">Brouillon</option>
+                <option value="pending_review">En attente de révision</option>
+                <option value="approved">Approuvé</option>
+                <option value="published">Publié</option>
+                <option value="rejected">Rejeté</option>
+              </select>
             </div>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="published"
+              checked={published}
+              onChange={(e) => setPublished(e.target.checked)}
+              className="rounded"
+            />
+            <label htmlFor="published" className="text-sm font-medium">
+              Marquer comme publié (si approuvé)
+            </label>
           </div>
         </CardContent>
       </Card>
@@ -305,6 +326,24 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
         <Button type="button" variant="outline" onClick={onCancel}>
           Annuler
         </Button>
+        
+        {status === 'draft' && (
+          <Button 
+            type="button" 
+            variant="outline"
+            onClick={(e) => handleSubmit(e, 'pending_review')}
+            disabled={loading}
+            className="border-yellow-300 text-yellow-700 hover:bg-yellow-50"
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600 mr-2"></div>
+            ) : (
+              <Send className="h-4 w-4 mr-2" />
+            )}
+            Soumettre pour révision
+          </Button>
+        )}
+        
         <Button type="submit" disabled={loading}>
           {loading ? (
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>

@@ -104,6 +104,10 @@ export type Database = {
           id: string
           image_url: string | null
           lieu: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          status: string | null
           titre: string
           updated_at: string
         }
@@ -117,6 +121,10 @@ export type Database = {
           id?: string
           image_url?: string | null
           lieu?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           titre: string
           updated_at?: string
         }
@@ -130,10 +138,91 @@ export type Database = {
           id?: string
           image_url?: string | null
           lieu?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           titre?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "events_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events_versions: {
+        Row: {
+          change_summary: string | null
+          created_at: string
+          created_by: string
+          date_debut: string
+          date_fin: string | null
+          description: string | null
+          event_id: string
+          heure_debut: string | null
+          heure_fin: string | null
+          id: string
+          image_url: string | null
+          lieu: string | null
+          status: string
+          titre: string
+          version_number: number
+        }
+        Insert: {
+          change_summary?: string | null
+          created_at?: string
+          created_by: string
+          date_debut: string
+          date_fin?: string | null
+          description?: string | null
+          event_id: string
+          heure_debut?: string | null
+          heure_fin?: string | null
+          id?: string
+          image_url?: string | null
+          lieu?: string | null
+          status: string
+          titre: string
+          version_number: number
+        }
+        Update: {
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string
+          date_debut?: string
+          date_fin?: string | null
+          description?: string | null
+          event_id?: string
+          heure_debut?: string | null
+          heure_fin?: string | null
+          id?: string
+          image_url?: string | null
+          lieu?: string | null
+          status?: string
+          titre?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_versions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       file_manager: {
         Row: {
@@ -269,6 +358,10 @@ export type Database = {
           id: string
           image_url: string | null
           published: boolean | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          status: string | null
           title: string
           updated_at: string
         }
@@ -283,6 +376,10 @@ export type Database = {
           id?: string
           image_url?: string | null
           published?: boolean | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           title: string
           updated_at?: string
         }
@@ -297,6 +394,10 @@ export type Database = {
           id?: string
           image_url?: string | null
           published?: boolean | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
           title?: string
           updated_at?: string
         }
@@ -306,6 +407,89 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news_versions: {
+        Row: {
+          author_id: string | null
+          category: Database["public"]["Enums"]["news_category"]
+          change_summary: string | null
+          content: string
+          created_at: string
+          created_by: string
+          document_name: string | null
+          document_url: string | null
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          news_id: string
+          status: string
+          title: string
+          version_number: number
+        }
+        Insert: {
+          author_id?: string | null
+          category: Database["public"]["Enums"]["news_category"]
+          change_summary?: string | null
+          content: string
+          created_at?: string
+          created_by: string
+          document_name?: string | null
+          document_url?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          news_id: string
+          status: string
+          title: string
+          version_number: number
+        }
+        Update: {
+          author_id?: string | null
+          category?: Database["public"]["Enums"]["news_category"]
+          change_summary?: string | null
+          content?: string
+          created_at?: string
+          created_by?: string
+          document_name?: string | null
+          document_url?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          news_id?: string
+          status?: string
+          title?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_versions_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_versions_news_id_fkey"
+            columns: ["news_id"]
+            isOneToOne: false
+            referencedRelation: "news"
             referencedColumns: ["id"]
           },
         ]
