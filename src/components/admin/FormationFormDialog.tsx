@@ -34,7 +34,7 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
   const [formData, setFormData] = useState({
     titre: formation?.titre || '',
     description: formation?.description || '',
-    type_formation: formation?.type_formation || 'licence',
+    type_formation: formation?.type_formation || 'Licence',
     departement: formation?.departement || '',
     image_url: formation?.image_url || '',
     document_url: formation?.document_url || '',
@@ -47,10 +47,10 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
   const { logActivity } = useActivityLogger();
 
   const typeFormationLabels = {
-    licence: "Licence",
-    master: "Master", 
-    doctorat: "Doctorat",
-    formation_continue: "Formation Continue"
+    'Licence': "Licence",
+    'Master': "Master", 
+    'Doctorat': "Doctorat",
+    'Formation Continue': "Formation Continue"
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -188,6 +188,9 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
         updated_at: new Date().toISOString(),
       };
 
+      console.log('Formation data being sent:', formationData);
+      console.log('Type formation value:', formData.type_formation);
+
       let result;
       if (formation) {
         result = await supabase
@@ -200,7 +203,12 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
           .insert([formationData]);
       }
 
-      if (result.error) throw result.error;
+      console.log('Supabase result:', result);
+
+      if (result.error) {
+        console.error('Supabase error details:', result.error);
+        throw result.error;
+      }
 
       await logActivity(
         formation ? 'update_formation' : 'create_formation',
@@ -218,7 +226,7 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
       console.error('Error saving formation:', error);
       toast({
         title: "Erreur",
-        description: "Erreur lors de la sauvegarde de la formation.",
+        description: `Erreur lors de la sauvegarde: ${error.message || 'Erreur inconnue'}`,
         variant: "destructive",
       });
     } finally {
@@ -272,10 +280,10 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
                   className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
                   required
                 >
-                  <option value="licence">Licence</option>
-                  <option value="master">Master</option>
-                  <option value="doctorat">Doctorat</option>
-                  <option value="formation_continue">Formation Continue</option>
+                  <option value="Licence">Licence</option>
+                  <option value="Master">Master</option>
+                  <option value="Doctorat">Doctorat</option>
+                  <option value="Formation Continue">Formation Continue</option>
                 </select>
               </div>
               
