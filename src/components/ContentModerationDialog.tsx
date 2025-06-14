@@ -13,7 +13,7 @@ interface ContentModerationDialogProps {
   isOpen: boolean;
   onClose: () => void;
   contentId: string;
-  contentType: 'formation' | 'cooperation' | 'page';
+  contentType: 'news' | 'formation' | 'cooperation' | 'page';
   contentTitle: string;
   currentStatus: string;
   onStatusUpdate: () => void;
@@ -73,6 +73,7 @@ const ContentModerationDialog = ({
 
   const getTableName = (type: string) => {
     switch (type) {
+      case 'news': return 'news';
       case 'formation': return 'formations';
       case 'cooperation': return 'cooperations';
       case 'page': return 'pages';
