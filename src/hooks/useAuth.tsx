@@ -39,6 +39,7 @@ export const useAuth = () => {
   }, [user]);
 
   const fetchProfile = useCallback(async (userId: string) => {
+    console.log('Fetching profile for user:', userId);
     try {
       const { data: profileData, error } = await supabase
         .from('profiles')
@@ -49,6 +50,7 @@ export const useAuth = () => {
       if (error) {
         console.error('Error fetching profile:', error);
       } else if (profileData) {
+        console.log('Profile loaded:', profileData);
         setProfile(profileData);
         
         // Log successful login
@@ -63,6 +65,7 @@ export const useAuth = () => {
                 ip_address: null,
                 user_agent: navigator.userAgent
               });
+            console.log('Login activity logged');
           } catch (error) {
             console.error('Error logging login:', error);
           }

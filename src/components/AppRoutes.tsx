@@ -1,4 +1,3 @@
-
 import { Routes, Route } from "react-router-dom";
 import Index from "../pages/Index";
 import Login from "../pages/Login";
@@ -61,6 +60,7 @@ import Profil from "../pages/Profil";
 import NotFound from "../pages/NotFound";
 import DynamicPage from "../pages/[slug]";
 import AuthGuard from "./AuthGuard";
+import SecurityTest from "@/pages/SecurityTest";
 
 const AppRoutes = () => {
   return (
@@ -150,6 +150,9 @@ const AppRoutes = () => {
       
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
+      
+      {/* Security Test */}
+      <Route path="/security-test" element={<SecurityTest />} />
     </Routes>
   );
 };

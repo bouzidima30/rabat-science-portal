@@ -75,6 +75,20 @@ const TopBar = () => {
               <span>Rechercher</span>
             </Button>
 
+            {/* Add security test link for development */}
+            {process.env.NODE_ENV === 'development' && (
+              <Link to="/security-test">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-orange-600 hover:text-orange-700 dark:text-orange-400"
+                >
+                  <Shield className="h-4 w-4 mr-1" />
+                  Security Test
+                </Button>
+              </Link>
+            )}
+
             <Button 
               variant="ghost" 
               size="sm" 
