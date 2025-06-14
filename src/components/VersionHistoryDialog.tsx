@@ -35,20 +35,74 @@ const VersionHistoryDialog = ({
   const fetchVersions = async () => {
     setLoading(true);
     try {
-      const table = contentType === 'news' ? 'news_versions' : 'events_versions';
-      const idField = contentType === 'news' ? 'news_id' : 'event_id';
-      
-      const { data, error } = await supabase
-        .from(table)
-        .select(`
-          *,
-          created_by_profile:profiles!created_by(full_name, email)
-        `)
-        .eq(idField, contentId)
-        .order('version_number', { ascending: false });
+      if (contentType === 'news') {
+        const { data, error } = await supabase
+          .from('news_versions')
+          .select(`
+            id,
+            news_id,
+            version_number,
+            title,
+            content,
+            excerpt,
+            category,
+            image_url,
+            document_url,
+            document_name,
+            status,
+            author_id,
+            created_at,
+            created_by,
+            change_summary
+          `)
+          .eq('news_id', contentId)
+          .order('version_number', { ascending: false });
 
-      if (error) throw error;
-      setVersions(data || []);
+        if (error) throw error;
+        setVersions(data || []);
+      } else {
+        const { data, error } = await supabase
+          .from('events_versions')
+          .select(`
+            id,
+            event_id,
+            version_number,
+            titre,
+            description,
+            date_debut,
+            date_fin,
+            heure_debut,
+            heure_fin,
+            lieu,
+            image_url,
+            status,
+            created_at,
+            created_by,
+            change_summary
+          `)
+          .eq('event_id', contentId)
+          .order('version_number', { ascending: false });
+
+        if (error) throw error;
+        setVersions(data || []);
+      }
+
+      // Fetch profile info separately for each version
+      if (versions.length > 0) {
+        const createdByIds = [...new Set(versions.map(v => v.created_by))];
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, full_name, email')
+          .in('id', createdByIds);
+
+        // Add profile info to versions
+        const versionsWithProfiles = versions.map(version => ({
+          ...version,
+          created_by_profile: profiles?.find(p => p.id === version.created_by)
+        }));
+        
+        setVersions(versionsWithProfiles);
+      }
     } catch (error: any) {
       console.error('Error fetching versions:', error);
       toast({
