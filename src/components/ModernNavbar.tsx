@@ -2,18 +2,33 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
+import { useMobileDetection } from "@/hooks/useMobileDetection";
 
 const ModernNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
+  const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
   const location = useLocation();
+  const { isMobile } = useMobileDetection();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setIsMobileMenuOpen(false);
+    setExpandedMobileMenu(null);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   const menuItems = [
     {
@@ -84,9 +99,14 @@ const ModernNavbar = () => {
     }
   ];
 
+  const toggleMobileSubmenu = (menuName: string) => {
+    setExpandedMobileMenu(expandedMobileMenu === menuName ? null : menuName);
+  };
+
   const handleMobileNavigation = (path: string) => {
     window.location.href = path;
     setIsMobileMenuOpen(false);
+    setExpandedMobileMenu(null);
   };
 
   return (
@@ -156,57 +176,90 @@ const ModernNavbar = () => {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="lg:hidden text-gray-700 dark:text-gray-200 hover:text-blue-600"
+            className="lg:hidden text-gray-700 dark:text-gray-200 hover:text-blue-600 z-[60] relative"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
+      </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+      )}
+
+      {/* Mobile Menu */}
+      <div className={`lg:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-900 shadow-2xl z-[55] transform transition-transform duration-300 ease-in-out ${
+        isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
+        <div className="flex flex-col h-full">
+          {/* Mobile Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Menu</h2>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-gray-700 dark:text-gray-200"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+
+          {/* Mobile Menu Items */}
+          <div className="flex-1 overflow-y-auto py-4">
             {menuItems.map((item) => (
-              <div key={item.name} className="py-2">
+              <div key={item.name} className="border-b border-gray-100 dark:border-gray-800 last:border-b-0">
                 {item.hasDropdown ? (
-                  <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-4 py-2">
-                      {item.name}
-                    </div>
-                    <Select onValueChange={handleMobileNavigation}>
-                      <SelectTrigger className="w-full mx-4 max-w-[calc(100%-2rem)]">
-                        <SelectValue placeholder="Choisir une option..." />
-                      </SelectTrigger>
-                      <SelectContent className="w-full max-h-60 overflow-y-auto">
+                  <div>
+                    <button 
+                      onClick={() => toggleMobileSubmenu(item.name)}
+                      className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      <span className="text-lg font-medium text-gray-900 dark:text-white">
+                        {item.name}
+                      </span>
+                      <ChevronRight 
+                        className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
+                          expandedMobileMenu === item.name ? 'rotate-90' : ''
+                        }`} 
+                      />
+                    </button>
+                    
+                    {expandedMobileMenu === item.name && (
+                      <div className="bg-gray-50 dark:bg-gray-800">
                         {item.dropdownItems?.map((dropdownItem) => (
-                          <SelectItem 
-                            key={dropdownItem.name} 
-                            value={dropdownItem.path}
-                            className="cursor-pointer"
+                          <button
+                            key={dropdownItem.name}
+                            onClick={() => handleMobileNavigation(dropdownItem.path)}
+                            className="w-full text-left p-4 pl-8 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-t border-gray-200 dark:border-gray-700 first:border-t-0"
                           >
                             {dropdownItem.name}
-                          </SelectItem>
+                          </button>
                         ))}
-                      </SelectContent>
-                    </Select>
+                      </div>
+                    )}
                   </div>
                 ) : (
-                  <Link 
-                    to={item.path} 
-                    onClick={() => setIsMobileMenuOpen(false)}
+                  <button
+                    onClick={() => handleMobileNavigation(item.path)}
+                    className="w-full text-left p-4 text-lg font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
-                    <Button 
-                      variant="ghost" 
-                      className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-blue-50"
-                    >
-                      {item.name}
-                    </Button>
-                  </Link>
+                    {item.name}
+                  </button>
                 )}
               </div>
             ))}
           </div>
-        )}
+
+          {/* Mobile Footer */}
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+              Faculté des Sciences de Rabat
+            </p>
+          </div>
+        </div>
       </div>
     </nav>
   );
