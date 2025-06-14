@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,13 +81,13 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
       const filePath = `formations/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('images')
+        .from('formation-images')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('images')
+        .from('formation-images')
         .getPublicUrl(filePath);
 
       setFormData(prev => ({
@@ -132,13 +131,13 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
       const filePath = `documents/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('files')
+        .from('formation-documents')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('files')
+        .from('formation-documents')
         .getPublicUrl(filePath);
 
       setFormData(prev => ({
