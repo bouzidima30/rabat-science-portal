@@ -9,14 +9,7 @@ import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
@@ -58,58 +51,51 @@ const Index = () => {
       return data || [];
     }
   });
-
-  const newsCategories = [
-    { id: 'all', label: 'Toutes' },
-    { id: 'nouvelles_informations', label: 'Nouvelles' },
-    { id: 'avis_etudiants', label: 'Étudiants' },
-    { id: 'avis_enseignants', label: 'Enseignants' },
-    { id: 'evenements_scientifique', label: 'Événements' }
-  ];
-
-  const carouselHighlights = [
-    {
-      title: "Excellence Académique",
-      description: "Plus de 50 formations d'excellence de la licence au doctorat",
-      image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
-      link: "/formations"
-    },
-    {
-      title: "Recherche de Pointe",
-      description: "12 laboratoires de recherche et innovation scientifique",
-      image: "/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png",
-      link: "/recherche"
-    },
-    {
-      title: "Partenariats Internationaux",
-      description: "Coopération avec les meilleures universités mondiales",
-      image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
-      link: "/cooperation"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+  const newsCategories = [{
+    id: 'all',
+    label: 'Toutes'
+  }, {
+    id: 'nouvelles_informations',
+    label: 'Nouvelles'
+  }, {
+    id: 'avis_etudiants',
+    label: 'Étudiants'
+  }, {
+    id: 'avis_enseignants',
+    label: 'Enseignants'
+  }, {
+    id: 'evenements_scientifique',
+    label: 'Événements'
+  }];
+  const carouselHighlights = [{
+    title: "Excellence Académique",
+    description: "Plus de 50 formations d'excellence de la licence au doctorat",
+    image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
+    link: "/formations"
+  }, {
+    title: "Recherche de Pointe",
+    description: "12 laboratoires de recherche et innovation scientifique",
+    image: "/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png",
+    link: "/recherche"
+  }, {
+    title: "Partenariats Internationaux",
+    description: "Coopération avec les meilleures universités mondiales",
+    image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
+    link: "/cooperation"
+  }];
+  return <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Faculté des Sciences de Rabat
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Un environnement d'apprentissage moderne et innovant pour l'excellence académique et scientifique
-          </p>
-        </div>
+        
 
         {/* Modern Carousel */}
         <div className="mb-12">
           <Carousel className="w-full max-w-5xl mx-auto">
             <CarouselContent>
-              {carouselHighlights.map((highlight, index) => (
-                <CarouselItem key={index}>
+              {carouselHighlights.map((highlight, index) => <CarouselItem key={index}>
                   <Link to={highlight.link}>
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                       <div className="relative h-80 bg-gradient-to-r from-[#006be5] to-[#0056b3]">
@@ -131,8 +117,7 @@ const Index = () => {
                       </div>
                     </Card>
                   </Link>
-                </CarouselItem>
-              ))}
+                </CarouselItem>)}
             </CarouselContent>
             <CarouselPrevious className="left-4" />
             <CarouselNext className="right-4" />
@@ -205,13 +190,23 @@ const Index = () => {
             La FSR en Chiffres
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, value: "15,000+", label: "Étudiants" },
-              { icon: BookOpen, value: "50+", label: "Formations" },
-              { icon: Award, value: "200+", label: "Enseignants" },
-              { icon: Building, value: "12", label: "Laboratoires" }
-            ].map((stat, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+            {[{
+            icon: Users,
+            value: "15,000+",
+            label: "Étudiants"
+          }, {
+            icon: BookOpen,
+            value: "50+",
+            label: "Formations"
+          }, {
+            icon: Award,
+            value: "200+",
+            label: "Enseignants"
+          }, {
+            icon: Building,
+            value: "12",
+            label: "Laboratoires"
+          }].map((stat, index) => <Card key={index} className="text-center hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mx-auto mb-4">
                     <stat.icon className="h-6 w-6 text-[#006be5]" />
@@ -223,8 +218,7 @@ const Index = () => {
                     {stat.label}
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
 
@@ -234,33 +228,27 @@ const Index = () => {
             Nos Programmes Académiques
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                title: "Formation Licence",
-                description: "Programmes de premier cycle dans toutes les disciplines scientifiques",
-                icon: BookOpen,
-                link: "/formations/licence"
-              },
-              {
-                title: "Formation Master", 
-                description: "Spécialisations avancées et recherche appliquée",
-                icon: GraduationCap,
-                link: "/formations/master"
-              },
-              {
-                title: "Formation Doctorat",
-                description: "Recherche de pointe et innovation scientifique", 
-                icon: Microscope,
-                link: "/formations/doctorat"
-              },
-              {
-                title: "Formation Continue",
-                description: "Perfectionnement professionnel et mise à jour des compétences",
-                icon: Award,
-                link: "/formations/continue"
-              }
-            ].map((program, index) => (
-              <Link key={index} to={program.link}>
+            {[{
+            title: "Formation Licence",
+            description: "Programmes de premier cycle dans toutes les disciplines scientifiques",
+            icon: BookOpen,
+            link: "/formations/licence"
+          }, {
+            title: "Formation Master",
+            description: "Spécialisations avancées et recherche appliquée",
+            icon: GraduationCap,
+            link: "/formations/master"
+          }, {
+            title: "Formation Doctorat",
+            description: "Recherche de pointe et innovation scientifique",
+            icon: Microscope,
+            link: "/formations/doctorat"
+          }, {
+            title: "Formation Continue",
+            description: "Perfectionnement professionnel et mise à jour des compétences",
+            icon: Award,
+            link: "/formations/continue"
+          }].map((program, index) => <Link key={index} to={program.link}>
                 <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
                   <CardHeader>
                     <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mb-4">
@@ -276,8 +264,7 @@ const Index = () => {
                     </p>
                   </CardContent>
                 </Card>
-              </Link>
-            ))}
+              </Link>)}
           </div>
         </div>
 
@@ -289,35 +276,18 @@ const Index = () => {
 
           {/* News Filter */}
           <div className="flex flex-wrap gap-2 mb-8 justify-center">
-            {newsCategories.map((category) => (
-              <Button
-                key={category.id}
-                variant={selectedCategory === category.id ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category.id)}
-                className={selectedCategory === category.id ? 'bg-[#006be5] hover:bg-[#005bb5]' : ''}
-              >
+            {newsCategories.map(category => <Button key={category.id} variant={selectedCategory === category.id ? "default" : "outline"} size="sm" onClick={() => setSelectedCategory(category.id)} className={selectedCategory === category.id ? 'bg-[#006be5] hover:bg-[#005bb5]' : ''}>
                 {category.label}
-              </Button>
-            ))}
+              </Button>)}
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {news.slice(0, 3).map((article) => (
-              <Link key={article.id} to={`/actualite/${article.id}`}>
+            {news.slice(0, 3).map(article => <Link key={article.id} to={`/actualite/${article.id}`}>
                 <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
                   <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                    {article.image_url ? (
-                      <img 
-                        src={article.image_url} 
-                        alt={article.title} 
-                        className="w-full h-full object-cover" 
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
+                    {article.image_url ? <img src={article.image_url} alt={article.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">
                         <BookOpen className="h-10 w-10 text-gray-400" />
-                      </div>
-                    )}
+                      </div>}
                   </div>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-2 text-sm text-[#006be5] mb-3">
@@ -327,15 +297,12 @@ const Index = () => {
                     <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
                       {article.title}
                     </h3>
-                    {article.excerpt && (
-                      <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
+                    {article.excerpt && <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
                         {article.excerpt}
-                      </p>
-                    )}
+                      </p>}
                   </CardContent>
                 </Card>
-              </Link>
-            ))}
+              </Link>)}
           </div>
 
           <div className="text-center mt-8">
@@ -355,20 +322,11 @@ const Index = () => {
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.slice(0, 3).map((event) => (
-              <Card key={event.id} className="hover:shadow-lg transition-shadow">
+            {events.slice(0, 3).map(event => <Card key={event.id} className="hover:shadow-lg transition-shadow">
                 <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                  {event.image_url ? (
-                    <img 
-                      src={event.image_url} 
-                      alt={event.titre} 
-                      className="w-full h-full object-cover" 
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
+                  {event.image_url ? <img src={event.image_url} alt={event.titre} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">
                       <Calendar className="h-10 w-10 text-gray-400" />
-                    </div>
-                  )}
+                    </div>}
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 text-sm text-[#006be5] mb-3">
@@ -376,30 +334,23 @@ const Index = () => {
                       <Calendar className="h-4 w-4" />
                       {new Date(event.date_debut).toLocaleDateString('fr-FR')}
                     </div>
-                    {event.heure_debut && (
-                      <div className="flex items-center gap-1">
+                    {event.heure_debut && <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
                         {event.heure_debut}
-                      </div>
-                    )}
+                      </div>}
                   </div>
                   <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
                     {event.titre}
                   </h3>
-                  {event.lieu && (
-                    <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 mb-3">
+                  {event.lieu && <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 mb-3">
                       <MapPin className="h-4 w-4 text-[#006be5]" />
                       {event.lieu}
-                    </div>
-                  )}
-                  {event.description && (
-                    <p className="text-gray-600 dark:text-gray-300 line-clamp-3 text-sm">
+                    </div>}
+                  {event.description && <p className="text-gray-600 dark:text-gray-300 line-clamp-3 text-sm">
                       {event.description}
-                    </p>
-                  )}
+                    </p>}
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
 
           <div className="text-center mt-8">
@@ -414,8 +365,6 @@ const Index = () => {
       </div>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
