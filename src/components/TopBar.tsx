@@ -107,7 +107,7 @@ const TopBar = () => {
                 </DropdownMenuContent>
               </DropdownMenu> : <div className="flex items-center space-x-2">
                 <Link to="/login">
-                  <Button variant="outline" size="sm" className="text-white border-white/30 hover:text-white bg-[#016be5]">
+                  <Button variant="outline" size="sm" className="text-white border-white/30 hover:bg-white/10 bg-[#016be5]">
                     Connexion
                   </Button>
                 </Link>
