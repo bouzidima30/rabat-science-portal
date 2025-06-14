@@ -9,6 +9,13 @@ import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -60,6 +67,27 @@ const Index = () => {
     { id: 'evenements_scientifique', label: 'Événements' }
   ];
 
+  const carouselHighlights = [
+    {
+      title: "Excellence Académique",
+      description: "Plus de 50 formations d'excellence de la licence au doctorat",
+      image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
+      link: "/formations"
+    },
+    {
+      title: "Recherche de Pointe",
+      description: "12 laboratoires de recherche et innovation scientifique",
+      image: "/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png",
+      link: "/recherche"
+    },
+    {
+      title: "Partenariats Internationaux",
+      description: "Coopération avec les meilleures universités mondiales",
+      image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
+      link: "/cooperation"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
@@ -74,6 +102,41 @@ const Index = () => {
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Un environnement d'apprentissage moderne et innovant pour l'excellence académique et scientifique
           </p>
+        </div>
+
+        {/* Modern Carousel */}
+        <div className="mb-12">
+          <Carousel className="w-full max-w-5xl mx-auto">
+            <CarouselContent>
+              {carouselHighlights.map((highlight, index) => (
+                <CarouselItem key={index}>
+                  <Link to={highlight.link}>
+                    <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                      <div className="relative h-80 bg-gradient-to-r from-[#006be5] to-[#0056b3]">
+                        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+                        <div className="relative z-10 h-full flex items-center justify-center p-8">
+                          <div className="text-center text-white">
+                            <h3 className="text-3xl font-bold mb-4">
+                              {highlight.title}
+                            </h3>
+                            <p className="text-lg opacity-90 max-w-2xl">
+                              {highlight.description}
+                            </p>
+                            <Button variant="secondary" className="mt-6">
+                              Découvrir
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4" />
+            <CarouselNext className="right-4" />
+          </Carousel>
         </div>
 
         {/* Vision Section */}
