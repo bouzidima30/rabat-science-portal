@@ -1,8 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, Search, GraduationCap, BookOpen, Users, Calendar, Eye, History } from "lucide-react";
@@ -13,6 +11,7 @@ import { useActivityLogger } from "@/hooks/useActivityLogger";
 import ContentStatusBadge from "@/components/ContentStatusBadge";
 import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
+import FormationFormDialog from "@/components/admin/FormationFormDialog";
 
 interface Formation {
   id: string;
@@ -41,15 +40,6 @@ const AdminFormations = () => {
   const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
   const [moderationFormation, setModerationFormation] = useState<Formation | null>(null);
   const [versionHistoryFormation, setVersionHistoryFormation] = useState<Formation | null>(null);
-  const [formData, setFormData] = useState({
-    titre: '',
-    description: '',
-    type_formation: 'licence',
-    departement: '',
-    image_url: '',
-    document_url: '',
-    document_name: ''
-  });
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
 
@@ -77,71 +67,6 @@ const AdminFormations = () => {
       toast({
         title: "Erreur",
         description: "Impossible de charger les formations.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      if (selectedFormation) {
-        // Update existing formation
-        const { error } = await supabase
-          .from('formations')
-          .update({
-            ...formData,
-            status: 'draft' // Reset to draft when editing
-          })
-          .eq('id', selectedFormation.id);
-
-        if (error) throw error;
-
-        await logActivity('update_formation', `Formation modifiée: ${formData.titre}`);
-
-        toast({
-          title: "Succès",
-          description: "La formation a été mise à jour.",
-        });
-      } else {
-        // Create new formation
-        const { error } = await supabase
-          .from('formations')
-          .insert({
-            ...formData,
-            status: 'draft'
-          });
-
-        if (error) throw error;
-
-        await logActivity('create_formation', `Formation créée: ${formData.titre} (${typeFormationLabels[formData.type_formation as keyof typeof typeFormationLabels]})`);
-
-        toast({
-          title: "Succès",
-          description: "La formation a été créée.",
-        });
-      }
-
-      setIsFormOpen(false);
-      setSelectedFormation(null);
-      setFormData({
-        titre: '',
-        description: '',
-        type_formation: 'licence',
-        departement: '',
-        image_url: '',
-        document_url: '',
-        document_name: ''
-      });
-      fetchFormations();
-    } catch (error: any) {
-      toast({
-        title: "Erreur",
-        description: "Erreur lors de la sauvegarde de la formation.",
         variant: "destructive",
       });
     } finally {
@@ -180,15 +105,6 @@ const AdminFormations = () => {
 
   const openEditDialog = (formation: Formation) => {
     setSelectedFormation(formation);
-    setFormData({
-      titre: formation.titre,
-      description: formation.description || '',
-      type_formation: formation.type_formation,
-      departement: formation.departement || '',
-      image_url: formation.image_url || '',
-      document_url: formation.document_url || '',
-      document_name: formation.document_name || ''
-    });
     setIsFormOpen(true);
   };
 
@@ -244,15 +160,6 @@ const AdminFormations = () => {
           <Button
             onClick={() => {
               setSelectedFormation(null);
-              setFormData({
-                titre: '',
-                description: '',
-                type_formation: 'licence',
-                departement: '',
-                image_url: '',
-                document_url: '',
-                document_name: ''
-              });
               setIsFormOpen(true);
             }}
             className="bg-orange-600 hover:bg-orange-700 shadow-lg"
@@ -439,57 +346,12 @@ const AdminFormations = () => {
         )}
       </div>
 
-      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">
-              {selectedFormation ? "Modifier la formation" : "Nouvelle formation"}
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input 
-              placeholder="Titre de la formation" 
-              value={formData.titre} 
-              onChange={(e) => setFormData({...formData, titre: e.target.value})} 
-              required 
-            />
-            <Textarea 
-              placeholder="Description de la formation..." 
-              value={formData.description} 
-              onChange={(e) => setFormData({...formData, description: e.target.value})} 
-              rows={4}
-            />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Type de formation</label>
-                <select
-                  value={formData.type_formation}
-                  onChange={(e) => setFormData({...formData, type_formation: e.target.value})}
-                  className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
-                >
-                  <option value="licence">Licence</option>
-                  <option value="master">Master</option>
-                  <option value="doctorat">Doctorat</option>
-                  <option value="formation_continue">Formation Continue</option>
-                </select>
-              </div>
-              <Input 
-                placeholder="Département" 
-                value={formData.departement} 
-                onChange={(e) => setFormData({...formData, departement: e.target.value})} 
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button type="submit" disabled={loading}>
-                {selectedFormation ? "Modifier" : "Créer"}
-              </Button>
-              <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)}>
-                Annuler
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <FormationFormDialog
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        formation={selectedFormation}
+        onSuccess={fetchFormations}
+      />
 
       {moderationFormation && (
         <ContentModerationDialog
