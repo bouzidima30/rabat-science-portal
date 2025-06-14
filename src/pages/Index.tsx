@@ -10,6 +10,7 @@ import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
@@ -51,55 +52,57 @@ const Index = () => {
       return data || [];
     }
   });
-  const newsCategories = [{
-    id: 'all',
-    label: 'Toutes'
-  }, {
-    id: 'nouvelles_informations',
-    label: 'Nouvelles'
-  }, {
-    id: 'avis_etudiants',
-    label: 'Étudiants'
-  }, {
-    id: 'avis_enseignants',
-    label: 'Enseignants'
-  }, {
-    id: 'evenements_scientifique',
-    label: 'Événements'
-  }];
-  const carouselHighlights = [{
-    title: "Excellence Académique",
-    description: "Plus de 50 formations d'excellence de la licence au doctorat",
-    image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
-    link: "/formations"
-  }, {
-    title: "Recherche de Pointe",
-    description: "12 laboratoires de recherche et innovation scientifique",
-    image: "/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png",
-    link: "/recherche"
-  }, {
-    title: "Partenariats Internationaux",
-    description: "Coopération avec les meilleures universités mondiales",
-    image: "/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png",
-    link: "/cooperation"
-  }];
-  return <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+
+  const newsCategories = [
+    { id: 'all', label: 'Toutes' },
+    { id: 'nouvelles_informations', label: 'Nouvelles' },
+    { id: 'avis_etudiants', label: 'Étudiants' },
+    { id: 'avis_enseignants', label: 'Enseignants' },
+    { id: 'evenements_scientifique', label: 'Événements' }
+  ];
+
+  const carouselHighlights = [
+    {
+      title: "Excellence Académique",
+      description: "Plus de 50 formations d'excellence de la licence au doctorat",
+      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=400&fit=crop",
+      link: "/formations"
+    },
+    {
+      title: "Recherche de Pointe",
+      description: "12 laboratoires de recherche et innovation scientifique",
+      image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=400&fit=crop",
+      link: "/recherche"
+    },
+    {
+      title: "Partenariats Internationaux",
+      description: "Coopération avec les meilleures universités mondiales",
+      image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=400&fit=crop",
+      link: "/cooperation"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        
-
         {/* Modern Carousel */}
         <div className="mb-12">
           <Carousel className="w-full max-w-5xl mx-auto">
             <CarouselContent>
-              {carouselHighlights.map((highlight, index) => <CarouselItem key={index}>
+              {carouselHighlights.map((highlight, index) => (
+                <CarouselItem key={index}>
                   <Link to={highlight.link}>
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                      <div className="relative h-80 bg-gradient-to-r from-[#006be5] to-[#0056b3]">
-                        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+                      <div className="relative h-80">
+                        <img 
+                          src={highlight.image} 
+                          alt={highlight.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#006be5]/80 to-[#0056b3]/60"></div>
                         <div className="relative z-10 h-full flex items-center justify-center p-8">
                           <div className="text-center text-white">
                             <h3 className="text-3xl font-bold mb-4">
@@ -117,7 +120,8 @@ const Index = () => {
                       </div>
                     </Card>
                   </Link>
-                </CarouselItem>)}
+                </CarouselItem>
+              ))}
             </CarouselContent>
             <CarouselPrevious className="left-4" />
             <CarouselNext className="right-4" />
@@ -365,6 +369,8 @@ const Index = () => {
       </div>
       
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
