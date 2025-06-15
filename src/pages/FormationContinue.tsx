@@ -6,10 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, Download, Eye } from "lucide-react";
+import { FileText, Download, Eye, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const FormationContinue = () => {
+  const [selectedDepartement, setSelectedDepartement] = useState<string>("all");
+
   const { data: formations, isLoading } = useQuery({
     queryKey: ['formations', 'Formation Continue'],
     queryFn: async () => {
@@ -22,6 +26,20 @@ const FormationContinue = () => {
       if (error) throw error;
       return data;
     }
+  });
+
+  const departements = [
+    'Biologie',
+    'Chimie',
+    'Géologie',
+    'Informatique',
+    'Mathématiques',
+    'Physique'
+  ];
+
+  const filteredFormations = formations?.filter(formation => {
+    if (selectedDepartement === "all") return true;
+    return formation.departement === selectedDepartement;
   });
 
   if (isLoading) {
@@ -52,8 +70,43 @@ const FormationContinue = () => {
           </p>
         </div>
 
+        {/* Filter Section */}
+        <div className="mb-8">
+          <Card className="shadow-lg">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <Filter className="h-5 w-5 text-gray-500" />
+                <div className="flex-1">
+                  <Select value={selectedDepartement} onValueChange={setSelectedDepartement}>
+                    <SelectTrigger className="w-64">
+                      <SelectValue placeholder="Filtrer par département" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous les départements</SelectItem>
+                      {departements.map((dept) => (
+                        <SelectItem key={dept} value={dept}>
+                          {dept}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {selectedDepartement !== "all" && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setSelectedDepartement("all")}
+                  >
+                    Réinitialiser
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-          {formations?.map((formation) => (
+          {filteredFormations?.map((formation) => (
             <Card key={formation.id} className="shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <CardTitle className="text-xl text-[#006be5]">
@@ -90,14 +143,17 @@ const FormationContinue = () => {
           ))}
         </div>
 
-        {!formations?.length && (
+        {!filteredFormations?.length && (
           <div className="text-center py-12">
             <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
               Aucune formation disponible
             </h3>
             <p className="text-gray-500 dark:text-gray-500">
-              Les formations continues seront bientôt disponibles.
+              {selectedDepartement !== "all" 
+                ? `Aucune formation trouvée pour le département ${selectedDepartement}.`
+                : "Les formations continues seront bientôt disponibles."
+              }
             </p>
           </div>
         )}
