@@ -44,10 +44,10 @@ const AdminFormations = () => {
   const { logActivity } = useActivityLogger();
 
   const typeFormationLabels = {
-    licence: "Licence",
-    master: "Master", 
-    doctorat: "Doctorat",
-    formation_continue: "Formation Continue"
+    'Licence': "Licence",
+    'Master': "Master", 
+    'Doctorat': "Doctorat",
+    'Formation Continue': "Formation Continue"
   };
 
   useEffect(() => {
@@ -188,7 +188,7 @@ const AdminFormations = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Licence</p>
-                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{formationsByType.licence || 0}</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{formationsByType.Licence || 0}</p>
               </div>
               <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
@@ -199,7 +199,7 @@ const AdminFormations = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-600 dark:text-green-400 text-sm font-medium">Master</p>
-                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{formationsByType.master || 0}</p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{formationsByType.Master || 0}</p>
               </div>
               <Users className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
@@ -210,7 +210,7 @@ const AdminFormations = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Doctorat</p>
-                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{formationsByType.doctorat || 0}</p>
+                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{formationsByType.Doctorat || 0}</p>
               </div>
               <Calendar className="h-8 w-8 text-purple-600 dark:text-purple-400" />
             </div>
@@ -293,7 +293,7 @@ const AdminFormations = () => {
                         variant="secondary" 
                         className="bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300"
                       >
-                        {typeFormationLabels[formation.type_formation as keyof typeof typeFormationLabels]}
+                        {typeFormationLabels[formation.type_formation as keyof typeof typeFormationLabels] || formation.type_formation}
                       </Badge>
                       {formation.departement && (
                         <Badge variant="outline">
