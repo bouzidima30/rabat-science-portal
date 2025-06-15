@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,19 +8,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Settings, User, Bell, Shield, Palette, Save, Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/hooks/useTheme";
 
 const Parametres = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { theme, setTheme } = useTheme();
+  const { isDarkMode, toggleTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: user?.email || '',
     notifications: true,
     emailNotifications: true,
-    darkMode: theme === 'dark'
+    darkMode: isDarkMode
   });
 
   const handleSave = async () => {
@@ -51,10 +50,9 @@ const Parametres = () => {
     }
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    setFormData(prev => ({ ...prev, darkMode: newTheme === 'dark' }));
+  const handleThemeToggle = () => {
+    toggleTheme();
+    setFormData(prev => ({ ...prev, darkMode: !prev.darkMode }));
   };
 
   return (
@@ -127,13 +125,13 @@ const Parametres = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                  {isDarkMode ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
                   <Label htmlFor="darkMode">Mode sombre</Label>
                 </div>
                 <Switch
                   id="darkMode"
-                  checked={formData.darkMode}
-                  onCheckedChange={toggleTheme}
+                  checked={isDarkMode}
+                  onCheckedChange={handleThemeToggle}
                 />
               </div>
             </CardContent>
