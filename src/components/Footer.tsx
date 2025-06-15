@@ -56,6 +56,33 @@ const Footer = () => {
               Établissement d'enseignement supérieur et de recherche scientifique de l'Université Mohammed V, 
               dédié à l'excellence académique depuis 1957.
             </p>
+            
+            {/* Social Media */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-blue-300">Suivez-nous</h4>
+              <div className="flex space-x-4">
+                {[{
+                icon: Facebook,
+                href: "#",
+                color: "hover:text-blue-400"
+              }, {
+                icon: Twitter,
+                href: "#",
+                color: "hover:text-sky-400"
+              }, {
+                icon: Linkedin,
+                href: "#",
+                color: "hover:text-blue-500"
+              }, {
+                icon: Youtube,
+                href: "#",
+                color: "hover:text-red-400"
+              }].map((social, index) => <a key={index} href={social.href} className={`p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-300 ${social.color} transform hover:scale-110`}>
+                    <social.icon className="h-5 w-5" />
+                  </a>)}
+              </div>
+            </div>
+          </div>
 
           {/* Quick Links */}
           <div>
@@ -111,33 +138,11 @@ const Footer = () => {
                 <span className="text-gray-300 text-sm">contact@fsr.ac.ma</span>
               </div>
             </div>
+
+            {/* Recent News */}
             
-            {/* Social Media */}
-            <div className="space-y-3">
-              <h4 className="font-semibold text-blue-300">Suivez-nous</h4>
-              <div className="flex space-x-4">
-                {[{
-                icon: Facebook,
-                href: "#",
-                color: "hover:text-blue-400"
-              }, {
-                icon: Twitter,
-                href: "#",
-                color: "hover:text-sky-400"
-              }, {
-                icon: Linkedin,
-                href: "#",
-                color: "hover:text-blue-500"
-              }, {
-                icon: Youtube,
-                href: "#",
-                color: "hover:text-red-400"
-              }].map((social, index) => <a key={index} href={social.href} className={`p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-300 ${social.color} transform hover:scale-110`}>
-                    <social.icon className="h-5 w-5" />
-                  </a>)}
-              </div>
-            </div>
           </div>
+        </div>
 
         {/* Newsletter Section */}
         <div className="border-t border-gray-700 pt-8 mb-8">

@@ -160,7 +160,9 @@ const Index = () => {
         {/* Vision Section */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5]">Notre Mission111</CardTitle>
+            <CardTitle className="text-2xl text-center text-[#006be5]">
+              Notre Mission
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-lg text-gray-700 dark:text-gray-300 text-center leading-relaxed">
