@@ -61,6 +61,7 @@ import NotFound from "../pages/NotFound";
 import DynamicPage from "../pages/[slug]";
 import AuthGuard from "./AuthGuard";
 import SecurityTest from "@/pages/SecurityTest";
+import Formations from "../pages/Formations";
 
 const AppRoutes = () => {
   return (
