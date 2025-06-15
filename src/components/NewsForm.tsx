@@ -100,14 +100,14 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
       let documentUrl = news?.document_url || "";
       let documentName = news?.document_name || "";
 
-      // Upload new image if provided
+      // Upload new image if provided - using news-images bucket
       if (imageFile) {
-        imageUrl = await uploadFile(imageFile, 'images', 'news');
+        imageUrl = await uploadFile(imageFile, 'news-images', 'news');
       }
 
-      // Upload new document if provided
+      // Upload new document if provided - using news-documents bucket
       if (documentFile) {
-        documentUrl = await uploadFile(documentFile, 'documents', 'news');
+        documentUrl = await uploadFile(documentFile, 'news-documents', 'news');
         documentName = documentFile.name;
       }
 
