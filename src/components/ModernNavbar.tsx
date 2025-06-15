@@ -234,20 +234,31 @@ const ModernNavbar = () => {
                       }`} />
                     </button>
                     
-                    {expandedMobileMenu === item.name && (
-                      <div className="bg-gray-50 dark:bg-gray-800">
-                        {item.dropdownItems?.map((dropdownItem) => (
+                    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      expandedMobileMenu === item.name 
+                        ? 'max-h-96 opacity-100' 
+                        : 'max-h-0 opacity-0'
+                    }`}>
+                      <div className="bg-gray-50 dark:bg-gray-800 transform transition-transform duration-300 ease-in-out">
+                        {item.dropdownItems?.map((dropdownItem, index) => (
                           <Link
                             key={dropdownItem.name}
                             to={dropdownItem.path}
                             onClick={() => handleMobileNavigation(dropdownItem.path)}
-                            className="block w-full text-left p-4 pl-8 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-t border-gray-200 dark:border-gray-700 first:border-t-0"
+                            className={`block w-full text-left p-4 pl-8 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 border-t border-gray-200 dark:border-gray-700 first:border-t-0 transform ${
+                              expandedMobileMenu === item.name 
+                                ? 'translate-x-0 opacity-100' 
+                                : 'translate-x-4 opacity-0'
+                            }`}
+                            style={{
+                              transitionDelay: expandedMobileMenu === item.name ? `${index * 50}ms` : '0ms'
+                            }}
                           >
                             {dropdownItem.name}
                           </Link>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 ) : (
                   <Link
