@@ -1,3 +1,4 @@
+
 import { Routes, Route } from "react-router-dom";
 import Index from "../pages/Index";
 import Login from "../pages/Login";
@@ -24,6 +25,7 @@ import Organisation from "../pages/Organisation";
 import FSRChiffres from "../pages/FSRChiffres";
 import Representants from "../pages/Representants";
 import LMDGuide from "../pages/LMDGuide";
+import Formations from "../pages/Formations";
 import FormationLicence from "../pages/FormationLicence";
 import FormationMaster from "../pages/FormationMaster";
 import FormationDoctorat from "../pages/FormationDoctorat";
@@ -100,6 +102,7 @@ const AppRoutes = () => {
       <Route path="/representants" element={<Representants />} />
       
       {/* Formation Pages */}
+      <Route path="/formations" element={<Formations />} />
       <Route path="/lmd-guide" element={<LMDGuide />} />
       <Route path="/formation-licence" element={<FormationLicence />} />
       <Route path="/formation-master" element={<FormationMaster />} />
