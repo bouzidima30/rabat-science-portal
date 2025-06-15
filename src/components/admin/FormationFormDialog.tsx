@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,13 +33,13 @@ interface FormationFormDialogProps {
 
 const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: FormationFormDialogProps) => {
   const [formData, setFormData] = useState({
-    titre: formation?.titre || '',
-    description: formation?.description || '',
-    type_formation: formation?.type_formation || 'Licence',
-    departement: formation?.departement || '',
-    image_url: formation?.image_url || '',
-    document_url: formation?.document_url || '',
-    document_name: formation?.document_name || ''
+    titre: '',
+    description: '',
+    type_formation: 'Licence',
+    departement: '',
+    image_url: '',
+    document_url: '',
+    document_name: ''
   });
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -52,6 +53,34 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
     'Doctorat': "Doctorat",
     'Formation Continue': "Formation Continue"
   };
+
+  // Reset form data when dialog opens/closes or formation changes
+  useEffect(() => {
+    if (isOpen) {
+      if (formation) {
+        console.log('Formation data loaded:', formation);
+        setFormData({
+          titre: formation.titre || '',
+          description: formation.description || '',
+          type_formation: formation.type_formation || 'Licence',
+          departement: formation.departement || '',
+          image_url: formation.image_url || '',
+          document_url: formation.document_url || '',
+          document_name: formation.document_name || ''
+        });
+      } else {
+        setFormData({
+          titre: '',
+          description: '',
+          type_formation: 'Licence',
+          departement: '',
+          image_url: '',
+          document_url: '',
+          document_name: ''
+        });
+      }
+    }
+  }, [isOpen, formation]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
