@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,7 +10,6 @@ import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
-
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [api, setApi] = useState<CarouselApi>();
@@ -56,73 +54,65 @@ const Index = () => {
       return data || [];
     }
   });
-
-  const newsCategories = [
-    { id: 'all', label: 'Toutes' },
-    { id: 'nouvelles_informations', label: 'Nouvelles' },
-    { id: 'avis_etudiants', label: 'Étudiants' },
-    { id: 'avis_enseignants', label: 'Enseignants' },
-    { id: 'evenements_scientifique', label: 'Événements' }
-  ];
-
-  const carouselHighlights = [
-    {
-      title: "Excellence Académique",
-      description: "Plus de 50 formations d'excellence de la licence au doctorat",
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=600&fit=crop",
-      link: "/formations"
-    },
-    {
-      title: "Recherche de Pointe",
-      description: "12 laboratoires de recherche et innovation scientifique",
-      image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=600&fit=crop",
-      link: "/recherche"
-    },
-    {
-      title: "Partenariats Internationaux",
-      description: "Coopération avec les meilleures universités mondiales",
-      image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=600&fit=crop",
-      link: "/cooperation"
-    }
-  ];
-
+  const newsCategories = [{
+    id: 'all',
+    label: 'Toutes'
+  }, {
+    id: 'nouvelles_informations',
+    label: 'Nouvelles'
+  }, {
+    id: 'avis_etudiants',
+    label: 'Étudiants'
+  }, {
+    id: 'avis_enseignants',
+    label: 'Enseignants'
+  }, {
+    id: 'evenements_scientifique',
+    label: 'Événements'
+  }];
+  const carouselHighlights = [{
+    title: "Excellence Académique",
+    description: "Plus de 50 formations d'excellence de la licence au doctorat",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=600&fit=crop",
+    link: "/formations"
+  }, {
+    title: "Recherche de Pointe",
+    description: "12 laboratoires de recherche et innovation scientifique",
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=600&fit=crop",
+    link: "/recherche"
+  }, {
+    title: "Partenariats Internationaux",
+    description: "Coopération avec les meilleures universités mondiales",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=600&fit=crop",
+    link: "/cooperation"
+  }];
   useEffect(() => {
     if (!api) {
       return;
     }
-
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
-
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1);
     });
   }, [api]);
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+  return <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Enhanced Modern Carousel */}
         <div className="mb-16">
-          <Carousel 
-            className="w-full max-w-6xl mx-auto" 
-            opts={{ align: "start", loop: true }}
-            setApi={setApi}
-          >
+          <Carousel className="w-full max-w-6xl mx-auto" opts={{
+          align: "start",
+          loop: true
+        }} setApi={setApi}>
             <CarouselContent className="-ml-2 md:-ml-4">
-              {carouselHighlights.map((highlight, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4">
+              {carouselHighlights.map((highlight, index) => <CarouselItem key={index} className="pl-2 md:pl-4">
                   <Link to={highlight.link} className="block group">
                     <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] bg-white/90 backdrop-blur-sm">
                       <div className="relative h-96 md:h-[32rem]">
-                        <img 
-                          src={highlight.image} 
-                          alt={highlight.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
+                        <img src={highlight.image} alt={highlight.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                         <div className="absolute inset-0 bg-gradient-to-r from-[#006be5]/60 to-transparent"></div>
                         
@@ -140,10 +130,7 @@ const Index = () => {
                             <p className="text-lg md:text-xl opacity-90 mb-6 leading-relaxed">
                               {highlight.description}
                             </p>
-                            <Button 
-                              size="lg" 
-                              className="bg-white text-[#006be5] hover:bg-gray-100 font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group-hover:translate-x-2"
-                            >
+                            <Button size="lg" className="bg-white text-[#006be5] hover:bg-gray-100 font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group-hover:translate-x-2">
                               Découvrir
                               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                             </Button>
@@ -156,28 +143,16 @@ const Index = () => {
                       </div>
                     </Card>
                   </Link>
-                </CarouselItem>
-              ))}
+                </CarouselItem>)}
             </CarouselContent>
             
             {/* Enhanced Navigation */}
-            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
+            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 dark:text-gray" />
             <CarouselNext className="right-2 md:-right-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
             
             {/* Interactive Dots indicator */}
             <div className="flex justify-center mt-8 space-x-3">
-              {carouselHighlights.map((_, index) => (
-                <button
-                  key={index}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
-                    current === index + 1 
-                      ? 'bg-[#006be5] w-8' 
-                      : 'bg-gray-300 hover:bg-[#006be5]/50'
-                  }`}
-                  onClick={() => api?.scrollTo(index)}
-                  aria-label={`Aller à la diapositive ${index + 1}`}
-                />
-              ))}
+              {carouselHighlights.map((_, index) => <button key={index} className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${current === index + 1 ? 'bg-[#006be5] w-8' : 'bg-gray-300 hover:bg-[#006be5]/50'}`} onClick={() => api?.scrollTo(index)} aria-label={`Aller à la diapositive ${index + 1}`} />)}
             </div>
           </Carousel>
         </div>
@@ -439,8 +414,6 @@ const Index = () => {
       </div>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
