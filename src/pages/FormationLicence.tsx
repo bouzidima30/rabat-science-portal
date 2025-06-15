@@ -133,7 +133,7 @@ const FormationLicence = () => {
                     <Button size="sm" variant="outline" asChild>
                       <a href={formation.document_url} target="_blank" rel="noopener noreferrer">
                         <Download className="h-4 w-4 mr-1" />
-                        {Télécharger || 'Document'}
+                        {'Télécharger' || 'Document'}
                         {/*{formation.document_name || 'Document'} */}
                       </a>
                     </Button>
