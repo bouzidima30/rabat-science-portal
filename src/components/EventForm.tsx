@@ -72,13 +72,13 @@ const EventForm = ({ event, onSuccess, onCancel }: EventFormProps) => {
       const filePath = `events/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('images')
+        .from('event-images')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('images')
+        .from('event-images')
         .getPublicUrl(filePath);
 
       setFormData(prev => ({
