@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -202,8 +203,8 @@ const Index = () => {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="pt-6">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mr-4">
-                    <BookOpen className="h-6 w-6 text-[#006be5]" />
+                  <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/20 rounded-lg flex items-center justify-center mr-4">
+                    <BookOpen className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -213,7 +214,7 @@ const Index = () => {
                       Programmes d'excellence de la licence au doctorat
                     </p>
                   </div>
-                  <ArrowRight className="ml-auto h-5 w-5 text-[#006be5]" />
+                  <ArrowRight className="ml-auto h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
               </CardContent>
             </Card>
@@ -223,8 +224,8 @@ const Index = () => {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="pt-6">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mr-4">
-                    <Microscope className="h-6 w-6 text-[#006be5]" />
+                  <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center mr-4">
+                    <Microscope className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -234,7 +235,7 @@ const Index = () => {
                       Innovation scientifique et partenariats internationaux
                     </p>
                   </div>
-                  <ArrowRight className="ml-auto h-5 w-5 text-[#006be5]" />
+                  <ArrowRight className="ml-auto h-5 w-5 text-purple-600 dark:text-purple-400" />
                 </div>
               </CardContent>
             </Card>
@@ -250,23 +251,31 @@ const Index = () => {
             {[{
             icon: Users,
             value: "15,000+",
-            label: "Étudiants"
+            label: "Étudiants",
+            color: "text-blue-600 dark:text-blue-400",
+            bgColor: "bg-blue-100 dark:bg-blue-900/20"
           }, {
             icon: BookOpen,
             value: "50+",
-            label: "Formations"
+            label: "Formations",
+            color: "text-orange-600 dark:text-orange-400",
+            bgColor: "bg-orange-100 dark:bg-orange-900/20"
           }, {
             icon: Award,
             value: "200+",
-            label: "Enseignants"
+            label: "Enseignants",
+            color: "text-green-600 dark:text-green-400",
+            bgColor: "bg-green-100 dark:bg-green-900/20"
           }, {
             icon: Building,
             value: "12",
-            label: "Laboratoires"
+            label: "Laboratoires",
+            color: "text-red-600 dark:text-red-400",
+            bgColor: "bg-red-100 dark:bg-red-900/20"
           }].map((stat, index) => <Card key={index} className="text-center hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
-                  <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <stat.icon className="h-6 w-6 text-[#006be5]" />
+                  <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center mx-auto mb-4`}>
+                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
                   </div>
                   <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                     {stat.value}
@@ -289,27 +298,35 @@ const Index = () => {
             title: "Formation Licence",
             description: "Programmes de premier cycle dans toutes les disciplines scientifiques",
             icon: BookOpen,
-            link: "/formations/licence"
+            link: "/formations/licence",
+            color: "text-indigo-600 dark:text-indigo-400",
+            bgColor: "bg-indigo-100 dark:bg-indigo-900/20"
           }, {
             title: "Formation Master",
             description: "Spécialisations avancées et recherche appliquée",
             icon: GraduationCap,
-            link: "/formations/master"
+            link: "/formations/master",
+            color: "text-cyan-600 dark:text-cyan-400",
+            bgColor: "bg-cyan-100 dark:bg-cyan-900/20"
           }, {
             title: "Formation Doctorat",
             description: "Recherche de pointe et innovation scientifique",
             icon: Microscope,
-            link: "/formations/doctorat"
+            link: "/formations/doctorat",
+            color: "text-pink-600 dark:text-pink-400",
+            bgColor: "bg-pink-100 dark:bg-pink-900/20"
           }, {
             title: "Formation Continue",
             description: "Perfectionnement professionnel et mise à jour des compétences",
             icon: Award,
-            link: "/formations/continue"
+            link: "/formations/continue",
+            color: "text-amber-600 dark:text-amber-400",
+            bgColor: "bg-amber-100 dark:bg-amber-900/20"
           }].map((program, index) => <Link key={index} to={program.link}>
                 <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
                   <CardHeader>
-                    <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mb-4">
-                      <program.icon className="h-6 w-6 text-[#006be5]" />
+                    <div className={`w-12 h-12 ${program.bgColor} rounded-lg flex items-center justify-center mb-4`}>
+                      <program.icon className={`h-6 w-6 ${program.color}`} />
                     </div>
                     <CardTitle className="text-xl">
                       {program.title}
