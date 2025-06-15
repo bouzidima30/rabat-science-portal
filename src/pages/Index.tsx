@@ -147,7 +147,7 @@ const Index = () => {
             </CarouselContent>
             
             {/* Enhanced Navigation */}
-            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 dark:text-gray" />
+            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
             <CarouselNext className="right-2 md:-right-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
             
             {/* Interactive Dots indicator */}
