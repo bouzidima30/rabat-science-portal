@@ -55,15 +55,6 @@ const FormationLicence = () => {
         <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
           {formations?.map((formation) => (
             <Card key={formation.id} className="shadow-lg hover:shadow-xl transition-shadow">
-              {formation.image_url && (
-                <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
-                  <img 
-                    src={formation.image_url} 
-                    alt={formation.titre}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
               <CardHeader>
                 <CardTitle className="text-xl text-[#006be5]">
                   {formation.titre}
