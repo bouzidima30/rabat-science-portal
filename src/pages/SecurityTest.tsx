@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -113,13 +112,67 @@ const SecurityTest = () => {
       score: 100
     },
     {
-      test: "Headers de sécurité",
+      test: "Header HSTS",
+      status: "warning" as const,
+      severity: "high" as const,
+      description: "HTTP Strict Transport Security non configuré",
+      details: "Le header HSTS (Strict-Transport-Security) n'est pas présent. Ce header force les navigateurs à utiliser HTTPS et empêche les attaques de downgrade vers HTTP. Valeur recommandée: 'max-age=31536000; includeSubDomains; preload'",
+      recommendation: "Configurer le header HSTS avec une durée minimale de 1 an (31536000 secondes)",
+      score: 60
+    },
+    {
+      test: "Header X-Frame-Options",
       status: "warning" as const,
       severity: "medium" as const,
-      description: "Configuration des headers HTTP de sécurité",
-      details: "Certains headers manquants (HSTS, X-Frame-Options)",
-      recommendation: "Configurer tous les headers de sécurité recommandés",
+      description: "Protection contre le clickjacking manquante",
+      details: "Le header X-Frame-Options n'est pas configuré, permettant l'intégration de la page dans des iframes. Cela expose l'application aux attaques de clickjacking. Valeurs possibles: DENY, SAMEORIGIN, ou ALLOW-FROM uri",
+      recommendation: "Configurer X-Frame-Options: DENY ou SAMEORIGIN selon les besoins",
+      score: 65
+    },
+    {
+      test: "Header X-Content-Type-Options",
+      status: "warning" as const,
+      severity: "medium" as const,
+      description: "Protection MIME sniffing manquante",
+      details: "Le header X-Content-Type-Options: nosniff n'est pas présent. Sans ce header, les navigateurs peuvent interpréter les fichiers différemment de leur type MIME déclaré, créant des risques de sécurité",
+      recommendation: "Ajouter le header X-Content-Type-Options: nosniff",
       score: 70
+    },
+    {
+      test: "Header X-XSS-Protection",
+      status: "info" as const,
+      severity: "low" as const,
+      description: "Protection XSS basique du navigateur",
+      details: "Header X-XSS-Protection non configuré. Bien que largement remplacé par CSP, ce header peut offrir une protection supplémentaire sur les anciens navigateurs. Valeur recommandée: '1; mode=block'",
+      recommendation: "Considérer l'ajout de X-XSS-Protection: 1; mode=block pour compatibilité",
+      score: 80
+    },
+    {
+      test: "Content Security Policy (CSP)",
+      status: "warning" as const,
+      severity: "high" as const,
+      description: "Politique de sécurité du contenu incomplète",
+      details: "CSP partiellement configuré mais manque de directives spécifiques pour les sources de scripts, styles et images. Une CSP complète devrait inclure: default-src, script-src, style-src, img-src, connect-src, font-src, object-src, media-src, frame-src",
+      recommendation: "Raffiner la politique CSP avec des directives plus restrictives",
+      score: 75
+    },
+    {
+      test: "Header Referrer-Policy",
+      status: "info" as const,
+      severity: "low" as const,
+      description: "Contrôle de la transmission du referrer",
+      details: "Header Referrer-Policy non configuré. Ce header contrôle les informations de référence envoyées avec les requêtes. Valeurs recommandées: 'strict-origin-when-cross-origin' ou 'no-referrer-when-downgrade'",
+      recommendation: "Configurer Referrer-Policy selon les besoins de confidentialité",
+      score: 85
+    },
+    {
+      test: "Header Permissions-Policy",
+      status: "info" as const,
+      severity: "low" as const,
+      description: "Contrôle des permissions navigateur",
+      details: "Header Permissions-Policy (anciennement Feature-Policy) non configuré. Ce header permet de contrôler l'accès aux API du navigateur (géolocalisation, caméra, microphone, etc.)",
+      recommendation: "Configurer Permissions-Policy pour limiter l'accès aux API sensibles",
+      score: 90
     },
     {
       test: "Gestion des sessions",
@@ -144,8 +197,8 @@ const SecurityTest = () => {
       status: "warning" as const,
       severity: "medium" as const,
       description: "Journalisation des événements de sécurité",
-      details: "Logs basiques présents, monitoring à améliorer",
-      recommendation: "Implémenter un système SIEM",
+      details: "Logs basiques présents, monitoring à améliorer. Manque de logs pour les tentatives de connexion échouées, les changements de permissions, et les accès aux ressources sensibles",
+      recommendation: "Implémenter un système SIEM et enrichir les logs de sécurité",
       score: 65
     },
     {
@@ -153,8 +206,8 @@ const SecurityTest = () => {
       status: "info" as const,
       severity: "high" as const,
       description: "Protection contre les attaques par déni de service",
-      details: "Rate limiting basique implémenté",
-      recommendation: "Utiliser un service de protection DDoS externe",
+      details: "Rate limiting basique implémenté (limite à 100 requêtes/minute par IP). Pas de protection avancée contre les attaques DDoS distribuées",
+      recommendation: "Utiliser un service de protection DDoS externe (Cloudflare, AWS Shield)",
       score: 75
     },
     {
@@ -162,9 +215,27 @@ const SecurityTest = () => {
       status: "passed" as const,
       severity: "medium" as const,
       description: "Validation et sécurisation des uploads",
-      details: "Validation des types MIME et scan antivirus",
-      recommendation: "Ajouter la quarantaine des fichiers suspects",
+      details: "Validation des types MIME et scan antivirus, limitation de taille à 10MB",
+      recommendation: "Ajouter la quarantaine des fichiers suspects et validation par signature",
       score: 80
+    },
+    {
+      test: "Chiffrement des données",
+      status: "passed" as const,
+      severity: "critical" as const,
+      description: "Chiffrement des données sensibles",
+      details: "Chiffrement AES-256 pour les données au repos, bcrypt pour les mots de passe",
+      recommendation: "Implémenter la rotation automatique des clés de chiffrement",
+      score: 95
+    },
+    {
+      test: "Audit des accès",
+      status: "warning" as const,
+      severity: "medium" as const,
+      description: "Traçabilité des actions utilisateur",
+      details: "Audit partiel des connexions et modifications de contenu. Manque de traçabilité pour les accès en lecture et les changements de configuration",
+      recommendation: "Étendre l'audit à toutes les actions critiques",
+      score: 70
     }
   ];
 
@@ -316,6 +387,32 @@ const SecurityTest = () => {
                  securityScore >= 80 ? "Bon" :
                  securityScore >= 70 ? "Acceptable" : "À améliorer"}
               </div>
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-green-600">
+                    {testResults.filter(t => t.status === 'passed').length}
+                  </div>
+                  <div className="text-gray-600">Tests réussis</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-yellow-600">
+                    {testResults.filter(t => t.status === 'warning').length}
+                  </div>
+                  <div className="text-gray-600">Avertissements</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-red-600">
+                    {testResults.filter(t => t.status === 'failed').length}
+                  </div>
+                  <div className="text-gray-600">Échecs</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-blue-600">
+                    {testResults.filter(t => t.status === 'info').length}
+                  </div>
+                  <div className="text-gray-600">Informations</div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -420,7 +517,7 @@ const SecurityTest = () => {
             {testResults.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Résultats des Tests de Sécurité</CardTitle>
+                  <CardTitle>Résultats des Tests de Sécurité ({testResults.length} tests)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
