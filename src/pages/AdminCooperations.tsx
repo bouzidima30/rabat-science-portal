@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
+import CooperationImageUpload from "@/components/admin/CooperationImageUpload";
 
 interface Cooperation {
   id: string;
@@ -459,6 +459,11 @@ const AdminCooperations = () => {
               value={formData.description} 
               onChange={(e) => setFormData({...formData, description: e.target.value})} 
               rows={4}
+            />
+            <CooperationImageUpload
+              imageUrl={formData.image_url}
+              onImageChange={(url) => setFormData({...formData, image_url: url})}
+              disabled={loading}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
