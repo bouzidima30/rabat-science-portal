@@ -1,9 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -54,6 +54,15 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
     'Formation Continue': "Formation Continue"
   };
 
+  const departements = [
+    'Biologie',
+    'Chimie',
+    'Géologie',
+    'Informatique',
+    'Mathématiques',
+    'Physique'
+  ];
+
   // Reset form data when dialog opens/closes or formation changes
   useEffect(() => {
     if (isOpen) {
@@ -84,6 +93,13 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -301,30 +317,39 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="type_formation">Type de formation *</Label>
-                <select
-                  id="type_formation"
-                  name="type_formation"
-                  value={formData.type_formation}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
-                  required
+                <Select 
+                  value={formData.type_formation} 
+                  onValueChange={(value) => handleSelectChange('type_formation', value)}
                 >
-                  <option value="Licence">Licence</option>
-                  <option value="Master">Master</option>
-                  <option value="Doctorat">Doctorat</option>
-                  <option value="Formation Continue">Formation Continue</option>
-                </select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner un type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Licence">Licence</SelectItem>
+                    <SelectItem value="Master">Master</SelectItem>
+                    <SelectItem value="Doctorat">Doctorat</SelectItem>
+                    <SelectItem value="Formation Continue">Formation Continue</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               
               <div>
                 <Label htmlFor="departement">Département</Label>
-                <Input
-                  id="departement"
-                  name="departement"
-                  value={formData.departement}
-                  onChange={handleInputChange}
-                  placeholder="Département"
-                />
+                <Select 
+                  value={formData.departement} 
+                  onValueChange={(value) => handleSelectChange('departement', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner un département" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {departements.map((dept) => (
+                      <SelectItem key={dept} value={dept}>
+                        {dept}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
