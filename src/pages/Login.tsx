@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,28 +18,26 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Nettoyer d'abord l'état d'authentification
-      try {
-        await supabase.auth.signOut();
-      } catch (error) {
-        // Ignorer les erreurs de déconnexion
-      }
-
+      console.log('Attempting login...');
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Login error:', error);
+        throw error;
+      }
 
       if (data.user) {
+        console.log('Login successful:', data.user.email);
         toast({
           title: "Connexion réussie",
           description: "Vous êtes maintenant connecté.",
@@ -48,12 +46,13 @@ const Login = () => {
         // Attendre un peu avant de rediriger pour laisser le temps à l'état de se stabiliser
         setTimeout(() => {
           window.location.href = "/";
-        }, 1500);
+        }, 1000);
       }
     } catch (error: any) {
+      console.error('Login failed:', error);
       toast({
         title: "Erreur de connexion",
-        description: error.message || "Une erreur est survenue.",
+        description: error.message || "Une erreur est survenue lors de la connexion.",
         variant: "destructive",
       });
     } finally {
