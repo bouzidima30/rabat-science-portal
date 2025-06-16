@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,41 +18,84 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Fonction de retry avec backoff exponentiel
+  const retryWithBackoff = async (fn: () => Promise<any>, maxRetries = 3) => {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        return await fn();
+      } catch (error: any) {
+        if (error.message?.includes('rate limit') && i < maxRetries - 1) {
+          const delay = Math.pow(2, i) * 1000; // 1s, 2s, 4s
+          console.log(`Rate limit hit, retrying in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        } else {
+          throw error;
+        }
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    
     setLoading(true);
 
     try {
-      console.log('Attempting login...');
+      console.log('Attempting login for:', email);
       
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      // Utilisation du retry avec backoff pour éviter les rate limits
+      const result = await retryWithBackoff(async () => {
+        return await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
       });
+
+      const { data, error } = result;
 
       if (error) {
         console.error('Login error:', error);
-        throw error;
+        
+        if (error.message.includes('rate limit')) {
+          toast({
+            title: "Trop de tentatives",
+            description: "Veuillez attendre quelques instants avant de réessayer.",
+            variant: "destructive",
+          });
+        } else if (error.message.includes('Invalid login credentials')) {
+          toast({
+            title: "Identifiants invalides",
+            description: "Email ou mot de passe incorrect.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Erreur de connexion",
+            description: error.message || "Une erreur est survenue lors de la connexion.",
+            variant: "destructive",
+          });
+        }
+        return;
       }
 
-      if (data.user) {
-        console.log('Login successful:', data.user.email);
+      if (data.user && data.session) {
+        console.log('Login successful for:', data.user.email);
         toast({
           title: "Connexion réussie",
           description: "Vous êtes maintenant connecté.",
         });
         
-        // Attendre un peu avant de rediriger pour laisser le temps à l'état de se stabiliser
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 1000);
+        // Redirection immédiate après connexion réussie
+        navigate("/", { replace: true });
       }
     } catch (error: any) {
       console.error('Login failed:', error);
       toast({
         title: "Erreur de connexion",
-        description: error.message || "Une erreur est survenue lors de la connexion.",
+        description: "Une erreur inattendue est survenue. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
@@ -97,6 +140,7 @@ const Login = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
                     required
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -113,6 +157,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
                     required
+                    disabled={loading}
                   />
                   <Button
                     type="button"
@@ -120,6 +165,7 @@ const Login = () => {
                     size="icon"
                     className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-gray-600"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={loading}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
