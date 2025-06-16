@@ -1,46 +1,39 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, User, Search, Moon, Sun, Settings, Shield } from "lucide-react";
 import GlobalSearch from "./GlobalSearch";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/hooks/useTheme";
+
 const TopBar = () => {
-  const {
-    user
-  } = useAuth();
-  const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const {
-    isDarkMode,
-    toggleTheme
-  } = useTheme();
+  const { isDarkMode, toggleTheme } = useTheme();
+
   const handleLogout = async () => {
-    const {
-      error
-    } = await supabase.auth.signOut();
-    if (error) {
-      console.error('Error logging out:', error);
-      toast({
-        title: "Erreur de déconnexion",
-        description: error.message,
-        variant: "destructive"
-      });
-    } else {
+    try {
+      await signOut();
       toast({
         title: "Déconnecté",
         description: "Vous avez été déconnecté avec succès"
       });
-      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      toast({
+        title: "Erreur de déconnexion",
+        description: "Une erreur est survenue lors de la déconnexion",
+        variant: "destructive"
+      });
     }
   };
-  return <>
+
+  return (
+    <>
       <div className="bg-[#016BE5] shadow-lg px-4 relative z-40 py-[6px]">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -50,24 +43,36 @@ const TopBar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={() => setIsSearchOpen(true)} className="hidden sm:flex items-center space-x-2 text-white/80 hover:text-white hover:bg-white/10 border-0">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setIsSearchOpen(true)} 
+              className="hidden sm:flex items-center space-x-2 text-white/80 hover:text-white hover:bg-white/10 border-0"
+            >
               <Search className="h-4 w-4" />
               <span>Rechercher</span>
             </Button>
 
-            {/* Add security test link for development */}
-            {process.env.NODE_ENV === 'development' && <Link to="/security-test">
+            {process.env.NODE_ENV === 'development' && (
+              <Link to="/security-test">
                 <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10 border-0">
                   <Shield className="h-4 w-4 mr-1" />
                   Security Test
                 </Button>
-              </Link>}
+              </Link>
+            )}
 
-            <Button variant="ghost" size="sm" onClick={toggleTheme} className="text-white/80 hover:text-white hover:bg-white/10 border-0">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={toggleTheme} 
+              className="text-white/80 hover:text-white hover:bg-white/10 border-0"
+            >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
-            {user ? <DropdownMenu>
+            {user ? (
+              <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-white/80 hover:text-white hover:bg-white/10 border-0">
                     <User className="h-4 w-4" />
@@ -93,7 +98,9 @@ const TopBar = () => {
                     Déconnexion
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu> : <div className="flex items-center space-x-2">
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center space-x-2">
                 <Link to="/login">
                   <Button variant="outline" size="sm" className="border-white/30 border-white bg-[#0070e3] text-white">
                     Connexion
@@ -104,12 +111,15 @@ const TopBar = () => {
                     Inscription
                   </Button>
                 </Link>
-              </div>}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-    </>;
+    </>
+  );
 };
+
 export default TopBar;

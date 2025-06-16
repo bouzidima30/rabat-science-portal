@@ -16,15 +16,7 @@ export const useAuth = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Éviter les requêtes simultanées
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [fetchingProfile, setFetchingProfile] = useState(false);
-
   const fetchProfile = useCallback(async (userId: string) => {
-    if (fetchingProfile) return;
-    setFetchingProfile(true);
-    
-    console.log('Fetching profile for user:', userId);
     try {
       const { data: profileData, error } = await supabase
         .from('profiles')
@@ -34,118 +26,71 @@ export const useAuth = () => {
       
       if (error) {
         console.error('Error fetching profile:', error);
-      } else if (profileData) {
+        return;
+      }
+      
+      if (profileData) {
         console.log('Profile loaded:', profileData);
         setProfile(profileData);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
-    } finally {
-      setFetchingProfile(false);
     }
-  }, [fetchingProfile]);
-
-  const logActivity = useCallback(async (action: string, details?: string) => {
-    if (!user) return;
-
-    try {
-      // Vérification simple de session avant de logger
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      if (!currentSession?.user) {
-        console.warn('No valid session for activity logging');
-        return;
-      }
-
-      await supabase
-        .from('activity_logs')
-        .insert({
-          user_id: user.id,
-          action,
-          details: details || action,
-          ip_address: null,
-          user_agent: navigator.userAgent
-        });
-
-      console.log('Activity logged:', action);
-    } catch (error) {
-      console.error('Error logging activity:', error);
-    }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     let mounted = true;
-    let authListener: any = null;
 
     const initializeAuth = async () => {
       try {
-        // Configuration du listener d'état d'authentification
+        // Vérifier la session existante
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        
+        if (!mounted) return;
+
+        if (currentSession?.user) {
+          console.log('Session existante trouvée:', currentSession.user.email);
+          setSession(currentSession);
+          setUser(currentSession.user);
+          
+          // Charger le profil après un délai
+          setTimeout(() => {
+            if (mounted) {
+              fetchProfile(currentSession.user.id);
+            }
+          }, 500);
+        }
+
+        // Configurer le listener d'état d'authentification
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
           async (event, session) => {
             if (!mounted) return;
             
             console.log('Auth state change:', event, session?.user?.email);
             
-            // Éviter les rafraîchissements multiples
-            if (event === 'TOKEN_REFRESHED' && isRefreshing) {
-              console.log('Token refresh already in progress, skipping...');
-              return;
-            }
-
-            if (event === 'TOKEN_REFRESHED') {
-              setIsRefreshing(true);
-              setTimeout(() => setIsRefreshing(false), 1000);
-            }
-            
             setSession(session);
             setUser(session?.user ?? null);
             
             if (event === 'SIGNED_OUT') {
               setProfile(null);
-              setLoading(false);
-              return;
             }
             
-            if (session?.user && !profile && !fetchingProfile) {
-              // Délai pour éviter les conflits
+            if (event === 'SIGNED_IN' && session?.user && !profile) {
+              // Charger le profil après connexion avec un délai plus long
               setTimeout(() => {
                 if (mounted) {
                   fetchProfile(session.user.id);
                 }
-              }, 500);
+              }, 1000);
             }
-            
-            if (event === 'SIGNED_IN' && session?.user) {
-              // Log d'activité avec délai plus long
-              setTimeout(() => {
-                if (mounted) {
-                  logActivity('login', `Connexion: ${session.user.email}`);
-                }
-              }, 2000);
-            }
-            
-            setLoading(false);
           }
         );
 
-        authListener = subscription;
-
-        // Vérification de session initiale
-        const { data: { session: initialSession } } = await supabase.auth.getSession();
-        if (!mounted) return;
-        
-        console.log('Initial session check:', initialSession?.user?.email);
-        setSession(initialSession);
-        setUser(initialSession?.user ?? null);
-        
-        if (initialSession?.user && !profile) {
-          setTimeout(() => {
-            if (mounted) {
-              fetchProfile(initialSession.user.id);
-            }
-          }, 100);
-        }
-        
         setLoading(false);
+
+        return () => {
+          subscription.unsubscribe();
+        };
       } catch (error) {
         console.error('Error initializing auth:', error);
         if (mounted) {
@@ -158,26 +103,14 @@ export const useAuth = () => {
 
     return () => {
       mounted = false;
-      if (authListener) {
-        authListener.unsubscribe();
-      }
     };
-  }, [fetchProfile, logActivity, profile, fetchingProfile, isRefreshing]);
+  }, [fetchProfile, profile]);
 
   const signOut = useCallback(async () => {
     try {
-      console.log('Signing out...');
+      console.log('Déconnexion en cours...');
       
-      // Log de déconnexion avant la déconnexion
-      if (user && profile) {
-        try {
-          await logActivity('logout', `Déconnexion: ${profile.full_name || profile.email || 'Utilisateur'}`);
-        } catch (error) {
-          console.error('Error logging logout:', error);
-        }
-      }
-      
-      // Nettoyer l'état local
+      // Nettoyer l'état local immédiatement
       setUser(null);
       setSession(null);
       setProfile(null);
@@ -185,12 +118,14 @@ export const useAuth = () => {
       // Déconnexion de Supabase
       await supabase.auth.signOut();
       
-      // Redirection
+      // Redirection forcée
       window.location.href = '/';
     } catch (error) {
       console.error('Error signing out:', error);
+      // Forcer la redirection même en cas d'erreur
+      window.location.href = '/';
     }
-  }, [user, profile, logActivity]);
+  }, []);
 
   return {
     user,

@@ -7,17 +7,18 @@ export const useActivityLogger = () => {
   const { user } = useAuth();
 
   const logActivity = useCallback(async (action: string, details?: string) => {
+    // Ne pas logger si l'utilisateur n'est pas connecté
     if (!user) return;
 
     try {
-      // Vérifier d'abord si l'utilisateur est authentifié
-      const { data: session } = await supabase.auth.getSession();
-      if (!session?.session?.user) {
+      // Vérification simple de la session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
         console.warn('No active session for logging activity');
         return;
       }
 
-      // Log d'activité simple sans enrichissement excessif
+      // Log d'activité simplifié
       const { error } = await supabase
         .from('activity_logs')
         .insert({

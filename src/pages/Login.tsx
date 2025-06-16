@@ -20,23 +20,6 @@ const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Fonction de retry avec backoff exponentiel
-  const retryWithBackoff = async (fn: () => Promise<any>, maxRetries = 3) => {
-    for (let i = 0; i < maxRetries; i++) {
-      try {
-        return await fn();
-      } catch (error: any) {
-        if (error.message?.includes('rate limit') && i < maxRetries - 1) {
-          const delay = Math.pow(2, i) * 1000; // 1s, 2s, 4s
-          console.log(`Rate limit hit, retrying in ${delay}ms...`);
-          await new Promise(resolve => setTimeout(resolve, delay));
-        } else {
-          throw error;
-        }
-      }
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
@@ -44,55 +27,49 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log('Attempting login for:', email);
+      console.log('Tentative de connexion pour:', email);
       
-      // Utilisation du retry avec backoff pour éviter les rate limits
-      const result = await retryWithBackoff(async () => {
-        return await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password,
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
       });
 
-      const { data, error } = result;
-
       if (error) {
-        console.error('Login error:', error);
+        console.error('Erreur de connexion:', error);
+        
+        let errorMessage = "Une erreur est survenue lors de la connexion.";
         
         if (error.message.includes('rate limit')) {
-          toast({
-            title: "Trop de tentatives",
-            description: "Veuillez attendre quelques instants avant de réessayer.",
-            variant: "destructive",
-          });
+          errorMessage = "Trop de tentatives. Veuillez attendre quelques instants avant de réessayer.";
         } else if (error.message.includes('Invalid login credentials')) {
-          toast({
-            title: "Identifiants invalides",
-            description: "Email ou mot de passe incorrect.",
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Erreur de connexion",
-            description: error.message || "Une erreur est survenue lors de la connexion.",
-            variant: "destructive",
-          });
+          errorMessage = "Email ou mot de passe incorrect.";
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = "Veuillez confirmer votre email avant de vous connecter.";
         }
+        
+        toast({
+          title: "Erreur de connexion",
+          description: errorMessage,
+          variant: "destructive",
+        });
         return;
       }
 
       if (data.user && data.session) {
-        console.log('Login successful for:', data.user.email);
+        console.log('Connexion réussie pour:', data.user.email);
+        
         toast({
           title: "Connexion réussie",
           description: "Vous êtes maintenant connecté.",
         });
         
-        // Redirection immédiate après connexion réussie
-        navigate("/", { replace: true });
+        // Attendre un peu avant la redirection pour laisser le temps à l'état de se synchroniser
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 500);
       }
     } catch (error: any) {
-      console.error('Login failed:', error);
+      console.error('Erreur inattendue:', error);
       toast({
         title: "Erreur de connexion",
         description: "Une erreur inattendue est survenue. Veuillez réessayer.",
