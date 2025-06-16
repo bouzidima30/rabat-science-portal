@@ -12,6 +12,13 @@ export const useActivityLogger = () => {
     if (!user) return;
 
     try {
+      // Vérifier d'abord si l'utilisateur est authentifié et a les permissions
+      const { data: session } = await supabase.auth.getSession();
+      if (!session?.session?.user) {
+        console.warn('No active session for logging activity');
+        return;
+      }
+
       // Log d'activité standard enrichi
       const enrichedDetails = {
         original_details: details,
@@ -34,6 +41,7 @@ export const useActivityLogger = () => {
 
       if (error) {
         console.error('Error logging activity:', error);
+        return;
       }
 
       // Log de sécurité pour certaines actions sensibles
@@ -41,13 +49,19 @@ export const useActivityLogger = () => {
         const severity = getSeverityForAction(action);
         const category = getCategoryForAction(action);
         
-        await logSecurityEvent({
-          action,
-          severity,
-          category,
-          details: details || `Action utilisateur: ${action}`,
-          metadata: { action_type: 'user_activity' }
-        });
+        setTimeout(async () => {
+          try {
+            await logSecurityEvent({
+              action,
+              severity,
+              category,
+              details: details || `Action utilisateur: ${action}`,
+              metadata: { action_type: 'user_activity' }
+            });
+          } catch (error) {
+            console.error('Error logging security event:', error);
+          }
+        }, 1000);
       }
 
     } catch (error) {

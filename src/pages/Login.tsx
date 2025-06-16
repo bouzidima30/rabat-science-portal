@@ -25,6 +25,13 @@ const Login = () => {
     setLoading(true);
 
     try {
+      // Nettoyer d'abord l'état d'authentification
+      try {
+        await supabase.auth.signOut();
+      } catch (error) {
+        // Ignorer les erreurs de déconnexion
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -37,7 +44,11 @@ const Login = () => {
           title: "Connexion réussie",
           description: "Vous êtes maintenant connecté.",
         });
-        navigate("/");
+        
+        // Attendre un peu avant de rediriger pour laisser le temps à l'état de se stabiliser
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1500);
       }
     } catch (error: any) {
       toast({

@@ -53,7 +53,7 @@ export const useAuth = () => {
         console.log('Profile loaded:', profileData);
         setProfile(profileData);
         
-        // Log successful login
+        // Log activity après un délai pour éviter les conflits
         setTimeout(async () => {
           try {
             await supabase
@@ -69,7 +69,7 @@ export const useAuth = () => {
           } catch (error) {
             console.error('Error logging login:', error);
           }
-        }, 1000);
+        }, 2000);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -86,16 +86,27 @@ export const useAuth = () => {
         if (!mounted) return;
         
         console.log('Auth state change:', event, session);
-        setSession(session);
-        setUser(session?.user ?? null);
         
-        if (session?.user) {
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-          }, 0);
-        } else {
+        if (event === 'SIGNED_OUT') {
+          setSession(null);
+          setUser(null);
           setProfile(null);
           setLoading(false);
+          return;
+        }
+        
+        if (event === 'TOKEN_REFRESHED' || event === 'SIGNED_IN') {
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user && !profile) {
+            setTimeout(() => {
+              fetchProfile(session.user.id);
+            }, 100);
+          } else if (!session?.user) {
+            setProfile(null);
+            setLoading(false);
+          }
         }
       }
     );
@@ -111,7 +122,7 @@ export const useAuth = () => {
         if (session?.user) {
           setTimeout(() => {
             fetchProfile(session.user.id);
-          }, 0);
+          }, 100);
         } else {
           setLoading(false);
         }
@@ -133,9 +144,21 @@ export const useAuth = () => {
 
   const signOut = useCallback(async () => {
     try {
-      // Log logout before signing out
-      if (user) {
-        await logActivity('logout', `Déconnexion: ${profile?.full_name || profile?.email || 'Utilisateur'}`);
+      // Log logout avant de se déconnecter
+      if (user && profile) {
+        try {
+          await supabase
+            .from('activity_logs')
+            .insert({
+              user_id: user.id,
+              action: 'logout',
+              details: `Déconnexion: ${profile.full_name || profile.email || 'Utilisateur'}`,
+              ip_address: null,
+              user_agent: navigator.userAgent
+            });
+        } catch (error) {
+          console.error('Error logging logout:', error);
+        }
       }
       
       setUser(null);
@@ -147,7 +170,7 @@ export const useAuth = () => {
     } catch (error) {
       console.error('Error signing out:', error);
     }
-  }, [user, profile, logActivity]);
+  }, [user, profile]);
 
   return {
     user,
