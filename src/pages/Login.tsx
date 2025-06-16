@@ -22,57 +22,38 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
-    
     setLoading(true);
 
     try {
-      console.log('Tentative de connexion pour:', email);
-      
+      // Nettoyer d'abord l'état d'authentification
+      try {
+        await supabase.auth.signOut();
+      } catch (error) {
+        // Ignorer les erreurs de déconnexion
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email,
         password,
       });
 
-      if (error) {
-        console.error('Erreur de connexion:', error);
-        
-        let errorMessage = "Une erreur est survenue lors de la connexion.";
-        
-        if (error.message.includes('rate limit')) {
-          errorMessage = "Trop de tentatives. Veuillez attendre quelques instants avant de réessayer.";
-        } else if (error.message.includes('Invalid login credentials')) {
-          errorMessage = "Email ou mot de passe incorrect.";
-        } else if (error.message.includes('Email not confirmed')) {
-          errorMessage = "Veuillez confirmer votre email avant de vous connecter.";
-        }
-        
-        toast({
-          title: "Erreur de connexion",
-          description: errorMessage,
-          variant: "destructive",
-        });
-        return;
-      }
+      if (error) throw error;
 
-      if (data.user && data.session) {
-        console.log('Connexion réussie pour:', data.user.email);
-        
+      if (data.user) {
         toast({
           title: "Connexion réussie",
           description: "Vous êtes maintenant connecté.",
         });
         
-        // Attendre un peu avant la redirection pour laisser le temps à l'état de se synchroniser
+        // Attendre un peu avant de rediriger pour laisser le temps à l'état de se stabiliser
         setTimeout(() => {
-          navigate("/", { replace: true });
-        }, 500);
+          window.location.href = "/";
+        }, 1500);
       }
     } catch (error: any) {
-      console.error('Erreur inattendue:', error);
       toast({
         title: "Erreur de connexion",
-        description: "Une erreur inattendue est survenue. Veuillez réessayer.",
+        description: error.message || "Une erreur est survenue.",
         variant: "destructive",
       });
     } finally {
@@ -117,7 +98,6 @@ const Login = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
                     required
-                    disabled={loading}
                   />
                 </div>
               </div>
@@ -134,7 +114,6 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
                     required
-                    disabled={loading}
                   />
                   <Button
                     type="button"
@@ -142,7 +121,6 @@ const Login = () => {
                     size="icon"
                     className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-gray-600"
                     onClick={() => setShowPassword(!showPassword)}
-                    disabled={loading}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
