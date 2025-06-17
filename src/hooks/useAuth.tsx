@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -10,15 +10,27 @@ interface Profile {
   role: string;
 }
 
+// Cache global pour éviter les re-fetches
+const authCache = {
+  user: null as User | null,
+  session: null as Session | null,
+  profile: null as Profile | null,
+  initialized: false
+};
+
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [initialized, setInitialized] = useState(false);
+  const [user, setUser] = useState<User | null>(authCache.user);
+  const [session, setSession] = useState<Session | null>(authCache.session);
+  const [profile, setProfile] = useState<Profile | null>(authCache.profile);
+  const [loading, setLoading] = useState(!authCache.initialized);
+  const [initialized, setInitialized] = useState(authCache.initialized);
+  const fetchingProfile = useRef(false);
 
   const fetchProfile = useCallback(async (userId: string) => {
+    if (fetchingProfile.current) return authCache.profile;
+    
     try {
+      fetchingProfile.current = true;
       const { data: profileData, error } = await supabase
         .from('profiles')
         .select('*')
@@ -30,15 +42,24 @@ export const useAuth = () => {
         return null;
       }
       
+      authCache.profile = profileData;
       return profileData;
     } catch (error) {
       console.error('Error fetching profile:', error);
       return null;
+    } finally {
+      fetchingProfile.current = false;
     }
   }, []);
 
   const signOut = useCallback(async () => {
     try {
+      // Clear cache first
+      authCache.user = null;
+      authCache.session = null;
+      authCache.profile = null;
+      authCache.initialized = true;
+      
       setUser(null);
       setSession(null);
       setProfile(null);
@@ -51,25 +72,31 @@ export const useAuth = () => {
   }, []);
 
   const updateAuthState = useCallback(async (newSession: Session | null) => {
+    // Update cache
+    authCache.session = newSession;
+    authCache.user = newSession?.user ?? null;
+    
     setSession(newSession);
     setUser(newSession?.user ?? null);
     
-    if (newSession?.user) {
+    if (newSession?.user && !authCache.profile) {
       try {
         const profileData = await fetchProfile(newSession.user.id);
         setProfile(profileData);
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
-    } else {
+    } else if (!newSession?.user) {
+      authCache.profile = null;
       setProfile(null);
     }
     
-    if (!initialized) {
+    if (!authCache.initialized) {
+      authCache.initialized = true;
       setInitialized(true);
     }
     setLoading(false);
-  }, [fetchProfile, initialized]);
+  }, [fetchProfile]);
 
   useEffect(() => {
     let mounted = true;
@@ -104,6 +131,9 @@ export const useAuth = () => {
         console.log('Auth state change:', event);
         
         if (event === 'SIGNED_OUT') {
+          authCache.user = null;
+          authCache.session = null;
+          authCache.profile = null;
           setSession(null);
           setUser(null);
           setProfile(null);
@@ -117,7 +147,16 @@ export const useAuth = () => {
       }
     );
 
-    initializeAuth();
+    // Si déjà initialisé, utiliser le cache
+    if (authCache.initialized) {
+      setUser(authCache.user);
+      setSession(authCache.session);
+      setProfile(authCache.profile);
+      setLoading(false);
+      setInitialized(true);
+    } else {
+      initializeAuth();
+    }
 
     return () => {
       mounted = false;
@@ -127,7 +166,7 @@ export const useAuth = () => {
 
   const isAdmin = useMemo(() => profile?.role === 'admin', [profile?.role]);
 
-  return {
+  return useMemo(() => ({
     user,
     session,
     profile,
@@ -135,5 +174,5 @@ export const useAuth = () => {
     signOut,
     isAdmin,
     initialized
-  };
+  }), [user, session, profile, loading, signOut, isAdmin, initialized]);
 };

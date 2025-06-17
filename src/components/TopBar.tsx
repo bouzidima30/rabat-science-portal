@@ -8,8 +8,11 @@ import { LogOut, User, Search, Moon, Sun, Settings, Shield } from "lucide-react"
 import GlobalSearch from "./GlobalSearch";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/hooks/useTheme";
+import { usePerformanceMonitor } from "@/hooks/usePerformanceMonitor";
 
 const TopBar = React.memo(() => {
+  usePerformanceMonitor('TopBar');
+  
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -41,6 +44,8 @@ const TopBar = React.memo(() => {
     setIsSearchOpen(false);
   }, []);
 
+  const userEmail = useMemo(() => user?.email, [user?.email]);
+
   const authButtons = useMemo(() => {
     if (user) {
       return (
@@ -48,7 +53,7 @@ const TopBar = React.memo(() => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-white/80 hover:text-white hover:bg-white/10 border-0">
               <User className="h-4 w-4" />
-              <span className="hidden sm:inline">{user.email}</span>
+              <span className="hidden sm:inline">{userEmail}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
@@ -88,7 +93,7 @@ const TopBar = React.memo(() => {
         </Link>
       </div>
     );
-  }, [user, handleLogout]);
+  }, [user, userEmail, handleLogout]);
 
   return (
     <>
