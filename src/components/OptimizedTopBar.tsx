@@ -8,17 +8,24 @@ import { LogOut, User, Search, Moon, Sun, Settings, Shield } from "lucide-react"
 import GlobalSearch from "./GlobalSearch";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/hooks/useTheme";
+import { usePerformanceOptimizer } from "@/hooks/usePerformanceOptimizer";
 
-const TopBar = React.memo(() => {
+const OptimizedTopBar = React.memo(() => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
+  const { debounce } = usePerformanceOptimizer();
+
+  const debouncedSignOut = useMemo(
+    () => debounce(signOut, 300),
+    [debounce, signOut]
+  );
 
   const handleLogout = useCallback(async () => {
     try {
-      await signOut();
+      await debouncedSignOut();
       toast({
         title: "Déconnecté",
         description: "Vous avez été déconnecté avec succès",
@@ -31,7 +38,7 @@ const TopBar = React.memo(() => {
         variant: "destructive"
       });
     }
-  }, [signOut, toast]);
+  }, [debouncedSignOut, toast]);
 
   const handleSearchOpen = useCallback(() => {
     setIsSearchOpen(true);
@@ -139,6 +146,6 @@ const TopBar = React.memo(() => {
   );
 });
 
-TopBar.displayName = 'TopBar';
+OptimizedTopBar.displayName = 'OptimizedTopBar';
 
-export default TopBar;
+export default OptimizedTopBar;

@@ -1,11 +1,11 @@
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
 import { useMobileDetection } from "@/hooks/useMobileDetection";
 
-const ModernNavbar = () => {
+const ModernNavbar = React.memo(() => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
@@ -13,7 +13,6 @@ const ModernNavbar = () => {
   const { isMobile } = useMobileDetection();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setIsMobileMenuOpen(false);
     setExpandedMobileMenu(null);
   }, [location.pathname]);
@@ -29,7 +28,7 @@ const ModernNavbar = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const menuItems = [
+  const menuItems = useMemo(() => [
     {
       name: "Accueil",
       path: "/",
@@ -96,16 +95,32 @@ const ModernNavbar = () => {
       path: "/contact",
       hasDropdown: false
     }
-  ];
+  ], []);
 
-  const toggleMobileSubmenu = (menuName: string) => {
+  const toggleMobileSubmenu = useCallback((menuName: string) => {
     setExpandedMobileMenu(expandedMobileMenu === menuName ? null : menuName);
-  };
+  }, [expandedMobileMenu]);
 
-  const handleMobileNavigation = (path: string) => {
+  const handleMobileNavigation = useCallback((path: string) => {
     setIsMobileMenuOpen(false);
     setExpandedMobileMenu(null);
-  };
+  }, []);
+
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  }, [isMobileMenuOpen]);
+
+  const closeMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  const handleMouseEnter = useCallback((itemName: string) => {
+    setHoveredMenu(itemName);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setHoveredMenu(null);
+  }, []);
 
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-lg border-b-2 border-blue-600 sticky top-0 z-50">
@@ -126,8 +141,8 @@ const ModernNavbar = () => {
               <div
                 key={item.name}
                 className="relative"
-                onMouseEnter={() => item.hasDropdown && setHoveredMenu(item.name)}
-                onMouseLeave={() => setHoveredMenu(null)}
+                onMouseEnter={() => item.hasDropdown && handleMouseEnter(item.name)}
+                onMouseLeave={handleMouseLeave}
               >
                 {item.hasDropdown ? (
                   <>
@@ -178,7 +193,7 @@ const ModernNavbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={toggleMobileMenu}
             className="lg:hidden text-gray-700 dark:text-gray-200 hover:text-blue-600 relative"
           >
             {isMobileMenuOpen ? (
@@ -194,7 +209,7 @@ const ModernNavbar = () => {
       {isMobileMenuOpen && (
         <div 
           className="lg:hidden fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm" 
-          onClick={() => setIsMobileMenuOpen(false)} 
+          onClick={closeMobileMenu} 
         />
       )}
 
@@ -209,7 +224,7 @@ const ModernNavbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
               className="text-gray-700 dark:text-gray-200"
             >
               <X className="h-6 w-6" />
@@ -283,6 +298,8 @@ const ModernNavbar = () => {
       </div>
     </nav>
   );
-};
+});
+
+ModernNavbar.displayName = 'ModernNavbar';
 
 export default ModernNavbar;
