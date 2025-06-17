@@ -1,7 +1,5 @@
-
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Youtube, ArrowRight } from "lucide-react";
-
 const Footer = () => {
   const quickLinks = [{
     title: "Formations",
@@ -19,7 +17,6 @@ const Footer = () => {
     title: "Coopération",
     href: "/cooperation"
   }];
-
   const formations = [{
     title: "Formation Licence",
     href: "/formations/licence"
@@ -33,7 +30,6 @@ const Footer = () => {
     title: "Formation Continue",
     href: "/formations/continue"
   }];
-
   const actualNews = [{
     title: "Nouvelle rentrée universitaire 2024-2025",
     date: "15 Sept 2024"
@@ -44,17 +40,13 @@ const Footer = () => {
     title: "Journées portes ouvertes",
     date: "25 Nov 2024"
   }];
-
-  return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+  return <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Main Footer Content */}
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-12 mb-12">
           {/* FSR Info */}
           <div>
-            <div className="flex items-center space-x-3 mb-6">
-              <img src="/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png" alt="FSR Logo" className="h-16 w-auto" />
-            </div>
+            
             <h3 className="text-xl font-bold mb-4 text-blue-300">
               Faculté des Sciences de Rabat
             </h3>
@@ -83,11 +75,9 @@ const Footer = () => {
                 icon: Youtube,
                 href: "#",
                 color: "hover:text-red-400"
-              }].map((social, index) => (
-                  <a key={index} href={social.href} className={`p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-300 ${social.color} transform hover:scale-110`}>
+              }].map((social, index) => <a key={index} href={social.href} className={`p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-300 ${social.color} transform hover:scale-110`}>
                     <social.icon className="h-5 w-5" />
-                  </a>
-                ))}
+                  </a>)}
               </div>
             </div>
           </div>
@@ -96,14 +86,12 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-6 text-blue-300">Liens Rapides</h3>
             <ul className="space-y-3">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
+              {quickLinks.map((link, index) => <li key={index}>
                   <Link to={link.href} className="group flex items-center text-gray-300 hover:text-blue-300 transition-colors duration-300">
                     <ArrowRight className="h-4 w-4 mr-2 transform group-hover:translate-x-1 transition-transform" />
                     {link.title}
                   </Link>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -111,14 +99,12 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-6 text-blue-300">Nos Formations</h3>
             <ul className="space-y-3">
-              {formations.map((formation, index) => (
-                <li key={index}>
+              {formations.map((formation, index) => <li key={index}>
                   <Link to={formation.href} className="group flex items-center text-gray-300 hover:text-blue-300 transition-colors duration-300">
                     <ArrowRight className="h-4 w-4 mr-2 transform group-hover:translate-x-1 transition-transform" />
                     {formation.title}
                   </Link>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -197,8 +183,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
