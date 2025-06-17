@@ -10,6 +10,7 @@ interface AuthGuardProps {
 const AuthGuard = ({ children, requireAdmin = false }: AuthGuardProps) => {
   const { user, profile, loading } = useAuth();
 
+  // Show loading state while checking auth
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -18,10 +19,12 @@ const AuthGuard = ({ children, requireAdmin = false }: AuthGuardProps) => {
     );
   }
 
+  // Redirect to login if not authenticated
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
+  // Redirect to home if admin access required but user is not admin
   if (requireAdmin && (!profile || profile.role !== 'admin')) {
     return <Navigate to="/" replace />;
   }

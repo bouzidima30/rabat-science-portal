@@ -16,30 +16,7 @@ export const useAuth = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const logActivity = useCallback(async (action: string, details?: string) => {
-    if (!user) return;
-
-    try {
-      const { error } = await supabase
-        .from('activity_logs')
-        .insert({
-          user_id: user.id,
-          action,
-          details,
-          ip_address: null,
-          user_agent: navigator.userAgent
-        });
-
-      if (error) {
-        console.error('Error logging activity:', error);
-      }
-    } catch (error) {
-      console.error('Error logging activity:', error);
-    }
-  }, [user]);
-
   const fetchProfile = useCallback(async (userId: string) => {
-    console.log('Fetching profile for user:', userId);
     try {
       const { data: profileData, error } = await supabase
         .from('profiles')
@@ -49,43 +26,82 @@ export const useAuth = () => {
       
       if (error) {
         console.error('Error fetching profile:', error);
-      } else if (profileData) {
-        console.log('Profile loaded:', profileData);
-        setProfile(profileData);
-        
-        // Log activity après un délai pour éviter les conflits
-        setTimeout(async () => {
-          try {
-            await supabase
-              .from('activity_logs')
-              .insert({
-                user_id: userId,
-                action: 'login',
-                details: `Connexion réussie: ${profileData.full_name || profileData.email}`,
-                ip_address: null,
-                user_agent: navigator.userAgent
-              });
-            console.log('Login activity logged');
-          } catch (error) {
-            console.error('Error logging login:', error);
-          }
-        }, 2000);
+        return null;
       }
+      
+      return profileData;
     } catch (error) {
       console.error('Error fetching profile:', error);
-    } finally {
-      setLoading(false);
+      return null;
+    }
+  }, []);
+
+  const signOut = useCallback(async () => {
+    try {
+      // Clear state first
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      
+      // Then sign out
+      await supabase.auth.signOut();
+      
+      // Force page reload to ensure clean state
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Force reload even if signOut fails
+      window.location.href = '/';
     }
   }, []);
 
   useEffect(() => {
     let mounted = true;
 
+    // Get initial session
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (!mounted) return;
+        
+        if (error) {
+          console.error('Error getting session:', error);
+          setLoading(false);
+          return;
+        }
+
+        if (session?.user) {
+          setSession(session);
+          setUser(session.user);
+          
+          // Fetch profile with delay to avoid rate limiting
+          setTimeout(async () => {
+            if (mounted) {
+              const profileData = await fetchProfile(session.user.id);
+              if (mounted && profileData) {
+                setProfile(profileData);
+              }
+              setLoading(false);
+            }
+          }, 500);
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!mounted) return;
         
-        console.log('Auth state change:', event, session);
+        console.log('Auth state change:', event);
         
         if (event === 'SIGNED_OUT') {
           setSession(null);
@@ -95,45 +111,30 @@ export const useAuth = () => {
           return;
         }
         
-        if (event === 'TOKEN_REFRESHED' || event === 'SIGNED_IN') {
+        if (event === 'SIGNED_IN' && session?.user) {
           setSession(session);
-          setUser(session?.user ?? null);
+          setUser(session.user);
           
-          if (session?.user && !profile) {
-            setTimeout(() => {
-              fetchProfile(session.user.id);
-            }, 100);
-          } else if (!session?.user) {
-            setProfile(null);
-            setLoading(false);
-          }
+          // Fetch profile with delay
+          setTimeout(async () => {
+            if (mounted) {
+              const profileData = await fetchProfile(session.user.id);
+              if (mounted && profileData) {
+                setProfile(profileData);
+              }
+              setLoading(false);
+            }
+          }, 500);
+        }
+        
+        if (event === 'TOKEN_REFRESHED' && session) {
+          setSession(session);
+          setUser(session.user);
         }
       }
     );
 
-    const initializeAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!mounted) return;
-        
-        console.log('Initial session:', session);
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-          }, 100);
-        } else {
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Error getting session:', error);
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    };
-
+    // Initialize auth
     initializeAuth();
 
     return () => {
@@ -141,36 +142,6 @@ export const useAuth = () => {
       subscription.unsubscribe();
     };
   }, [fetchProfile]);
-
-  const signOut = useCallback(async () => {
-    try {
-      // Log logout avant de se déconnecter
-      if (user && profile) {
-        try {
-          await supabase
-            .from('activity_logs')
-            .insert({
-              user_id: user.id,
-              action: 'logout',
-              details: `Déconnexion: ${profile.full_name || profile.email || 'Utilisateur'}`,
-              ip_address: null,
-              user_agent: navigator.userAgent
-            });
-        } catch (error) {
-          console.error('Error logging logout:', error);
-        }
-      }
-      
-      setUser(null);
-      setSession(null);
-      setProfile(null);
-      
-      await supabase.auth.signOut();
-      window.location.href = '/';
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  }, [user, profile]);
 
   return {
     user,
