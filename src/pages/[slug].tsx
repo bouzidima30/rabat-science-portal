@@ -1,6 +1,5 @@
 
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
@@ -9,11 +8,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuthenticatedQuery } from "@/hooks/useAuthenticatedQuery";
 
 const DynamicPage = () => {
   const { slug } = useParams();
 
-  const { data: page, isLoading } = useQuery({
+  const { data: page, isLoading, isAuthReady } = useAuthenticatedQuery({
     queryKey: ['page', slug],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -25,6 +25,7 @@ const DynamicPage = () => {
       if (error) throw error;
       return data;
     },
+    requireAuth: false, // Les pages sont publiques
     staleTime: 20 * 60 * 1000, // 20 minutes
     gcTime: 60 * 60 * 1000, // 1 hour
     refetchOnWindowFocus: false,
@@ -32,7 +33,7 @@ const DynamicPage = () => {
     enabled: !!slug
   });
 
-  if (isLoading) {
+  if (!isAuthReady || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <TopBar />

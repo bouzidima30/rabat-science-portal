@@ -4,17 +4,17 @@ import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Download, Eye, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useAuthenticatedQuery } from "@/hooks/useAuthenticatedQuery";
 
 const FormationLicence = () => {
   const [selectedDepartement, setSelectedDepartement] = useState<string>("all");
 
-  const { data: formations, isLoading } = useQuery({
+  const { data: formations, isLoading, isAuthReady } = useAuthenticatedQuery({
     queryKey: ['formations', 'Licence'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -26,6 +26,7 @@ const FormationLicence = () => {
       if (error) throw error;
       return data;
     },
+    requireAuth: false, // Les formations sont publiques
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
     refetchOnWindowFocus: false,
@@ -46,7 +47,7 @@ const FormationLicence = () => {
     return formation.departement === selectedDepartement;
   });
 
-  if (isLoading) {
+  if (!isAuthReady || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <TopBar />
