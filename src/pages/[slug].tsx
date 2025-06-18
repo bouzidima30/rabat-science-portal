@@ -24,7 +24,12 @@ const DynamicPage = () => {
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 20 * 60 * 1000, // 20 minutes
+    gcTime: 60 * 60 * 1000, // 1 hour
+    refetchOnWindowFocus: false,
+    retry: 2,
+    enabled: !!slug
   });
 
   if (isLoading) {

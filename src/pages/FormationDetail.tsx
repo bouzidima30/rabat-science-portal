@@ -24,7 +24,12 @@ const FormationDetail = () => {
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 15 * 60 * 1000, // 15 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
+    refetchOnWindowFocus: false,
+    retry: 2,
+    enabled: !!id
   });
 
   if (isLoading) {
@@ -80,7 +85,7 @@ const FormationDetail = () => {
 
         <Card className="shadow-lg">
           {formation.image_url && (
-            <div className="{bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+            <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
               <img 
                 src={formation.image_url} 
                 alt={formation.titre}
