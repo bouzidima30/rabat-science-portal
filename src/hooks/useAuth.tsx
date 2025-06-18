@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -10,28 +10,15 @@ interface Profile {
   role: string;
 }
 
-// Cache global pour éviter les re-fetches
-const authCache = {
-  user: null as User | null,
-  session: null as Session | null,
-  profile: null as Profile | null,
-  initialized: false
-};
-
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(authCache.user);
-  const [session, setSession] = useState<Session | null>(authCache.session);
-  const [profile, setProfile] = useState<Profile | null>(authCache.profile);
-  const [loading, setLoading] = useState(!authCache.initialized);
-  const [initialized, setInitialized] = useState(authCache.initialized);
-  const fetchingProfile = useRef(false);
-  const initializationPromise = useRef<Promise<void> | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [initialized, setInitialized] = useState(false);
 
   const fetchProfile = useCallback(async (userId: string) => {
-    if (fetchingProfile.current) return authCache.profile;
-    
     try {
-      fetchingProfile.current = true;
       const { data: profileData, error } = await supabase
         .from('profiles')
         .select('*')
@@ -43,91 +30,23 @@ export const useAuth = () => {
         return null;
       }
       
-      authCache.profile = profileData;
       return profileData;
     } catch (error) {
       console.error('Error fetching profile:', error);
       return null;
-    } finally {
-      fetchingProfile.current = false;
     }
   }, []);
 
   const signOut = useCallback(async () => {
     try {
-      // Clear cache first
-      authCache.user = null;
-      authCache.session = null;
-      authCache.profile = null;
-      authCache.initialized = true;
-      
       setUser(null);
       setSession(null);
       setProfile(null);
-      
       await supabase.auth.signOut();
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
     }
-  }, []);
-
-  const updateAuthState = useCallback(async (newSession: Session | null) => {
-    console.log('Auth: Updating auth state', { hasSession: !!newSession });
-    
-    // Update cache
-    authCache.session = newSession;
-    authCache.user = newSession?.user ?? null;
-    
-    setSession(newSession);
-    setUser(newSession?.user ?? null);
-    
-    if (newSession?.user && !authCache.profile) {
-      try {
-        const profileData = await fetchProfile(newSession.user.id);
-        setProfile(profileData);
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    } else if (!newSession?.user) {
-      authCache.profile = null;
-      setProfile(null);
-    }
-    
-    if (!authCache.initialized) {
-      authCache.initialized = true;
-      setInitialized(true);
-      console.log('Auth: Initialization complete');
-    }
-    setLoading(false);
-  }, [fetchProfile]);
-
-  // Fonction pour attendre l'initialisation complète
-  const waitForInitialization = useCallback((): Promise<void> => {
-    if (authCache.initialized) {
-      return Promise.resolve();
-    }
-    
-    if (!initializationPromise.current) {
-      initializationPromise.current = new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          console.log('Auth: Initialization timeout, proceeding anyway');
-          resolve();
-        }, 5000); // Timeout de 5 secondes
-        
-        const checkInitialized = () => {
-          if (authCache.initialized) {
-            clearTimeout(timeout);
-            resolve();
-          } else {
-            setTimeout(checkInitialized, 100);
-          }
-        };
-        checkInitialized();
-      });
-    }
-    
-    return initializationPromise.current;
   }, []);
 
   useEffect(() => {
@@ -137,71 +56,89 @@ export const useAuth = () => {
       try {
         console.log('Auth: Starting initialization');
         
-        // Force a fresh session check on page refresh
+        // Obtenir la session actuelle
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (!mounted) return;
         
         if (error) {
           console.error('Error getting session:', error);
-          setLoading(false);
-          setInitialized(true);
-          authCache.initialized = true;
-          return;
+        } else {
+          console.log('Auth: Session retrieved', { hasSession: !!session });
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          // Charger le profil si l'utilisateur est connecté
+          if (session?.user) {
+            try {
+              const profileData = await fetchProfile(session.user.id);
+              if (mounted) {
+                setProfile(profileData);
+              }
+            } catch (error) {
+              console.error('Error fetching profile:', error);
+            }
+          }
         }
-
-        console.log('Auth: Session retrieved', { hasSession: !!session });
-        await updateAuthState(session);
+        
+        if (mounted) {
+          setInitialized(true);
+          setLoading(false);
+          console.log('Auth: Initialization complete');
+        }
       } catch (error) {
         console.error('Error initializing auth:', error);
         if (mounted) {
-          setLoading(false);
           setInitialized(true);
-          authCache.initialized = true;
+          setLoading(false);
         }
       }
     };
 
+    // Écouter les changements d'état d'authentification
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!mounted) return;
         
         console.log('Auth state change event:', event);
         
+        setSession(session);
+        setUser(session?.user ?? null);
+        
         if (event === 'SIGNED_OUT') {
-          authCache.user = null;
-          authCache.session = null;
-          authCache.profile = null;
-          setSession(null);
-          setUser(null);
           setProfile(null);
           setLoading(false);
           return;
         }
         
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          await updateAuthState(session);
+          if (session?.user) {
+            // Utiliser setTimeout pour éviter les deadlocks
+            setTimeout(async () => {
+              try {
+                const profileData = await fetchProfile(session.user.id);
+                if (mounted) {
+                  setProfile(profileData);
+                }
+              } catch (error) {
+                console.error('Error fetching profile:', error);
+              }
+              setLoading(false);
+            }, 0);
+          } else {
+            setLoading(false);
+          }
         }
       }
     );
 
-    // Si déjà initialisé, utiliser le cache
-    if (authCache.initialized) {
-      console.log('Auth: Using cached state');
-      setUser(authCache.user);
-      setSession(authCache.session);
-      setProfile(authCache.profile);
-      setLoading(false);
-      setInitialized(true);
-    } else {
-      initializeAuth();
-    }
+    initializeAuth();
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [updateAuthState]);
+  }, [fetchProfile]);
 
   const isAdmin = useMemo(() => profile?.role === 'admin', [profile?.role]);
 
@@ -212,7 +149,6 @@ export const useAuth = () => {
     loading,
     signOut,
     isAdmin,
-    initialized,
-    waitForInitialization
-  }), [user, session, profile, loading, signOut, isAdmin, initialized, waitForInitialization]);
+    initialized
+  }), [user, session, profile, loading, signOut, isAdmin, initialized]);
 };

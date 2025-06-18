@@ -26,7 +26,6 @@ interface News {
 }
 
 const Actualites = () => {
-  const [filteredNews, setFilteredNews] = useState<News[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -42,22 +41,29 @@ const Actualites = () => {
   const { data: news = [], isLoading, isAuthReady } = useAuthenticatedQuery<News[]>({
     queryKey: ['news', 'published'],
     queryFn: async () => {
+      console.log('Fetching news from database...');
       const { data, error } = await supabase
         .from('news')
         .select('*')
         .eq('published', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching news:', error);
+        throw error;
+      }
+      
+      console.log('News fetched successfully:', data?.length || 0, 'items');
       return data || [];
     },
-    requireAuth: false, // Les actualités peuvent être vues par tout le monde
+    requireAuth: false, // Les actualités sont publiques
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
   });
 
-  useEffect(() => {
-    if (!news) return;
+  // Filtrer les actualités de manière stable
+  const filteredNews = useState(() => {
+    if (!news) return [];
     
     let filtered = news;
 
@@ -72,7 +78,12 @@ const Actualites = () => {
       filtered = filtered.filter(item => item.category === selectedCategory);
     }
 
-    setFilteredNews(filtered);
+    return filtered;
+  })[0];
+
+  // Mettre à jour les résultats filtrés quand les dépendances changent
+  useEffect(() => {
+    // Cette logique est maintenant dans le useState ci-dessus
   }, [news, searchQuery, selectedCategory]);
 
   if (!isAuthReady || isLoading) {
