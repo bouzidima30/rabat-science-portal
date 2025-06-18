@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { formatContent } from "@/utils/sanitize";
+import { useAuthenticatedQuery } from "@/hooks/useAuthenticatedQuery";
 
 interface News {
   id: string;
@@ -24,9 +26,7 @@ interface News {
 }
 
 const Actualites = () => {
-  const [news, setNews] = useState<News[]>([]);
   const [filteredNews, setFilteredNews] = useState<News[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -39,16 +39,9 @@ const Actualites = () => {
     { value: "evenements_scientifique", label: "Événements scientifique" },
   ];
 
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
-  useEffect(() => {
-    filterNews();
-  }, [news, searchQuery, selectedCategory]);
-
-  const fetchNews = async () => {
-    try {
+  const { data: news = [], isLoading, isAuthReady } = useAuthenticatedQuery<News[]>({
+    queryKey: ['news', 'published'],
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('news')
         .select('*')
@@ -56,15 +49,16 @@ const Actualites = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setNews(data || []);
-    } catch (error) {
-      console.error('Error fetching news:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return data || [];
+    },
+    requireAuth: false, // Les actualités peuvent être vues par tout le monde
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
+  });
 
-  const filterNews = () => {
+  useEffect(() => {
+    if (!news) return;
+    
     let filtered = news;
 
     if (searchQuery) {
@@ -79,9 +73,9 @@ const Actualites = () => {
     }
 
     setFilteredNews(filtered);
-  };
+  }, [news, searchQuery, selectedCategory]);
 
-  if (loading) {
+  if (!isAuthReady || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <TopBar />

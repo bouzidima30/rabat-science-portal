@@ -25,6 +25,7 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(!authCache.initialized);
   const [initialized, setInitialized] = useState(authCache.initialized);
   const fetchingProfile = useRef(false);
+  const initializationPromise = useRef<Promise<void> | null>(null);
 
   const fetchProfile = useCallback(async (userId: string) => {
     if (fetchingProfile.current) return authCache.profile;
@@ -98,11 +99,34 @@ export const useAuth = () => {
     setLoading(false);
   }, [fetchProfile]);
 
+  // Fonction pour attendre l'initialisation complète
+  const waitForInitialization = useCallback((): Promise<void> => {
+    if (authCache.initialized) {
+      return Promise.resolve();
+    }
+    
+    if (!initializationPromise.current) {
+      initializationPromise.current = new Promise((resolve) => {
+        const checkInitialized = () => {
+          if (authCache.initialized) {
+            resolve();
+          } else {
+            setTimeout(checkInitialized, 50);
+          }
+        };
+        checkInitialized();
+      });
+    }
+    
+    return initializationPromise.current;
+  }, []);
+
   useEffect(() => {
     let mounted = true;
 
     const initializeAuth = async () => {
       try {
+        // Force a fresh session check on page refresh
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (!mounted) return;
@@ -111,6 +135,7 @@ export const useAuth = () => {
           console.error('Error getting session:', error);
           setLoading(false);
           setInitialized(true);
+          authCache.initialized = true;
           return;
         }
 
@@ -120,6 +145,7 @@ export const useAuth = () => {
         if (mounted) {
           setLoading(false);
           setInitialized(true);
+          authCache.initialized = true;
         }
       }
     };
@@ -173,6 +199,7 @@ export const useAuth = () => {
     loading,
     signOut,
     isAdmin,
-    initialized
-  }), [user, session, profile, loading, signOut, isAdmin, initialized]);
+    initialized,
+    waitForInitialization
+  }), [user, session, profile, loading, signOut, isAdmin, initialized, waitForInitialization]);
 };

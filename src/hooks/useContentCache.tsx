@@ -1,11 +1,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/hooks/useAuth';
 
 interface CacheOptions {
   staleTime?: number;
   cacheTime?: number;
   refetchOnWindowFocus?: boolean;
+  requireAuth?: boolean;
 }
 
 export const useContentCache = <T,>(
@@ -16,14 +18,35 @@ export const useContentCache = <T,>(
   const {
     staleTime = 5 * 60 * 1000, // 5 minutes
     cacheTime = 30 * 60 * 1000, // 30 minutes
-    refetchOnWindowFocus = false
+    refetchOnWindowFocus = false,
+    requireAuth = false
   } = options;
 
+  const { initialized, session, waitForInitialization } = useAuth();
+  const [canExecute, setCanExecute] = useState(false);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const checkCanExecute = async () => {
+      if (!requireAuth) {
+        setCanExecute(true);
+        return;
+      }
+
+      if (!initialized) {
+        await waitForInitialization();
+      }
+      
+      setCanExecute(true);
+    };
+
+    checkCanExecute();
+  }, [initialized, session, requireAuth, waitForInitialization]);
 
   const query = useQuery({
     queryKey,
     queryFn,
+    enabled: canExecute && (requireAuth ? !!session : true),
     staleTime,
     gcTime: cacheTime,
     refetchOnWindowFocus,
@@ -51,12 +74,13 @@ export const useContentCache = <T,>(
     ...query,
     invalidateCache,
     updateCache,
-    prefetchRelated
+    prefetchRelated,
+    isAuthReady: canExecute
   };
 };
 
-// Specific cache hooks for common content types
-export const useNewsCache = (enabled = true) => {
+// Specific cache hooks for common content types with better auth handling
+export const useNewsCache = () => {
   return useContentCache(
     ['news', 'published'],
     async () => {
@@ -72,12 +96,13 @@ export const useNewsCache = (enabled = true) => {
     },
     {
       staleTime: 10 * 60 * 1000, // 10 minutes for news
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      requireAuth: false // Les actualités sont publiques
     }
   );
 };
 
-export const useEventsCache = (enabled = true) => {
+export const useEventsCache = () => {
   return useContentCache(
     ['events', 'upcoming'],
     async () => {
@@ -92,7 +117,8 @@ export const useEventsCache = (enabled = true) => {
       return data;
     },
     {
-      staleTime: 15 * 60 * 1000 // 15 minutes for events
+      staleTime: 15 * 60 * 1000, // 15 minutes for events
+      requireAuth: false // Les événements sont publics
     }
   );
 };
@@ -119,7 +145,8 @@ export const useFormationsCache = (type?: string) => {
       return data;
     },
     {
-      staleTime: 20 * 60 * 1000 // 20 minutes for formations
+      staleTime: 20 * 60 * 1000, // 20 minutes for formations
+      requireAuth: false // Les formations sont publiques
     }
   );
 };
