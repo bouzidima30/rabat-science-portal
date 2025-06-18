@@ -1,6 +1,5 @@
 
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
@@ -9,12 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuthenticatedQuery } from "@/hooks/useAuthenticatedQuery";
 
 const FormationDetail = () => {
   const { id } = useParams();
 
-  const { data: formation, isLoading } = useQuery({
-    queryKey: ['formation', id],
+  const { data: formation, isLoading, isAuthReady } = useAuthenticatedQuery({
+    queryKey: ['formation', id || ''],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('formations')
@@ -25,6 +25,7 @@ const FormationDetail = () => {
       if (error) throw error;
       return data;
     },
+    requireAuth: false, // Les formations sont publiques
     staleTime: 15 * 60 * 1000, // 15 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
     refetchOnWindowFocus: false,
@@ -32,7 +33,7 @@ const FormationDetail = () => {
     enabled: !!id
   });
 
-  if (isLoading) {
+  if (!isAuthReady || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <TopBar />

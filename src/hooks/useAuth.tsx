@@ -73,6 +73,8 @@ export const useAuth = () => {
   }, []);
 
   const updateAuthState = useCallback(async (newSession: Session | null) => {
+    console.log('Auth: Updating auth state', { hasSession: !!newSession });
+    
     // Update cache
     authCache.session = newSession;
     authCache.user = newSession?.user ?? null;
@@ -95,6 +97,7 @@ export const useAuth = () => {
     if (!authCache.initialized) {
       authCache.initialized = true;
       setInitialized(true);
+      console.log('Auth: Initialization complete');
     }
     setLoading(false);
   }, [fetchProfile]);
@@ -106,12 +109,18 @@ export const useAuth = () => {
     }
     
     if (!initializationPromise.current) {
-      initializationPromise.current = new Promise((resolve) => {
+      initializationPromise.current = new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          console.log('Auth: Initialization timeout, proceeding anyway');
+          resolve();
+        }, 5000); // Timeout de 5 secondes
+        
         const checkInitialized = () => {
           if (authCache.initialized) {
+            clearTimeout(timeout);
             resolve();
           } else {
-            setTimeout(checkInitialized, 50);
+            setTimeout(checkInitialized, 100);
           }
         };
         checkInitialized();
@@ -126,6 +135,8 @@ export const useAuth = () => {
 
     const initializeAuth = async () => {
       try {
+        console.log('Auth: Starting initialization');
+        
         // Force a fresh session check on page refresh
         const { data: { session }, error } = await supabase.auth.getSession();
         
@@ -139,6 +150,7 @@ export const useAuth = () => {
           return;
         }
 
+        console.log('Auth: Session retrieved', { hasSession: !!session });
         await updateAuthState(session);
       } catch (error) {
         console.error('Error initializing auth:', error);
@@ -154,7 +166,7 @@ export const useAuth = () => {
       async (event, session) => {
         if (!mounted) return;
         
-        console.log('Auth state change:', event);
+        console.log('Auth state change event:', event);
         
         if (event === 'SIGNED_OUT') {
           authCache.user = null;
@@ -175,6 +187,7 @@ export const useAuth = () => {
 
     // Si déjà initialisé, utiliser le cache
     if (authCache.initialized) {
+      console.log('Auth: Using cached state');
       setUser(authCache.user);
       setSession(authCache.session);
       setProfile(authCache.profile);
