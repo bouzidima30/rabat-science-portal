@@ -273,28 +273,28 @@ const Index = () => {
             title: "Formation Licence",
             description: "Programmes de premier cycle dans toutes les disciplines scientifiques",
             icon: BookOpen,
-            link: "/formations/licence",
+            link: "/formation-licence",
             color: "text-indigo-600 dark:text-indigo-400",
             bgColor: "bg-indigo-100 dark:bg-indigo-900/20"
           }, {
             title: "Formation Master",
             description: "Spécialisations avancées et recherche appliquée",
             icon: GraduationCap,
-            link: "/formations/master",
+            link: "/formation-master",
             color: "text-cyan-600 dark:text-cyan-400",
             bgColor: "bg-cyan-100 dark:bg-cyan-900/20"
           }, {
             title: "Formation Doctorat",
             description: "Recherche de pointe et innovation scientifique",
             icon: Microscope,
-            link: "/formations/doctorat",
+            link: "/formation-doctorat",
             color: "text-pink-600 dark:text-pink-400",
             bgColor: "bg-pink-100 dark:bg-pink-900/20"
           }, {
             title: "Formation Continue",
             description: "Perfectionnement professionnel et mise à jour des compétences",
             icon: Award,
-            link: "/formations/continue",
+            link: "/formation-continue",
             color: "text-amber-600 dark:text-amber-400",
             bgColor: "bg-amber-100 dark:bg-amber-900/20"
           }].map((program, index) => <Link key={index} to={program.link}>
