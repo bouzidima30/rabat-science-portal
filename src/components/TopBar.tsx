@@ -57,11 +57,9 @@ const TopBar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                {user.email?.includes('@um5.ac.ma') && (
                   <DropdownMenuItem asChild>
                     <Link to="/admin">Administration</Link>
                   </DropdownMenuItem>
-                )}
                 <DropdownMenuItem asChild>
                   <Link to="/profil">Mon Profil</Link>
                 </DropdownMenuItem>
