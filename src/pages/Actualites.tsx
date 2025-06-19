@@ -181,7 +181,7 @@ const Actualites = () => {
                     />
                     
                     <div className="flex flex-wrap items-center gap-4">
-                      <Link to={`/actualites/${item.id}`}>
+                      <Link to={`/actualite/${item.id}`}>
                         <Button className="bg-[#006be5] hover:bg-[#0056b3]">
                           Lire la suite
                           <ArrowRight className="h-4 w-4 ml-2" />
