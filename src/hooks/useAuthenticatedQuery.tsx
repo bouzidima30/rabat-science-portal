@@ -17,9 +17,19 @@ export const useAuthenticatedQuery = <T,>({
 }: UseAuthenticatedQueryOptions<T>) => {
   const { user, loading } = useAuth();
 
+  // Ensure we always return a boolean for enabled
   const isAuthReady = !loading;
   const canQuery = !requireAuth || (requireAuth && !!user);
-  const shouldEnabled = Boolean(enabled && isAuthReady && canQuery);
+  const shouldEnabled = Boolean(enabled) && isAuthReady && canQuery;
+
+  console.log('useAuthenticatedQuery:', {
+    queryKey,
+    user: user?.email,
+    loading,
+    isAuthReady,
+    canQuery,
+    shouldEnabled
+  });
 
   return {
     ...useQuery({
