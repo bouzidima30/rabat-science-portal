@@ -1,5 +1,4 @@
-
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,23 +24,22 @@ interface News {
   created_at: string;
 }
 
+const categoryOptions = [
+  { value: "reunion_travail", label: "Réunion de travail" },
+  { value: "nouvelles_informations", label: "Nouvelles informations" },
+  { value: "activites_parauniversitaire", label: "Activités parauniversitaire" },
+  { value: "avis_etudiants", label: "Avis étudiants" },
+  { value: "avis_enseignants", label: "Avis enseignants" },
+  { value: "evenements_scientifique", label: "Événements scientifique" },
+];
+
 const Actualites = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const categoryOptions = [
-    { value: "reunion_travail", label: "Réunion de travail" },
-    { value: "nouvelles_informations", label: "Nouvelles informations" },
-    { value: "activites_parauniversitaire", label: "Activités parauniversitaire" },
-    { value: "avis_etudiants", label: "Avis étudiants" },
-    { value: "avis_enseignants", label: "Avis enseignants" },
-    { value: "evenements_scientifique", label: "Événements scientifique" },
-  ];
-
   const { data: news = [], isLoading, isAuthReady } = useAuthenticatedQuery<News[]>({
     queryKey: ['news', 'published'],
     queryFn: async () => {
-      console.log('Fetching news from database...');
       const { data, error } = await supabase
         .from('news')
         .select('*')
@@ -53,7 +51,6 @@ const Actualites = () => {
         throw error;
       }
       
-      console.log('News fetched successfully:', data?.length || 0, 'items');
       return data || [];
     },
     requireAuth: false,
@@ -108,7 +105,6 @@ const Actualites = () => {
           </p>
         </div>
 
-        {/* Filters */}
         <div className="mb-8 space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -141,7 +137,6 @@ const Actualites = () => {
           </div>
         </div>
 
-        {/* News Grid */}
         <div className="grid gap-6">
           {filteredNews.map((item) => (
             <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">

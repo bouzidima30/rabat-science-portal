@@ -20,32 +20,18 @@ export const useAuthenticatedQuery = <T,>({
   const stableQueryKey = useMemo(() => queryKey, [queryKey.join(',')]);
 
   const canExecute = useMemo(() => {
-    if (!requireAuth) {
-      return true;
-    }
+    if (!requireAuth) return true;
     return initialized && !!session;
   }, [requireAuth, initialized, session]);
-
-  console.log('AuthenticatedQuery status:', {
-    queryKey: stableQueryKey.join('-'),
-    requireAuth,
-    initialized,
-    hasSession: !!session,
-    canExecute
-  });
 
   const query = useQuery({
     queryKey: stableQueryKey,
     queryFn,
     enabled: canExecute,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
     refetchOnWindowFocus: false,
-    retry: (failureCount, error) => {
-      if (failureCount >= 2) return false;
-      console.log('Query retry:', { failureCount, error, queryKey: stableQueryKey });
-      return true;
-    },
+    retry: 2, // Reduced retries
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
     ...options
   });
