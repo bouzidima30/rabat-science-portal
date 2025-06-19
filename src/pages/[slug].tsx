@@ -8,12 +8,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuthenticatedQuery } from "@/hooks/useAuthenticatedQuery";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const DynamicPage = () => {
   const { slug } = useParams();
 
-  const { data: page, isLoading, isAuthReady } = useAuthenticatedQuery({
+  const { data: page, isLoading } = useQuery({
     queryKey: ['page', slug],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -25,7 +26,6 @@ const DynamicPage = () => {
       if (error) throw error;
       return data;
     },
-    requireAuth: false, // Les pages sont publiques
     staleTime: 20 * 60 * 1000, // 20 minutes
     gcTime: 60 * 60 * 1000, // 1 hour
     refetchOnWindowFocus: false,
@@ -33,13 +33,13 @@ const DynamicPage = () => {
     enabled: !!slug
   });
 
-  if (!isAuthReady || isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <LoadingSpinner />
         </div>
         <Footer />
       </div>

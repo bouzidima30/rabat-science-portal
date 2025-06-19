@@ -8,12 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuthenticatedQuery } from "@/hooks/useAuthenticatedQuery";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const FormationDetail = () => {
   const { id } = useParams();
 
-  const { data: formation, isLoading, isAuthReady } = useAuthenticatedQuery({
+  const { data: formation, isLoading } = useQuery({
     queryKey: ['formation', id || ''],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -25,7 +26,6 @@ const FormationDetail = () => {
       if (error) throw error;
       return data;
     },
-    requireAuth: false, // Les formations sont publiques
     staleTime: 15 * 60 * 1000, // 15 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
     refetchOnWindowFocus: false,
@@ -33,13 +33,13 @@ const FormationDetail = () => {
     enabled: !!id
   });
 
-  if (!isAuthReady || isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <LoadingSpinner />
         </div>
         <Footer />
       </div>

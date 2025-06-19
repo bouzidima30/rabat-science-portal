@@ -57,7 +57,6 @@ import ListesExamens from "../pages/ListesExamens";
 import Resultats from "../pages/Resultats";
 import Preselection from "../pages/Preselection";
 import ActivitesParaUniversitaires from "../pages/ActivitesParaUniversitaires";
-import Parametres from "../pages/Parametres";
 import Profil from "../pages/Profil";
 import NotFound from "../pages/NotFound";
 import DynamicPage from "../pages/[slug]";
@@ -70,7 +69,6 @@ const AppRoutes = () => {
       <Route path="/" element={<Index />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/parametres" element={<Parametres />} />
       <Route path="/profil" element={<AuthGuard><Profil /></AuthGuard>} />
       
       {/* Admin Routes */}
