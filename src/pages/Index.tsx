@@ -201,7 +201,7 @@ const Index = () => {
             </Card>
           </Link>
           
-          <Link to="/recherche">
+          <Link to="/ecole-doctorale">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="pt-6">
                 <div className="flex items-center">
