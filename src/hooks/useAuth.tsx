@@ -51,12 +51,12 @@ export const useAuth = () => {
 
   useEffect(() => {
     let mounted = true;
+    let profileFetchInProgress = false;
 
     const initializeAuth = async () => {
       try {
         console.log('Auth: Starting initialization');
         
-        // Obtenir la session actuelle
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (!mounted) return;
@@ -68,8 +68,8 @@ export const useAuth = () => {
           setSession(session);
           setUser(session?.user ?? null);
           
-          // Charger le profil si l'utilisateur est connecté
-          if (session?.user) {
+          if (session?.user && !profileFetchInProgress) {
+            profileFetchInProgress = true;
             try {
               const profileData = await fetchProfile(session.user.id);
               if (mounted) {
@@ -77,6 +77,8 @@ export const useAuth = () => {
               }
             } catch (error) {
               console.error('Error fetching profile:', error);
+            } finally {
+              profileFetchInProgress = false;
             }
           }
         }
@@ -95,7 +97,6 @@ export const useAuth = () => {
       }
     };
 
-    // Écouter les changements d'état d'authentification
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!mounted) return;
@@ -111,23 +112,23 @@ export const useAuth = () => {
           return;
         }
         
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          if (session?.user) {
-            // Utiliser setTimeout pour éviter les deadlocks
-            setTimeout(async () => {
-              try {
-                const profileData = await fetchProfile(session.user.id);
-                if (mounted) {
-                  setProfile(profileData);
-                }
-              } catch (error) {
-                console.error('Error fetching profile:', error);
+        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user && !profileFetchInProgress) {
+          profileFetchInProgress = true;
+          setTimeout(async () => {
+            try {
+              const profileData = await fetchProfile(session.user.id);
+              if (mounted) {
+                setProfile(profileData);
               }
+            } catch (error) {
+              console.error('Error fetching profile:', error);
+            } finally {
+              profileFetchInProgress = false;
               setLoading(false);
-            }, 0);
-          } else {
-            setLoading(false);
-          }
+            }
+          }, 100);
+        } else {
+          setLoading(false);
         }
       }
     );

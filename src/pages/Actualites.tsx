@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,13 +56,12 @@ const Actualites = () => {
       console.log('News fetched successfully:', data?.length || 0, 'items');
       return data || [];
     },
-    requireAuth: false, // Les actualités sont publiques
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    requireAuth: false,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
-  // Filtrer les actualités de manière stable
-  const filteredNews = useState(() => {
+  const filteredNews = useMemo(() => {
     if (!news) return [];
     
     let filtered = news;
@@ -79,11 +78,6 @@ const Actualites = () => {
     }
 
     return filtered;
-  })[0];
-
-  // Mettre à jour les résultats filtrés quand les dépendances changent
-  useEffect(() => {
-    // Cette logique est maintenant dans le useState ci-dessus
   }, [news, searchQuery, selectedCategory]);
 
   if (!isAuthReady || isLoading) {

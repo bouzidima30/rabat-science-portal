@@ -17,15 +17,13 @@ export const useAuthenticatedQuery = <T,>({
 }: AuthenticatedQueryOptions<T>) => {
   const { initialized, session } = useAuth();
 
-  // Stabiliser les query keys
   const stableQueryKey = useMemo(() => queryKey, [queryKey.join(',')]);
 
-  // Logique simple pour déterminer si on peut exécuter la requête
   const canExecute = useMemo(() => {
     if (!requireAuth) {
-      return true; // Données publiques, toujours exécuter
+      return true;
     }
-    return initialized && !!session; // Données privées, attendre auth + session
+    return initialized && !!session;
   }, [requireAuth, initialized, session]);
 
   console.log('AuthenticatedQuery status:', {
@@ -40,12 +38,13 @@ export const useAuthenticatedQuery = <T,>({
     queryKey: stableQueryKey,
     queryFn,
     enabled: canExecute,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: (failureCount, error) => {
+      if (failureCount >= 2) return false;
       console.log('Query retry:', { failureCount, error, queryKey: stableQueryKey });
-      return failureCount < 2;
+      return true;
     },
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
     ...options
