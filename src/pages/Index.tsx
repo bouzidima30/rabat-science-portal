@@ -58,17 +58,23 @@ const Index = () => {
     id: 'all',
     label: 'Toutes'
   }, {
+    id: 'reunion_travail',
+    label: 'Réunion de travail'
+  }, {
     id: 'nouvelles_informations',
-    label: 'Nouvelles'
+    label: 'Nouvelles informations'
+  }, {
+    id: 'activites_parauniversitaire',
+    label: 'Activités parauniversitaire'
   }, {
     id: 'avis_etudiants',
-    label: 'Étudiants'
+    label: 'Avis étudiants'
   }, {
     id: 'avis_enseignants',
-    label: 'Enseignants'
+    label: 'Avis enseignants'
   }, {
     id: 'evenements_scientifique',
-    label: 'Événements'
+    label: 'Événements scientifique"'
   }];
   const carouselHighlights = [{
     title: "Excellence Académique",
