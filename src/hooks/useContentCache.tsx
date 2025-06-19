@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,26 +21,20 @@ export const useContentCache = <T,>(
     requireAuth = false
   } = options;
 
-  const { initialized, session, waitForInitialization } = useAuth();
+  const { initialized, session } = useAuth();
   const [canExecute, setCanExecute] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const checkCanExecute = async () => {
-      if (!requireAuth) {
-        setCanExecute(true);
-        return;
-      }
-
-      if (!initialized) {
-        await waitForInitialization();
-      }
-      
+    if (!requireAuth) {
       setCanExecute(true);
-    };
+      return;
+    }
 
-    checkCanExecute();
-  }, [initialized, session, requireAuth, waitForInitialization]);
+    if (initialized) {
+      setCanExecute(true);
+    }
+  }, [initialized, session, requireAuth]);
 
   const query = useQuery({
     queryKey,
