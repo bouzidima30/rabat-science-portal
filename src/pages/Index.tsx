@@ -74,7 +74,7 @@ const Index = () => {
     label: 'Avis enseignants'
   }, {
     id: 'evenements_scientifique',
-    label: 'Événements scientifique"'
+    label: 'Événements scientifique'
   }];
   const carouselHighlights = [{
     title: "Excellence Académique",
