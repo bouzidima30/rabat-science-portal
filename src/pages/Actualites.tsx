@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,12 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Search, Download, Calendar, ArrowRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { formatContent } from "@/utils/sanitize";
-import { useAuthenticatedQuery } from "@/hooks/useAuthenticatedQuery";
 
 interface News {
   id: string;
@@ -37,7 +38,7 @@ const Actualites = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { data: news = [], isLoading, isAuthReady } = useAuthenticatedQuery<News[]>({
+  const { data: news = [], isLoading } = useQuery({
     queryKey: ['news', 'published'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -46,21 +47,13 @@ const Actualites = () => {
         .eq('published', true)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching news:', error);
-        throw error;
-      }
-      
+      if (error) throw error;
       return data || [];
     },
-    requireAuth: false,
     staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
   });
 
   const filteredNews = useMemo(() => {
-    if (!news) return [];
-    
     let filtered = news;
 
     if (searchQuery) {
@@ -77,7 +70,7 @@ const Actualites = () => {
     return filtered;
   }, [news, searchQuery, selectedCategory]);
 
-  if (!isAuthReady || isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <TopBar />

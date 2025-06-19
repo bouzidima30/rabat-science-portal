@@ -8,11 +8,10 @@ interface AuthGuardProps {
   requireAdmin?: boolean;
 }
 
-const AuthGuard = React.memo(({ children, requireAdmin = false }: AuthGuardProps) => {
-  const { user, profile, loading, initialized } = useAuth();
+const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAdmin = false }) => {
+  const { user, loading } = useAuth();
 
-  // Attendre que l'authentification soit complètement initialisée
-  if (!initialized || loading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center space-y-4">
@@ -27,13 +26,12 @@ const AuthGuard = React.memo(({ children, requireAdmin = false }: AuthGuardProps
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && (!profile || profile.role !== 'admin')) {
+  // For admin requirement, we'll check the email domain for now
+  if (requireAdmin && !user.email?.includes('@um5.ac.ma')) {
     return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
-});
-
-AuthGuard.displayName = 'AuthGuard';
+};
 
 export default AuthGuard;

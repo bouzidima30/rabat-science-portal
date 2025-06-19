@@ -1,41 +1,46 @@
 
-import { createRoot } from 'react-dom/client'
-import { StrictMode } from 'react'
-import App from './App.tsx'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "@/hooks/useAuth";
+import App from "./App.tsx";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profil from "./pages/Profil";
+import Admin from "./pages/Admin";
+import AdminDashboard from "./pages/AdminDashboard";
+import Actualites from "./pages/Actualites";
+import "./index.css";
 
-// Performance optimizations
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('SW registered: ', registration);
-      })
-      .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
-}
-
-// Preload critical resources
-const preloadResources = () => {
-  const criticalFonts = [
-    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
-  ];
-  
-  criticalFonts.forEach(font => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'style';
-    link.href = font;
-    document.head.appendChild(link);
-  });
-};
-
-preloadResources();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      retry: 2,
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profil" element={<Profil />} />
+            <Route path="/actualites" element={<Actualites />} />
+            <Route path="/admin/*" element={<Admin />}>
+              <Route index element={<AdminDashboard />} />
+            </Route>
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

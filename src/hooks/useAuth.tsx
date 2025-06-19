@@ -1,41 +1,57 @@
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { authManager } from '@/lib/authManager';
+import { supabase } from '@/integrations/supabase/client';
 
-interface Profile {
-  id: string;
-  email: string;
-  full_name: string | null;
-  role: string;
+interface AuthContextType {
+  user: User | null;
+  session: Session | null;
+  loading: boolean;
+  signOut: () => Promise<void>;
 }
 
-export const useAuth = () => {
-  const [state, setState] = useState(() => authManager.getState());
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = authManager.subscribe(setState);
-    return unsubscribe;
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const signOut = useCallback(async () => {
-    try {
-      await authManager.signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-      throw error;
-    }
-  }, []);
+  const signOut = async () => {
+    await supabase.auth.signOut();
+  };
 
-  const isAdmin = useMemo(() => authManager.isAdmin, [state.profile?.role]);
+  return (
+    <AuthContext.Provider value={{ user, session, loading, signOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-  return useMemo(() => ({
-    user: state.user,
-    session: state.session,
-    profile: state.profile,
-    loading: state.loading,
-    signOut,
-    isAdmin,
-    initialized: state.initialized
-  }), [state.user, state.session, state.profile, state.loading, signOut, isAdmin, state.initialized]);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

@@ -22,49 +22,26 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (loading) return; // Prevent multiple submissions
-    
     setLoading(true);
 
     try {
-      // Simple sign in without clearing state first
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
-      if (data.user) {
-        toast({
-          title: "Connexion réussie",
-          description: "Redirection en cours...",
-        });
-        
-        // Simple redirect after successful login
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      }
+      toast({
+        title: "Connexion réussie",
+        description: "Redirection en cours...",
+      });
+      
+      navigate("/");
     } catch (error: any) {
-      console.error('Login error:', error);
-      
-      let errorMessage = "Une erreur est survenue.";
-      
-      if (error.message?.includes('rate limit')) {
-        errorMessage = "Trop de tentatives. Veuillez attendre quelques minutes.";
-      } else if (error.message?.includes('Invalid login credentials')) {
-        errorMessage = "Email ou mot de passe incorrect.";
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
       toast({
         title: "Erreur de connexion",
-        description: errorMessage,
+        description: error.message || "Une erreur est survenue",
         variant: "destructive",
       });
     } finally {
@@ -80,13 +57,6 @@ const Login = () => {
       <div className="flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <img 
-                src="/lovable-uploads/a6746f93-07ad-4ae4-a5ea-79f98c731a2a.png" 
-                alt="FSR Logo" 
-                className="h-16 w-auto"
-              />
-            </div>
             <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
               Connexion
             </CardTitle>
