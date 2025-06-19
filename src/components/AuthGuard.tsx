@@ -2,6 +2,8 @@
 import React from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -11,7 +13,29 @@ interface AuthGuardProps {
 const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAdmin = false }) => {
   const { user, loading } = useAuth();
 
-  if (loading) {
+  // Fetch user profile to get the role
+  const { data: profile, isLoading: profileLoading } = useQuery({
+    queryKey: ['user-profile', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        return null;
+      }
+      
+      return data;
+    },
+    enabled: !!user?.id,
+  });
+
+  if (loading || profileLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center space-y-4">
@@ -26,8 +50,8 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAdmin = false })
     return <Navigate to="/login" replace />;
   }
 
-  // For admin requirement, we'll check the email domain for now
-  if (requireAdmin && !user.email?.includes('@um5.ac.ma')) {
+  // For admin requirement, check the role from the profile
+  if (requireAdmin && profile?.role !== 'admin') {
     return <Navigate to="/" replace />;
   }
 

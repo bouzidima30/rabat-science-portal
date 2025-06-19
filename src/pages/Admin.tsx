@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/hooks/useTheme";
@@ -33,6 +34,7 @@ const Admin = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
+  const { isAdmin, isLoading: roleLoading } = useUserRole();
   const { toast } = useToast();
   const { isDarkMode, toggleTheme } = useTheme();
 
@@ -52,6 +54,40 @@ const Admin = () => {
       });
     }
   };
+
+  // Show loading while checking role
+  if (roleLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <p className="text-gray-600 dark:text-gray-400">Vérification des permissions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect non-admin users
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Accès refusé
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Vous n'avez pas les permissions nécessaires pour accéder à cette section.
+          </p>
+          <Link to="/">
+            <Button>
+              <Home className="h-4 w-4 mr-2" />
+              Retour à l'accueil
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const sidebarItems = [
     { name: "Dashboard", path: "/admin", icon: LayoutDashboard, description: "Vue d'ensemble" },
