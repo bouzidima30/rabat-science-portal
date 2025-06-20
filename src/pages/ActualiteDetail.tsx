@@ -145,9 +145,7 @@ const ActualiteDetail = () => {
           <CardContent>
             <div 
               className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 leading-relaxed"
-              dangerouslySetInnerHTML={{ 
-                __html: formatContent(actualite.content)
-              }}
+              dangerouslySetInnerHTML={{ __html: actualite.contenu }}
             />
             
             {actualite.document_url && (
