@@ -129,7 +129,7 @@ const ModernNavbar = React.memo(() => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-4">
             <img 
-              src="/lovable-uploads/14d8950a-9b26-404a-a40b-7931ec76f547.png" 
+              src="/lovable-uploads/FSR.webp" 
               alt="FSR Logo" 
               className="h-16 w-auto" 
             />
