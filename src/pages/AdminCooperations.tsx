@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +36,7 @@ const AdminCooperations = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCooperation, setSelectedCooperation] = useState<Cooperation | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
@@ -63,14 +65,20 @@ const AdminCooperations = () => {
 
   const fetchCooperations = async () => {
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('cooperations')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching cooperations:', error);
+        throw error;
+      }
+      
       setCooperations(data || []);
     } catch (error: any) {
+      console.error('Fetch cooperations error:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger les coopérations.",
@@ -83,23 +91,42 @@ const AdminCooperations = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    
+    if (!formData.titre.trim()) {
+      toast({
+        title: "Erreur",
+        description: "Le titre est requis.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSaving(true);
 
     try {
+      console.log('Submitting cooperation data:', formData);
+
       const cooperationData = {
-        titre: formData.titre,
-        description: formData.description || null,
+        titre: formData.titre.trim(),
+        description: formData.description.trim() || null,
         type_cooperation: formData.type_cooperation,
-        coordinateur: formData.coordinateur || null,
-        email_coordinateur: formData.email_coordinateur || null,
-        partenaires: formData.partenaires ? formData.partenaires.split(',').map(p => p.trim()) : null,
-        pays: formData.pays ? formData.pays.split(',').map(p => p.trim()) : null,
-        domaine_recherche: formData.domaine_recherche || null,
-        appel_offre: formData.appel_offre || null,
+        coordinateur: formData.coordinateur.trim() || null,
+        email_coordinateur: formData.email_coordinateur.trim() || null,
+        partenaires: formData.partenaires ? 
+          formData.partenaires.split(',').map(p => p.trim()).filter(p => p.length > 0) : 
+          null,
+        pays: formData.pays ? 
+          formData.pays.split(',').map(p => p.trim()).filter(p => p.length > 0) : 
+          null,
+        domaine_recherche: formData.domaine_recherche.trim() || null,
+        appel_offre: formData.appel_offre.trim() || null,
         annee_debut: formData.annee_debut ? parseInt(formData.annee_debut) : null,
         annee_fin: formData.annee_fin ? parseInt(formData.annee_fin) : null,
-        image_url: formData.image_url || null
+        image_url: formData.image_url || null,
+        updated_at: new Date().toISOString()
       };
+
+      console.log('Processed cooperation data:', cooperationData);
 
       if (selectedCooperation) {
         // Update existing cooperation
@@ -108,7 +135,10 @@ const AdminCooperations = () => {
           .update(cooperationData)
           .eq('id', selectedCooperation.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Update error:', error);
+          throw error;
+        }
 
         await logActivity('update_cooperation', `Coopération modifiée: ${formData.titre}`);
 
@@ -120,9 +150,15 @@ const AdminCooperations = () => {
         // Create new cooperation
         const { error } = await supabase
           .from('cooperations')
-          .insert(cooperationData);
+          .insert({
+            ...cooperationData,
+            created_at: new Date().toISOString()
+          });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Insert error:', error);
+          throw error;
+        }
 
         await logActivity('create_cooperation', `Coopération créée: ${formData.titre} (${typeCooperationLabels[formData.type_cooperation as keyof typeof typeCooperationLabels]})`);
 
@@ -134,30 +170,35 @@ const AdminCooperations = () => {
 
       setIsFormOpen(false);
       setSelectedCooperation(null);
-      setFormData({
-        titre: '',
-        description: '',
-        type_cooperation: 'internationale',
-        coordinateur: '',
-        email_coordinateur: '',
-        partenaires: '',
-        pays: '',
-        domaine_recherche: '',
-        appel_offre: '',
-        annee_debut: '',
-        annee_fin: '',
-        image_url: ''
-      });
-      fetchCooperations();
+      resetForm();
+      await fetchCooperations();
     } catch (error: any) {
+      console.error('Save cooperation error:', error);
       toast({
         title: "Erreur",
-        description: "Erreur lors de la sauvegarde de la coopération.",
+        description: error.message || "Erreur lors de la sauvegarde de la coopération.",
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      titre: '',
+      description: '',
+      type_cooperation: 'internationale',
+      coordinateur: '',
+      email_coordinateur: '',
+      partenaires: '',
+      pays: '',
+      domaine_recherche: '',
+      appel_offre: '',
+      annee_debut: '',
+      annee_fin: '',
+      image_url: ''
+    });
   };
 
   const handleDelete = async (id: string) => {
@@ -181,6 +222,7 @@ const AdminCooperations = () => {
 
       fetchCooperations();
     } catch (error: any) {
+      console.error('Delete cooperation error:', error);
       toast({
         title: "Erreur",
         description: "Impossible de supprimer la coopération.",
@@ -208,6 +250,12 @@ const AdminCooperations = () => {
     setIsFormOpen(true);
   };
 
+  const openCreateDialog = () => {
+    setSelectedCooperation(null);
+    resetForm();
+    setIsFormOpen(true);
+  };
+
   const filteredCooperations = cooperations.filter(cooperation =>
     cooperation.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
     cooperation.type_cooperation.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -221,16 +269,16 @@ const AdminCooperations = () => {
 
   if (loading) {
     return (
-      <div className="p-8">
+      <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -248,24 +296,7 @@ const AdminCooperations = () => {
             </div>
           </div>
           <Button
-            onClick={() => {
-              setSelectedCooperation(null);
-              setFormData({
-                titre: '',
-                description: '',
-                type_cooperation: 'internationale',
-                coordinateur: '',
-                email_coordinateur: '',
-                partenaires: '',
-                pays: '',
-                domaine_recherche: '',
-                appel_offre: '',
-                annee_debut: '',
-                annee_fin: '',
-                image_url: ''
-              });
-              setIsFormOpen(true);
-            }}
+            onClick={openCreateDialog}
             className="bg-purple-600 hover:bg-purple-700 shadow-lg"
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -428,7 +459,7 @@ const AdminCooperations = () => {
               </p>
               {!searchQuery && (
                 <Button 
-                  onClick={() => setIsFormOpen(true)}
+                  onClick={openCreateDialog}
                   className="bg-purple-600 hover:bg-purple-700"
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -463,7 +494,7 @@ const AdminCooperations = () => {
             <CooperationImageUpload
               imageUrl={formData.image_url}
               onImageChange={(url) => setFormData({...formData, image_url: url})}
-              disabled={loading}
+              disabled={saving}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -526,8 +557,8 @@ const AdminCooperations = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button type="submit" disabled={loading}>
-                {selectedCooperation ? "Modifier" : "Créer"}
+              <Button type="submit" disabled={saving}>
+                {saving ? "Enregistrement..." : (selectedCooperation ? "Modifier" : "Créer")}
               </Button>
               <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)}>
                 Annuler
