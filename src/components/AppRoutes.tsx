@@ -112,11 +112,11 @@ const AppRoutes = () => {
         <Route path="/formation/:id" element={<FormationDetail />} />
         
         {/* Research Pages */}
-        <Route path="/ecole-doctorale" element={<EcoleDoctorale />} />
-        <Route path="/valorisation-recherche" element={<ValorisationRecherche />} />
+        <Route path="/recherche/ecole-doctorale" element={<EcoleDoctorale />} />
+        <Route path="/recherche/valorisation-recherche" element={<ValorisationRecherche />} />
         <Route path="/recherche/structures" element={<StructuresRecherche />} />
         <Route path="/recherche/domaines" element={<DomainesRecherche />} />
-        <Route path="/plateformes-techniques" element={<PlateformesTechniques />} />
+        <Route path="/recherche/plateformes-techniques" element={<PlateformesTechniques />} />
         
         {/* Space Pages */}
         <Route path="/espace-enseignants" element={<EspaceEnseignants />} />
