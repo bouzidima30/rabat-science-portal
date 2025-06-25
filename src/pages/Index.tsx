@@ -201,7 +201,7 @@ const Index = () => {
             </Card>
           </Link>
           
-          <Link to="/ecole-doctorale">
+          <Link to="/recherche/ecole-doctorale">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="pt-6">
                 <div className="flex items-center">
@@ -279,28 +279,28 @@ const Index = () => {
             title: "Formation Licence",
             description: "Programmes de premier cycle dans toutes les disciplines scientifiques",
             icon: BookOpen,
-            link: "/formation-licence",
+            link: "/formations/formation-licence",
             color: "text-indigo-600 dark:text-indigo-400",
             bgColor: "bg-indigo-100 dark:bg-indigo-900/20"
           }, {
             title: "Formation Master",
             description: "Spécialisations avancées et recherche appliquée",
             icon: GraduationCap,
-            link: "/formation-master",
+            link: "/formations/formation-master",
             color: "text-cyan-600 dark:text-cyan-400",
             bgColor: "bg-cyan-100 dark:bg-cyan-900/20"
           }, {
             title: "Formation Doctorat",
             description: "Recherche de pointe et innovation scientifique",
             icon: Microscope,
-            link: "/formation-doctorat",
+            link: "/formations/formation-doctorat",
             color: "text-pink-600 dark:text-pink-400",
             bgColor: "bg-pink-100 dark:bg-pink-900/20"
           }, {
             title: "Formation Continue",
             description: "Perfectionnement professionnel et mise à jour des compétences",
             icon: Award,
-            link: "/formation-continue",
+            link: "/formations/formation-continue",
             color: "text-amber-600 dark:text-amber-400",
             bgColor: "bg-amber-100 dark:bg-amber-900/20"
           }].map((program, index) => <Link key={index} to={program.link}>
