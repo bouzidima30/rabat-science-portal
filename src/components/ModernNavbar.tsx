@@ -41,12 +41,12 @@ const ModernNavbar = React.memo(() => {
       path: "/presentation",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Mot du Doyen", path: "/mot-doyen" },
-        { name: "Projet de développement", path: "/projet-developpement" },
-        { name: "Historique", path: "/historique" },
-        { name: "Organisation générale", path: "/organisation" },
-        { name: "FSR en chiffres", path: "/fsr-chiffres" },
-        { name: "Représentants de la faculté", path: "/representants" }
+        { name: "Mot du Doyen", path: "/presentation/mot-doyen" },
+        { name: "Projet de développement", path: "/presentation/projet-developpement" },
+        { name: "Historique", path: "/presentation/historique" },
+        { name: "Organisation générale", path: "/presentation/organisation" },
+        { name: "FSR en chiffres", path: "/presentation/fsr-chiffres" },
+        { name: "Représentants de la faculté", path: "/presentation/representants" }
       ]
     },
     {
