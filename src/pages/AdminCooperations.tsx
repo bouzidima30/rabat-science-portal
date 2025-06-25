@@ -55,8 +55,8 @@ const AdminCooperations = () => {
 
   // Corriger les valeurs autorisées pour type_cooperation
   const typeCooperationLabels = {
-    internationale: "Internationale",
-    nationale: "Nationale"
+    internationale: "internationale",
+    nationale: "nationale"
   };
 
   // Valeurs exactes autorisées par la contrainte check
