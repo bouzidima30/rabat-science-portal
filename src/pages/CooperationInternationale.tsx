@@ -11,12 +11,12 @@ import { Link } from "react-router-dom";
 
 const CooperationInternationale = () => {
   const { data: cooperations, isLoading } = useQuery({
-    queryKey: ['cooperations', 'Internationale'],
+    queryKey: ['cooperations', 'internationale'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('cooperations')
         .select('*')
-        .eq('type_cooperation', 'Internationale')
+        .eq('type_cooperation', 'internationale')
         .order('created_at', { ascending: false });
       
       if (error) throw error;
