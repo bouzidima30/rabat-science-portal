@@ -54,11 +54,11 @@ const ModernNavbar = React.memo(() => {
       path: "/formations",
       hasDropdown: true,
       dropdownItems: [
-        { name: "LMD : Mode d'emploi", path: "/lmd-guide" },
-        { name: "Formation licence", path: "/formation-licence" },
-        { name: "Formation master", path: "/formation-master" },
-        { name: "Formation doctorat", path: "/formation-doctorat" },
-        { name: "Formation continue", path: "/formation-continue" }
+        { name: "LMD : Mode d'emploi", path: "/formations/lmd-guide" },
+        { name: "Formation licence", path: "/formations/formation-licence" },
+        { name: "Formation master", path: "/formations/formation-master" },
+        { name: "Formation doctorat", path: "/formations/formation-doctorat" },
+        { name: "Formation continue", path: "/formations/formation-continue" }
       ]
     },
     {
