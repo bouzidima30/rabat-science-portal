@@ -103,12 +103,12 @@ const AppRoutes = () => {
         <Route path="/representants" element={<Representants />} />
         
         {/* Formation Pages */}
-        <Route path="/lmd-guide" element={<LMDGuide />} />
+        <Route path="/formations/lmd-guide" element={<LMDGuide />} />
         <Route path="/formations" element={<Formations />} />
-        <Route path="/formation-licence" element={<FormationLicence />} />
-        <Route path="/formation-master" element={<FormationMaster />} />
-        <Route path="/formation-doctorat" element={<FormationDoctorat />} />
-        <Route path="/formation-continue" element={<FormationContinue />} />
+        <Route path="/formations/formation-licence" element={<FormationLicence />} />
+        <Route path="/formations/formation-master" element={<FormationMaster />} />
+        <Route path="/formations/formation-doctorat" element={<FormationDoctorat />} />
+        <Route path="/formations/formation-continue" element={<FormationContinue />} />
         <Route path="/formation/:id" element={<FormationDetail />} />
         
         {/* Research Pages */}
