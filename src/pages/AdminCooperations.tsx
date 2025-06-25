@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,10 +53,14 @@ const AdminCooperations = () => {
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
 
+  // Corriger les valeurs autorisées pour type_cooperation
   const typeCooperationLabels = {
     internationale: "Internationale",
     nationale: "Nationale"
   };
+
+  // Valeurs exactes autorisées par la contrainte check
+  const VALID_COOPERATION_TYPES = ['internationale', 'nationale'];
 
   useEffect(() => {
     fetchCooperations();
@@ -101,6 +104,16 @@ const AdminCooperations = () => {
       return;
     }
 
+    // Valider le type de coopération
+    if (!VALID_COOPERATION_TYPES.includes(formData.type_cooperation)) {
+      toast({
+        title: "Erreur",
+        description: "Type de coopération invalide. Veuillez sélectionner 'internationale' ou 'nationale'.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -109,7 +122,7 @@ const AdminCooperations = () => {
       const cooperationData = {
         titre: formData.titre.trim(),
         description: formData.description.trim() || null,
-        type_cooperation: formData.type_cooperation,
+        type_cooperation: formData.type_cooperation, // S'assurer que c'est exactement 'internationale' ou 'nationale'
         coordinateur: formData.coordinateur.trim() || null,
         email_coordinateur: formData.email_coordinateur.trim() || null,
         partenaires: formData.partenaires ? 
@@ -188,7 +201,7 @@ const AdminCooperations = () => {
     setFormData({
       titre: '',
       description: '',
-      type_cooperation: 'internationale',
+      type_cooperation: 'internationale', // Valeur par défaut valide
       coordinateur: '',
       email_coordinateur: '',
       partenaires: '',

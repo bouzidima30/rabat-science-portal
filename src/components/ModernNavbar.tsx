@@ -15,6 +15,8 @@ const ModernNavbar = React.memo(() => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setExpandedMobileMenu(null);
+    // Scroll vers le haut lors du changement de page
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -122,17 +124,24 @@ const ModernNavbar = React.memo(() => {
     setHoveredMenu(null);
   }, []);
 
+  // Mémoriser l'image pour éviter le rechargement
+  const fsrLogo = useMemo(() => (
+    <img 
+      src="/lovable-uploads/FSR.webp" 
+      alt="FSR Logo" 
+      className="h-16 w-auto" 
+      loading="eager"
+      decoding="async"
+    />
+  ), []);
+
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-lg border-b-2 border-blue-600 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-4">
-            <img 
-              src="/lovable-uploads/FSR.webp" 
-              alt="FSR Logo" 
-              className="h-16 w-auto" 
-            />
+            {fsrLogo}
           </Link>
 
           {/* Desktop Menu */}
