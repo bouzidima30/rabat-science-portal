@@ -66,11 +66,11 @@ const ModernNavbar = React.memo(() => {
       path: "/recherche",
       hasDropdown: true,
       dropdownItems: [
-        { name: "École doctorale", path: "/ecole-doctorale" },
-        { name: "Valorisation de la recherche", path: "/valorisation-recherche" },
+        { name: "École doctorale", path: "/recherche/ecole-doctorale" },
+        { name: "Valorisation de la recherche", path: "/recherche/valorisation-recherche" },
         { name: "Structures de recherche", path: "/recherche/structures" },
         { name: "Domaines de recherche", path: "/recherche/domaines" },
-        { name: "Plateformes techniques", path: "/plateformes-techniques" }
+        { name: "Plateformes techniques", path: "/recherche/plateformes-techniques" }
       ]
     },
     {
