@@ -95,12 +95,12 @@ const AppRoutes = () => {
         <Route path="/evenement/:id" element={<EvenementDetail />} />
         
         {/* Presentation Pages */}
-        <Route path="/mot-doyen" element={<MotDoyen />} />
-        <Route path="/projet-developpement" element={<ProjetDeveloppement />} />
-        <Route path="/historique" element={<Historique />} />
-        <Route path="/organisation" element={<Organisation />} />
-        <Route path="/fsr-chiffres" element={<FSRChiffres />} />
-        <Route path="/representants" element={<Representants />} />
+        <Route path="/presentation/mot-doyen" element={<MotDoyen />} />
+        <Route path="/presentation/projet-developpement" element={<ProjetDeveloppement />} />
+        <Route path="/presentation/historique" element={<Historique />} />
+        <Route path="/presentation/organisation" element={<Organisation />} />
+        <Route path="/presentation/fsr-chiffres" element={<FSRChiffres />} />
+        <Route path="/presentation/representants" element={<Representants />} />
         
         {/* Formation Pages */}
         <Route path="/formations/lmd-guide" element={<LMDGuide />} />
