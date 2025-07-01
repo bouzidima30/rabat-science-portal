@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useSecurityLogger } from "@/hooks/useSecurityLogger";
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
@@ -17,27 +18,92 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { logAuthenticationEvent, logSuspiciousActivity } = useSecurityLogger();
+
+  // Rate limiting for failed login attempts
+  const isRateLimited = loginAttempts >= 5;
+
+  const cleanupAuthState = () => {
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+        localStorage.removeItem(key);
+      }
+    });
+    Object.keys(sessionStorage || {}).forEach((key) => {
+      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+        sessionStorage.removeItem(key);
+      }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isRateLimited) {
+      toast({
+        title: "Trop de tentatives",
+        description: "Veuillez attendre quelques minutes avant de réessayer",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // Clean up existing auth state
+      cleanupAuthState();
+      
+      // Attempt global sign out first
+      try {
+        await supabase.auth.signOut({ scope: 'global' });
+      } catch (err) {
+        // Continue even if this fails
+      }
+
+      const { error, data } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        setLoginAttempts(prev => prev + 1);
+        
+        // Log failed login attempt
+        logAuthenticationEvent(false, email.trim(), error.message);
+        
+        // Log suspicious activity if too many attempts
+        if (loginAttempts >= 3) {
+          logSuspiciousActivity(
+            'repeated_login_failures', 
+            `Multiple failed login attempts for email: ${email.trim()}`,
+            { attemptCount: loginAttempts + 1, email: email.trim() }
+          );
+        }
+        
+        throw error;
+      }
+
+      // Reset attempts on success
+      setLoginAttempts(0);
+      
+      // Log successful login
+      logAuthenticationEvent(true, email.trim(), 'Successful password login');
 
       toast({
         title: "Connexion réussie",
         description: "Redirection en cours...",
       });
       
-      navigate("/");
+      // Force page reload for clean state
+      if (data.user) {
+        window.location.href = '/';
+      } else {
+        navigate("/");
+      }
     } catch (error: any) {
       toast({
         title: "Erreur de connexion",

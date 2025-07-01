@@ -12,28 +12,37 @@ export type Database = {
       activity_logs: {
         Row: {
           action: string
+          category: string | null
           created_at: string
           details: string | null
           id: string
           ip_address: unknown | null
+          metadata: Json | null
+          severity: string | null
           user_agent: string | null
           user_id: string
         }
         Insert: {
           action: string
+          category?: string | null
           created_at?: string
           details?: string | null
           id?: string
           ip_address?: unknown | null
+          metadata?: Json | null
+          severity?: string | null
           user_agent?: string | null
           user_id: string
         }
         Update: {
           action?: string
+          category?: string | null
           created_at?: string
           details?: string | null
           id?: string
           ip_address?: unknown | null
+          metadata?: Json | null
+          severity?: string | null
           user_agent?: string | null
           user_id?: string
         }
@@ -358,6 +367,48 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "file_manager"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      file_quarantine: {
+        Row: {
+          created_by: string | null
+          file_id: string | null
+          id: string
+          quarantine_reason: string
+          released_at: string | null
+          scanned_at: string | null
+        }
+        Insert: {
+          created_by?: string | null
+          file_id?: string | null
+          id?: string
+          quarantine_reason: string
+          released_at?: string | null
+          scanned_at?: string | null
+        }
+        Update: {
+          created_by?: string | null
+          file_id?: string | null
+          id?: string
+          quarantine_reason?: string
+          released_at?: string | null
+          scanned_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "file_quarantine_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "file_quarantine_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: true
+            referencedRelation: "files"
             referencedColumns: ["id"]
           },
         ]
@@ -805,7 +856,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_content_owner: {
+        Args: { content_author_id: string }
+        Returns: boolean
+      }
+      log_security_event: {
+        Args: {
+          p_user_id: string
+          p_action: string
+          p_severity?: string
+          p_category?: string
+          p_details?: string
+          p_metadata?: Json
+        }
+        Returns: string
+      }
     }
     Enums: {
       news_category:
