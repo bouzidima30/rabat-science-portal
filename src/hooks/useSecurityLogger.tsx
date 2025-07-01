@@ -1,7 +1,6 @@
 
 import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
 
 export interface SecurityLogEntry {
   action: string;
@@ -13,14 +12,13 @@ export interface SecurityLogEntry {
   metadata?: Record<string, any>;
 }
 
-export const useSecurityLogger = () => {
-  const { user } = useAuth();
+export const useSecurityLogger = (userId?: string | null) => {
 
   const logSecurityEvent = useCallback(async (entry: SecurityLogEntry) => {
     try {
       // Enrichissement automatique des logs
       const enrichedEntry = {
-        user_id: user?.id || null,
+        user_id: userId || null,
         action: entry.action,
         details: JSON.stringify({
           severity: entry.severity,
@@ -56,7 +54,7 @@ export const useSecurityLogger = () => {
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement du log de sécurité:', error);
     }
-  }, [user]);
+  }, [userId]);
 
   const triggerSecurityAlert = async (entry: any) => {
     try {

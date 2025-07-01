@@ -1,8 +1,6 @@
-
 import { useState, useEffect, createContext, useContext } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useSecurityLogger } from './useSecurityLogger';
 
 interface AuthContextType {
   user: User | null;
@@ -17,7 +15,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const { logAuthenticationEvent, logSecurityEvent } = useSecurityLogger();
 
   useEffect(() => {
     console.log('AuthProvider: Setting up auth listener');
@@ -30,26 +27,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-      
-      // Log authentication events for security monitoring
-      if (event === 'SIGNED_IN' && session?.user) {
-        setTimeout(() => {
-          logAuthenticationEvent(true, session.user.email, 'Successful login');
-        }, 0);
-      } else if (event === 'SIGNED_OUT') {
-        setTimeout(() => {
-          logAuthenticationEvent(true, user?.email, 'User logged out');
-        }, 0);
-      } else if (event === 'TOKEN_REFRESHED') {
-        setTimeout(() => {
-          logSecurityEvent({
-            action: 'token_refreshed',
-            severity: 'info',
-            category: 'authentication',
-            details: 'User session token refreshed successfully'
-          });
-        }, 0);
-      }
     });
 
     // Then get initial session

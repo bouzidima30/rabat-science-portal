@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useSecurityLogger } from "@/hooks/useSecurityLogger";
+
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
@@ -21,8 +21,6 @@ const Login = () => {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { logAuthenticationEvent, logSuspiciousActivity } = useSecurityLogger();
-
   // Rate limiting for failed login attempts
   const isRateLimited = loginAttempts >= 5;
 
@@ -71,27 +69,11 @@ const Login = () => {
 
       if (error) {
         setLoginAttempts(prev => prev + 1);
-        
-        // Log failed login attempt
-        logAuthenticationEvent(false, email.trim(), error.message);
-        
-        // Log suspicious activity if too many attempts
-        if (loginAttempts >= 3) {
-          logSuspiciousActivity(
-            'repeated_login_failures', 
-            `Multiple failed login attempts for email: ${email.trim()}`,
-            { attemptCount: loginAttempts + 1, email: email.trim() }
-          );
-        }
-        
         throw error;
       }
 
       // Reset attempts on success
       setLoginAttempts(0);
-      
-      // Log successful login
-      logAuthenticationEvent(true, email.trim(), 'Successful password login');
 
       toast({
         title: "Connexion réussie",

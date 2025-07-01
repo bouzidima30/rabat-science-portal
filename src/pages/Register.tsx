@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useSecurityLogger } from "@/hooks/useSecurityLogger";
+
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
@@ -25,7 +25,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { logSecurityEvent } = useSecurityLogger();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
