@@ -14,6 +14,7 @@ import QuillEditor from "@/components/QuillEditor";
 import ContentStatusBadge from "@/components/ContentStatusBadge";
 import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
+import { SafeHTMLRenderer } from "@/utils/contentSanitizer";
 
 const AdminPages = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -451,9 +452,10 @@ const AdminPages = () => {
                         })}
                       </div>
                     </div>
-                    <div className="text-gray-700 dark:text-gray-300 line-clamp-3" dangerouslySetInnerHTML={{
-                      __html: page.contenu.substring(0, 200) + '...'
-                    }} />
+                    <SafeHTMLRenderer 
+                      content={page.contenu.substring(0, 200) + '...'}
+                      className="text-gray-700 dark:text-gray-300 line-clamp-3"
+                    />
                   </div>
                 </div>
                 <div className="flex gap-2 ml-4">

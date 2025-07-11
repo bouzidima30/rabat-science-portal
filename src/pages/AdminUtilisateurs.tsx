@@ -1,12 +1,10 @@
 
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { useAdminSecurity } from "@/hooks/useAdminSecurity";
 import { 
   Users, 
   Search, 
@@ -30,47 +28,32 @@ interface Profile {
 
 const AdminUtilisateurs = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const { 
+    users, 
+    isLoading, 
+    updateUserRoleMutation, 
+    logSuspiciousActivity 
+  } = useAdminSecurity();
 
-  const { data: users = [], isLoading } = useQuery({
-    queryKey: ['admin-users'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return data as Profile[];
-    }
-  });
+  // Enhanced role update with security logging
+  const handleRoleUpdate = async (userId: string, newRole: string, userEmail: string) => {
+    try {
+      // Log the attempt
+      await logSuspiciousActivity(
+        'admin_role_change',
+        `Attempting to change role for user ${userEmail} to ${newRole}`,
+        { target_user_id: userId, new_role: newRole }
+      );
 
-  const updateUserRoleMutation = useMutation({
-    mutationFn: async ({ userId, newRole }: { userId: string; newRole: string }) => {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('id', userId);
-      
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-      toast({
-        title: "Rôle mis à jour",
-        description: "Le rôle de l'utilisateur a été modifié avec succès",
+      updateUserRoleMutation.mutate({ 
+        userId, 
+        newRole,
+        reason: 'Admin role change via user management interface'
       });
-    },
-    onError: (error) => {
-      console.error('Error updating user role:', error);
-      toast({
-        title: "Erreur",
-        description: "Erreur lors de la mise à jour du rôle",
-        variant: "destructive",
-      });
+    } catch (error) {
+      console.error('Failed to update user role:', error);
     }
-  });
+  };
 
   const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -226,7 +209,7 @@ const AdminUtilisateurs = () => {
                       className={`${getRoleColor(user.role)} flex items-center gap-1 cursor-pointer px-3 py-1`}
                       onClick={() => {
                         const newRole = user.role === 'admin' ? 'user' : 'admin';
-                        updateUserRoleMutation.mutate({ userId: user.id, newRole });
+                        handleRoleUpdate(user.id, newRole, user.email);
                       }}
                     >
                       {getRoleIcon(user.role)}
@@ -238,7 +221,7 @@ const AdminUtilisateurs = () => {
                       size="sm"
                       onClick={() => {
                         const newRole = user.role === 'admin' ? 'user' : 'admin';
-                        updateUserRoleMutation.mutate({ userId: user.id, newRole });
+                        handleRoleUpdate(user.id, newRole, user.email);
                       }}
                       disabled={updateUserRoleMutation.isPending}
                       className="h-10"

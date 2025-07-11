@@ -47,6 +47,18 @@ const Register = () => {
         throw new Error("Le mot de passe doit contenir au moins 8 caractères");
       }
 
+      // Clean up auth state before signup
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+          localStorage.removeItem(key);
+        }
+      });
+
+      // Enhanced password validation
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+        throw new Error("Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre");
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email: formData.email.trim(),
         password: formData.password,

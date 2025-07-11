@@ -12,6 +12,7 @@ import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { formatContent } from "@/utils/sanitize";
+import { SafeHTMLRenderer } from "@/utils/contentSanitizer";
 
 interface News {
   id: string;
@@ -161,11 +162,9 @@ const Actualites = () => {
                     <CardTitle className="text-xl mb-2">{item.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div 
+                    <SafeHTMLRenderer 
+                      content={formatContent(item.excerpt || item.content.substring(0, 300) + "...")}
                       className="prose prose-sm max-w-none text-gray-600 dark:text-gray-300 mb-4"
-                      dangerouslySetInnerHTML={{ 
-                        __html: formatContent(item.excerpt || item.content.substring(0, 300) + "...") 
-                      }}
                     />
                     
                     <div className="flex flex-wrap items-center gap-4">

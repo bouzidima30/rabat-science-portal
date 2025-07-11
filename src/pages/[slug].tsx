@@ -10,6 +10,7 @@ import { ArrowLeft, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { SafeHTMLRenderer } from "@/utils/contentSanitizer";
 
 const DynamicPage = () => {
   const { slug } = useParams();
@@ -100,9 +101,9 @@ const DynamicPage = () => {
               {page.titre}
             </h1>
             
-            <div 
+            <SafeHTMLRenderer 
+              content={page.contenu}
               className="prose dark:prose-invert max-w-none prose-lg"
-              dangerouslySetInnerHTML={{ __html: page.contenu }}
             />
             
             {page.fichiers && page.fichiers.length > 0 && (

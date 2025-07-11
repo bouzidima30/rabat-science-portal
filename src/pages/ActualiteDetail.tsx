@@ -10,6 +10,7 @@ import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import type { News } from "@/types/news";
 import { sanitizeHtml, formatContent } from "@/utils/sanitize";
+import { SafeHTMLRenderer } from "@/utils/contentSanitizer";
 
 const ActualiteDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -143,9 +144,9 @@ const ActualiteDetail = () => {
           </CardHeader>
           
           <CardContent>
-            <div 
+            <SafeHTMLRenderer 
+              content={actualite.content}
               className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: actualite.content }}
             />
             
             {actualite.document_url && (
