@@ -25,21 +25,23 @@ const QuillEditor = ({ value, onChange, placeholder = "Écrivez votre contenu...
 
   const modules = {
     toolbar: [
-      [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-      [{size: []}],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, 
-       {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image', 'video'],
+      [{ 'header': '1'}, {'header': '2'}],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      ['link'],
       ['clean']
     ],
+    clipboard: {
+      // Strip HTML when pasting
+      matchVisual: false
+    }
   };
 
   const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'list', 'bullet',
+    'link'
   ];
 
   if (!ReactQuill.current) {

@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useSecurityMonitoring } from "@/hooks/useSecurityMonitoring";
 
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
@@ -21,6 +22,7 @@ const Login = () => {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { logSecurityEvent } = useSecurityMonitoring();
   // Rate limiting for failed login attempts
   const isRateLimited = loginAttempts >= 5;
 
@@ -69,6 +71,16 @@ const Login = () => {
 
       if (error) {
         setLoginAttempts(prev => prev + 1);
+        
+        // Log security event for failed login
+        await logSecurityEvent({
+          action: 'login_failed',
+          severity: loginAttempts >= 3 ? 'medium' : 'low',
+          category: 'authentication',
+          details: `Failed login attempt for email: ${email}`,
+          metadata: { error: error.message, attemptNumber: loginAttempts + 1 }
+        });
+        
         throw error;
       }
 

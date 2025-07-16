@@ -24,14 +24,28 @@ export const useSecureAuth = () => {
   };
 
   const validatePassword = (password: string): { isValid: boolean; message?: string } => {
-    if (password.length < 8) {
-      return { isValid: false, message: "Le mot de passe doit contenir au moins 8 caractères" };
+    if (password.length < 12) {
+      return { isValid: false, message: "Le mot de passe doit contenir au moins 12 caractères" };
     }
     
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(password)) {
       return { 
         isValid: false, 
-        message: "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre" 
+        message: "Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractère spécial" 
+      };
+    }
+    
+    // Check for common weak patterns
+    const weakPatterns = [
+      /(.)\1{2,}/, // Repeated characters
+      /123|abc|qwe|password/i, // Common sequences
+      /^\d+$/, // Only numbers
+    ];
+    
+    if (weakPatterns.some(pattern => pattern.test(password))) {
+      return { 
+        isValid: false, 
+        message: "Le mot de passe contient des motifs faibles. Utilisez une combinaison plus complexe." 
       };
     }
     
