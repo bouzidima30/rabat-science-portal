@@ -7,6 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Shield, AlertTriangle, Eye, Activity, Users, Lock } from 'lucide-react';
 import { useSecurityLogger } from '@/hooks/useSecurityLogger';
+import { 
+  TIME_FILTER_OPTIONS, 
+  SEVERITY_COLORS, 
+  CATEGORY_ICON_MAP, 
+  SECURITY_DASHBOARD_CONFIG,
+  METRIC_LABELS,
+  SECURITY_EVENT_ACTIONS
+} from '@/data/securityDashboardData';
 
 interface SecurityEvent {
   id: string;
@@ -27,7 +35,8 @@ const SecurityDashboard = () => {
   const { data: events = [], isLoading } = useQuery({
     queryKey: ['security-events', timeFilter],
     queryFn: async () => {
-      const hoursBack = timeFilter === '24h' ? 24 : timeFilter === '7d' ? 168 : 720;
+      const filterOption = TIME_FILTER_OPTIONS.find(option => option.value === timeFilter);
+      const hoursBack = filterOption?.hours || 24;
       const startTime = new Date();
       startTime.setHours(startTime.getHours() - hoursBack);
 
@@ -45,12 +54,12 @@ const SecurityDashboard = () => {
         `)
         .gte('created_at', startTime.toISOString())
         .order('created_at', { ascending: false })
-        .limit(100);
+        .limit(SECURITY_DASHBOARD_CONFIG.eventLimit);
 
       if (error) throw error;
       return data as SecurityEvent[];
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: SECURITY_DASHBOARD_CONFIG.refreshInterval,
   });
 
   // Security metrics
@@ -58,29 +67,25 @@ const SecurityDashboard = () => {
     totalEvents: events.length,
     criticalEvents: events.filter(e => e.severity === 'critical').length,
     highSeverityEvents: events.filter(e => e.severity === 'high').length,
-    authFailures: events.filter(e => e.action.includes('login_failure')).length,
-    suspiciousActivity: events.filter(e => e.action === 'suspicious_activity').length,
+    authFailures: events.filter(e => e.action.includes(SECURITY_EVENT_ACTIONS.LOGIN_FAILURE)).length,
+    suspiciousActivity: events.filter(e => e.action === SECURITY_EVENT_ACTIONS.SUSPICIOUS_ACTIVITY).length,
     uniqueUsers: new Set(events.map(e => e.user_id)).size,
   };
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-blue-500';
-      default: return 'bg-gray-500';
-    }
-  };
+  const getSeverityColor = (severity: string) => 
+    SEVERITY_COLORS[severity] || SEVERITY_COLORS.default;
 
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'authentication': return <Lock className="h-4 w-4" />;
-      case 'authorization': return <Shield className="h-4 w-4" />;
-      case 'data_access': return <Eye className="h-4 w-4" />;
-      case 'system': return <Activity className="h-4 w-4" />;
-      case 'network': return <Activity className="h-4 w-4" />;
-      default: return <Users className="h-4 w-4" />;
+    const iconName = CATEGORY_ICON_MAP[category as keyof typeof CATEGORY_ICON_MAP] || CATEGORY_ICON_MAP.default;
+    const iconProps = { className: "h-4 w-4" };
+    
+    switch (iconName) {
+      case 'Lock': return <Lock {...iconProps} />;
+      case 'Shield': return <Shield {...iconProps} />;
+      case 'Eye': return <Eye {...iconProps} />;
+      case 'Activity': return <Activity {...iconProps} />;
+      case 'Users': return <Users {...iconProps} />;
+      default: return <Users {...iconProps} />;
     }
   };
 
@@ -96,7 +101,7 @@ const SecurityDashboard = () => {
   useEffect(() => {
     // Log security dashboard access
     logSecurityEvent({
-      action: 'security_dashboard_accessed',
+      action: SECURITY_EVENT_ACTIONS.DASHBOARD_ACCESS,
       severity: 'info',
       category: 'system',
       details: 'Security dashboard was accessed by admin'
@@ -116,14 +121,14 @@ const SecurityDashboard = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          {['24h', '7d', '30d'].map((filter) => (
+          {TIME_FILTER_OPTIONS.map((filter) => (
             <Button
-              key={filter}
-              variant={timeFilter === filter ? 'default' : 'outline'}
+              key={filter.value}
+              variant={timeFilter === filter.value ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setTimeFilter(filter)}
+              onClick={() => setTimeFilter(filter.value)}
             >
-              {filter}
+              {filter.label}
             </Button>
           ))}
         </div>
@@ -147,7 +152,7 @@ const SecurityDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  Total Événements
+                  {METRIC_LABELS.totalEvents}
                 </p>
                 <p className="text-2xl font-bold">{metrics.totalEvents}</p>
               </div>
@@ -161,7 +166,7 @@ const SecurityDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  Événements Critiques
+                  {METRIC_LABELS.criticalEvents}
                 </p>
                 <p className="text-2xl font-bold text-red-600">{metrics.criticalEvents}</p>
               </div>
@@ -175,7 +180,7 @@ const SecurityDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  Haute Sévérité
+                  {METRIC_LABELS.highSeverityEvents}
                 </p>
                 <p className="text-2xl font-bold text-orange-600">{metrics.highSeverityEvents}</p>
               </div>
@@ -189,7 +194,7 @@ const SecurityDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  Échecs Connexion
+                  {METRIC_LABELS.authFailures}
                 </p>
                 <p className="text-2xl font-bold text-yellow-600">{metrics.authFailures}</p>
               </div>
@@ -203,7 +208,7 @@ const SecurityDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  Activité Suspecte
+                  {METRIC_LABELS.suspiciousActivity}
                 </p>
                 <p className="text-2xl font-bold text-purple-600">{metrics.suspiciousActivity}</p>
               </div>
@@ -217,7 +222,7 @@ const SecurityDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  Utilisateurs Uniques
+                  {METRIC_LABELS.uniqueUsers}
                 </p>
                 <p className="text-2xl font-bold">{metrics.uniqueUsers}</p>
               </div>
