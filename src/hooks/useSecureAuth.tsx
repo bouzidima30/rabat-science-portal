@@ -24,8 +24,8 @@ export const useSecureAuth = () => {
   };
 
   const validatePassword = (password: string): { isValid: boolean; message?: string } => {
-    if (password.length < 12) {
-      return { isValid: false, message: "Le mot de passe doit contenir au moins 12 caractères" };
+    if (password.length < 16) {
+      return { isValid: false, message: "Le mot de passe doit contenir au moins 16 caractères" };
     }
     
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(password)) {

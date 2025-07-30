@@ -9,14 +9,20 @@ export const SECURITY_HEADERS = {
     "connect-src 'self' https://swxpidinkniuvtusjtrh.supabase.co wss://swxpidinkniuvtusjtrh.supabase.co; " +
     "frame-ancestors 'none'; " +
     "base-uri 'self'; " +
-    "form-action 'self';",
+    "form-action 'self'; " +
+    "upgrade-insecure-requests; " +
+    "block-all-mixed-content;",
   
   'X-Frame-Options': 'DENY',
   'X-Content-Type-Options': 'nosniff',
   'X-XSS-Protection': '1; mode=block',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'
+  'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), autoplay=()',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'Expect-CT': 'max-age=86400, enforce',
+  'Cross-Origin-Embedder-Policy': 'require-corp',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Resource-Policy': 'same-origin'
 };
 
 // Apply security headers to responses
