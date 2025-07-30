@@ -1,25 +1,38 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect, useMemo, memo, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
+import { useOptimizedQuery } from "@/hooks/useOptimizedQuery";
+import { usePrefetchQueries } from "@/hooks/usePrefetchQueries";
+import { supabase } from "@/integrations/supabase/client";
+// Memoized components for performance
+const OptimizedCard = memo(Card);
+const OptimizedButton = memo(Button);
+
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+  
+  // Prefetch related data
+  const { prefetchNews, prefetchEvents, prefetchFormations } = usePrefetchQueries();
+  
+  useEffect(() => {
+    // Prefetch on mount for faster navigation
+    prefetchNews();
+    prefetchEvents();
+    prefetchFormations();
+  }, [prefetchNews, prefetchEvents, prefetchFormations]);
 
-  // Fetch latest news with category filter
-  const {
-    data: news = []
-  } = useQuery({
+  // Optimized news query with better caching
+  const { data: news = [] } = useOptimizedQuery({
     queryKey: ['latest-news', selectedCategory],
     queryFn: async () => {
       let query = supabase.from('news').select('*').eq('published', true).order('created_at', {
@@ -28,79 +41,78 @@ const Index = () => {
       if (selectedCategory !== 'all') {
         query = query.eq('category', selectedCategory as NewsCategory);
       }
-      const {
-        data,
-        error
-      } = await query.limit(3);
+      const { data, error } = await query.limit(3);
       if (error) throw error;
       return data || [];
-    }
+    },
+    staleTimeMinutes: 5,
+    cacheTimeMinutes: 15,
   });
 
-  // Fetch upcoming events
-  const {
-    data: events = []
-  } = useQuery({
+  // Optimized events query
+  const { data: events = [] } = useOptimizedQuery({
     queryKey: ['upcoming-events'],
     queryFn: async () => {
       const today = new Date().toISOString().split('T')[0];
-      const {
-        data,
-        error
-      } = await supabase.from('events').select('*').gte('date_debut', today).order('date_debut', {
+      const { data, error } = await supabase.from('events').select('*').gte('date_debut', today).order('date_debut', {
         ascending: true
       }).limit(3);
       if (error) throw error;
       return data || [];
-    }
+    },
+    staleTimeMinutes: 10,
+    cacheTimeMinutes: 20,
   });
-  const newsCategories = [{
-    id: 'all',
-    label: 'Toutes'
-  }, {
-    id: 'reunion_travail',
-    label: 'Réunion de travail'
-  }, {
-    id: 'nouvelles_informations',
-    label: 'Nouvelles informations'
-  }, {
-    id: 'activites_parauniversitaire',
-    label: 'Activités parauniversitaire'
-  }, {
-    id: 'avis_etudiants',
-    label: 'Avis étudiants'
-  }, {
-    id: 'avis_enseignants',
-    label: 'Avis enseignants'
-  }, {
-    id: 'evenements_scientifique',
-    label: 'Événements scientifique'
-  }];
-  const carouselHighlights = [{
-    title: "Excellence Académique",
-    description: "Plus de 50 formations d'excellence de la licence au doctorat",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=600&fit=crop",
-    link: "/formations"
-  }, {
-    title: "Recherche de Pointe",
-    description: "12 laboratoires de recherche et innovation scientifique",
-    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=600&fit=crop",
-    link: "/recherche"
-  }, {
-    title: "Partenariats Internationaux",
-    description: "Coopération avec les meilleures universités mondiales",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=600&fit=crop",
-    link: "/cooperation"
-  }];
-  useEffect(() => {
-    if (!api) {
-      return;
+  // Memoized static data
+  const newsCategories = useMemo(() => [
+    { id: 'all', label: 'Toutes' },
+    { id: 'reunion_travail', label: 'Réunion de travail' },
+    { id: 'nouvelles_informations', label: 'Nouvelles informations' },
+    { id: 'activites_parauniversitaire', label: 'Activités parauniversitaire' },
+    { id: 'avis_etudiants', label: 'Avis étudiants' },
+    { id: 'avis_enseignants', label: 'Avis enseignants' },
+    { id: 'evenements_scientifique', label: 'Événements scientifique' }
+  ], []);
+  
+  const carouselHighlights = useMemo(() => [
+    {
+      title: "Excellence Académique",
+      description: "Plus de 50 formations d'excellence de la licence au doctorat",
+      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=600&fit=crop",
+      link: "/formations"
+    },
+    {
+      title: "Recherche de Pointe",
+      description: "12 laboratoires de recherche et innovation scientifique",
+      image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=600&fit=crop",
+      link: "/recherche"
+    },
+    {
+      title: "Partenariats Internationaux",
+      description: "Coopération avec les meilleures universités mondiales",
+      image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=600&fit=crop",
+      link: "/cooperation"
     }
+  ], []);
+
+  // Optimized callback functions
+  const handleCategoryChange = useCallback((categoryId: string) => {
+    setSelectedCategory(categoryId);
+  }, []);
+
+  useEffect(() => {
+    if (!api) return;
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
-    api.on("select", () => {
+    
+    const handleSelect = () => {
       setCurrent(api.selectedScrollSnap() + 1);
-    });
+    };
+    
+    api.on("select", handleSelect);
+    return () => {
+      api.off("select", handleSelect);
+    };
   }, [api]);
   return <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
@@ -331,7 +343,7 @@ const Index = () => {
 
           {/* News Filter */}
           <div className="flex flex-wrap gap-2 mb-8 justify-center">
-            {newsCategories.map(category => <Button key={category.id} variant={selectedCategory === category.id ? "default" : "outline"} size="sm" onClick={() => setSelectedCategory(category.id)} className={selectedCategory === category.id ? 'bg-[#006be5] hover:bg-[#005bb5]' : ''}>
+            {newsCategories.map(category => <Button key={category.id} variant={selectedCategory === category.id ? "default" : "outline"} size="sm" onClick={() => handleCategoryChange(category.id)} className={selectedCategory === category.id ? 'bg-[#006be5] hover:bg-[#005bb5]' : ''}>
                 {category.label}
               </Button>)}
           </div>

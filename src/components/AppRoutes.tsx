@@ -1,162 +1,103 @@
 
 import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
-import Index from "../pages/Index";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Admin from "../pages/Admin";
-import AdminDashboard from "../pages/AdminDashboard";
-import AdminActualites from "../pages/AdminActualites";
-import AdminEvenements from "../pages/AdminEvenements";
-import AdminUtilisateurs from "../pages/AdminUtilisateurs";
-import AdminFormations from "../pages/AdminFormations";
-import AdminCooperations from "../pages/AdminCooperations";
-import AdminPages from "../pages/AdminPages";
-import AdminFichiers from "../pages/AdminFichiers";
-import AdminUploadFiles from "../pages/AdminUploadFiles";
-import AdminHistorique from "../pages/AdminHistorique";
-import Actualites from "../pages/Actualites";
-import ActualiteDetail from "../pages/ActualiteDetail";
-import Evenements from "../pages/Evenements";
-import EvenementDetail from "../pages/EvenementDetail";
-import MotDoyen from "../pages/MotDoyen";
-import ProjetDeveloppement from "../pages/ProjetDeveloppement";
-import Historique from "../pages/Historique";
-import Organisation from "../pages/Organisation";
-import FSRChiffres from "../pages/FSRChiffres";
-import Representants from "../pages/Representants";
-import LMDGuide from "../pages/LMDGuide";
-import Formations from "../pages/Formations";
-import FormationLicence from "../pages/FormationLicence";
-import FormationMaster from "../pages/FormationMaster";
-import FormationDoctorat from "../pages/FormationDoctorat";
-import FormationContinue from "../pages/FormationContinue";
-import FormationDetail from "../pages/FormationDetail";
-import EcoleDoctorale from "../pages/EcoleDoctorale";
-import ValorisationRecherche from "../pages/ValorisationRecherche";
-import StructuresRecherche from "../pages/StructuresRecherche";
-import DomainesRecherche from "../pages/DomainesRecherche";
-import PlateformesTechniques from "../pages/PlateformesTechniques";
-import EspaceEnseignants from "../pages/EspaceEnseignants";
-import EspaceEtudiants from "../pages/EspaceEtudiants";
-import CooperationNationale from "../pages/CooperationNationale";
-import CooperationInternationale from "../pages/CooperationInternationale";
-import CooperationDetail from "../pages/CooperationDetail";
-import Contact from "../pages/Contact";
-import PlanAcces from "../pages/PlanAcces";
-import CeDoc from "../pages/CeDoc";
-import Bibliotheque from "../pages/Bibliotheque";
-import ServicesBibliotheque from "../pages/ServicesBibliotheque";
-import RessourcesElectroniques from "../pages/RessourcesElectroniques";
-import ServiceScolarite from "../pages/ServiceScolarite";
-import ProceduresNumeriques from "../pages/ProceduresNumeriques";
-import CalendrierEmploiTemps from "../pages/CalendrierEmploiTemps";
-import CoursTdsTps from "../pages/CoursTdsTps";
-import SectionsGroupes from "../pages/SectionsGroupes";
-import PlanningEvaluations from "../pages/PlanningEvaluations";
-import ListesExamens from "../pages/ListesExamens";
-import Resultats from "../pages/Resultats";
-import Preselection from "../pages/Preselection";
-import ActivitesParaUniversitaires from "../pages/ActivitesParaUniversitaires";
-import Profil from "../pages/Profil";
-import NotFound from "../pages/NotFound";
-import DynamicPage from "../pages/[slug]";
 import AuthGuard from "./AuthGuard";
-import SecurityTest from "@/pages/SecurityTest";
+import LoadingSuspense from "./LoadingSuspense";
+import * as LazyPages from "./LazyRoutes";
 
 const AppRoutes = () => {
   return (
     <>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profil" element={<AuthGuard><Profil /></AuthGuard>} />
+        <Route path="/" element={<LoadingSuspense><LazyPages.Index /></LoadingSuspense>} />
+        <Route path="/login" element={<LoadingSuspense><LazyPages.Login /></LoadingSuspense>} />
+        <Route path="/register" element={<LoadingSuspense><LazyPages.Register /></LoadingSuspense>} />
+        <Route path="/profil" element={<AuthGuard><LoadingSuspense><LazyPages.Profil /></LoadingSuspense></AuthGuard>} />
         
         {/* Admin Routes */}
-        <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="actualites" element={<AdminActualites />} />
-          <Route path="evenements" element={<AdminEvenements />} />
-          <Route path="utilisateurs" element={<AdminUtilisateurs />} />
-          <Route path="formations" element={<AdminFormations />} />
-          <Route path="cooperations" element={<AdminCooperations />} />
-          <Route path="pages" element={<AdminPages />} />
-          <Route path="fichiers" element={<AdminFichiers />} />
-          <Route path="upload-files" element={<AdminUploadFiles />} />
-          <Route path="historique" element={<AdminHistorique />} />
+        <Route path="/admin" element={<AuthGuard><LoadingSuspense><LazyPages.Admin /></LoadingSuspense></AuthGuard>}>
+          <Route index element={<LoadingSuspense><LazyPages.AdminDashboard /></LoadingSuspense>} />
+          <Route path="actualites" element={<LoadingSuspense><LazyPages.AdminActualites /></LoadingSuspense>} />
+          <Route path="evenements" element={<LoadingSuspense><LazyPages.AdminEvenements /></LoadingSuspense>} />
+          <Route path="utilisateurs" element={<LoadingSuspense><LazyPages.AdminUtilisateurs /></LoadingSuspense>} />
+          <Route path="formations" element={<LoadingSuspense><LazyPages.AdminFormations /></LoadingSuspense>} />
+          <Route path="cooperations" element={<LoadingSuspense><LazyPages.AdminCooperations /></LoadingSuspense>} />
+          <Route path="pages" element={<LoadingSuspense><LazyPages.AdminPages /></LoadingSuspense>} />
+          <Route path="fichiers" element={<LoadingSuspense><LazyPages.AdminFichiers /></LoadingSuspense>} />
+          <Route path="upload-files" element={<LoadingSuspense><LazyPages.AdminUploadFiles /></LoadingSuspense>} />
+          <Route path="historique" element={<LoadingSuspense><LazyPages.AdminHistorique /></LoadingSuspense>} />
         </Route>
 
         {/* Public Pages */}
-        <Route path="/actualites" element={<Actualites />} />
-        <Route path="/actualite/:id" element={<ActualiteDetail />} />
-        <Route path="/evenements" element={<Evenements />} />
-        <Route path="/evenement/:id" element={<EvenementDetail />} />
+        <Route path="/actualites" element={<LoadingSuspense><LazyPages.Actualites /></LoadingSuspense>} />
+        <Route path="/actualite/:id" element={<LoadingSuspense><LazyPages.ActualiteDetail /></LoadingSuspense>} />
+        <Route path="/evenements" element={<LoadingSuspense><LazyPages.Evenements /></LoadingSuspense>} />
+        <Route path="/evenement/:id" element={<LoadingSuspense><LazyPages.EvenementDetail /></LoadingSuspense>} />
         
         {/* Presentation Pages */}
-        <Route path="/presentation/mot-doyen" element={<MotDoyen />} />
-        <Route path="/presentation/projet-developpement" element={<ProjetDeveloppement />} />
-        <Route path="/presentation/historique" element={<Historique />} />
-        <Route path="/presentation/organisation" element={<Organisation />} />
-        <Route path="/presentation/fsr-chiffres" element={<FSRChiffres />} />
-        <Route path="/presentation/representants" element={<Representants />} />
+        <Route path="/presentation/mot-doyen" element={<LoadingSuspense><LazyPages.MotDoyen /></LoadingSuspense>} />
+        <Route path="/presentation/projet-developpement" element={<LoadingSuspense><LazyPages.ProjetDeveloppement /></LoadingSuspense>} />
+        <Route path="/presentation/historique" element={<LoadingSuspense><LazyPages.Historique /></LoadingSuspense>} />
+        <Route path="/presentation/organisation" element={<LoadingSuspense><LazyPages.Organisation /></LoadingSuspense>} />
+        <Route path="/presentation/fsr-chiffres" element={<LoadingSuspense><LazyPages.FSRChiffres /></LoadingSuspense>} />
+        <Route path="/presentation/representants" element={<LoadingSuspense><LazyPages.Representants /></LoadingSuspense>} />
         
         {/* Formation Pages */}
-        <Route path="/formations/lmd-guide" element={<LMDGuide />} />
-        <Route path="/formations" element={<Formations />} />
-        <Route path="/formations/formation-licence" element={<FormationLicence />} />
-        <Route path="/formations/formation-master" element={<FormationMaster />} />
-        <Route path="/formations/formation-doctorat" element={<FormationDoctorat />} />
-        <Route path="/formations/formation-continue" element={<FormationContinue />} />
-        <Route path="/formation/:id" element={<FormationDetail />} />
+        <Route path="/formations/lmd-guide" element={<LoadingSuspense><LazyPages.LMDGuide /></LoadingSuspense>} />
+        <Route path="/formations" element={<LoadingSuspense><LazyPages.Formations /></LoadingSuspense>} />
+        <Route path="/formations/formation-licence" element={<LoadingSuspense><LazyPages.FormationLicence /></LoadingSuspense>} />
+        <Route path="/formations/formation-master" element={<LoadingSuspense><LazyPages.FormationMaster /></LoadingSuspense>} />
+        <Route path="/formations/formation-doctorat" element={<LoadingSuspense><LazyPages.FormationDoctorat /></LoadingSuspense>} />
+        <Route path="/formations/formation-continue" element={<LoadingSuspense><LazyPages.FormationContinue /></LoadingSuspense>} />
+        <Route path="/formation/:id" element={<LoadingSuspense><LazyPages.FormationDetail /></LoadingSuspense>} />
         
         {/* Research Pages */}
-        <Route path="/recherche/ecole-doctorale" element={<EcoleDoctorale />} />
-        <Route path="/recherche/valorisation-recherche" element={<ValorisationRecherche />} />
-        <Route path="/recherche/structures" element={<StructuresRecherche />} />
-        <Route path="/recherche/domaines" element={<DomainesRecherche />} />
-        <Route path="/recherche/plateformes-techniques" element={<PlateformesTechniques />} />
+        <Route path="/recherche/ecole-doctorale" element={<LoadingSuspense><LazyPages.EcoleDoctorale /></LoadingSuspense>} />
+        <Route path="/recherche/valorisation-recherche" element={<LoadingSuspense><LazyPages.ValorisationRecherche /></LoadingSuspense>} />
+        <Route path="/recherche/structures" element={<LoadingSuspense><LazyPages.StructuresRecherche /></LoadingSuspense>} />
+        <Route path="/recherche/domaines" element={<LoadingSuspense><LazyPages.DomainesRecherche /></LoadingSuspense>} />
+        <Route path="/recherche/plateformes-techniques" element={<LoadingSuspense><LazyPages.PlateformesTechniques /></LoadingSuspense>} />
         
         {/* Space Pages */}
-        <Route path="/espace-enseignants" element={<EspaceEnseignants />} />
-        <Route path="/espace-etudiants" element={<EspaceEtudiants />} />
+        <Route path="/espace-enseignants" element={<LoadingSuspense><LazyPages.EspaceEnseignants /></LoadingSuspense>} />
+        <Route path="/espace-etudiants" element={<LoadingSuspense><LazyPages.EspaceEtudiants /></LoadingSuspense>} />
         
         {/* Cooperation Pages */}
-        <Route path="/cooperation-nationale" element={<CooperationNationale />} />
-        <Route path="/cooperation-internationale" element={<CooperationInternationale />} />
-        <Route path="/cooperation/:id" element={<CooperationDetail />} />
+        <Route path="/cooperation-nationale" element={<LoadingSuspense><LazyPages.CooperationNationale /></LoadingSuspense>} />
+        <Route path="/cooperation-internationale" element={<LoadingSuspense><LazyPages.CooperationInternationale /></LoadingSuspense>} />
+        <Route path="/cooperation/:id" element={<LoadingSuspense><LazyPages.CooperationDetail /></LoadingSuspense>} />
         
         {/* Contact & Practical Info */}
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/plan-acces" element={<PlanAcces />} />
+        <Route path="/contact" element={<LoadingSuspense><LazyPages.Contact /></LoadingSuspense>} />
+        <Route path="/plan-acces" element={<LoadingSuspense><LazyPages.PlanAcces /></LoadingSuspense>} />
         
         {/* Library & Services */}
-        <Route path="/cedoc" element={<CeDoc />} />
-        <Route path="/bibliotheque" element={<Bibliotheque />} />
-        <Route path="/services-bibliotheque" element={<ServicesBibliotheque />} />
-        <Route path="/ressources-electroniques" element={<RessourcesElectroniques />} />
+        <Route path="/cedoc" element={<LoadingSuspense><LazyPages.CeDoc /></LoadingSuspense>} />
+        <Route path="/bibliotheque" element={<LoadingSuspense><LazyPages.Bibliotheque /></LoadingSuspense>} />
+        <Route path="/services-bibliotheque" element={<LoadingSuspense><LazyPages.ServicesBibliotheque /></LoadingSuspense>} />
+        <Route path="/ressources-electroniques" element={<LoadingSuspense><LazyPages.RessourcesElectroniques /></LoadingSuspense>} />
         
         {/* Student Services */}
-        <Route path="/service-scolarite" element={<ServiceScolarite />} />
-        <Route path="/procedures-numeriques" element={<ProceduresNumeriques />} />
-        <Route path="/calendrier-emploi-temps" element={<CalendrierEmploiTemps />} />
-        <Route path="/cours-tds-tps" element={<CoursTdsTps />} />
-        <Route path="/sections-groupes" element={<SectionsGroupes />} />
-        <Route path="/planning-evaluations" element={<PlanningEvaluations />} />
-        <Route path="/listes-examens" element={<ListesExamens />} />
-        <Route path="/resultats" element={<Resultats />} />
-        <Route path="/preselection" element={<Preselection />} />
-        <Route path="/activites-parauniversitaire" element={<ActivitesParaUniversitaires />} />
+        <Route path="/service-scolarite" element={<LoadingSuspense><LazyPages.ServiceScolarite /></LoadingSuspense>} />
+        <Route path="/procedures-numeriques" element={<LoadingSuspense><LazyPages.ProceduresNumeriques /></LoadingSuspense>} />
+        <Route path="/calendrier-emploi-temps" element={<LoadingSuspense><LazyPages.CalendrierEmploiTemps /></LoadingSuspense>} />
+        <Route path="/cours-tds-tps" element={<LoadingSuspense><LazyPages.CoursTdsTps /></LoadingSuspense>} />
+        <Route path="/sections-groupes" element={<LoadingSuspense><LazyPages.SectionsGroupes /></LoadingSuspense>} />
+        <Route path="/planning-evaluations" element={<LoadingSuspense><LazyPages.PlanningEvaluations /></LoadingSuspense>} />
+        <Route path="/listes-examens" element={<LoadingSuspense><LazyPages.ListesExamens /></LoadingSuspense>} />
+        <Route path="/resultats" element={<LoadingSuspense><LazyPages.Resultats /></LoadingSuspense>} />
+        <Route path="/preselection" element={<LoadingSuspense><LazyPages.Preselection /></LoadingSuspense>} />
+        <Route path="/activites-parauniversitaire" element={<LoadingSuspense><LazyPages.ActivitesParaUniversitaires /></LoadingSuspense>} />
         
         {/* Dynamic Pages */}
-        <Route path="/:slug" element={<DynamicPage />} />
+        <Route path="/:slug" element={<LoadingSuspense><LazyPages.DynamicPage /></LoadingSuspense>} />
         
         {/* 404 */}
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<LoadingSuspense><LazyPages.NotFound /></LoadingSuspense>} />
         
         {/* Security Test */}
-        <Route path="/security-test" element={<SecurityTest />} />
+        <Route path="/security-test" element={<LoadingSuspense><LazyPages.SecurityTest /></LoadingSuspense>} />
       </Routes>
     </>
   );
