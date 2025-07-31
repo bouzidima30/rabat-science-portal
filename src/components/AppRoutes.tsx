@@ -1,5 +1,6 @@
 
 import { Routes, Route } from "react-router-dom";
+import { Suspense } from "react";
 import ScrollToTop from "./ScrollToTop";
 import AuthGuard from "./AuthGuard";
 import * as LazyPages from "./LazyRoutes";
@@ -8,7 +9,8 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollToTop />
-      <Routes>
+      <Suspense fallback={null}>
+        <Routes>
         <Route path="/" element={<LazyPages.Index />} />
         <Route path="/login" element={<LazyPages.Login />} />
         <Route path="/register" element={<LazyPages.Register />} />
@@ -97,7 +99,8 @@ const AppRoutes = () => {
         
         {/* Security Test */}
         <Route path="/security-test" element={<LazyPages.SecurityTest />} />
-      </Routes>
+        </Routes>
+      </Suspense>
     </>
   );
 };
