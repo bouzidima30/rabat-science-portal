@@ -213,6 +213,34 @@ const Profil = () => {
                 <CardContent className="p-6">
                   <form onSubmit={handleUpdatePassword} className="space-y-6">
                     <div className="space-y-2">
+                      <Label htmlFor="current_password">Mot de passe actuel</Label>
+                      <div className="relative">
+                        <Input
+                          id="current_password"
+                          type={showCurrentPassword ? "text" : "password"}
+                          value={currentPassword}
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                          placeholder="Entrez votre mot de passe actuel"
+                          className="h-12 pr-10"
+                          required
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-12 px-3 py-2 hover:bg-transparent"
+                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                        >
+                          {showCurrentPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
                       <Label htmlFor="new_password">Nouveau mot de passe</Label>
                       <div className="relative">
                         <Input
@@ -273,7 +301,7 @@ const Profil = () => {
 
                     <Button 
                       type="submit" 
-                      disabled={isUpdatingPassword || !newPassword || !confirmPassword}
+                      disabled={isUpdatingPassword || !currentPassword || !newPassword || !confirmPassword}
                       className="w-full h-12 bg-orange-600 hover:bg-orange-700"
                     >
                       {isUpdatingPassword ? (
