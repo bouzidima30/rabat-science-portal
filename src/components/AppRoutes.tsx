@@ -5,20 +5,11 @@ import ScrollToTop from "./ScrollToTop";
 import AuthGuard from "./AuthGuard";
 import * as LazyPages from "./LazyRoutes";
 
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-    <div className="flex flex-col items-center space-y-4">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
-      <p className="text-gray-600 dark:text-gray-400">Chargement...</p>
-    </div>
-  </div>
-);
-
 const AppRoutes = () => {
   return (
     <>
       <ScrollToTop />
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense fallback={<div />}>
         <Routes>
         <Route path="/" element={<LazyPages.Index />} />
         <Route path="/login" element={<LazyPages.Login />} />
