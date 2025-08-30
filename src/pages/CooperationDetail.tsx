@@ -2,6 +2,8 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { SecurityNotice } from "@/components/SecurityNotice";
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
@@ -12,6 +14,7 @@ import { Link } from "react-router-dom";
 
 const CooperationDetail = () => {
   const { id } = useParams();
+  const { user } = useAuth();
 
   const { data: cooperation, isLoading } = useQuery({
     queryKey: ['cooperation', id],
@@ -145,11 +148,16 @@ const CooperationDetail = () => {
                       <p className="text-gray-600 dark:text-gray-400">
                         {cooperation.coordinateur}
                       </p>
-                      {cooperation.email_coordinateur && (
+                      {cooperation.email_coordinateur && user && (
                         <p className="text-gray-600 dark:text-gray-400">
                           <Mail className="h-4 w-4 inline mr-1" />
                           {cooperation.email_coordinateur}
                         </p>
+                      )}
+                      {cooperation.email_coordinateur && !user && (
+                        <div className="mt-2">
+                          <SecurityNotice type="email-protected" />
+                        </div>
                       )}
                     </div>
                   </div>
