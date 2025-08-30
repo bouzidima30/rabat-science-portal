@@ -72,6 +72,16 @@ const Profil = () => {
         throw new Error(passwordValidation.message);
       }
 
+      // Vérification de l'ancien mot de passe
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email!,
+        password: currentPassword
+      });
+
+      if (signInError) {
+        throw new Error("Mot de passe actuel incorrect");
+      }
+
       // Mise à jour du mot de passe
       const { error } = await supabase.auth.updateUser({
         password: newPassword
