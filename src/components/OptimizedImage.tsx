@@ -113,6 +113,7 @@ const OptimizedImage = ({
             onError={handleError}
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
+            style={{ aspectRatio: `${optimalWidth}/${optimalHeight}` }}
           />
         </>
       )}

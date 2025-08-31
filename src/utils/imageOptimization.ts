@@ -18,19 +18,9 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
   
   // Handle Supabase storage images
   if (url.includes('supabase.co/storage')) {
-    // For Supabase images, we can add transform parameters
-    const urlObj = new URL(url);
-    const params = new URLSearchParams();
-    
-    if (width) params.set('width', width.toString());
-    if (height) params.set('height', height.toString());
-    params.set('quality', quality.toString());
-    params.set('format', 'webp');
-    params.set('resize', 'cover');
-    
-    // Add transform parameters to the URL
-    const transformUrl = `${url}?${params.toString()}`;
-    return transformUrl;
+    // Supabase storage doesn't support query parameter transforms by default
+    // We'll rely on proper sizing in the component and browser optimization
+    return url;
   }
   
   return url;

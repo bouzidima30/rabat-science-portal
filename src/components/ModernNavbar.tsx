@@ -132,6 +132,8 @@ const ModernNavbar = React.memo(() => {
       className="h-16 w-auto" 
       loading="eager"
       decoding="async"
+      width="135"
+      height="64"
     />
   ), []);
 
