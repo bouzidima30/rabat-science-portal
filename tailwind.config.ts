@@ -3,10 +3,25 @@ import type { Config } from "tailwindcss";
 export default {
 	darkMode: ["class"],
 	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
+		"./index.html",
+		"./src/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/hooks/**/*.{js,ts,jsx,tsx,mdx}",
+	],
+	// Enable aggressive purging of unused styles
+	safelist: [
+		// Keep essential classes that might be used dynamically
+		'hidden',
+		'block',
+		'flex',
+		'grid',
+		'opacity-0',
+		'opacity-100',
+		// Keep animation classes
+		/^animate-/,
+		// Keep state-based classes
+		/^(hover|focus|active|disabled):/,
 	],
 	prefix: "",
 	theme: {

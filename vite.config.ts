@@ -37,5 +37,12 @@ export default defineConfig(({ mode }) => ({
         },
       },
     },
+    // Enable CSS optimization and purging
+    cssMinify: true,
+    assetsInlineLimit: 0, // Don't inline assets to allow better caching
+  },
+  css: {
+    // Enable CSS optimization
+    devSourcemap: false,
   },
 }));
