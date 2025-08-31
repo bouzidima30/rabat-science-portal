@@ -27,18 +27,20 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
 };
 
 // Get responsive image sizes based on context
-export const getResponsiveImageSizes = (context: 'card' | 'hero' | 'thumbnail' | 'full') => {
+export const getResponsiveImageSizes = (context: 'card' | 'hero' | 'thumbnail' | 'full' | 'logo') => {
   switch (context) {
     case 'card':
-      return { width: 400, height: 300 };
+      return { width: 398, height: 224 }; // Exact display size from audit
     case 'hero':
-      return { width: 1200, height: 600 };
+      return { width: 1152, height: 512 }; // Exact display size from audit  
     case 'thumbnail':
-      return { width: 150, height: 150 };
+      return { width: 200, height: 150 };
+    case 'logo':
+      return { width: 135, height: 64 }; // Exact FSR logo size from audit
     case 'full':
       return { width: 800, height: 600 };
     default:
-      return { width: 400, height: 300 };
+      return { width: 398, height: 224 };
   }
 };
 

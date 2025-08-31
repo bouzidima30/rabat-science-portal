@@ -13,7 +13,7 @@ interface OptimizedImageProps {
   placeholder?: string;
   onLoad?: () => void;
   onError?: () => void;
-  context?: 'card' | 'hero' | 'thumbnail' | 'full';
+  context?: 'card' | 'hero' | 'thumbnail' | 'full' | 'logo';
   quality?: number;
 }
 
@@ -35,8 +35,33 @@ const OptimizedImage = ({
   const optimalWidth = width || responsiveSizes.width;
   const optimalHeight = height || responsiveSizes.height;
   
+  // Generate srcSet for responsive images
+  const generateSrcSet = (baseSrc: string, baseWidth: number, baseHeight: number) => {
+    if (baseSrc.includes('supabase.co/storage')) {
+      // For Supabase images, generate multiple sizes using URL transforms if available
+      // Since Supabase doesn't support query params by default, we'll use the original
+      return '';
+    }
+    
+    if (baseSrc.includes('unsplash.com')) {
+      const scales = [0.5, 1, 1.5, 2];
+      return scales
+        .map(scale => {
+          const scaledWidth = Math.round(baseWidth * scale);
+          const scaledHeight = Math.round(baseHeight * scale);
+          const url = baseSrc.replace(/w=\d+/, `w=${scaledWidth}`).replace(/h=\d+/, `h=${scaledHeight}`);
+          return `${url} ${scaledWidth}w`;
+        })
+        .join(', ');
+    }
+    
+    return '';
+  };
+
   // Optimize the image URL
   const optimizedSrc = optimizeImageUrl(src, optimalWidth, optimalHeight, quality);
+  const srcSet = generateSrcSet(src, optimalWidth, optimalHeight);
+  const sizes = context === 'hero' ? '100vw' : context === 'card' ? '(max-width: 768px) 100vw, 398px' : '(max-width: 768px) 100vw, 200px';
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
@@ -102,6 +127,8 @@ const OptimizedImage = ({
           )}
           <img
             src={hasError ? placeholder : optimizedSrc}
+            srcSet={hasError ? '' : srcSet}
+            sizes={hasError ? '' : sizes}
             alt={alt}
             width={optimalWidth}
             height={optimalHeight}

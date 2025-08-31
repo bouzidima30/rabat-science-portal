@@ -134,6 +134,7 @@ const ModernNavbar = React.memo(() => {
       decoding="async"
       width="135"
       height="64"
+      style={{ maxWidth: '135px', maxHeight: '64px' }}
     />
   ), []);
 
