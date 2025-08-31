@@ -19,38 +19,65 @@ export const useMobileDetection = (): MobileDetectionHook => {
   });
 
   useEffect(() => {
-    const updateDeviceInfo = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      
-      const isMobile = width < 768;
-      const isTablet = width >= 768 && width < 1024;
-      const isDesktop = width >= 1024;
-      
-      const screenSize: 'mobile' | 'tablet' | 'desktop' = 
-        isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
-      
-      const orientation: 'portrait' | 'landscape' = 
-        height > width ? 'portrait' : 'landscape';
+    let rafId: number | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
 
-      setDeviceInfo({
-        isMobile,
-        isTablet,
-        isDesktop,
-        screenSize,
-        orientation
+    const updateDeviceInfo = () => {
+      // Cancel any pending animation frame to prevent multiple layout reads
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+
+      // Use requestAnimationFrame to batch layout operations and avoid forced reflows
+      rafId = requestAnimationFrame(() => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        const isMobile = width < 768;
+        const isTablet = width >= 768 && width < 1024;
+        const isDesktop = width >= 1024;
+        
+        const screenSize: 'mobile' | 'tablet' | 'desktop' = 
+          isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
+        
+        const orientation: 'portrait' | 'landscape' = 
+          height > width ? 'portrait' : 'landscape';
+
+        setDeviceInfo({
+          isMobile,
+          isTablet,
+          isDesktop,
+          screenSize,
+          orientation
+        });
+
+        rafId = null;
       });
+    };
+
+    // Debounced resize handler to prevent excessive layout reads
+    const debouncedUpdate = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(updateDeviceInfo, 100);
     };
 
     // Initial detection
     updateDeviceInfo();
 
-    // Listen for resize events
-    window.addEventListener('resize', updateDeviceInfo);
-    window.addEventListener('orientationchange', updateDeviceInfo);
+    // Listen for resize events with debouncing
+    window.addEventListener('resize', debouncedUpdate, { passive: true });
+    window.addEventListener('orientationchange', updateDeviceInfo, { passive: true });
 
     return () => {
-      window.removeEventListener('resize', updateDeviceInfo);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      window.removeEventListener('resize', debouncedUpdate);
       window.removeEventListener('orientationchange', updateDeviceInfo);
     };
   }, []);

@@ -35,13 +35,18 @@ const OptimizedImage = ({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        // Use requestAnimationFrame to batch state updates and prevent forced reflows
         if (entry.isIntersecting) {
-          setIsInView(true);
+          requestAnimationFrame(() => {
+            setIsInView(true);
+          });
           observer.disconnect();
         }
       },
       {
-        rootMargin: '50px'
+        // Increase root margin and set threshold to reduce intersection calculations
+        rootMargin: '100px',
+        threshold: 0.1
       }
     );
 

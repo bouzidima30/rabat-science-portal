@@ -7,14 +7,21 @@ export const usePerformanceOptimizer = () => {
   const optimizeImages = useCallback(() => {
     const images = document.querySelectorAll('img[data-src]');
     const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target as HTMLImageElement;
-          img.src = img.dataset.src || '';
-          img.removeAttribute('data-src');
-          imageObserver.unobserve(img);
-        }
+      // Use requestAnimationFrame to batch DOM operations and prevent forced reflows
+      requestAnimationFrame(() => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target as HTMLImageElement;
+            img.src = img.dataset.src || '';
+            img.removeAttribute('data-src');
+            imageObserver.unobserve(img);
+          }
+        });
       });
+    }, {
+      // Use larger root margin and threshold to reduce intersection calculations
+      rootMargin: '100px',
+      threshold: 0.1
     });
 
     images.forEach(img => imageObserver.observe(img));
