@@ -7,24 +7,32 @@ export const usePerformanceOptimizer = () => {
   const optimizeImages = useCallback(() => {
     const images = document.querySelectorAll('img[data-src]');
     const imageObserver = new IntersectionObserver((entries) => {
-      // Use requestAnimationFrame to batch DOM operations and prevent forced reflows
+      // Use double requestAnimationFrame to ensure DOM is stable before modifications
       requestAnimationFrame(() => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target as HTMLImageElement;
-            img.src = img.dataset.src || '';
-            img.removeAttribute('data-src');
-            imageObserver.unobserve(img);
-          }
+        requestAnimationFrame(() => {
+          // Batch DOM modifications to prevent layout thrashing
+          const fragment = document.createDocumentFragment();
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target as HTMLImageElement;
+              // Avoid forcing layout by setting src without reading properties
+              img.src = img.dataset.src || '';
+              img.removeAttribute('data-src');
+              imageObserver.unobserve(img);
+            }
+          });
         });
       });
     }, {
-      // Use larger root margin and threshold to reduce intersection calculations
-      rootMargin: '100px',
-      threshold: 0.1
+      // Optimize intersection observer settings to reduce calculations
+      rootMargin: '150px',
+      threshold: [0, 0.1]
     });
 
-    images.forEach(img => imageObserver.observe(img));
+    // Observe images in a batch to avoid layout reads
+    requestAnimationFrame(() => {
+      images.forEach(img => imageObserver.observe(img));
+    });
     
     return () => imageObserver.disconnect();
   }, []);

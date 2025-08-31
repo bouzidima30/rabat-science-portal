@@ -21,54 +21,64 @@ export const useMobileDetection = (): MobileDetectionHook => {
   useEffect(() => {
     let rafId: number | null = null;
     let timeoutId: NodeJS.Timeout | null = null;
+    let isUpdating = false;
 
     const updateDeviceInfo = () => {
-      // Cancel any pending animation frame to prevent multiple layout reads
+      // Prevent multiple simultaneous updates to avoid forced reflows
+      if (isUpdating) return;
+      
+      // Cancel any pending animation frame
       if (rafId) {
         cancelAnimationFrame(rafId);
       }
 
-      // Use requestAnimationFrame to batch layout operations and avoid forced reflows
+      // Use double requestAnimationFrame to ensure layout is stable
       rafId = requestAnimationFrame(() => {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        
-        const isMobile = width < 768;
-        const isTablet = width >= 768 && width < 1024;
-        const isDesktop = width >= 1024;
-        
-        const screenSize: 'mobile' | 'tablet' | 'desktop' = 
-          isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
-        
-        const orientation: 'portrait' | 'landscape' = 
-          height > width ? 'portrait' : 'landscape';
+        requestAnimationFrame(() => {
+          isUpdating = true;
+          
+          // Read layout properties in a single batch to minimize reflows
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+          
+          const isMobile = width < 768;
+          const isTablet = width >= 768 && width < 1024;
+          const isDesktop = width >= 1024;
+          
+          const screenSize: 'mobile' | 'tablet' | 'desktop' = 
+            isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
+          
+          const orientation: 'portrait' | 'landscape' = 
+            height > width ? 'portrait' : 'landscape';
 
-        setDeviceInfo({
-          isMobile,
-          isTablet,
-          isDesktop,
-          screenSize,
-          orientation
+          setDeviceInfo({
+            isMobile,
+            isTablet,
+            isDesktop,
+            screenSize,
+            orientation
+          });
+
+          isUpdating = false;
+          rafId = null;
         });
-
-        rafId = null;
       });
     };
 
-    // Debounced resize handler to prevent excessive layout reads
+    // More aggressive debouncing to reduce layout thrashing
     const debouncedUpdate = () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      timeoutId = setTimeout(updateDeviceInfo, 100);
+      timeoutId = setTimeout(updateDeviceInfo, 150);
     };
 
-    // Initial detection
-    updateDeviceInfo();
+    // Initial detection with delay to avoid early layout reads
+    setTimeout(updateDeviceInfo, 0);
 
-    // Listen for resize events with debouncing
+    // Use passive listeners to avoid blocking main thread
     window.addEventListener('resize', debouncedUpdate, { passive: true });
-    window.addEventListener('orientationchange', updateDeviceInfo, { passive: true });
+    window.addEventListener('orientationchange', debouncedUpdate, { passive: true });
 
     return () => {
       if (rafId) {
@@ -78,7 +88,7 @@ export const useMobileDetection = (): MobileDetectionHook => {
         clearTimeout(timeoutId);
       }
       window.removeEventListener('resize', debouncedUpdate);
-      window.removeEventListener('orientationchange', updateDeviceInfo);
+      window.removeEventListener('orientationchange', debouncedUpdate);
     };
   }, []);
 
