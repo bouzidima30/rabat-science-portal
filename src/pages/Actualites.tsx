@@ -13,6 +13,7 @@ import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { formatContent } from "@/utils/sanitize";
 import { SafeHTMLRenderer } from "@/utils/contentSanitizer";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface News {
   id: string;
@@ -137,10 +138,12 @@ const Actualites = () => {
               <div className="md:flex">
                 {item.image_url && (
                   <div className="md:w-1/3">
-                    <img 
+                    <OptimizedImage 
                       src={item.image_url} 
                       alt={item.title}
                       className="w-full h-48 md:h-full object-cover"
+                      context="card"
+                      quality={85}
                     />
                   </div>
                 )}

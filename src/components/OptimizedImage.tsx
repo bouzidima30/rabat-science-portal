@@ -1,6 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { optimizeImageUrl, getResponsiveImageSizes } from '@/utils/imageOptimization';
 
 interface OptimizedImageProps {
   src: string;
@@ -12,6 +13,8 @@ interface OptimizedImageProps {
   placeholder?: string;
   onLoad?: () => void;
   onError?: () => void;
+  context?: 'card' | 'hero' | 'thumbnail' | 'full';
+  quality?: number;
 }
 
 const OptimizedImage = ({
@@ -23,8 +26,17 @@ const OptimizedImage = ({
   priority = false,
   placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3C/svg%3E",
   onLoad,
-  onError
+  onError,
+  context = 'card',
+  quality = 80
 }: OptimizedImageProps) => {
+  // Get optimal dimensions if not provided
+  const responsiveSizes = getResponsiveImageSizes(context);
+  const optimalWidth = width || responsiveSizes.width;
+  const optimalHeight = height || responsiveSizes.height;
+  
+  // Optimize the image URL
+  const optimizedSrc = optimizeImageUrl(src, optimalWidth, optimalHeight, quality);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
@@ -89,8 +101,10 @@ const OptimizedImage = ({
             />
           )}
           <img
-            src={hasError ? placeholder : src}
+            src={hasError ? placeholder : optimizedSrc}
             alt={alt}
+            width={optimalWidth}
+            height={optimalHeight}
             className={cn(
               'w-full h-full object-cover transition-opacity duration-300',
               isLoaded ? 'opacity-100' : 'opacity-0'

@@ -11,6 +11,7 @@ import { NewsCategory } from "@/types/news";
 import { useOptimizedQuery } from "@/hooks/useOptimizedQuery";
 import { usePrefetchQueries } from "@/hooks/usePrefetchQueries";
 import { supabase } from "@/integrations/supabase/client";
+import OptimizedImage from "@/components/OptimizedImage";
 // Memoized components for performance
 const OptimizedCard = memo(Card);
 const OptimizedButton = memo(Button);
@@ -130,7 +131,14 @@ const Index = () => {
                   <Link to={highlight.link} className="block group">
                     <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] bg-white/90 backdrop-blur-sm">
                       <div className="relative h-96 md:h-[32rem]">
-                        <img src={highlight.image} alt={highlight.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <OptimizedImage 
+                          src={highlight.image} 
+                          alt={highlight.title} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          context="hero"
+                          priority={index === 0}
+                          quality={90}
+                        />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                         <div className="absolute inset-0 bg-gradient-to-r from-[#006be5]/60 to-transparent"></div>
                         
@@ -352,7 +360,13 @@ const Index = () => {
             {news.slice(0, 3).map(article => <Link key={article.id} to={`/actualite/${article.id}`}>
                 <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
                   <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                    {article.image_url ? <img src={article.image_url} alt={article.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">
+                    {article.image_url ? <OptimizedImage 
+                      src={article.image_url} 
+                      alt={article.title} 
+                      className="w-full h-full object-cover"
+                      context="card"
+                      quality={85}
+                    /> : <div className="w-full h-full flex items-center justify-center">
                         <BookOpen className="h-10 w-10 text-gray-400" />
                       </div>}
                   </div>
