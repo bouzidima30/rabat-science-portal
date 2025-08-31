@@ -36,13 +36,14 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, [prefetchNews, prefetchEvents, prefetchFormations]);
 
-  // Optimized news query with better caching - non-blocking
+  // Optimized news query with reduced fields to minimize transfer size
   const { data: news = [] } = useOptimizedQuery({
     queryKey: ['latest-news', selectedCategory],
     queryFn: async () => {
-      let query = supabase.from('news').select('*').eq('published', true).order('created_at', {
-        ascending: false
-      });
+      let query = supabase.from('news')
+        .select('id,title,excerpt,image_url,created_at,category')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
       if (selectedCategory !== 'all') {
         query = query.eq('category', selectedCategory as NewsCategory);
       }
@@ -368,7 +369,7 @@ const Index = () => {
                   <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
                     {article.image_url ? <OptimizedImage 
                       src={article.image_url} 
-                      alt={article.title} 
+                      alt={article.title}
                       className="w-full h-full object-cover"
                       context="card"
                       quality={85}
