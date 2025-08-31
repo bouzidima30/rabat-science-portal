@@ -22,17 +22,21 @@ const Index = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   
-  // Prefetch related data
+  // Prefetch related data - defer to avoid blocking initial render
   const { prefetchNews, prefetchEvents, prefetchFormations } = usePrefetchQueries();
   
   useEffect(() => {
-    // Prefetch on mount for faster navigation
-    prefetchNews();
-    prefetchEvents();
-    prefetchFormations();
+    // Defer prefetching to after initial render
+    const timer = setTimeout(() => {
+      prefetchNews();
+      prefetchEvents();
+      prefetchFormations();
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [prefetchNews, prefetchEvents, prefetchFormations]);
 
-  // Optimized news query with better caching
+  // Optimized news query with better caching - non-blocking
   const { data: news = [] } = useOptimizedQuery({
     queryKey: ['latest-news', selectedCategory],
     queryFn: async () => {
@@ -48,9 +52,10 @@ const Index = () => {
     },
     staleTimeMinutes: 5,
     cacheTimeMinutes: 15,
+    enabled: true, // Non-blocking query
   });
 
-  // Optimized events query
+  // Optimized events query - non-blocking
   const { data: events = [] } = useOptimizedQuery({
     queryKey: ['upcoming-events'],
     queryFn: async () => {
@@ -63,6 +68,7 @@ const Index = () => {
     },
     staleTimeMinutes: 10,
     cacheTimeMinutes: 20,
+    enabled: true, // Non-blocking query
   });
   // Memoized static data
   const newsCategories = useMemo(() => [
