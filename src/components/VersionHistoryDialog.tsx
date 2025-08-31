@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useSecureCooperationData } from "@/hooks/useSecureCooperationData";
 import { Clock, User, FileText } from "lucide-react";
 
 interface VersionHistoryDialogProps {
@@ -25,6 +26,7 @@ const VersionHistoryDialog = ({
   const [versions, setVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { filterCooperationVersionsList } = useSecureCooperationData();
 
   useEffect(() => {
     if (isOpen && contentId) {
@@ -89,7 +91,8 @@ const VersionHistoryDialog = ({
           .order('version_number', { ascending: false });
 
         if (error) throw error;
-        data = cooperationData || [];
+        // Apply security filtering to prevent email exposure to anonymous users
+        data = filterCooperationVersionsList(cooperationData || []);
       } else if (contentType === 'page') {
         const { data: pageData, error } = await supabase
           .from('pages_versions')

@@ -82,7 +82,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
         })));
       }
 
-      // Search coopérations
+      // Search coopérations - exclude email for security
       const { data: cooperations } = await supabase
         .from('cooperations')
         .select('id, titre, description')

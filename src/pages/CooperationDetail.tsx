@@ -11,10 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, MapPin, Mail, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSecureCooperationData } from "@/hooks/useSecureCooperationData";
 
 const CooperationDetail = () => {
   const { id } = useParams();
   const { user } = useAuth();
+  const { filterCooperationData } = useSecureCooperationData();
 
   const { data: cooperation, isLoading } = useQuery({
     queryKey: ['cooperation', id],
@@ -26,7 +28,8 @@ const CooperationDetail = () => {
         .single();
       
       if (error) throw error;
-      return data;
+      // Apply security filtering to prevent email exposure to anonymous users
+      return filterCooperationData(data);
     }
   });
 

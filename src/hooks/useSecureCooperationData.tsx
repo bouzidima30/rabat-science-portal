@@ -8,10 +8,11 @@ export const useSecureCooperationData = () => {
     if (!cooperation) return cooperation;
     
     // If user is not authenticated, remove sensitive email information
+    // This provides defense-in-depth even though database policies should prevent this
     if (!user) {
       return {
         ...cooperation,
-        email_coordinateur: undefined // Hide email for non-authenticated users
+        email_coordinateur: null // Hide email for non-authenticated users
       };
     }
     
@@ -29,9 +30,32 @@ export const useSecureCooperationData = () => {
     return !!user;
   };
 
+  // Enhanced filtering for cooperation versions
+  const filterCooperationVersionData = (version: any) => {
+    if (!version) return version;
+    
+    // If user is not authenticated, remove sensitive email information
+    if (!user) {
+      return {
+        ...version,
+        email_coordinateur: null
+      };
+    }
+    
+    return version;
+  };
+
+  const filterCooperationVersionsList = (versions: any[]) => {
+    if (!versions) return versions;
+    
+    return versions.map(filterCooperationVersionData);
+  };
+
   return {
     filterCooperationData,
     filterCooperationsList,
+    filterCooperationVersionData,
+    filterCooperationVersionsList,
     canViewCoordinatorEmail,
     isAuthenticated: !!user
   };

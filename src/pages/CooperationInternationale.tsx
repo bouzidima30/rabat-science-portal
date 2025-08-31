@@ -8,8 +8,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Globe, Eye, Calendar, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSecureCooperationData } from "@/hooks/useSecureCooperationData";
 
 const CooperationInternationale = () => {
+  const { filterCooperationsList } = useSecureCooperationData();
+  
   const { data: cooperations, isLoading } = useQuery({
     queryKey: ['cooperations', 'internationale'],
     queryFn: async () => {
@@ -20,7 +23,8 @@ const CooperationInternationale = () => {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data;
+      // Apply security filtering to prevent email exposure to anonymous users
+      return filterCooperationsList(data);
     }
   });
 
