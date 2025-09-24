@@ -14,9 +14,7 @@
     <link rel="preload" href="/src/main.tsx" as="script">
     <link rel="modulepreload" href="/src/main.tsx">
     
-    <!-- Non-blocking CSS loading strategy -->
-    <link rel="preload" href="/assets/index-CTf9dxI7.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/index-CTf9dxI7.css"></noscript>
+    <!-- Non-blocking CSS loading strategy will be handled by Vite automatically -->
     
     <!-- Critical inline CSS to prevent FOUC and improve LCP -->
     <style>
@@ -119,11 +117,7 @@
       .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
     </style>
     
-    <!-- Fallback for browsers that don't support preload -->
-    <script>
-      !function(e){"use strict";var t=function(t,n,r){function o(e){return i.body?e():void setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var i=e.document,d=i.createElement("link");if(n)d.href=n;else{if(!t)return;d.href=t.href,d.media=t.media||"all"}d.rel="stylesheet",d.addEventListener&&d.addEventListener("load",a),(d.addEventListener||d.attachEvent)&&o(function(){i.head.appendChild(d)})};e.loadCSS=t}(this);
-      loadCSS("/assets/index-CTf9dxI7.css");
-    </script>
+    <!-- CSS will be injected by Vite automatically -->
     
     <title>Faculté des Sciences de Rabat - FSR Mohammed V</title>
     <meta name="description" content="Faculté des Sciences de Rabat - Formation d'excellence, recherche de pointe et innovation. Découvrez nos programmes de licence, master et doctorat." />
