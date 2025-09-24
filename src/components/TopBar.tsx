@@ -33,7 +33,7 @@ const TopBar = () => {
     <div className="bg-[#016BE5] shadow-lg px-4 relative z-40 py-[6px]">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <div className="hidden md:block text-sm text-white/80 ml-8">
+          <div className="hidden md:block text-sm text-white ml-8">
             Avenue Ibn Battouta, B.P. 1014 RP, Rabat – Maroc
           </div>
         </div>
