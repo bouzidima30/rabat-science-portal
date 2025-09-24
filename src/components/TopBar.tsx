@@ -44,6 +44,7 @@ const TopBar = () => {
             size="sm" 
             onClick={toggleTheme} 
             className="text-white/80 hover:text-white hover:bg-white/10 border-0"
+            aria-label={isDarkMode ? "Basculer vers le mode clair" : "Basculer vers le mode sombre"}
           >
             {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
