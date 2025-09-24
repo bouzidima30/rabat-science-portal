@@ -11,25 +11,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, MapPin, Mail, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSecureCooperationData } from "@/hooks/useSecureCooperationData";
-
 const CooperationDetail = () => {
   const { id } = useParams();
   const { user } = useAuth();
-  const { filterCooperationData } = useSecureCooperationData();
 
   const { data: cooperation, isLoading } = useQuery({
-    queryKey: ['cooperation', id],
+    queryKey: ['cooperation', id, !!user],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('cooperations')
-        .select('*')
-        .eq('id', id)
-        .single();
-      
-      if (error) throw error;
-      // Apply security filtering to prevent email exposure to anonymous users
-      return filterCooperationData(data);
+      if (user) {
+        // Authenticated users: direct query with full data
+        const { data, error } = await supabase
+          .from('cooperations')
+          .select('*')
+          .eq('id', id)
+          .single();
+        
+        if (error) throw error;
+        return data;
+      } else {
+        // Anonymous users: use secure RPC that masks emails
+        const { data, error } = await supabase
+          .rpc('get_public_cooperations', { 
+            p_id: id,
+            p_limit: 1,
+            p_offset: 0 
+          });
+        
+        if (error) throw error;
+        return data?.[0] || null;
+      }
     }
   });
 

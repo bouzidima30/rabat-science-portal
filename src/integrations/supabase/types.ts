@@ -869,6 +869,36 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_public_cooperations: {
+        Args: {
+          p_id?: string
+          p_limit?: number
+          p_offset?: number
+          p_order_desc?: boolean
+          p_type?: string
+        }
+        Returns: {
+          annee_debut: number
+          annee_fin: number
+          appel_offre: string
+          coordinateur: string
+          created_at: string
+          description: string
+          domaine_recherche: string
+          email_coordinateur: string
+          id: string
+          image_url: string
+          partenaires: string[]
+          pays: string[]
+          review_notes: string
+          reviewed_at: string
+          reviewer_id: string
+          status: string
+          titre: string
+          type_cooperation: string
+          updated_at: string
+        }[]
+      }
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean

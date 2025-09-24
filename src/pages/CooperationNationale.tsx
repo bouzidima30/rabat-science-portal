@@ -8,23 +8,36 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Globe, Eye, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSecureCooperationData } from "@/hooks/useSecureCooperationData";
+import { useAuth } from "@/hooks/useAuth";
 
 const CooperationNationale = () => {
-  const { filterCooperationsList } = useSecureCooperationData();
+  const { user } = useAuth();
   
   const { data: cooperations, isLoading } = useQuery({
-    queryKey: ['cooperations', 'nationale'],
+    queryKey: ['cooperations', 'nationale', !!user],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('cooperations')
-        .select('*')
-        .eq('type_cooperation', 'nationale')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      // Apply security filtering to prevent email exposure to anonymous users
-      return filterCooperationsList(data);
+      if (user) {
+        // Authenticated users: direct query with full data
+        const { data, error } = await supabase
+          .from('cooperations')
+          .select('*')
+          .eq('type_cooperation', 'nationale')
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data;
+      } else {
+        // Anonymous users: use secure RPC that masks emails
+        const { data, error } = await supabase
+          .rpc('get_public_cooperations', { 
+            p_type: 'nationale',
+            p_limit: 100,
+            p_offset: 0 
+          });
+        
+        if (error) throw error;
+        return data;
+      }
     }
   });
 
