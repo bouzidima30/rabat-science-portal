@@ -62,20 +62,24 @@ const Footer = () => {
                 {[{
                 icon: Facebook,
                 href: "#",
-                color: "hover:text-blue-400"
+                color: "hover:text-blue-400",
+                label: "Suivez-nous sur Facebook"
               }, {
                 icon: Twitter,
                 href: "#",
-                color: "hover:text-sky-400"
+                color: "hover:text-sky-400",
+                label: "Suivez-nous sur Twitter"
               }, {
                 icon: Linkedin,
                 href: "#",
-                color: "hover:text-blue-500"
+                color: "hover:text-blue-500",
+                label: "Suivez-nous sur LinkedIn"
               }, {
                 icon: Youtube,
                 href: "#",
-                color: "hover:text-red-400"
-              }].map((social, index) => <a key={index} href={social.href} className={`p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-300 ${social.color} transform hover:scale-110`}>
+                color: "hover:text-red-400",
+                label: "Suivez-nous sur YouTube"
+              }].map((social, index) => <a key={index} href={social.href} aria-label={social.label} className={`p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-300 ${social.color} transform hover:scale-110`}>
                     <social.icon className="h-5 w-5" />
                   </a>)}
               </div>
