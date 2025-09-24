@@ -7,32 +7,40 @@ export const usePerformanceOptimizer = () => {
   const optimizeImages = useCallback(() => {
     const images = document.querySelectorAll('img[data-src]');
     const imageObserver = new IntersectionObserver((entries) => {
-      // Use double requestAnimationFrame to ensure DOM is stable before modifications
-      requestAnimationFrame(() => {
+      // Process entries without forcing layout
+      const intersectingImages: HTMLImageElement[] = [];
+      
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          intersectingImages.push(entry.target as HTMLImageElement);
+        }
+      });
+
+      if (intersectingImages.length > 0) {
+        // Batch all DOM writes together to prevent layout thrashing
         requestAnimationFrame(() => {
-          // Batch DOM modifications to prevent layout thrashing
-          const fragment = document.createDocumentFragment();
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target as HTMLImageElement;
-              // Avoid forcing layout by setting src without reading properties
-              img.src = img.dataset.src || '';
+          intersectingImages.forEach(img => {
+            const dataSrc = img.getAttribute('data-src');
+            if (dataSrc) {
+              img.src = dataSrc;
               img.removeAttribute('data-src');
               imageObserver.unobserve(img);
             }
           });
         });
-      });
+      }
     }, {
-      // Optimize intersection observer settings to reduce calculations
+      // Optimize intersection observer settings
       rootMargin: '150px',
-      threshold: [0, 0.1]
+      threshold: 0.1
     });
 
-    // Observe images in a batch to avoid layout reads
-    requestAnimationFrame(() => {
-      images.forEach(img => imageObserver.observe(img));
-    });
+    // Observe images without causing layout reads
+    if (images.length > 0) {
+      requestAnimationFrame(() => {
+        images.forEach(img => imageObserver.observe(img));
+      });
+    }
     
     return () => imageObserver.disconnect();
   }, []);
