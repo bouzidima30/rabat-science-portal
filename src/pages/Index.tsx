@@ -86,7 +86,7 @@ const Index = () => {
     {
       title: "Excellence Académique",
       description: "Plus de 50 formations d'excellence de la licence au doctorat",
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1200&h=600&fit=crop",
       link: "/formations"
     },
     {
