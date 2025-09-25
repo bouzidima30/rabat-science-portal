@@ -199,6 +199,13 @@ export type Database = {
             referencedRelation: "cooperations"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "cooperations_versions_cooperation_id_fkey"
+            columns: ["cooperation_id"]
+            isOneToOne: false
+            referencedRelation: "public_cooperations"
+            referencedColumns: ["id"]
+          },
         ]
       }
       events: {
@@ -858,7 +865,80 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_cooperations: {
+        Row: {
+          annee_debut: number | null
+          annee_fin: number | null
+          appel_offre: string | null
+          coordinateur: string | null
+          created_at: string | null
+          description: string | null
+          domaine_recherche: string | null
+          email_coordinateur: string | null
+          id: string | null
+          image_url: string | null
+          partenaires: string[] | null
+          pays: string[] | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          status: string | null
+          titre: string | null
+          type_cooperation: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          annee_debut?: number | null
+          annee_fin?: number | null
+          appel_offre?: string | null
+          coordinateur?: string | null
+          created_at?: string | null
+          description?: string | null
+          domaine_recherche?: string | null
+          email_coordinateur?: never
+          id?: string | null
+          image_url?: string | null
+          partenaires?: string[] | null
+          pays?: string[] | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
+          titre?: string | null
+          type_cooperation?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          annee_debut?: number | null
+          annee_fin?: number | null
+          appel_offre?: string | null
+          coordinateur?: string | null
+          created_at?: string | null
+          description?: string | null
+          domaine_recherche?: string | null
+          email_coordinateur?: never
+          id?: string | null
+          image_url?: string | null
+          partenaires?: string[] | null
+          pays?: string[] | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string | null
+          titre?: string | null
+          type_cooperation?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooperations_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       can_view_coordinator_email: {
