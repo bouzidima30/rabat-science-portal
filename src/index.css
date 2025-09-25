@@ -2,6 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Page transition CSS to prevent white flash */
+body {
+  background-color: #f9fafb;
+  transition: background-color 0.2s ease-in-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #111827;
+  }
+}
+
+/* Ensure smooth page transitions */
+#root {
+  min-height: 100vh;
+  background-color: inherit;
+}
+
+/* Prevent layout shift during page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
