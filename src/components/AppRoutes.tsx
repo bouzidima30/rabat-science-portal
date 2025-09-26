@@ -4,7 +4,7 @@ import { Suspense, lazy } from "react";
 import ScrollToTop from "./ScrollToTop";
 import AuthGuard from "./AuthGuard";
 import LoadingSpinner from "./LoadingSpinner";
-import PageTransition from "./PageTransition";
+
 
 // Critical pages loaded eagerly
 import Index from "../pages/Index";
@@ -81,9 +81,9 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profil" element={
           <AuthGuard>
-            <PageTransition>
+            <Suspense fallback={<LoadingSpinner />}>
               <Profil />
-            </PageTransition>
+            </Suspense>
           </AuthGuard>
         } />
         
@@ -149,242 +149,242 @@ const AppRoutes = () => {
 
         {/* Public Pages */}
         <Route path="/actualites" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Actualites />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/actualite/:id" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ActualiteDetail />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/evenements" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Evenements />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/evenement/:id" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <EvenementDetail />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Presentation Pages */}
         <Route path="/presentation/mot-doyen" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <MotDoyen />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/presentation/projet-developpement" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ProjetDeveloppement />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/presentation/historique" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Historique />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/presentation/organisation" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Organisation />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/presentation/fsr-chiffres" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <FSRChiffres />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/presentation/representants" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Representants />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Formation Pages */}
         <Route path="/formations/lmd-guide" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <LMDGuide />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/formations" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Formations />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/formations/formation-licence" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <FormationLicence />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/formations/formation-master" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <FormationMaster />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/formations/formation-doctorat" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <FormationDoctorat />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/formations/formation-continue" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <FormationContinue />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/formation/:id" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <FormationDetail />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Research Pages */}
         <Route path="/recherche/ecole-doctorale" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <EcoleDoctorale />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/recherche/valorisation-recherche" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ValorisationRecherche />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/recherche/structures" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <StructuresRecherche />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/recherche/domaines" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <DomainesRecherche />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/recherche/plateformes-techniques" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <PlateformesTechniques />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Space Pages */}
         <Route path="/espace-enseignants" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <EspaceEnseignants />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/espace-etudiants" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <EspaceEtudiants />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Cooperation Pages */}
         <Route path="/cooperation-nationale" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <CooperationNationale />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/cooperation-internationale" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <CooperationInternationale />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/cooperation/:id" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <CooperationDetail />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Contact & Practical Info */}
         <Route path="/contact" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Contact />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/plan-acces" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <PlanAcces />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Library & Services */}
         <Route path="/cedoc" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <CeDoc />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/bibliotheque" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Bibliotheque />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/services-bibliotheque" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ServicesBibliotheque />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/ressources-electroniques" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <RessourcesElectroniques />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Student Services */}
         <Route path="/service-scolarite" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ServiceScolarite />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/procedures-numeriques" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ProceduresNumeriques />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/calendrier-emploi-temps" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <CalendrierEmploiTemps />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/cours-tds-tps" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <CoursTdsTps />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/sections-groupes" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <SectionsGroupes />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/planning-evaluations" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <PlanningEvaluations />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/listes-examens" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ListesExamens />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/resultats" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Resultats />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/preselection" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <Preselection />
-          </PageTransition>
+          </Suspense>
         } />
         <Route path="/activites-parauniversitaire" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <ActivitesParaUniversitaires />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* Dynamic Pages */}
         <Route path="/:slug" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <DynamicPage />
-          </PageTransition>
+          </Suspense>
         } />
         
         {/* 404 */}
@@ -392,9 +392,9 @@ const AppRoutes = () => {
         
         {/* Security Test */}
         <Route path="/security-test" element={
-          <PageTransition>
+          <Suspense fallback={<LoadingSpinner />}>
             <SecurityTest />
-          </PageTransition>
+          </Suspense>
         } />
       </Routes>
     </>
