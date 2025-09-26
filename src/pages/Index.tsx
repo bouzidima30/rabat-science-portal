@@ -136,7 +136,7 @@ const Index = () => {
             <CarouselContent className="-ml-2 md:-ml-4">
               {carouselHighlights.map((highlight, index) => <CarouselItem key={index} className="pl-2 md:pl-4">
                   <Link to={highlight.link} className="block group">
-                    <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] bg-white/90 backdrop-blur-sm">
+                    <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                       <div className="relative h-96 md:h-[32rem]">
                         <OptimizedImage 
                           src={highlight.image} 
@@ -180,12 +180,12 @@ const Index = () => {
             </CarouselContent>
             
             {/* Enhanced Navigation */}
-            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
-            <CarouselNext className="right-2 md:-right-6 w-12 h-12 border-2 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300" />
+            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 shadow-lg hover:shadow-xl transition-all duration-300" />
+            <CarouselNext className="right-2 md:-right-6 w-12 h-12 border-2 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 shadow-lg hover:shadow-xl transition-all duration-300" />
             
             {/* Interactive Dots indicator */}
             <div className="flex justify-center mt-8 space-x-3">
-              {carouselHighlights.map((_, index) => <button key={index} className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${current === index + 1 ? 'bg-[#006be5] w-8' : 'bg-gray-300 hover:bg-[#006be5]/50'}`} onClick={() => api?.scrollTo(index)} aria-label={`Aller à la diapositive ${index + 1}`} />)}
+              {carouselHighlights.map((_, index) => <button key={index} className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${current === index + 1 ? 'bg-[#006be5] w-8' : 'bg-gray-300 dark:bg-gray-600 hover:bg-[#006be5]/50 dark:hover:bg-[#006be5]/50'}`} onClick={() => api?.scrollTo(index)} aria-label={`Aller à la diapositive ${index + 1}`} />)}
             </div>
           </Carousel>
         </div>
