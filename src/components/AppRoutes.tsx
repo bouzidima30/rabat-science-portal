@@ -81,7 +81,7 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profil" element={
           <AuthGuard>
-            <Suspense fallback={<LoadingSpinner />}>
+            <Suspense>
               <Profil />
             </Suspense>
           </AuthGuard>
@@ -149,240 +149,240 @@ const AppRoutes = () => {
 
         {/* Public Pages */}
         <Route path="/actualites" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Actualites />
           </Suspense>
         } />
         <Route path="/actualite/:id" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ActualiteDetail />
           </Suspense>
         } />
         <Route path="/evenements" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Evenements />
           </Suspense>
         } />
         <Route path="/evenement/:id" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <EvenementDetail />
           </Suspense>
         } />
         
         {/* Presentation Pages */}
         <Route path="/presentation/mot-doyen" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <MotDoyen />
           </Suspense>
         } />
         <Route path="/presentation/projet-developpement" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ProjetDeveloppement />
           </Suspense>
         } />
         <Route path="/presentation/historique" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Historique />
           </Suspense>
         } />
         <Route path="/presentation/organisation" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Organisation />
           </Suspense>
         } />
         <Route path="/presentation/fsr-chiffres" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <FSRChiffres />
           </Suspense>
         } />
         <Route path="/presentation/representants" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Representants />
           </Suspense>
         } />
         
         {/* Formation Pages */}
         <Route path="/formations/lmd-guide" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <LMDGuide />
           </Suspense>
         } />
         <Route path="/formations" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Formations />
           </Suspense>
         } />
         <Route path="/formations/formation-licence" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <FormationLicence />
           </Suspense>
         } />
         <Route path="/formations/formation-master" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <FormationMaster />
           </Suspense>
         } />
         <Route path="/formations/formation-doctorat" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <FormationDoctorat />
           </Suspense>
         } />
         <Route path="/formations/formation-continue" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <FormationContinue />
           </Suspense>
         } />
         <Route path="/formation/:id" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <FormationDetail />
           </Suspense>
         } />
         
         {/* Research Pages */}
         <Route path="/recherche/ecole-doctorale" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <EcoleDoctorale />
           </Suspense>
         } />
         <Route path="/recherche/valorisation-recherche" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ValorisationRecherche />
           </Suspense>
         } />
         <Route path="/recherche/structures" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <StructuresRecherche />
           </Suspense>
         } />
         <Route path="/recherche/domaines" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <DomainesRecherche />
           </Suspense>
         } />
         <Route path="/recherche/plateformes-techniques" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <PlateformesTechniques />
           </Suspense>
         } />
         
         {/* Space Pages */}
         <Route path="/espace-enseignants" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <EspaceEnseignants />
           </Suspense>
         } />
         <Route path="/espace-etudiants" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <EspaceEtudiants />
           </Suspense>
         } />
         
         {/* Cooperation Pages */}
         <Route path="/cooperation-nationale" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <CooperationNationale />
           </Suspense>
         } />
         <Route path="/cooperation-internationale" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <CooperationInternationale />
           </Suspense>
         } />
         <Route path="/cooperation/:id" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <CooperationDetail />
           </Suspense>
         } />
         
         {/* Contact & Practical Info */}
         <Route path="/contact" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Contact />
           </Suspense>
         } />
         <Route path="/plan-acces" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <PlanAcces />
           </Suspense>
         } />
         
         {/* Library & Services */}
         <Route path="/cedoc" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <CeDoc />
           </Suspense>
         } />
         <Route path="/bibliotheque" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Bibliotheque />
           </Suspense>
         } />
         <Route path="/services-bibliotheque" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ServicesBibliotheque />
           </Suspense>
         } />
         <Route path="/ressources-electroniques" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <RessourcesElectroniques />
           </Suspense>
         } />
         
         {/* Student Services */}
         <Route path="/service-scolarite" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ServiceScolarite />
           </Suspense>
         } />
         <Route path="/procedures-numeriques" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ProceduresNumeriques />
           </Suspense>
         } />
         <Route path="/calendrier-emploi-temps" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <CalendrierEmploiTemps />
           </Suspense>
         } />
         <Route path="/cours-tds-tps" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <CoursTdsTps />
           </Suspense>
         } />
         <Route path="/sections-groupes" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <SectionsGroupes />
           </Suspense>
         } />
         <Route path="/planning-evaluations" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <PlanningEvaluations />
           </Suspense>
         } />
         <Route path="/listes-examens" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ListesExamens />
           </Suspense>
         } />
         <Route path="/resultats" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Resultats />
           </Suspense>
         } />
         <Route path="/preselection" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <Preselection />
           </Suspense>
         } />
         <Route path="/activites-parauniversitaire" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <ActivitesParaUniversitaires />
           </Suspense>
         } />
         
         {/* Dynamic Pages */}
         <Route path="/:slug" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <DynamicPage />
           </Suspense>
         } />
@@ -392,7 +392,7 @@ const AppRoutes = () => {
         
         {/* Security Test */}
         <Route path="/security-test" element={
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense>
             <SecurityTest />
           </Suspense>
         } />
