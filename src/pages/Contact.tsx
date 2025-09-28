@@ -289,7 +289,7 @@ const Contact = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="w-full h-64 rounded-lg overflow-hidden">
+            <div className="w-full h-96 rounded-lg overflow-hidden">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3306.3!2d-6.8382388!3d34.0079673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76c80825a1893%3A0xbf497c49ab56246a!2sFaculty%20of%20Sciences%20Rabat!5e0!3m2!1sen!2sma!4v1727563758123!5m2!1sen!2sma"
                 width="100%"
