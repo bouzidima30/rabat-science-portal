@@ -6,9 +6,74 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { useToastNotifications } from "@/hooks/useToastNotifications";
+import { useState } from "react";
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Le nom est requis").max(100, "Le nom doit faire moins de 100 caractères"),
+  email: z.string().trim().email("Email invalide").max(255, "L'email doit faire moins de 255 caractères"),
+  phone: z.string().optional(),
+  subject: z.string().trim().min(1, "Le sujet est requis").max(200, "Le sujet doit faire moins de 200 caractères"),
+  message: z.string().trim().min(1, "Le message est requis").max(1000, "Le message doit faire moins de 1000 caractères")
+});
+
+type ContactForm = z.infer<typeof contactSchema>;
 
 const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showSuccess, showError } = useToastNotifications();
+  
+  const form = useForm<ContactForm>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: ""
+    }
+  });
+
+  const onSubmit = async (data: ContactForm) => {
+    setIsSubmitting(true);
+    try {
+      const contactData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        subject: data.subject,
+        message: data.message,
+        status: 'unread'
+      };
+      
+      const { error } = await supabase
+        .from('contact_messages')
+        .insert([contactData]);
+
+      if (error) throw error;
+
+      showSuccess(
+        "Message envoyé",
+        "Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais."
+      );
+      form.reset();
+    } catch (error) {
+      console.error('Error sending contact message:', error);
+      showError(
+        "Erreur",
+        "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
@@ -126,58 +191,91 @@ const Contact = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <form className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Nom *
-                      </label>
-                      <Input placeholder="Votre nom" required />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Prénom *
-                      </label>
-                      <Input placeholder="Votre prénom" required />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Email *
-                    </label>
-                    <Input type="email" placeholder="votre.email@exemple.com" required />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Téléphone
-                    </label>
-                    <Input placeholder="Votre numéro de téléphone" />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Sujet *
-                    </label>
-                    <Input placeholder="Objet de votre message" required />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Message *
-                    </label>
-                    <Textarea 
-                      placeholder="Votre message..." 
-                      rows={6}
-                      required 
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nom *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Votre nom complet" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </div>
-                  
-                  <Button className="w-full bg-[#006be5] hover:bg-[#0056b3]">
-                    Envoyer le message
-                  </Button>
-                </form>
+                    
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email *</FormLabel>
+                          <FormControl>
+                            <Input type="email" placeholder="votre.email@exemple.com" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Téléphone</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Votre numéro de téléphone" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="subject"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Sujet *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Objet de votre message" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Message *</FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder="Votre message..." 
+                              rows={6}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[#006be5] hover:bg-[#0056b3]"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Envoi en cours..." : "Envoyer le message"}
+                    </Button>
+                  </form>
+                </Form>
               </CardContent>
             </Card>
           </div>

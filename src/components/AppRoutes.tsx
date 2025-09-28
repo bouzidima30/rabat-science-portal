@@ -24,6 +24,7 @@ const AdminPages = lazy(() => import("../pages/AdminPages"));
 const AdminFichiers = lazy(() => import("../pages/AdminFichiers"));
 const AdminUploadFiles = lazy(() => import("../pages/AdminUploadFiles"));
 const AdminHistorique = lazy(() => import("../pages/AdminHistorique"));
+const AdminContact = lazy(() => import("../pages/AdminContact"));
 const Actualites = lazy(() => import("../pages/Actualites"));
 const ActualiteDetail = lazy(() => import("../pages/ActualiteDetail"));
 const Evenements = lazy(() => import("../pages/Evenements"));
@@ -143,6 +144,11 @@ const AppRoutes = () => {
           <Route path="historique" element={
             <Suspense fallback={<LoadingSpinner />}>
               <AdminHistorique />
+            </Suspense>
+          } />
+          <Route path="contact" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminContact />
             </Suspense>
           } />
         </Route>

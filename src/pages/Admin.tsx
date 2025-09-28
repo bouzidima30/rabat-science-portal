@@ -26,7 +26,8 @@ import {
   User,
   Moon,
   Sun,
-  Activity
+  Activity,
+  MessageSquare
 } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
@@ -96,6 +97,7 @@ const Admin = () => {
     { name: "Formations", path: "/admin/formations", icon: GraduationCap, description: "Programmes de formation" },
     { name: "Coopérations", path: "/admin/cooperations", icon: HandHeart, description: "Partenariats" },
     { name: "Pages", path: "/admin/pages", icon: FileStack, description: "Gestion des pages" },
+    { name: "Contact", path: "/admin/contact", icon: MessageSquare, description: "Messages de contact" },
     { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
     { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
     { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
