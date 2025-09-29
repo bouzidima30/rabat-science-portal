@@ -12,6 +12,7 @@ import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 import EventForm from "@/components/EventForm";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 interface Event {
   id: string;
@@ -37,6 +38,8 @@ const AdminEvenements = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [moderationItem, setModerationItem] = useState<any>(null);
   const [versionHistoryItem, setVersionHistoryItem] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
 

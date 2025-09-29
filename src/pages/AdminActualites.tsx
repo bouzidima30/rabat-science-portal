@@ -13,6 +13,7 @@ import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 import type { News } from "@/types/news";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const AdminActualites = () => {
   const [news, setNews] = useState<News[]>([]);
@@ -23,6 +24,8 @@ const AdminActualites = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [moderationItem, setModerationItem] = useState<News | null>(null);
   const [versionHistoryItem, setVersionHistoryItem] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
 
@@ -104,6 +107,13 @@ const AdminActualites = () => {
     
     return matchesSearch && matchesStatus;
   });
+
+  // Pagination logic
+  const totalItems = filteredNews.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedNews = filteredNews.slice(startIndex, endIndex);
 
   const getStatusCounts = () => {
     return {
@@ -255,7 +265,7 @@ const AdminActualites = () => {
 
       {/* News List */}
       <div className="space-y-6">
-        {filteredNews.map((item) => (
+        {paginatedNews.map((item) => (
           <Card key={item.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
@@ -403,6 +413,52 @@ const AdminActualites = () => {
           contentType="news"
           contentTitle={versionHistoryItem.title}
         />
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8 flex justify-center">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) setCurrentPage(currentPage - 1);
+                  }}
+                  className={currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(page);
+                    }}
+                    isActive={currentPage === page}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              
+              <PaginationItem>
+                <PaginationNext 
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                  }}
+                  className={currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       )}
     </div>
   );

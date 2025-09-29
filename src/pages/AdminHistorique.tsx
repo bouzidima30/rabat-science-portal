@@ -37,6 +37,8 @@ const AdminHistorique = () => {
   const [selectedAction, setSelectedAction] = useState<string>("all");
   const [selectedUser, setSelectedUser] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const { data: activities = [], isLoading } = useQuery({
     queryKey: ['admin-activity-logs'],
@@ -390,6 +392,7 @@ const AdminHistorique = () => {
           )}
         </CardContent>
       </Card>
+
     </div>
   );
 };

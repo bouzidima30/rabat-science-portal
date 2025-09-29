@@ -15,6 +15,7 @@ import ContentStatusBadge from "@/components/ContentStatusBadge";
 import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 import { SafeHTMLRenderer } from "@/utils/contentSanitizer";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const AdminPages = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -24,6 +25,8 @@ const AdminPages = () => {
   const [isVersionHistoryOpen, setIsVersionHistoryOpen] = useState(false);
   const [moderationPage, setModerationPage] = useState<any>(null);
   const [versionHistoryPage, setVersionHistoryPage] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const [formData, setFormData] = useState({
     titre: '',
     contenu: '',
@@ -251,6 +254,13 @@ const AdminPages = () => {
     page.slug.toLowerCase().includes(searchQuery.toLowerCase())
   ) || [];
 
+  // Pagination logic
+  const totalItems = filteredPages.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedPages = filteredPages.slice(startIndex, endIndex);
+
   if (isLoading) {
     return (
       <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -419,7 +429,7 @@ const AdminPages = () => {
 
       {/* Pages List */}
       <div className="space-y-6">
-        {filteredPages.map((page) => (
+        {paginatedPages.map((page) => (
           <Card key={page.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
