@@ -12,6 +12,7 @@ import ContentStatusBadge from "@/components/ContentStatusBadge";
 import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 import FormationFormDialog from "@/components/admin/FormationFormDialog";
+import { usePagination, Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/utils/adminPagination";
 
 interface Formation {
   id: string;
@@ -124,6 +125,14 @@ const AdminFormations = () => {
     (formation.departement && formation.departement.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    paginatedItems: paginatedFormations,
+    totalItems
+  } = usePagination(filteredFormations, 10);
+
   const formationsByType = formations.reduce((acc, formation) => {
     acc[formation.type_formation] = (acc[formation.type_formation] || 0) + 1;
     return acc;
@@ -235,7 +244,7 @@ const AdminFormations = () => {
 
       {/* Formations List */}
       <div className="space-y-6">
-        {filteredFormations.map((formation) => (
+        {paginatedFormations.map((formation) => (
           <Card key={formation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
@@ -322,7 +331,7 @@ const AdminFormations = () => {
           </Card>
         ))}
 
-        {filteredFormations.length === 0 && (
+        {paginatedFormations.length === 0 && filteredFormations.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <GraduationCap className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -345,6 +354,35 @@ const AdminFormations = () => {
           </Card>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination>
+            <PaginationContent>
+              <PaginationPrevious 
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationNext 
+                onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
 
       <FormationFormDialog
         isOpen={isFormOpen}

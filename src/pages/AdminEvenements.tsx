@@ -12,7 +12,7 @@ import ContentModerationDialog from "@/components/ContentModerationDialog";
 import VersionHistoryDialog from "@/components/VersionHistoryDialog";
 import EventForm from "@/components/EventForm";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { usePagination, Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/utils/adminPagination";
 
 interface Event {
   id: string;
@@ -38,8 +38,6 @@ const AdminEvenements = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [moderationItem, setModerationItem] = useState<any>(null);
   const [versionHistoryItem, setVersionHistoryItem] = useState<any>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
 
@@ -125,6 +123,14 @@ const AdminEvenements = () => {
   };
 
   const statusCounts = getStatusCounts();
+
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    paginatedItems: paginatedEvents,
+    totalItems
+  } = usePagination(filteredEvents, 10);
 
   if (loading) {
     return (
@@ -248,7 +254,7 @@ const AdminEvenements = () => {
 
       {/* Events List */}
       <div className="space-y-6">
-        {filteredEvents.map((event) => (
+        {paginatedEvents.map((event) => (
           <Card key={event.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
@@ -350,7 +356,7 @@ const AdminEvenements = () => {
           </Card>
         ))}
 
-        {filteredEvents.length === 0 && (
+        {paginatedEvents.length === 0 && filteredEvents.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -376,6 +382,35 @@ const AdminEvenements = () => {
           </Card>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination>
+            <PaginationContent>
+              <PaginationPrevious 
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationNext 
+                onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">

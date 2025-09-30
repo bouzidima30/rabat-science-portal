@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { FileText, Download, Trash2, Upload, Search, FolderOpen, Eye, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { usePagination, Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/utils/adminPagination";
 
 interface FileItem {
   id: string;
@@ -146,6 +147,14 @@ const AdminFichiers = () => {
   const totalFiles = files.length;
   const totalSize = files.reduce((acc, file) => acc + (file.file_size || 0), 0);
 
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    paginatedItems: paginatedFiles,
+    totalItems
+  } = usePagination(filteredFiles, 10);
+
   if (loading) {
     return (
       <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -239,7 +248,7 @@ const AdminFichiers = () => {
 
       {/* Files List */}
       <div className="space-y-6">
-        {filteredFiles.map((file) => (
+        {paginatedFiles.map((file) => (
           <Card key={file.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -308,7 +317,7 @@ const AdminFichiers = () => {
           </Card>
         ))}
 
-        {filteredFiles.length === 0 && (
+        {paginatedFiles.length === 0 && filteredFiles.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <FolderOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -330,6 +339,35 @@ const AdminFichiers = () => {
           </Card>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination>
+            <PaginationContent>
+              <PaginationPrevious 
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationNext 
+                onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
 import CooperationImageUpload from "@/components/admin/CooperationImageUpload";
+import { usePagination, Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/utils/adminPagination";
 
 interface Cooperation {
   id: string;
@@ -280,6 +281,14 @@ const AdminCooperations = () => {
     return acc;
   }, {} as Record<string, number>);
 
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    paginatedItems: paginatedCooperations,
+    totalItems
+  } = usePagination(filteredCooperations, 10);
+
   if (loading) {
     return (
       <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -372,7 +381,7 @@ const AdminCooperations = () => {
 
       {/* Cooperations List */}
       <div className="space-y-6">
-        {filteredCooperations.map((cooperation) => (
+        {paginatedCooperations.map((cooperation) => (
           <Card key={cooperation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
@@ -460,7 +469,7 @@ const AdminCooperations = () => {
           </Card>
         ))}
 
-        {filteredCooperations.length === 0 && (
+        {paginatedCooperations.length === 0 && filteredCooperations.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <Globe className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -483,6 +492,35 @@ const AdminCooperations = () => {
           </Card>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination>
+            <PaginationContent>
+              <PaginationPrevious 
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationNext 
+                onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">

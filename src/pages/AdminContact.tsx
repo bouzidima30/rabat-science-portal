@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToastNotifications } from "@/hooks/useToastNotifications";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { usePagination, Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/utils/adminPagination";
 
 interface ContactMessage {
   id: string;
@@ -132,6 +133,14 @@ const AdminContact = () => {
     });
   };
 
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    paginatedItems: paginatedMessages,
+    totalItems
+  } = usePagination(messages || [], 10);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -157,7 +166,7 @@ const AdminContact = () => {
       </div>
 
       <div className="grid gap-6">
-        {messages?.map((message) => (
+        {paginatedMessages.map((message) => (
           <Card key={message.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -319,6 +328,35 @@ const AdminContact = () => {
           </Card>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination>
+            <PaginationContent>
+              <PaginationPrevious 
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationNext 
+                onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 };
