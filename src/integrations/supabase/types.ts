@@ -53,6 +53,47 @@ export type Database = {
         }
         Relationships: []
       }
+      carousel_config: {
+        Row: {
+          created_at: string
+          id: string
+          news_id: string | null
+          position: number
+          type: string
+          updated_at: string
+          youtube_title: string | null
+          youtube_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          news_id?: string | null
+          position: number
+          type: string
+          updated_at?: string
+          youtube_title?: string | null
+          youtube_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          news_id?: string | null
+          position?: number
+          type?: string
+          updated_at?: string
+          youtube_title?: string | null
+          youtube_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carousel_config_news_id_fkey"
+            columns: ["news_id"]
+            isOneToOne: false
+            referencedRelation: "news"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_messages: {
         Row: {
           created_at: string

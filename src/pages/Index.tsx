@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, memo, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building } from "lucide-react";
+import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building, FileText, Youtube } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
@@ -35,6 +35,52 @@ const Index = () => {
     
     return () => clearTimeout(timer);
   }, [prefetchNews, prefetchEvents, prefetchFormations]);
+
+  // Carousel news query
+  const { data: carouselNews = [] } = useOptimizedQuery({
+    queryKey: ['carousel-news'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('carousel_config')
+        .select(`
+          id,
+          position,
+          news:news_id (
+            id,
+            title,
+            excerpt,
+            image_url,
+            created_at
+          )
+        `)
+        .eq('type', 'news')
+        .order('position', { ascending: true })
+        .limit(3);
+      if (error) throw error;
+      return data?.map(item => item.news).filter(Boolean) || [];
+    },
+    staleTimeMinutes: 5,
+    cacheTimeMinutes: 15,
+    enabled: true,
+  });
+
+  // Carousel YouTube query
+  const { data: carouselYoutube = [] } = useOptimizedQuery({
+    queryKey: ['carousel-youtube'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('carousel_config')
+        .select('id, youtube_url, youtube_title, position')
+        .eq('type', 'youtube')
+        .order('position', { ascending: true })
+        .limit(3);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTimeMinutes: 5,
+    cacheTimeMinutes: 15,
+    enabled: true,
+  });
 
   // Optimized news query with reduced fields to minimize transfer size
   const { data: news = [] } = useOptimizedQuery({
@@ -127,67 +173,101 @@ const Index = () => {
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Enhanced Modern Carousel */}
-        <div className="mb-16">
-          <Carousel className="w-full max-w-6xl mx-auto" opts={{
-          align: "start",
-          loop: true
-        }} setApi={setApi}>
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {carouselHighlights.map((highlight, index) => <CarouselItem key={index} className="pl-2 md:pl-4">
-                  <Link to={highlight.link} className="block group">
-                    <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-                      <div className="relative h-96 md:h-[32rem]">
-                        <OptimizedImage 
-                          src={highlight.image} 
-                          alt={highlight.title} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          context="hero"
-                          priority={index === 0}
-                          quality={90}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#006be5]/60 to-transparent"></div>
-                        
-                        {/* Content overlay */}
-                        <div className="absolute inset-0 flex items-end p-8 md:p-12">
-                          <div className="text-white max-w-2xl">
-                            <div className="mb-4">
-                              <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium border border-white/30">
-                                FSR Mohammed V
-                              </span>
+        {/* Dual Carousel Section */}
+        <div className="mb-16 grid md:grid-cols-2 gap-6">
+          {/* News Carousel */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+              <FileText className="h-6 w-6 mr-2 text-blue-600" />
+              Actualités
+            </h2>
+            <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+              <CarouselContent>
+                {carouselNews.map((article: any, index) => (
+                  <CarouselItem key={index}>
+                    <Link to={`/actualite/${article.id}`}>
+                      <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all">
+                        <div className="relative h-72">
+                          {article.image_url ? (
+                            <OptimizedImage 
+                              src={article.image_url} 
+                              alt={article.title}
+                              className="w-full h-full object-cover"
+                              context="card"
+                              quality={85}
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                              <FileText className="h-20 w-20 text-white/50" />
                             </div>
-                            <h3 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
-                              {highlight.title}
-                            </h3>
-                            <p className="text-lg md:text-xl opacity-90 mb-6 leading-relaxed">
-                              {highlight.description}
-                            </p>
-                            <Button size="lg" className="bg-white text-[#006be5] hover:bg-gray-100 font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group-hover:translate-x-2">
-                              Découvrir
-                              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                            </Button>
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                          <div className="absolute bottom-0 p-6 text-white">
+                            <h3 className="text-xl font-bold mb-2">{article.title}</h3>
+                            <p className="text-sm opacity-90 line-clamp-2">{article.excerpt}</p>
                           </div>
                         </div>
-
-                        {/* Decorative elements */}
-                        <div className="absolute top-8 right-8 w-20 h-20 border-2 border-white/30 rounded-full backdrop-blur-sm"></div>
-                        <div className="absolute bottom-8 right-16 w-12 h-12 bg-white/20 rounded-full backdrop-blur-sm"></div>
+                      </Card>
+                    </Link>
+                  </CarouselItem>
+                ))}
+                {carouselNews.length === 0 && (
+                  <CarouselItem>
+                    <Card className="h-72 flex items-center justify-center">
+                      <div className="text-center text-gray-400">
+                        <FileText className="h-16 w-16 mx-auto mb-2" />
+                        <p>Aucune actualité</p>
                       </div>
                     </Card>
-                  </Link>
-                </CarouselItem>)}
-            </CarouselContent>
-            
-            {/* Enhanced Navigation */}
-            <CarouselPrevious className="left-2 md:-left-6 w-12 h-12 border-2 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 shadow-lg hover:shadow-xl transition-all duration-300" />
-            <CarouselNext className="right-2 md:-right-6 w-12 h-12 border-2 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 shadow-lg hover:shadow-xl transition-all duration-300" />
-            
-            {/* Interactive Dots indicator */}
-            <div className="flex justify-center mt-8 space-x-3">
-              {carouselHighlights.map((_, index) => <button key={index} className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${current === index + 1 ? 'bg-[#006be5] w-8' : 'bg-gray-300 dark:bg-gray-600 hover:bg-[#006be5]/50 dark:hover:bg-[#006be5]/50'}`} onClick={() => api?.scrollTo(index)} aria-label={`Aller à la diapositive ${index + 1}`} />)}
-            </div>
-          </Carousel>
+                  </CarouselItem>
+                )}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+          </div>
+
+          {/* YouTube Carousel */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+              <Youtube className="h-6 w-6 mr-2 text-red-600" />
+              Vidéos
+            </h2>
+            <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+              <CarouselContent>
+                {carouselYoutube.map((video: any, index) => (
+                  <CarouselItem key={index}>
+                    <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all">
+                      <div className="relative h-72">
+                        <iframe
+                          className="w-full h-full"
+                          src={video.youtube_url.replace('watch?v=', 'embed/')}
+                          title={video.youtube_title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                          <h3 className="text-white font-semibold">{video.youtube_title}</h3>
+                        </div>
+                      </div>
+                    </Card>
+                  </CarouselItem>
+                ))}
+                {carouselYoutube.length === 0 && (
+                  <CarouselItem>
+                    <Card className="h-72 flex items-center justify-center">
+                      <div className="text-center text-gray-400">
+                        <Youtube className="h-16 w-16 mx-auto mb-2" />
+                        <p>Aucune vidéo</p>
+                      </div>
+                    </Card>
+                  </CarouselItem>
+                )}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+          </div>
         </div>
 
         {/* Vision Section */}
