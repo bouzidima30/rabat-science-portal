@@ -18,21 +18,20 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
   
   // Handle Supabase storage images with transformation API
   if (url.includes('supabase.co/storage')) {
-    // Convert to Supabase image transformation endpoint
-    // From: /storage/v1/object/public/bucket/path
-    // To: /storage/v1/render/image/public/bucket/path?width=X&quality=Y
+    // For Supabase, we need to use the transformation API to convert to WebP
+    // The transformation endpoint supports format conversion and resizing
     const transformUrl = url.replace('/storage/v1/object/', '/storage/v1/render/image/');
     const params = new URLSearchParams();
     
-    // Always apply width/height if provided for responsive sizing
+    // Apply dimensions if provided
     if (width) params.set('width', width.toString());
     if (height) params.set('height', height.toString());
     
-    // Always optimize quality and format for better compression
-    params.set('quality', quality.toString());
+    // Critical: Always use WebP format for better compression (565KB savings per audit)
+    // This addresses the "Serve images in next-gen formats" SEO issue
     params.set('format', 'webp');
+    params.set('quality', quality.toString());
     
-    // Ensure transformation happens even without dimensions
     return `${transformUrl}?${params.toString()}`;
   }
   
