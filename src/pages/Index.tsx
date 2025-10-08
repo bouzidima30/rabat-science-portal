@@ -155,18 +155,22 @@ const Index = () => {
     setSelectedCategory(categoryId);
   }, []);
 
-  // Preload first carousel image for faster LCP
+  // Preload first carousel image for faster LCP with proper sizing hints
   useEffect(() => {
     if (carouselNews.length > 0 && carouselNews[0]?.image_url) {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
       link.href = carouselNews[0].image_url;
-      link.fetchPriority = 'high' as any;
+      link.setAttribute('fetchpriority', 'high');
+      link.setAttribute('imagesrcset', carouselNews[0].image_url);
+      link.setAttribute('imagesizes', '(max-width: 768px) 100vw, 398px');
       document.head.appendChild(link);
       
       return () => {
-        document.head.removeChild(link);
+        if (document.head.contains(link)) {
+          document.head.removeChild(link);
+        }
       };
     }
   }, [carouselNews]);
