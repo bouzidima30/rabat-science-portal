@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
 import { useOptimizedQuery } from "@/hooks/useOptimizedQuery";
 import { usePrefetchQueries } from "@/hooks/usePrefetchQueries";
+import LazyYouTubeEmbed from "@/components/LazyYouTubeEmbed";
 import { supabase } from "@/integrations/supabase/client";
 import OptimizedImage from "@/components/OptimizedImage";
 // Memoized components for performance
@@ -240,15 +241,12 @@ const Index = () => {
                   <CarouselItem key={index}>
                     <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all">
                       <div className="relative h-72">
-                        <iframe
-                          className="w-full h-full"
-                          src={video.youtube_url.replace('watch?v=', 'embed/')}
+                        <LazyYouTubeEmbed
+                          url={video.youtube_url}
                           title={video.youtube_title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          loading="lazy"
-                        ></iframe>
-                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                          className="w-full h-full"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent pointer-events-none">
                           <h3 className="text-white font-semibold">{video.youtube_title}</h3>
                         </div>
                       </div>
