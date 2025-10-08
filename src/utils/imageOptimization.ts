@@ -24,12 +24,15 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
     const transformUrl = url.replace('/storage/v1/object/', '/storage/v1/render/image/');
     const params = new URLSearchParams();
     
+    // Always apply width/height if provided for responsive sizing
     if (width) params.set('width', width.toString());
     if (height) params.set('height', height.toString());
+    
+    // Always optimize quality and format for better compression
     params.set('quality', quality.toString());
-    // Request WebP format for better compression
     params.set('format', 'webp');
     
+    // Ensure transformation happens even without dimensions
     return `${transformUrl}?${params.toString()}`;
   }
   
