@@ -27,7 +27,8 @@ import {
   Moon,
   Sun,
   Activity,
-  MessageSquare
+  MessageSquare,
+  GripVertical
 } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
