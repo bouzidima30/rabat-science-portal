@@ -38,9 +38,15 @@ const OptimizedImage = ({
   // Generate srcSet for responsive images
   const generateSrcSet = (baseSrc: string, baseWidth: number, baseHeight: number) => {
     if (baseSrc.includes('supabase.co/storage')) {
-      // For Supabase images, generate multiple sizes using URL transforms if available
-      // Since Supabase doesn't support query params by default, we'll use the original
-      return '';
+      // For Supabase images, create srcset with width descriptors
+      // This tells the browser the actual width so it can make better decisions
+      const scales = [0.5, 1, 1.5];
+      return scales
+        .map(scale => {
+          const scaledWidth = Math.round(baseWidth * scale);
+          return `${baseSrc} ${scaledWidth}w`;
+        })
+        .join(', ');
     }
     
     if (baseSrc.includes('unsplash.com')) {
