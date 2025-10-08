@@ -16,11 +16,21 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
     return `${baseUrl}?${params.toString()}`;
   }
   
-  // Handle Supabase storage images
+  // Handle Supabase storage images with transformation API
   if (url.includes('supabase.co/storage')) {
-    // Supabase storage doesn't support query parameter transforms by default
-    // We'll rely on proper sizing in the component and browser optimization
-    return url;
+    // Convert to Supabase image transformation endpoint
+    // From: /storage/v1/object/public/bucket/path
+    // To: /storage/v1/render/image/public/bucket/path?width=X&quality=Y
+    const transformUrl = url.replace('/storage/v1/object/', '/storage/v1/render/image/');
+    const params = new URLSearchParams();
+    
+    if (width) params.set('width', width.toString());
+    if (height) params.set('height', height.toString());
+    params.set('quality', quality.toString());
+    // Request WebP format for better compression
+    params.set('format', 'webp');
+    
+    return `${transformUrl}?${params.toString()}`;
   }
   
   return url;
