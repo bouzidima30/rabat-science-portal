@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { Play } from 'lucide-react';
 
 interface LazyYouTubeEmbedProps {
   url: string;
@@ -7,48 +8,51 @@ interface LazyYouTubeEmbedProps {
 }
 
 const LazyYouTubeEmbed = ({ url, title, className = '' }: LazyYouTubeEmbedProps) => {
-  const [shouldLoad, setShouldLoad] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShouldLoad(true);
-            observer.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: '50px', // Start loading when within 50px of viewport
-      }
-    );
+  // Extract video ID from URL
+  const getVideoId = (videoUrl: string): string => {
+    const match = videoUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?/]+)/);
+    return match ? match[1] : '';
+  };
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+  const videoId = getVideoId(url);
+  const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+  const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 
-    return () => observer.disconnect();
-  }, []);
-
-  const embedUrl = url.replace('watch?v=', 'embed/');
+  const handleClick = () => {
+    setIsLoaded(true);
+  };
 
   return (
-    <div ref={containerRef} className={className}>
-      {shouldLoad ? (
+    <div className={`relative ${className}`}>
+      {!isLoaded ? (
+        <button
+          onClick={handleClick}
+          className="w-full h-full relative group cursor-pointer"
+          aria-label={`Play ${title}`}
+        >
+          <img
+            src={thumbnailUrl}
+            alt={title}
+            className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+            <div className="bg-red-600 rounded-full p-4 group-hover:bg-red-700 transition-colors">
+              <Play className="w-12 h-12 text-white fill-white" />
+            </div>
+          </div>
+        </button>
+      ) : (
         <iframe
           className="w-full h-full"
-          src={embedUrl}
+          src={`${embedUrl}?autoplay=1`}
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          loading="lazy"
         />
-      ) : (
-        <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
-          <div className="text-gray-400">Chargement...</div>
-        </div>
       )}
     </div>
   );
