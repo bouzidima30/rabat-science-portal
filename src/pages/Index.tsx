@@ -195,6 +195,7 @@ const Index = () => {
                               className="w-full h-full object-cover"
                               context="card"
                               quality={85}
+                              priority={index === 0}
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
