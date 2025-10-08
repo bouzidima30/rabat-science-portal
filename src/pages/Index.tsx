@@ -246,6 +246,7 @@ const Index = () => {
                           title={video.youtube_title}
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
+                          loading="lazy"
                         ></iframe>
                         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
                           <h3 className="text-white font-semibold">{video.youtube_title}</h3>
