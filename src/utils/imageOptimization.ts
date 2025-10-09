@@ -18,21 +18,30 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
   
   // Handle Supabase storage images with transformation API
   if (url.includes('supabase.co/storage')) {
-    // For Supabase, we need to use the transformation API to convert to WebP
+    // For Supabase, we'll try to use the transformation API
+    // However, not all Supabase instances support transformation
     // The transformation endpoint supports format conversion and resizing
-    const transformUrl = url.replace('/storage/v1/object/', '/storage/v1/render/image/');
-    const params = new URLSearchParams();
-    
-    // Apply dimensions if provided
-    if (width) params.set('width', width.toString());
-    if (height) params.set('height', height.toString());
-    
-    // Critical: Always use WebP format for better compression (565KB savings per audit)
-    // This addresses the "Serve images in next-gen formats" SEO issue
-    params.set('format', 'webp');
-    params.set('quality', quality.toString());
-    
-    return `${transformUrl}?${params.toString()}`;
+    try {
+      const transformUrl = url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
+      const params = new URLSearchParams();
+      
+      // Apply dimensions if provided
+      if (width) params.set('width', width.toString());
+      if (height) params.set('height', height.toString());
+      
+      // Critical: Always use WebP format for better compression (565KB savings per audit)
+      // This addresses the "Serve images in next-gen formats" SEO issue
+      params.set('format', 'webp');
+      params.set('quality', quality.toString());
+      
+      const optimizedUrl = `${transformUrl}?${params.toString()}`;
+      // Return the optimized URL
+      return optimizedUrl;
+    } catch (e) {
+      // If transformation fails, return original URL
+      console.warn('Image optimization failed, using original URL:', e);
+      return url;
+    }
   }
   
   return url;

@@ -39,9 +39,10 @@ const OptimizedImage = ({
   const generateSrcSet = (baseSrc: string, baseWidth: number, baseHeight: number) => {
     if (baseSrc.includes('supabase.co/storage')) {
       // For Supabase images, create srcset with width descriptors
-      // This tells the browser the actual width so it can make better decisions
+      // Note: Supabase image transformation API may not support all features
+      // Fall back to original URL if transformation fails
       const scales = [0.5, 1, 1.5];
-      return scales
+      const srcSetItems = scales
         .map(scale => {
           const scaledWidth = Math.round(baseWidth * scale);
           const scaledHeight = Math.round(baseHeight * scale);
@@ -49,7 +50,10 @@ const OptimizedImage = ({
           const optimizedUrl = optimizeImageUrl(baseSrc, scaledWidth, scaledHeight, quality);
           return `${optimizedUrl} ${scaledWidth}w`;
         })
-        .join(', ');
+        .filter(Boolean);
+      
+      // If srcSet generation fails, return empty to use src only
+      return srcSetItems.length > 0 ? srcSetItems.join(', ') : '';
     }
     
     if (baseSrc.includes('unsplash.com')) {
