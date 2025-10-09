@@ -44,7 +44,10 @@ const OptimizedImage = ({
       return scales
         .map(scale => {
           const scaledWidth = Math.round(baseWidth * scale);
-          return `${baseSrc} ${scaledWidth}w`;
+          const scaledHeight = Math.round(baseHeight * scale);
+          // Use optimizeImageUrl to ensure WebP format and proper sizing for each scale
+          const optimizedUrl = optimizeImageUrl(baseSrc, scaledWidth, scaledHeight, quality);
+          return `${optimizedUrl} ${scaledWidth}w`;
         })
         .join(', ');
     }
