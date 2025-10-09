@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import type { News } from "@/types/news";
 import { sanitizeHtml, formatContent } from "@/utils/sanitize";
 import { SafeHTMLRenderer } from "@/utils/contentSanitizer";
+import OptimizedImage from "@/components/OptimizedImage";
 
 const ActualiteDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -109,10 +110,13 @@ const ActualiteDetail = () => {
         <Card className="overflow-hidden">
           {actualite.image_url && (
             <div className="aspect-video overflow-hidden">
-              <img 
+              <OptimizedImage 
                 src={actualite.image_url} 
                 alt={`Image illustrant ${actualite.title}`}
                 className="w-full h-full object-cover"
+                context="card"
+                quality={85}
+                priority={true}
               />
             </div>
           )}
