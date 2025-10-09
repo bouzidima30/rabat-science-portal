@@ -133,7 +133,7 @@ const Actualites = () => {
         </div>
 
         <div className="grid gap-6">
-          {filteredNews.map((item) => (
+          {filteredNews.map((item, index) => (
             <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <div className="md:flex">
                 {item.image_url && (
@@ -144,6 +144,7 @@ const Actualites = () => {
                       className="w-full h-48 md:h-full object-cover"
                       context="card"
                       quality={85}
+                      priority={index < 3}
                     />
                   </div>
                 )}
