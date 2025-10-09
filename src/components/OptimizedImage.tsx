@@ -28,7 +28,7 @@ const OptimizedImage = ({
   onLoad,
   onError,
   context = 'card',
-  quality = 80
+  quality = 85 // Increased default quality for better encoding
 }: OptimizedImageProps) => {
   // Get optimal dimensions if not provided
   const responsiveSizes = getResponsiveImageSizes(context);
