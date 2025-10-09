@@ -1,5 +1,5 @@
 // Image optimization utilities
-export const optimizeImageUrl = (url: string, width?: number, height?: number, quality = 85) => {
+export const optimizeImageUrl = (url: string, width?: number, height?: number, quality = 80) => {
   if (!url || url.startsWith('data:')) return url;
   
   // Check if it's an external image
@@ -18,36 +18,27 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
   
   // Handle Supabase storage images with transformation API
   if (url.includes('supabase.co/storage')) {
+    // For Supabase, we'll try to use the transformation API
+    // However, not all Supabase instances support transformation
+    // The transformation endpoint supports format conversion and resizing
     try {
-      // Use the render/image endpoint for transformations
       const transformUrl = url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
       const params = new URLSearchParams();
       
-      // Supabase transformation API requires at least one dimension to trigger format conversion
-      // Apply dimensions if provided - this reduces file size significantly
+      // Apply dimensions if provided
       if (width) params.set('width', width.toString());
       if (height) params.set('height', height.toString());
       
-      // If no dimensions provided, use a reasonable default to ensure transformation triggers
-      // This is critical for WebP conversion to work
-      if (!width && !height) {
-        params.set('width', '1200'); // Default max width for responsive images
-      }
-      
-      // Critical: Use WebP format for 30-40% better compression than JPEG
-      // WebP provides superior compression while maintaining quality
+      // Critical: Always use WebP format for better compression (565KB savings per audit)
+      // This addresses the "Serve images in next-gen formats" SEO issue
       params.set('format', 'webp');
-      
-      // Use higher quality for better encoding (85 is optimal balance)
-      // This ensures the image looks good while still being compressed
       params.set('quality', quality.toString());
       
-      // Add resize mode to ensure proper cropping
-      params.set('resize', 'cover');
-      
-      const optimizedUrl = params.toString() ? `${transformUrl}?${params.toString()}` : transformUrl;
+      const optimizedUrl = `${transformUrl}?${params.toString()}`;
+      // Return the optimized URL
       return optimizedUrl;
     } catch (e) {
+      // If transformation fails, return original URL
       console.warn('Image optimization failed, using original URL:', e);
       return url;
     }

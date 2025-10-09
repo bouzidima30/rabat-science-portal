@@ -19,7 +19,8 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' && componentTagger(),
+    mode === 'development' &&
+    componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -31,28 +32,15 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        // Aggressive code splitting to reduce TBT
-        manualChunks: (id) => {
-          // Vendor chunk for core dependencies
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'vendor-react';
-            }
-            if (id.includes('@radix-ui')) {
-              return 'vendor-ui';
-            }
-            if (id.includes('lucide-react')) {
-              return 'vendor-icons';
-            }
-            return 'vendor';
-          }
+        // Defer CSS loading to prevent render blocking
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
         },
       },
     },
     // Enable CSS optimization and purging
     cssMinify: true,
     assetsInlineLimit: 0, // Don't inline assets to allow better caching
-    chunkSizeWarningLimit: 500, // Warn if chunks exceed 500kb
   },
   css: {
     // Enable CSS optimization

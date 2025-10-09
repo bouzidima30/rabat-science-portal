@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Play } from 'lucide-react';
 
 interface LazyYouTubeEmbedProps {
@@ -7,8 +7,7 @@ interface LazyYouTubeEmbedProps {
   className?: string;
 }
 
-// Memoize to prevent unnecessary re-renders and reduce JS execution time
-const LazyYouTubeEmbedComponent = ({ url, title, className = '' }: LazyYouTubeEmbedProps) => {
+const LazyYouTubeEmbed = ({ url, title, className = '' }: LazyYouTubeEmbedProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -84,16 +83,14 @@ const LazyYouTubeEmbedComponent = ({ url, title, className = '' }: LazyYouTubeEm
       ) : (
         <iframe
           className="w-full h-full"
-          src={`${embedUrl}?autoplay=1&rel=0&modestbranding=1&enablejsapi=0`}
+          src={`${embedUrl}?autoplay=1`}
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          loading="lazy"
         />
       )}
     </div>
   );
 };
 
-// Export memoized version to reduce re-renders and TBT
-export default memo(LazyYouTubeEmbedComponent);
+export default LazyYouTubeEmbed;

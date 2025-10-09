@@ -28,7 +28,7 @@ const OptimizedImage = ({
   onLoad,
   onError,
   context = 'card',
-  quality = 85 // Increased default quality for better encoding
+  quality = 80
 }: OptimizedImageProps) => {
   // Get optimal dimensions if not provided
   const responsiveSizes = getResponsiveImageSizes(context);
@@ -39,30 +39,21 @@ const OptimizedImage = ({
   const generateSrcSet = (baseSrc: string, baseWidth: number, baseHeight: number) => {
     if (baseSrc.includes('supabase.co/storage')) {
       // For Supabase images, create srcset with width descriptors
-      const scales = [1, 1.5, 2];
-      try {
-        const srcSetItems = scales
-          .map(scale => {
-            const scaledWidth = Math.round(baseWidth * scale);
-            const scaledHeight = Math.round(baseHeight * scale);
-            // Use optimizeImageUrl to ensure WebP format and proper sizing for each scale
-            const optimizedUrl = optimizeImageUrl(baseSrc, scaledWidth, scaledHeight, quality);
-            return optimizedUrl ? `${optimizedUrl} ${scaledWidth}w` : null;
-          })
-          .filter(Boolean);
-        
-        // Always return a valid srcSet - use optimized src at minimum
-        if (srcSetItems.length === 0) {
-          const fallbackUrl = optimizeImageUrl(baseSrc, baseWidth, baseHeight, quality);
-          return fallbackUrl ? `${fallbackUrl} ${baseWidth}w` : '';
-        }
-        
-        return srcSetItems.join(', ');
-      } catch (e) {
-        // On error, return single optimized URL as srcSet
-        const fallbackUrl = optimizeImageUrl(baseSrc, baseWidth, baseHeight, quality);
-        return fallbackUrl ? `${fallbackUrl} ${baseWidth}w` : '';
-      }
+      // Note: Supabase image transformation API may not support all features
+      // Fall back to original URL if transformation fails
+      const scales = [0.5, 1, 1.5];
+      const srcSetItems = scales
+        .map(scale => {
+          const scaledWidth = Math.round(baseWidth * scale);
+          const scaledHeight = Math.round(baseHeight * scale);
+          // Use optimizeImageUrl to ensure WebP format and proper sizing for each scale
+          const optimizedUrl = optimizeImageUrl(baseSrc, scaledWidth, scaledHeight, quality);
+          return `${optimizedUrl} ${scaledWidth}w`;
+        })
+        .filter(Boolean);
+      
+      // If srcSet generation fails, return empty to use src only
+      return srcSetItems.length > 0 ? srcSetItems.join(', ') : '';
     }
     
     if (baseSrc.includes('unsplash.com')) {
@@ -84,7 +75,7 @@ const OptimizedImage = ({
   const optimizedSrc = optimizeImageUrl(src, optimalWidth, optimalHeight, quality);
   const srcSet = generateSrcSet(src, optimalWidth, optimalHeight);
   const sizes = context === 'hero' ? '100vw' : context === 'card' ? '(max-width: 768px) 100vw, 398px' : '(max-width: 768px) 100vw, 200px';
-  const [isLoaded, setIsLoaded] = useState(priority); // Priority images start loaded
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -132,8 +123,7 @@ const OptimizedImage = ({
       className={cn('relative overflow-hidden', className)}
       style={{ width, height }}
     >
-      {/* Priority images always render immediately, no placeholder */}
-      {!priority && !isInView ? (
+      {!isInView ? (
         <img
           src={placeholder}
           alt=""
