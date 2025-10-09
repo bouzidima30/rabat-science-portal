@@ -13,6 +13,7 @@ import { usePrefetchQueries } from "@/hooks/usePrefetchQueries";
 import LazyYouTubeEmbed from "@/components/LazyYouTubeEmbed";
 import { supabase } from "@/integrations/supabase/client";
 import OptimizedImage from "@/components/OptimizedImage";
+import { optimizeImageUrl } from "@/utils/imageOptimization";
 // Memoized components for performance
 const OptimizedCard = memo(Card);
 const OptimizedButton = memo(Button);
@@ -161,9 +162,11 @@ const Index = () => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
-      link.href = carouselNews[0].image_url;
+      // Preload optimized WebP version to improve LCP and serve next-gen format
+      const optimizedHref = optimizeImageUrl(carouselNews[0].image_url, 398, 224, 80);
+      link.href = optimizedHref;
       link.setAttribute('fetchpriority', 'high');
-      link.setAttribute('imagesrcset', carouselNews[0].image_url);
+      link.setAttribute('imagesrcset', optimizedHref);
       link.setAttribute('imagesizes', '(max-width: 768px) 100vw, 398px');
       document.head.appendChild(link);
       
@@ -512,9 +515,19 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.slice(0, 3).map(event => <Card key={event.id} className="hover:shadow-lg transition-shadow">
                 <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                  {event.image_url ? <img src={event.image_url} alt={event.titre} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">
+                  {event.image_url ? (
+                    <OptimizedImage 
+                      src={event.image_url}
+                      alt={event.titre}
+                      className="w-full h-full object-cover"
+                      context="card"
+                      quality={85}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
                       <Calendar className="h-10 w-10 text-gray-400" />
-                    </div>}
+                    </div>
+                  )}
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 text-sm text-[#006be5] mb-3">
