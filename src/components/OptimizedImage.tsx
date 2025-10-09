@@ -115,7 +115,7 @@ const OptimizedImage = ({
 
   return (
     <div
-      ref={imgRef}
+      ref={priority ? undefined : imgRef}
       className={cn('relative overflow-hidden', className)}
       style={{ width, height }}
     >
@@ -127,7 +127,7 @@ const OptimizedImage = ({
         />
       ) : (
         <>
-          {!isLoaded && !hasError && (
+          {!isLoaded && !hasError && !priority && (
             <img
               src={placeholder}
               alt=""
@@ -143,7 +143,7 @@ const OptimizedImage = ({
             height={optimalHeight}
             className={cn(
               'w-full h-full object-cover transition-opacity duration-300',
-              isLoaded ? 'opacity-100' : 'opacity-0'
+              priority || isLoaded ? 'opacity-100' : 'opacity-0'
             )}
             onLoad={handleLoad}
             onError={handleError}
