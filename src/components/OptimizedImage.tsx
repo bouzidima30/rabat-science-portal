@@ -84,7 +84,7 @@ const OptimizedImage = ({
   const optimizedSrc = optimizeImageUrl(src, optimalWidth, optimalHeight, quality);
   const srcSet = generateSrcSet(src, optimalWidth, optimalHeight);
   const sizes = context === 'hero' ? '100vw' : context === 'card' ? '(max-width: 768px) 100vw, 398px' : '(max-width: 768px) 100vw, 200px';
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(priority); // Priority images start loaded
   const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -132,7 +132,8 @@ const OptimizedImage = ({
       className={cn('relative overflow-hidden', className)}
       style={{ width, height }}
     >
-      {!isInView ? (
+      {/* Priority images always render immediately, no placeholder */}
+      {!priority && !isInView ? (
         <img
           src={placeholder}
           alt=""
@@ -149,8 +150,8 @@ const OptimizedImage = ({
           )}
           <img
             src={hasError ? placeholder : optimizedSrc}
-            srcSet={hasError ? '' : srcSet}
-            sizes={hasError ? '' : sizes}
+            srcSet={hasError || !srcSet ? '' : srcSet}
+            sizes={hasError || !srcSet ? '' : sizes}
             alt={alt}
             width={optimalWidth}
             height={optimalHeight}
