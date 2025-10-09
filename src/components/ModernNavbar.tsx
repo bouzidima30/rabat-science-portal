@@ -134,8 +134,6 @@ const ModernNavbar = React.memo(() => {
       decoding="async"
       width="135"
       height="64"
-      srcSet="/lovable-uploads/FSR.webp 135w"
-      sizes="135px"
       style={{ maxWidth: '135px', maxHeight: '64px' }}
     />
   ), []);
