@@ -467,18 +467,24 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {news.slice(0, 3).map(article => <Link key={article.id} to={`/actualite/${article.id}`}>
+            {news.slice(0, 3).map((article, index) => (
+              <Link key={article.id} to={`/actualite/${article.id}`}>
                 <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
                   <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                    {article.image_url ? <OptimizedImage 
-                      src={article.image_url} 
-                      alt={`Image illustrant ${article.title}`}
-                      className="w-full h-full object-cover"
-                      context="card"
-                      quality={85}
-                    /> : <div className="w-full h-full flex items-center justify-center">
+                    {article.image_url ? (
+                      <OptimizedImage 
+                        src={article.image_url} 
+                        alt={`Image illustrant ${article.title}`}
+                        className="w-full h-full object-cover"
+                        context="card"
+                        quality={85}
+                        priority={index === 0}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
                         <BookOpen className="h-10 w-10 text-gray-400" />
-                      </div>}
+                      </div>
+                    )}
                   </div>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-2 text-sm text-[#006be5] mb-3">
@@ -493,7 +499,7 @@ const Index = () => {
                       </p>}
                   </CardContent>
                 </Card>
-              </Link>)}
+               </Link>))}
           </div>
 
           <div className="text-center mt-8">
