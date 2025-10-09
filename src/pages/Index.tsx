@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, memo, useCallback } from "react";
+import { useState, useEffect, useMemo, memo, useCallback, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building, FileText, Youtube } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,10 +10,13 @@ import Footer from "@/components/Footer";
 import { NewsCategory } from "@/types/news";
 import { useOptimizedQuery } from "@/hooks/useOptimizedQuery";
 import { usePrefetchQueries } from "@/hooks/usePrefetchQueries";
-import LazyYouTubeEmbed from "@/components/LazyYouTubeEmbed";
 import { supabase } from "@/integrations/supabase/client";
 import OptimizedImage from "@/components/OptimizedImage";
 import { optimizeImageUrl } from "@/utils/imageOptimization";
+
+// Lazy load heavy components to reduce initial bundle size and TBT
+const LazyYouTubeEmbed = lazy(() => import("@/components/LazyYouTubeEmbed"));
+
 // Memoized components for performance
 const OptimizedCard = memo(Card);
 const OptimizedButton = memo(Button);
@@ -252,7 +255,7 @@ const Index = () => {
             </Carousel>
           </div>
 
-          {/* YouTube Carousel */}
+          {/* YouTube Carousel - Wrapped in Suspense for code splitting */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
               <Youtube className="h-6 w-6 mr-2 text-red-600" />
@@ -264,11 +267,17 @@ const Index = () => {
                   <CarouselItem key={index}>
                     <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all">
                       <div className="relative h-72">
-                        <LazyYouTubeEmbed
-                          url={video.youtube_url}
-                          title={video.youtube_title}
-                          className="w-full h-full"
-                        />
+                        <Suspense fallback={
+                          <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+                            <Youtube className="h-12 w-12 text-gray-400 animate-pulse" />
+                          </div>
+                        }>
+                          <LazyYouTubeEmbed
+                            url={video.youtube_url}
+                            title={video.youtube_title}
+                            className="w-full h-full"
+                          />
+                        </Suspense>
                         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent pointer-events-none">
                           <h3 className="text-white font-semibold">{video.youtube_title}</h3>
                         </div>
