@@ -73,12 +73,24 @@ const OptimizedImage = ({
 
   // Optimize the image URL
   const optimizedSrc = optimizeImageUrl(src, optimalWidth, optimalHeight, quality);
-  const srcSet = generateSrcSet(src, optimalWidth, optimalHeight);
+  const initialSrcSet = generateSrcSet(src, optimalWidth, optimalHeight);
   const sizes = context === 'hero' ? '100vw' : context === 'card' ? '(max-width: 768px) 100vw, 398px' : '(max-width: 768px) 100vw, 200px';
+  const [srcToUse, setSrcToUse] = useState(optimizedSrc);
+  const [srcSetToUse, setSrcSetToUse] = useState(initialSrcSet);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // Reset and recompute when inputs change
+    const nextOptimized = optimizeImageUrl(src, optimalWidth, optimalHeight, quality);
+    const nextSrcSet = generateSrcSet(src, optimalWidth, optimalHeight);
+    setSrcToUse(nextOptimized);
+    setSrcSetToUse(nextSrcSet);
+    setIsLoaded(false);
+    setHasError(false);
+  }, [src, optimalWidth, optimalHeight, quality]);
 
   useEffect(() => {
     if (priority) return;
@@ -113,6 +125,13 @@ const OptimizedImage = ({
   };
 
   const handleError = () => {
+    // Fallback: if optimized URL failed (e.g., Supabase render endpoint), retry with original URL once
+    if (srcToUse !== src) {
+      setSrcToUse(src);
+      setSrcSetToUse('');
+      setHasError(false);
+      return;
+    }
     setHasError(true);
     onError?.();
   };
@@ -139,8 +158,8 @@ const OptimizedImage = ({
             />
           )}
           <img
-            src={hasError ? placeholder : optimizedSrc}
-            srcSet={hasError ? '' : srcSet}
+            src={hasError ? placeholder : srcToUse}
+            srcSet={hasError ? '' : srcSetToUse}
             sizes={hasError ? '' : sizes}
             alt={alt}
             width={optimalWidth}
