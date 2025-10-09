@@ -23,9 +23,16 @@ export const optimizeImageUrl = (url: string, width?: number, height?: number, q
       const transformUrl = url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
       const params = new URLSearchParams();
       
+      // Supabase transformation API requires at least one dimension to trigger format conversion
       // Apply dimensions if provided - this reduces file size significantly
       if (width) params.set('width', width.toString());
       if (height) params.set('height', height.toString());
+      
+      // If no dimensions provided, use a reasonable default to ensure transformation triggers
+      // This is critical for WebP conversion to work
+      if (!width && !height) {
+        params.set('width', '1200'); // Default max width for responsive images
+      }
       
       // Critical: Use WebP format for 30-40% better compression than JPEG
       // WebP provides superior compression while maintaining quality
