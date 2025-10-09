@@ -150,8 +150,8 @@ const OptimizedImage = ({
           )}
           <img
             src={hasError ? placeholder : optimizedSrc}
-            srcSet={hasError || !srcSet ? '' : srcSet}
-            sizes={hasError || !srcSet ? '' : sizes}
+            srcSet={hasError ? '' : srcSet}
+            sizes={hasError ? '' : sizes}
             alt={alt}
             width={optimalWidth}
             height={optimalHeight}
