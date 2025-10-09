@@ -140,7 +140,7 @@ const Actualites = () => {
                   <div className="md:w-1/3">
                     <OptimizedImage 
                       src={item.image_url} 
-                      alt={item.title}
+                      alt={`Image illustrant ${item.title}`}
                       className="w-full h-48 md:h-full object-cover"
                       context="card"
                       quality={85}

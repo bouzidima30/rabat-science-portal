@@ -212,7 +212,7 @@ const Index = () => {
                           {article.image_url ? (
                             <OptimizedImage 
                               src={article.image_url} 
-                              alt={article.title}
+                              alt={`Image illustrant ${article.title}`}
                               className="w-full h-full object-cover"
                               context="card"
                               quality={85}
@@ -469,7 +469,7 @@ const Index = () => {
                   <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
                     {article.image_url ? <OptimizedImage 
                       src={article.image_url} 
-                      alt={article.title}
+                      alt={`Image illustrant ${article.title}`}
                       className="w-full h-full object-cover"
                       context="card"
                       quality={85}

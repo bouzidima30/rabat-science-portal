@@ -111,7 +111,7 @@ const ActualiteDetail = () => {
             <div className="aspect-video overflow-hidden">
               <img 
                 src={actualite.image_url} 
-                alt={actualite.title}
+                alt={`Image illustrant ${actualite.title}`}
                 className="w-full h-full object-cover"
               />
             </div>
