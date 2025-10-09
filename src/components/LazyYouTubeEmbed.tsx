@@ -44,7 +44,7 @@ const LazyYouTubeEmbed = ({ url, title, className = '' }: LazyYouTubeEmbedProps)
   }, []);
 
   const videoId = getVideoId(url);
-  const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
   const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 
   const handleClick = () => {
