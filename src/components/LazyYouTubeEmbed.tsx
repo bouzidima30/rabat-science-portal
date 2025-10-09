@@ -84,7 +84,7 @@ const LazyYouTubeEmbedComponent = ({ url, title, className = '' }: LazyYouTubeEm
       ) : (
         <iframe
           className="w-full h-full"
-          src={`${embedUrl}?autoplay=1`}
+          src={`${embedUrl}?autoplay=1&rel=0&modestbranding=1&enablejsapi=0`}
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
