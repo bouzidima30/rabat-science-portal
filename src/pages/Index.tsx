@@ -166,7 +166,7 @@ const Index = () => {
       link.rel = 'preload';
       link.as = 'image';
       // Preload optimized WebP version to improve LCP and serve next-gen format
-      const optimizedHref = optimizeImageUrl(carouselNews[0].image_url, 398, 224, 80);
+      const optimizedHref = optimizeImageUrl(carouselNews[0].image_url, 398, 224, 85);
       link.href = optimizedHref;
       link.setAttribute('fetchpriority', 'high');
       link.setAttribute('imagesrcset', optimizedHref);

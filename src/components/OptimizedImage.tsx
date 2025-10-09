@@ -39,21 +39,30 @@ const OptimizedImage = ({
   const generateSrcSet = (baseSrc: string, baseWidth: number, baseHeight: number) => {
     if (baseSrc.includes('supabase.co/storage')) {
       // For Supabase images, create srcset with width descriptors
-      // Note: Supabase image transformation API may not support all features
-      // Fall back to original URL if transformation fails
-      const scales = [0.5, 1, 1.5];
-      const srcSetItems = scales
-        .map(scale => {
-          const scaledWidth = Math.round(baseWidth * scale);
-          const scaledHeight = Math.round(baseHeight * scale);
-          // Use optimizeImageUrl to ensure WebP format and proper sizing for each scale
-          const optimizedUrl = optimizeImageUrl(baseSrc, scaledWidth, scaledHeight, quality);
-          return `${optimizedUrl} ${scaledWidth}w`;
-        })
-        .filter(Boolean);
-      
-      // If srcSet generation fails, return empty to use src only
-      return srcSetItems.length > 0 ? srcSetItems.join(', ') : '';
+      const scales = [1, 1.5, 2];
+      try {
+        const srcSetItems = scales
+          .map(scale => {
+            const scaledWidth = Math.round(baseWidth * scale);
+            const scaledHeight = Math.round(baseHeight * scale);
+            // Use optimizeImageUrl to ensure WebP format and proper sizing for each scale
+            const optimizedUrl = optimizeImageUrl(baseSrc, scaledWidth, scaledHeight, quality);
+            return optimizedUrl ? `${optimizedUrl} ${scaledWidth}w` : null;
+          })
+          .filter(Boolean);
+        
+        // Always return a valid srcSet - use optimized src at minimum
+        if (srcSetItems.length === 0) {
+          const fallbackUrl = optimizeImageUrl(baseSrc, baseWidth, baseHeight, quality);
+          return fallbackUrl ? `${fallbackUrl} ${baseWidth}w` : '';
+        }
+        
+        return srcSetItems.join(', ');
+      } catch (e) {
+        // On error, return single optimized URL as srcSet
+        const fallbackUrl = optimizeImageUrl(baseSrc, baseWidth, baseHeight, quality);
+        return fallbackUrl ? `${fallbackUrl} ${baseWidth}w` : '';
+      }
     }
     
     if (baseSrc.includes('unsplash.com')) {
