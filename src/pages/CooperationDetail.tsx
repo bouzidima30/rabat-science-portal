@@ -2,7 +2,7 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useSecureCooperationData } from "@/hooks/useSecureCooperationData";
 import { SecurityNotice } from "@/components/SecurityNotice";
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
@@ -13,34 +13,20 @@ import { ArrowLeft, Calendar, MapPin, Mail, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 const CooperationDetail = () => {
   const { id } = useParams();
-  const { user } = useAuth();
+  const { canViewCoordinatorEmail } = useSecureCooperationData();
 
   const { data: cooperation, isLoading } = useQuery({
-    queryKey: ['cooperation', id, !!user],
+    queryKey: ['cooperation', id],
     queryFn: async () => {
-      if (user) {
-        // Authenticated users: direct query with full data
-        const { data, error } = await supabase
-          .from('cooperations')
-          .select('*')
-          .eq('id', id)
-          .single();
-        
-        if (error) throw error;
-        return data;
-      } else {
-        // Anonymous users: use secure RPC that masks emails
-        const { data, error } = await supabase
-          .rpc('get_public_cooperations', { 
-            p_id: id,
-            p_limit: 1,
-            p_offset: 0 
-          });
-        
-        if (error) throw error;
-        return data?.[0] || null;
-      }
-    }
+      const { data, error } = await supabase
+        .from('cooperations')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!id,
   });
 
   if (isLoading) {
@@ -161,13 +147,13 @@ const CooperationDetail = () => {
                       <p className="text-gray-600 dark:text-gray-400">
                         {cooperation.coordinateur}
                       </p>
-                      {cooperation.email_coordinateur && user && (
+                      {cooperation.email_coordinateur && canViewCoordinatorEmail() && (
                         <p className="text-gray-600 dark:text-gray-400">
                           <Mail className="h-4 w-4 inline mr-1" />
                           {cooperation.email_coordinateur}
                         </p>
                       )}
-                      {cooperation.email_coordinateur && !user && (
+                      {cooperation.email_coordinateur && !canViewCoordinatorEmail() && (
                         <div className="mt-2">
                           <SecurityNotice type="email-protected" />
                         </div>
