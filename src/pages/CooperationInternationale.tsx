@@ -11,33 +11,18 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const CooperationInternationale = () => {
-  const { user } = useAuth();
-  
   const { data: cooperations, isLoading } = useQuery({
-    queryKey: ['cooperations', 'internationale', !!user],
+    queryKey: ['cooperations', 'internationale'],
     queryFn: async () => {
-      if (user) {
-        // Authenticated users: direct query with full data
-        const { data, error } = await supabase
-          .from('cooperations')
-          .select('*')
-          .eq('type_cooperation', 'internationale')
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        return data;
-      } else {
-        // Anonymous users: use secure RPC that masks emails
-        const { data, error } = await supabase
-          .rpc('get_public_cooperations', { 
-            p_type: 'internationale',
-            p_limit: 100,
-            p_offset: 0 
-          });
-        
-        if (error) throw error;
-        return data;
-      }
+      const { data, error } = await supabase
+        .from('cooperations')
+        .select('*')
+        .eq('type_cooperation', 'internationale')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
     }
   });
 
