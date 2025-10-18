@@ -15,18 +15,33 @@ export const useAdminSecurity = () => {
     queryFn: async () => {
       if (!user?.id) return null;
       
-      const { data, error } = await supabase
+      // Fetch profile data
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('role, full_name, email')
+        .select('full_name, email')
         .eq('id', user.id)
         .single();
       
-      if (error) {
-        console.error('Error fetching user profile:', error);
+      if (profileError) {
+        console.error('Error fetching user profile:', profileError);
         return null;
       }
+
+      // Fetch user roles from user_roles table
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .maybeSingle();
       
-      return data;
+      if (roleError) {
+        console.error('Error fetching user role:', roleError);
+      }
+      
+      return {
+        ...profileData,
+        role: roleData?.role || 'user'
+      };
     },
     enabled: !!user?.id,
   });
@@ -59,12 +74,19 @@ export const useAdminSecurity = () => {
         }
       });
 
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('id', userId);
+      // Delete old role and insert new role in user_roles table
+      const { error: deleteError } = await supabase
+        .from('user_roles')
+        .delete()
+        .eq('user_id', userId);
 
-      if (error) throw error;
+      if (deleteError) throw deleteError;
+
+      const { error: insertError } = await supabase
+        .from('user_roles')
+        .insert({ user_id: userId, role: newRole as 'admin' | 'user' });
+
+      if (insertError) throw insertError;
 
       // Log successful change
       await supabase.rpc('log_security_event', {
@@ -114,13 +136,31 @@ export const useAdminSecurity = () => {
     queryFn: async () => {
       if (!isAdmin) return [];
       
-      const { data, error } = await supabase
+      // Fetch profiles
+      const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
-        .select('id, email, full_name, role, created_at, updated_at')
+        .select('id, email, full_name, created_at, updated_at')
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
-      return data;
+      if (profilesError) throw profilesError;
+
+      // Fetch all user roles
+      const { data: rolesData, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+      
+      if (rolesError) throw rolesError;
+
+      // Merge profiles with roles
+      const usersWithRoles = profilesData?.map(profile => {
+        const userRole = rolesData?.find(r => r.user_id === profile.id);
+        return {
+          ...profile,
+          role: userRole?.role || 'user'
+        };
+      });
+      
+      return usersWithRoles;
     },
     enabled: isAdmin,
   });

@@ -13,20 +13,20 @@ interface AuthGuardProps {
 const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAdmin = false }) => {
   const { user, loading } = useAuth();
 
-  // Fetch user profile to get the role
+  // Fetch user role from user_roles table
   const { data: profile, isLoading: profileLoading } = useQuery({
-    queryKey: ['user-profile', user?.id],
+    queryKey: ['user-role', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
       
       const { data, error } = await supabase
-        .from('profiles')
+        .from('user_roles')
         .select('role')
-        .eq('id', user.id)
-        .single();
+        .eq('user_id', user.id)
+        .maybeSingle();
       
       if (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error fetching user role:', error);
         return null;
       }
       
