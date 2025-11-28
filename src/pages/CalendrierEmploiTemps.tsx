@@ -2,35 +2,12 @@
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
+import FileExplorer from "@/components/FileExplorer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Download, Clock, Plane } from "lucide-react";
 
 const CalendrierEmploiTemps = () => {
-  const emploisTemps = [
-    {
-      niveau: "Licence S1",
-      documents: [
-        { nom: "Emploi du temps - Groupe A", fichier: "EDT_L1_GroupeA.pdf", taille: "1.2 MB" },
-        { nom: "Emploi du temps - Groupe B", fichier: "EDT_L1_GroupeB.pdf", taille: "1.1 MB" }
-      ]
-    },
-    {
-      niveau: "Licence S3",
-      documents: [
-        { nom: "Emploi du temps - Math", fichier: "EDT_L3_Math.pdf", taille: "1.3 MB" },
-        { nom: "Emploi du temps - Physique", fichier: "EDT_L3_Phys.pdf", taille: "1.2 MB" }
-      ]
-    },
-    {
-      niveau: "Master M1",
-      documents: [
-        { nom: "Emploi du temps - Informatique", fichier: "EDT_M1_Info.pdf", taille: "0.9 MB" },
-        { nom: "Emploi du temps - Mathématiques", fichier: "EDT_M1_Math.pdf", taille: "0.8 MB" }
-      ]
-    }
-  ];
-
   const calendriers = [
     {
       type: "Calendrier des Semaines",
@@ -93,40 +70,11 @@ const CalendrierEmploiTemps = () => {
 
         {/* Emplois du temps */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+            <Clock className="h-6 w-6 mr-2 text-[#006be5]" />
             Emplois du Temps
           </h2>
-          <div className="grid lg:grid-cols-3 gap-6">
-            {emploisTemps.map((niveau, index) => (
-              <Card key={index} className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-lg text-[#006be5] flex items-center">
-                    <Clock className="h-5 w-5 mr-2" />
-                    {niveau.niveau}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {niveau.documents.map((doc, docIndex) => (
-                      <div key={docIndex} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                        <div>
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">
-                            {doc.nom}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            PDF • {doc.taille}
-                          </p>
-                        </div>
-                        <Button size="sm" variant="outline">
-                          <Download className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <FileExplorer categoryFilter="emploi_temps" showDownload={true} />
         </div>
 
         {/* Calendriers */}
