@@ -21,7 +21,7 @@ export type Database = {
           created_at: string
           details: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           metadata: Json | null
           severity: string | null
           user_agent: string | null
@@ -33,7 +33,7 @@ export type Database = {
           created_at?: string
           details?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           severity?: string | null
           user_agent?: string | null
@@ -45,7 +45,7 @@ export type Database = {
           created_at?: string
           details?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           severity?: string | null
           user_agent?: string | null
@@ -965,14 +965,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      can_view_coordinator_email: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      get_current_user_role: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      can_view_coordinator_email: { Args: never; Returns: boolean }
+      get_current_user_role: { Args: never; Returns: string }
       get_public_cooperations: {
         Args: {
           p_id?: string
@@ -1010,10 +1004,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      is_admin: { Args: never; Returns: boolean }
       is_content_owner: {
         Args: { content_author_id: string }
         Returns: boolean

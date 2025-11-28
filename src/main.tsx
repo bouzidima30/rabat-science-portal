@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/useAuth";
 import AppRoutes from "@/components/AppRoutes";
+import CookieConsent from "@/components/CookieConsent";
 import "./index.css";
 
 const queryClient = new QueryClient({
@@ -30,6 +31,7 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <TooltipProvider>
             <AppRoutes />
+            <CookieConsent />
             <Toaster />
             <Sonner />
           </TooltipProvider>
