@@ -46,15 +46,24 @@ const AdminEmploiTemps = () => {
 
   const createFolderMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase
+      console.log('Creating folder:', newFolderName, 'Parent:', selectedParentId);
+      
+      const { data, error } = await supabase
         .from('file_manager')
         .insert({
           name: newFolderName,
           type: 'folder',
           parent_id: selectedParentId || null
-        });
+        })
+        .select();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Folder creation error:', error);
+        throw error;
+      }
+      
+      console.log('Folder created successfully:', data);
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-file-manager'] });
@@ -66,13 +75,13 @@ const AdminEmploiTemps = () => {
       setSelectedParentId("");
       setCreateFolderOpen(false);
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error('Full error:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de créer le dossier",
+        title: "Erreur lors de la création du dossier",
+        description: error?.message || "Impossible de créer le dossier",
         variant: "destructive"
       });
-      console.error(error);
     }
   });
 
@@ -80,21 +89,32 @@ const AdminEmploiTemps = () => {
     mutationFn: async () => {
       if (!uploadFile) throw new Error("No file selected");
 
+      console.log('Uploading file:', uploadFile.name, 'to parent:', uploadParentId);
+
       const fileExt = uploadFile.name.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `emploi-temps/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
+      console.log('Upload path:', filePath);
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('files')
         .upload(filePath, uploadFile);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('File uploaded to storage:', uploadData);
 
       const { data: { publicUrl } } = supabase.storage
         .from('files')
         .getPublicUrl(filePath);
 
-      const { error: dbError } = await supabase
+      console.log('Public URL:', publicUrl);
+
+      const { data: dbData, error: dbError } = await supabase
         .from('file_manager')
         .insert({
           name: uploadFile.name,
@@ -103,9 +123,16 @@ const AdminEmploiTemps = () => {
           file_size: uploadFile.size,
           mime_type: uploadFile.type,
           parent_id: uploadParentId || null
-        });
+        })
+        .select();
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database insert error:', dbError);
+        throw dbError;
+      }
+
+      console.log('File record created in database:', dbData);
+      return dbData;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-file-manager'] });
@@ -117,13 +144,13 @@ const AdminEmploiTemps = () => {
       setUploadParentId("");
       setUploadFileOpen(false);
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error('Full upload error:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de télécharger le fichier",
+        title: "Erreur lors du téléchargement",
+        description: error?.message || "Impossible de télécharger le fichier",
         variant: "destructive"
       });
-      console.error(error);
     }
   });
 
