@@ -53,7 +53,7 @@ const AdminEmploiTemps = () => {
         .insert({
           name: newFolderName,
           type: 'folder',
-          parent_id: selectedParentId || null
+          parent_id: !selectedParentId || selectedParentId === 'root' ? null : selectedParentId
         })
         .select();
       
@@ -122,7 +122,7 @@ const AdminEmploiTemps = () => {
           file_url: publicUrl,
           file_size: uploadFile.size,
           mime_type: uploadFile.type,
-          parent_id: uploadParentId || null
+          parent_id: !uploadParentId || uploadParentId === 'root' ? null : uploadParentId
         })
         .select();
 
@@ -280,7 +280,7 @@ const AdminEmploiTemps = () => {
                       <SelectValue placeholder="Racine" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Racine</SelectItem>
+                      <SelectItem value="root">Racine</SelectItem>
                       {folders.map(folder => (
                         <SelectItem key={folder.id} value={folder.id}>
                           {folder.name}
@@ -330,7 +330,7 @@ const AdminEmploiTemps = () => {
                       <SelectValue placeholder="Racine" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Racine</SelectItem>
+                      <SelectItem value="root">Racine</SelectItem>
                       {folders.map(folder => (
                         <SelectItem key={folder.id} value={folder.id}>
                           {folder.name}
