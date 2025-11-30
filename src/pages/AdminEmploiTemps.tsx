@@ -21,9 +21,9 @@ interface FileManagerItem {
 
 const AdminEmploiTemps = () => {
   const [newFolderName, setNewFolderName] = useState("");
-  const [selectedParentId, setSelectedParentId] = useState<string>("");
+  const [selectedParentId, setSelectedParentId] = useState<string>("root");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
-  const [uploadParentId, setUploadParentId] = useState<string>("");
+  const [uploadParentId, setUploadParentId] = useState<string>("root");
   const [createFolderOpen, setCreateFolderOpen] = useState(false);
   const [uploadFileOpen, setUploadFileOpen] = useState(false);
   
@@ -72,7 +72,7 @@ const AdminEmploiTemps = () => {
         description: "Le dossier a été créé avec succès"
       });
       setNewFolderName("");
-      setSelectedParentId("");
+      setSelectedParentId("root");
       setCreateFolderOpen(false);
     },
     onError: (error: any) => {
@@ -141,7 +141,7 @@ const AdminEmploiTemps = () => {
         description: "Le fichier a été téléchargé avec succès"
       });
       setUploadFile(null);
-      setUploadParentId("");
+      setUploadParentId("root");
       setUploadFileOpen(false);
     },
     onError: (error: any) => {
