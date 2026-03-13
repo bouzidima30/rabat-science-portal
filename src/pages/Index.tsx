@@ -122,14 +122,24 @@ const Index = () => {
   });
   // Memoized static data
   const newsCategories = useMemo(() => [
-    { id: 'all', label: 'Toutes' },
-    { id: 'reunion_travail', label: 'Réunion de travail' },
-    { id: 'nouvelles_informations', label: 'Nouvelles informations' },
-    { id: 'activites_parauniversitaire', label: 'Activités parauniversitaire' },
-    { id: 'avis_etudiants', label: 'Avis étudiants' },
-    { id: 'avis_enseignants', label: 'Avis enseignants' },
-    { id: 'evenements_scientifique', label: 'Événements scientifique' }
+    { id: 'all', label: 'Toutes', color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' },
+    { id: 'reunion_travail', label: 'Réunion de travail', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
+    { id: 'nouvelles_informations', label: 'Nouvelles', color: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' },
+    { id: 'activites_parauniversitaire', label: 'Activités', color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' },
+    { id: 'avis_etudiants', label: 'Avis étudiants', color: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' },
+    { id: 'avis_enseignants', label: 'Avis enseignants', color: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300' },
+    { id: 'evenements_scientifique', label: 'Événements', color: 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300' }
   ], []);
+
+  const getCategoryStyle = useCallback((categoryId: string) => {
+    const cat = newsCategories.find(c => c.id === categoryId);
+    return cat?.color || 'bg-gray-100 text-gray-800';
+  }, [newsCategories]);
+
+  const getCategoryLabel = useCallback((categoryId: string) => {
+    const cat = newsCategories.find(c => c.id === categoryId);
+    return cat?.label || categoryId;
+  }, [newsCategories]);
   
   const carouselHighlights = useMemo(() => [
     {
