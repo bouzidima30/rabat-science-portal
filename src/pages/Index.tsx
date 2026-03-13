@@ -354,48 +354,16 @@ const Index = () => {
         </div>
 
         {/* FSR Stats */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-foreground mb-2 text-center">
             La FSR en Chiffres
           </h2>
+          <p className="text-muted-foreground text-center mb-10">Des décennies d'excellence académique et scientifique</p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[{
-            icon: Users,
-            value: "15,000+",
-            label: "Étudiants",
-            color: "text-blue-600 dark:text-blue-400",
-            bgColor: "bg-blue-100 dark:bg-blue-900/20"
-          }, {
-            icon: BookOpen,
-            value: "50+",
-            label: "Formations",
-            color: "text-orange-600 dark:text-orange-400",
-            bgColor: "bg-orange-100 dark:bg-orange-900/20"
-          }, {
-            icon: Award,
-            value: "200+",
-            label: "Enseignants",
-            color: "text-green-600 dark:text-green-400",
-            bgColor: "bg-green-100 dark:bg-green-900/20"
-          }, {
-            icon: Building,
-            value: "12",
-            label: "Laboratoires",
-            color: "text-red-600 dark:text-red-400",
-            bgColor: "bg-red-100 dark:bg-red-900/20"
-          }].map((stat, index) => <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
-                  <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center mx-auto mb-4`}>
-                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                  </div>
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-gray-600 dark:text-gray-300">
-                    {stat.label}
-                  </div>
-                </CardContent>
-              </Card>)}
+            <AnimatedCounter icon={Users} value={15000} suffix="+" label="Étudiants" color="text-blue-600 dark:text-blue-400" bgColor="bg-blue-100 dark:bg-blue-900/20" />
+            <AnimatedCounter icon={BookOpen} value={50} suffix="+" label="Formations" color="text-orange-600 dark:text-orange-400" bgColor="bg-orange-100 dark:bg-orange-900/20" />
+            <AnimatedCounter icon={Award} value={200} suffix="+" label="Enseignants" color="text-green-600 dark:text-green-400" bgColor="bg-green-100 dark:bg-green-900/20" />
+            <AnimatedCounter icon={Building} value={12} label="Laboratoires" color="text-red-600 dark:text-red-400" bgColor="bg-red-100 dark:bg-red-900/20" />
           </div>
         </div>
 
