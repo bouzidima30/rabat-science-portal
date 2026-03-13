@@ -150,9 +150,13 @@ const ModernNavbar = React.memo(() => {
   ), []);
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b-2 border-blue-600 sticky top-0 z-50">
+    <nav className={`sticky top-0 z-50 border-b-2 border-blue-600 transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-xl' 
+        : 'bg-white dark:bg-gray-900 shadow-lg'
+    }`}>
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+        <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? 'h-16' : 'h-20'}`}>
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-4">
             {fsrLogo}
