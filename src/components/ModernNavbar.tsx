@@ -9,8 +9,17 @@ const ModernNavbar = React.memo(() => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { isMobile } = useMobileDetection();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -129,21 +138,25 @@ const ModernNavbar = React.memo(() => {
     <img 
       src="/lovable-uploads/FSR.webp" 
       alt="FSR Logo" 
-      className="h-16 w-auto" 
+      className={`w-auto transition-all duration-300 ${isScrolled ? 'h-12' : 'h-16'}`}
       loading="eager"
       decoding="async"
       width="135"
       height="64"
       srcSet="/lovable-uploads/FSR.webp 135w"
       sizes="135px"
-      style={{ maxWidth: '135px', maxHeight: '64px' }}
+      style={{ maxWidth: '135px' }}
     />
-  ), []);
+  ), [isScrolled]);
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b-2 border-blue-600 sticky top-0 z-50">
+    <nav className={`sticky top-0 z-50 border-b-2 border-blue-600 transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-xl' 
+        : 'bg-white dark:bg-gray-900 shadow-lg'
+    }`}>
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+        <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? 'h-16' : 'h-20'}`}>
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-4">
             {fsrLogo}
@@ -172,12 +185,12 @@ const ModernNavbar = React.memo(() => {
                       <ChevronDown className="ml-1 h-4 w-4" />
                     </Button>
                     {hoveredMenu === item.name && (
-                      <div className="absolute top-full left-0 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+                      <div className="absolute top-full left-0 w-72 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-border/50 z-50 overflow-hidden animate-fade-in">
                         {item.dropdownItems?.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.name}
                             to={dropdownItem.path}
-                            className="block text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 py-[10px] px-[16px]"
+                            className="block text-sm text-foreground hover:bg-primary/5 hover:text-primary transition-all duration-200 border-b border-border/30 last:border-b-0 py-[10px] px-[16px] hover:pl-[20px]"
                           >
                             {dropdownItem.name}
                           </Link>

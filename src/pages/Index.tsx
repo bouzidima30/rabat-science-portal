@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, memo, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building, FileText, Youtube } from "lucide-react";
+import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building, FileText, Youtube, Tag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
@@ -13,6 +13,7 @@ import { usePrefetchQueries } from "@/hooks/usePrefetchQueries";
 import LazyYouTubeEmbed from "@/components/LazyYouTubeEmbed";
 import { supabase } from "@/integrations/supabase/client";
 import OptimizedImage from "@/components/OptimizedImage";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import { optimizeImageUrl } from "@/utils/imageOptimization";
 // Memoized components for performance
 const OptimizedCard = memo(Card);
@@ -121,14 +122,24 @@ const Index = () => {
   });
   // Memoized static data
   const newsCategories = useMemo(() => [
-    { id: 'all', label: 'Toutes' },
-    { id: 'reunion_travail', label: 'Réunion de travail' },
-    { id: 'nouvelles_informations', label: 'Nouvelles informations' },
-    { id: 'activites_parauniversitaire', label: 'Activités parauniversitaire' },
-    { id: 'avis_etudiants', label: 'Avis étudiants' },
-    { id: 'avis_enseignants', label: 'Avis enseignants' },
-    { id: 'evenements_scientifique', label: 'Événements scientifique' }
+    { id: 'all', label: 'Toutes', color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' },
+    { id: 'reunion_travail', label: 'Réunion de travail', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
+    { id: 'nouvelles_informations', label: 'Nouvelles', color: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' },
+    { id: 'activites_parauniversitaire', label: 'Activités', color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' },
+    { id: 'avis_etudiants', label: 'Avis étudiants', color: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' },
+    { id: 'avis_enseignants', label: 'Avis enseignants', color: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300' },
+    { id: 'evenements_scientifique', label: 'Événements', color: 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300' }
   ], []);
+
+  const getCategoryStyle = useCallback((categoryId: string) => {
+    const cat = newsCategories.find(c => c.id === categoryId);
+    return cat?.color || 'bg-gray-100 text-gray-800';
+  }, [newsCategories]);
+
+  const getCategoryLabel = useCallback((categoryId: string) => {
+    const cat = newsCategories.find(c => c.id === categoryId);
+    return cat?.label || categoryId;
+  }, [newsCategories]);
   
   const carouselHighlights = useMemo(() => [
     {
@@ -354,48 +365,16 @@ const Index = () => {
         </div>
 
         {/* FSR Stats */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-foreground mb-2 text-center">
             La FSR en Chiffres
           </h2>
+          <p className="text-muted-foreground text-center mb-10">Des décennies d'excellence académique et scientifique</p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[{
-            icon: Users,
-            value: "15,000+",
-            label: "Étudiants",
-            color: "text-blue-600 dark:text-blue-400",
-            bgColor: "bg-blue-100 dark:bg-blue-900/20"
-          }, {
-            icon: BookOpen,
-            value: "50+",
-            label: "Formations",
-            color: "text-orange-600 dark:text-orange-400",
-            bgColor: "bg-orange-100 dark:bg-orange-900/20"
-          }, {
-            icon: Award,
-            value: "200+",
-            label: "Enseignants",
-            color: "text-green-600 dark:text-green-400",
-            bgColor: "bg-green-100 dark:bg-green-900/20"
-          }, {
-            icon: Building,
-            value: "12",
-            label: "Laboratoires",
-            color: "text-red-600 dark:text-red-400",
-            bgColor: "bg-red-100 dark:bg-red-900/20"
-          }].map((stat, index) => <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
-                  <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center mx-auto mb-4`}>
-                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                  </div>
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-gray-600 dark:text-gray-300">
-                    {stat.label}
-                  </div>
-                </CardContent>
-              </Card>)}
+            <AnimatedCounter icon={Users} value={15000} suffix="+" label="Étudiants" color="text-blue-600 dark:text-blue-400" bgColor="bg-blue-100 dark:bg-blue-900/20" />
+            <AnimatedCounter icon={BookOpen} value={50} suffix="+" label="Formations" color="text-orange-600 dark:text-orange-400" bgColor="bg-orange-100 dark:bg-orange-900/20" />
+            <AnimatedCounter icon={Award} value={200} suffix="+" label="Enseignants" color="text-green-600 dark:text-green-400" bgColor="bg-green-100 dark:bg-green-900/20" />
+            <AnimatedCounter icon={Building} value={12} label="Laboratoires" color="text-red-600 dark:text-red-400" bgColor="bg-red-100 dark:bg-red-900/20" />
           </div>
         </div>
 
@@ -454,57 +433,82 @@ const Index = () => {
         </div>
 
         {/* News Section */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-foreground mb-2 text-center">
             Dernières Nouvelles
           </h2>
+          <p className="text-muted-foreground text-center mb-8">Restez informé des dernières actualités de la FSR</p>
 
-          {/* News Filter */}
-          <div className="flex flex-wrap gap-2 mb-8 justify-center">
-            {newsCategories.map(category => <Button key={category.id} variant={selectedCategory === category.id ? "default" : "outline"} size="sm" onClick={() => handleCategoryChange(category.id)} className={selectedCategory === category.id ? 'bg-[#006be5] hover:bg-[#005bb5]' : ''}>
+          {/* News Filter - pill style */}
+          <div className="flex flex-wrap gap-2 mb-10 justify-center">
+            {newsCategories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => handleCategoryChange(category.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  selectedCategory === category.id
+                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:scale-105'
+                }`}
+              >
                 {category.label}
-              </Button>)}
+              </button>
+            ))}
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {news.slice(0, 3).map((article, index) => (
-              <Link key={article.id} to={`/actualite/${article.id}`}>
-                <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
-                  <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
+              <Link key={article.id} to={`/actualite/${article.id}`} className="group">
+                <div className="bg-card rounded-2xl overflow-hidden border border-border/50 hover:border-border hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
+                  <div className="aspect-[16/10] bg-muted overflow-hidden relative">
                     {article.image_url ? (
                       <OptimizedImage 
                         src={article.image_url} 
                         alt={`Image illustrant ${article.title}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         context="card"
                         quality={85}
                         priority={index === 0}
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <BookOpen className="h-10 w-10 text-gray-400" />
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+                        <BookOpen className="h-12 w-12 text-primary/30" />
                       </div>
                     )}
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-2 text-sm text-[#006be5] mb-3">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(article.created_at).toLocaleDateString('fr-FR')}
+                    {/* Category badge */}
+                    <div className="absolute top-3 left-3">
+                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${getCategoryStyle(article.category)}`}>
+                        <Tag className="h-3 w-3" />
+                        {getCategoryLabel(article.category)}
+                      </span>
                     </div>
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                      <Calendar className="h-3.5 w-3.5" />
+                      {new Date(article.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </div>
+                    <h3 className="font-bold text-lg text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
                       {article.title}
                     </h3>
-                    {article.excerpt && <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
+                    {article.excerpt && (
+                      <p className="text-muted-foreground text-sm line-clamp-3 flex-1">
                         {article.excerpt}
-                      </p>}
-                  </CardContent>
-                </Card>
-               </Link>))}
+                      </p>
+                    )}
+                    <div className="mt-4 flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all duration-300">
+                      Lire la suite
+                      <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-10">
             <Link to="/actualites">
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-full px-8 hover:bg-primary hover:text-primary-foreground transition-all duration-300">
                 Voir toutes les actualités
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
