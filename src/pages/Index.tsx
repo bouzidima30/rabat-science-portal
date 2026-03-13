@@ -433,57 +433,82 @@ const Index = () => {
         </div>
 
         {/* News Section */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-foreground mb-2 text-center">
             Dernières Nouvelles
           </h2>
+          <p className="text-muted-foreground text-center mb-8">Restez informé des dernières actualités de la FSR</p>
 
-          {/* News Filter */}
-          <div className="flex flex-wrap gap-2 mb-8 justify-center">
-            {newsCategories.map(category => <Button key={category.id} variant={selectedCategory === category.id ? "default" : "outline"} size="sm" onClick={() => handleCategoryChange(category.id)} className={selectedCategory === category.id ? 'bg-[#006be5] hover:bg-[#005bb5]' : ''}>
+          {/* News Filter - pill style */}
+          <div className="flex flex-wrap gap-2 mb-10 justify-center">
+            {newsCategories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => handleCategoryChange(category.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  selectedCategory === category.id
+                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:scale-105'
+                }`}
+              >
                 {category.label}
-              </Button>)}
+              </button>
+            ))}
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {news.slice(0, 3).map((article, index) => (
-              <Link key={article.id} to={`/actualite/${article.id}`}>
-                <Card className="hover:shadow-lg transition-shadow h-full cursor-pointer">
-                  <div className="aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
+              <Link key={article.id} to={`/actualite/${article.id}`} className="group">
+                <div className="bg-card rounded-2xl overflow-hidden border border-border/50 hover:border-border hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
+                  <div className="aspect-[16/10] bg-muted overflow-hidden relative">
                     {article.image_url ? (
                       <OptimizedImage 
                         src={article.image_url} 
                         alt={`Image illustrant ${article.title}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         context="card"
                         quality={85}
                         priority={index === 0}
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <BookOpen className="h-10 w-10 text-gray-400" />
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+                        <BookOpen className="h-12 w-12 text-primary/30" />
                       </div>
                     )}
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-2 text-sm text-[#006be5] mb-3">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(article.created_at).toLocaleDateString('fr-FR')}
+                    {/* Category badge */}
+                    <div className="absolute top-3 left-3">
+                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${getCategoryStyle(article.category)}`}>
+                        <Tag className="h-3 w-3" />
+                        {getCategoryLabel(article.category)}
+                      </span>
                     </div>
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                      <Calendar className="h-3.5 w-3.5" />
+                      {new Date(article.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </div>
+                    <h3 className="font-bold text-lg text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
                       {article.title}
                     </h3>
-                    {article.excerpt && <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
+                    {article.excerpt && (
+                      <p className="text-muted-foreground text-sm line-clamp-3 flex-1">
                         {article.excerpt}
-                      </p>}
-                  </CardContent>
-                </Card>
-               </Link>))}
+                      </p>
+                    )}
+                    <div className="mt-4 flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all duration-300">
+                      Lire la suite
+                      <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-10">
             <Link to="/actualites">
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-full px-8 hover:bg-primary hover:text-primary-foreground transition-all duration-300">
                 Voir toutes les actualités
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
