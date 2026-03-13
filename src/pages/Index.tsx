@@ -12,7 +12,7 @@ import { useOptimizedQuery } from "@/hooks/useOptimizedQuery";
 import { usePrefetchQueries } from "@/hooks/usePrefetchQueries";
 import LazyYouTubeEmbed from "@/components/LazyYouTubeEmbed";
 import { supabase } from "@/integrations/supabase/client";
-import OptimizedImage from "@/components/OptimizedImage";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import { optimizeImageUrl } from "@/utils/imageOptimization";
 // Memoized components for performance
 const OptimizedCard = memo(Card);
