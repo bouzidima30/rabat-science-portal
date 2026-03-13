@@ -138,16 +138,16 @@ const ModernNavbar = React.memo(() => {
     <img 
       src="/lovable-uploads/FSR.webp" 
       alt="FSR Logo" 
-      className="h-16 w-auto" 
+      className={`w-auto transition-all duration-300 ${isScrolled ? 'h-12' : 'h-16'}`}
       loading="eager"
       decoding="async"
       width="135"
       height="64"
       srcSet="/lovable-uploads/FSR.webp 135w"
       sizes="135px"
-      style={{ maxWidth: '135px', maxHeight: '64px' }}
+      style={{ maxWidth: '135px' }}
     />
-  ), []);
+  ), [isScrolled]);
 
   return (
     <nav className={`sticky top-0 z-50 border-b-2 border-blue-600 transition-all duration-300 ${
