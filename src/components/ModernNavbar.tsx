@@ -221,7 +221,7 @@ const ModernNavbar = React.memo(() => {
             variant="ghost"
             size="icon"
             onClick={toggleMobileMenu}
-            className="lg:hidden text-gray-700 dark:text-gray-200 hover:text-blue-600 relative"
+            className="lg:hidden text-foreground hover:text-primary relative"
           >
             {isMobileMenuOpen ? (
               <X className="h-6 w-6" />
