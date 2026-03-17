@@ -246,13 +246,13 @@ const ModernNavbar = React.memo(() => {
       }`}>
         <div className="flex flex-col h-full">
           {/* Mobile Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Menu</h2>
+          <div className="flex items-center justify-between p-6 border-b border-border">
+            <h2 className="text-xl font-bold text-foreground">Menu</h2>
             <Button
               variant="ghost"
               size="icon"
               onClick={closeMobileMenu}
-              className="text-gray-700 dark:text-gray-200"
+              className="text-foreground"
             >
               <X className="h-6 w-6" />
             </Button>
