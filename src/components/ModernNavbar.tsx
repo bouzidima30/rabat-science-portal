@@ -241,7 +241,7 @@ const ModernNavbar = React.memo(() => {
       )}
 
       {/* Mobile Menu */}
-      <div className={`lg:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-900 shadow-2xl z-[55] transform transition-transform duration-300 ease-in-out ${
+      <div className={`lg:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-background shadow-2xl z-[55] transform transition-transform duration-300 ease-in-out ${
         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="flex flex-col h-full">
