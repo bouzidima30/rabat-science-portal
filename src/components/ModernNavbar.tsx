@@ -175,9 +175,9 @@ const ModernNavbar = React.memo(() => {
                   <>
                     <Button
                       variant="ghost"
-                      className={`text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 text-sm font-semibold transition-colors duration-200 ${
+                      className={`text-foreground/80 hover:text-primary text-sm font-semibold transition-colors duration-200 ${
                         location.pathname.startsWith(item.path) 
-                          ? "text-blue-600 dark:text-blue-400" 
+                          ? "text-primary" 
                           : ""
                       }`}
                     >
