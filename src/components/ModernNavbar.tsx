@@ -185,7 +185,7 @@ const ModernNavbar = React.memo(() => {
                       <ChevronDown className="ml-1 h-4 w-4" />
                     </Button>
                     {hoveredMenu === item.name && (
-                      <div className="absolute top-full left-0 w-72 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-border/50 z-50 overflow-hidden animate-fade-in">
+                      <div className="absolute top-full left-0 w-72 bg-popover/95 backdrop-blur-xl rounded-xl shadow-2xl border border-border z-50 overflow-hidden animate-fade-in">
                         {item.dropdownItems?.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.name}
