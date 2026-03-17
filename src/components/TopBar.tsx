@@ -30,21 +30,19 @@ const TopBar = () => {
   };
 
   return (
-    <div className="bg-[#016BE5] shadow-lg px-4 relative z-40 py-[6px]">
+    <div className="bg-primary shadow-lg px-4 relative z-40 py-1.5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="hidden md:block text-sm text-white ml-8">
-            Avenue Ibn Battouta, B.P. 1014 RP, Rabat – Maroc
-          </div>
+        <div className="hidden md:block text-sm text-primary-foreground/80 ml-2">
+          Avenue Ibn Battouta, B.P. 1014 RP, Rabat – Maroc
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-2 ml-auto">
           <Button 
             variant="ghost" 
-            size="sm" 
+            size="icon"
             onClick={toggleTheme} 
-            className="text-white/80 hover:text-white hover:bg-white/10 border-0"
-            aria-label={isDarkMode ? "Basculer vers le mode clair" : "Basculer vers le mode sombre"}
+            className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10 h-8 w-8"
+            aria-label={isDarkMode ? "Mode clair" : "Mode sombre"}
           >
             {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
@@ -52,15 +50,15 @@ const TopBar = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-white/80 hover:text-white hover:bg-white/10 border-0">
+                <Button variant="ghost" size="sm" className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10 gap-2">
                   <User className="h-4 w-4" />
-                  <span className="hidden sm:inline">{user.email}</span>
+                  <span className="hidden sm:inline text-sm">{user.email}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin">Administration</Link>
-                  </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/admin">Administration</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/profil">Mon Profil</Link>
                 </DropdownMenuItem>
@@ -72,14 +70,14 @@ const TopBar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-2">
               <Link to="/login">
-                <Button variant="outline" size="sm" className="border-white/30 border-white bg-[#0070e3] text-white">
+                <Button variant="ghost" size="sm" className="text-primary-foreground/90 hover:text-primary-foreground hover:bg-white/10 text-sm font-medium">
                   Connexion
                 </Button>
               </Link>
               <Link to="/register">
-                <Button size="sm" className="bg-white text-[#016BE5] hover:bg-white/90 hover:text-[#016BE5]">
+                <Button size="sm" className="bg-white text-primary hover:bg-white/90 text-sm font-semibold rounded-full px-5 shadow-sm">
                   Inscription
                 </Button>
               </Link>
