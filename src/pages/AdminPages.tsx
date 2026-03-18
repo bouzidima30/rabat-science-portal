@@ -213,9 +213,24 @@ const AdminPages = () => {
       .replace(/^-|-$/g, '');
   };
 
+  const pageSchema = z.object({
+    titre: z.string().trim().min(1, "Le titre est requis").max(200, "Le titre ne peut pas dépasser 200 caractères"),
+    contenu: z.string().min(1, "Le contenu est requis").max(50000, "Le contenu est trop long"),
+    slug: z.string().max(200, "Le slug ne peut pas dépasser 200 caractères").optional(),
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const result = pageSchema.safeParse(formData);
+    if (!result.success) {
+      toast({ title: "Erreur de validation", description: result.error.errors[0].message, variant: "destructive" });
+      return;
+    }
     const slug = formData.slug || generateSlug(formData.titre);
+    if (slug.length > 200) {
+      toast({ title: "Erreur", description: "Le slug généré est trop long.", variant: "destructive" });
+      return;
+    }
     pageMutation.mutate({ ...formData, slug });
   };
 

@@ -94,37 +94,54 @@ const AdminCooperations = () => {
     }
   };
 
+  const cooperationSchema = z.object({
+    titre: z.string().trim().min(1, "Le titre est requis").max(200, "Le titre ne peut pas dépasser 200 caractères"),
+    description: z.string().max(5000, "La description ne peut pas dépasser 5000 caractères").optional(),
+    type_cooperation: z.enum(['internationale', 'nationale'], { errorMap: () => ({ message: "Type de coopération invalide" }) }),
+    coordinateur: z.string().max(200, "Le nom ne peut pas dépasser 200 caractères").optional(),
+    email_coordinateur: z.string().email("Format d'email invalide").optional().or(z.literal('')),
+    partenaires: z.string().max(2000).optional(),
+    pays: z.string().max(2000).optional(),
+    domaine_recherche: z.string().max(300).optional(),
+    appel_offre: z.string().max(300).optional(),
+    annee_debut: z.string().optional(),
+    annee_fin: z.string().optional(),
+    image_url: z.string().optional(),
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.titre.trim()) {
+    const result = cooperationSchema.safeParse(formData);
+    if (!result.success) {
+      const firstError = result.error.errors[0];
       toast({
-        title: "Erreur",
-        description: "Le titre est requis.",
+        title: "Erreur de validation",
+        description: firstError.message,
         variant: "destructive",
       });
       return;
     }
 
-    // Valider le type de coopération
-    if (!VALID_COOPERATION_TYPES.includes(formData.type_cooperation)) {
-      toast({
-        title: "Erreur",
-        description: "Type de coopération invalide. Veuillez sélectionner 'internationale' ou 'nationale'.",
-        variant: "destructive",
-      });
+    // Validate year ranges
+    const anneeDebut = formData.annee_debut ? parseInt(formData.annee_debut) : null;
+    const anneeFin = formData.annee_fin ? parseInt(formData.annee_fin) : null;
+    if (anneeDebut !== null && (anneeDebut < 1900 || anneeDebut > 2100)) {
+      toast({ title: "Erreur", description: "L'année de début doit être entre 1900 et 2100.", variant: "destructive" });
+      return;
+    }
+    if (anneeFin !== null && (anneeFin < 1900 || anneeFin > 2100)) {
+      toast({ title: "Erreur", description: "L'année de fin doit être entre 1900 et 2100.", variant: "destructive" });
       return;
     }
 
     setSaving(true);
 
     try {
-      console.log('Submitting cooperation data:', formData);
-
       const cooperationData = {
         titre: formData.titre.trim(),
         description: formData.description.trim() || null,
-        type_cooperation: formData.type_cooperation, // S'assurer que c'est exactement 'internationale' ou 'nationale'
+        type_cooperation: formData.type_cooperation,
         coordinateur: formData.coordinateur.trim() || null,
         email_coordinateur: formData.email_coordinateur.trim() || null,
         partenaires: formData.partenaires ? 
@@ -135,8 +152,8 @@ const AdminCooperations = () => {
           null,
         domaine_recherche: formData.domaine_recherche.trim() || null,
         appel_offre: formData.appel_offre.trim() || null,
-        annee_debut: formData.annee_debut ? parseInt(formData.annee_debut) : null,
-        annee_fin: formData.annee_fin ? parseInt(formData.annee_fin) : null,
+        annee_debut: anneeDebut,
+        annee_fin: anneeFin,
         image_url: formData.image_url || null,
         updated_at: new Date().toISOString()
       };
