@@ -44,6 +44,16 @@ const TopBar = () => {
           <Button 
             variant="ghost" 
             size="icon"
+            onClick={() => setIsSearchOpen(true)} 
+            className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10 h-8 w-8"
+            aria-label="Rechercher"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
+
+          <Button 
+            variant="ghost" 
+            size="icon"
             onClick={toggleTheme} 
             className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10 h-8 w-8"
             aria-label={isDarkMode ? "Mode clair" : "Mode sombre"}
