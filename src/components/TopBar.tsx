@@ -4,14 +4,18 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, User, Moon, Sun } from "lucide-react";
+import { LogOut, User, Moon, Sun, Search } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/hooks/useTheme";
+import GlobalSearch from "@/components/GlobalSearch";
+
+import { useState } from "react";
 
 const TopBar = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const { isDarkMode, toggleTheme } = useTheme();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -37,6 +41,16 @@ const TopBar = () => {
         </div>
 
         <div className="flex items-center gap-2 ml-auto">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setIsSearchOpen(true)} 
+            className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10 h-8 w-8"
+            aria-label="Rechercher"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
+
           <Button 
             variant="ghost" 
             size="icon"
@@ -85,6 +99,7 @@ const TopBar = () => {
           )}
         </div>
       </div>
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 };
