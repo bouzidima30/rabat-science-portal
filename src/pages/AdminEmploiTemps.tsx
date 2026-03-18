@@ -183,6 +183,7 @@ const AdminEmploiTemps = () => {
               file_size: blob.size,
               mime_type: mimeGuess,
               parent_id: parentId,
+              category: "emploi_temps",
             });
           if (dbError) throw dbError;
         }
