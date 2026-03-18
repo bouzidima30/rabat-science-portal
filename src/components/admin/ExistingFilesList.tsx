@@ -35,6 +35,16 @@ const ExistingFilesList = ({
   onDownload,
   onDelete
 }: ExistingFilesListProps) => {
+  const { toast } = useToast();
+
+  const copyFileUrl = async (fileUrl: string) => {
+    try {
+      await navigator.clipboard.writeText(fileUrl);
+      toast({ title: "URL copiée", description: "L'URL du fichier a été copiée dans le presse-papiers." });
+    } catch {
+      toast({ title: "Erreur", description: "Impossible de copier l'URL", variant: "destructive" });
+    }
+  };
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
