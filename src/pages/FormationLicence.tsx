@@ -22,6 +22,7 @@ const FormationLicence = () => {
         .from('formations')
         .select('*')
         .eq('type_formation', 'Licence')
+        .eq('status', 'published')
         .order('created_at', { ascending: false });
       
       if (error) throw error;

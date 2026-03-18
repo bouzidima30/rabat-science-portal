@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { z } from 'zod';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -113,6 +114,10 @@ const AdminCarousel = () => {
     }
   };
 
+  const youtubeUrlSchema = z.string()
+    .url("L'URL doit être valide")
+    .regex(/youtube\.com|youtu\.be/, "L'URL doit être une URL YouTube valide");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -129,13 +134,16 @@ const AdminCarousel = () => {
         return;
       }
 
-      if (formType === 'youtube' && (!youtubeUrl || !youtubeTitle)) {
-        toast({
-          title: "Erreur",
-          description: "Veuillez remplir tous les champs.",
-          variant: "destructive",
-        });
-        return;
+      if (formType === 'youtube') {
+        if (!youtubeTitle.trim() || youtubeTitle.length > 200) {
+          toast({ title: "Erreur", description: "Le titre doit contenir entre 1 et 200 caractères.", variant: "destructive" });
+          return;
+        }
+        const urlResult = youtubeUrlSchema.safeParse(youtubeUrl);
+        if (!urlResult.success) {
+          toast({ title: "Erreur", description: urlResult.error.errors[0].message, variant: "destructive" });
+          return;
+        }
       }
 
       if (selectedItem) {
