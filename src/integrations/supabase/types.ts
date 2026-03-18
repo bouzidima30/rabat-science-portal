@@ -420,6 +420,7 @@ export type Database = {
       }
       file_manager: {
         Row: {
+          category: string | null
           created_at: string
           file_size: number | null
           file_url: string | null
@@ -431,6 +432,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          category?: string | null
           created_at?: string
           file_size?: number | null
           file_url?: string | null
@@ -442,6 +444,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          category?: string | null
           created_at?: string
           file_size?: number | null
           file_url?: string | null

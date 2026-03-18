@@ -3,8 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Folder, File, Trash2, Upload, Archive, Loader2 } from "lucide-react";
+import { Folder, File, Trash2, Archive, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import JSZip from "jszip";
 
@@ -15,23 +16,30 @@ interface FileManagerItem {
   file_url?: string | null;
   file_size?: number | null;
   parent_id?: string | null;
+  category?: string | null;
 }
 
-const AdminEmploiTemps = () => {
+const CATEGORIES = [
+  { key: "planning_evaluations", label: "Planning des Évaluations" },
+  { key: "calendrier_evaluations", label: "Calendrier des Évaluations de Fin de Semestre" },
+];
+
+const AdminPlanningEvaluations = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [progressLabel, setProgressLabel] = useState("");
+  const [activeTab, setActiveTab] = useState(CATEGORIES[0].key);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: items, isLoading } = useQuery({
-    queryKey: ["admin-file-manager"],
+    queryKey: ["admin-planning-evaluations"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("file_manager")
         .select("*")
-        .eq("category", "emploi_temps")
+        .in("category", CATEGORIES.map(c => c.key))
         .order("type", { ascending: false })
         .order("name");
       if (error) throw error;
@@ -41,60 +49,54 @@ const AdminEmploiTemps = () => {
 
   const deleteItemMutation = useMutation({
     mutationFn: async (itemId: string) => {
-      const item = items?.find((i) => i.id === itemId);
+      const allItems = items || [];
+      const item = allItems.find((i) => i.id === itemId);
       if (item?.type === "file" && item.file_url) {
         const filePath = item.file_url.split("/").slice(-2).join("/");
         await supabase.storage.from("files").remove([filePath]);
       }
-      // Also delete children if it's a folder
       if (item?.type === "folder") {
-        const children = items?.filter((i) => i.parent_id === itemId) || [];
+        const children = allItems.filter((i) => i.parent_id === itemId);
         for (const child of children) {
           await deleteItemMutation.mutateAsync(child.id);
         }
       }
-      const { error } = await supabase
-        .from("file_manager")
-        .delete()
-        .eq("id", itemId);
+      const { error } = await supabase.from("file_manager").delete().eq("id", itemId);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-file-manager"] });
-      toast({ title: "Élément supprimé", description: "L'élément a été supprimé avec succès" });
+      queryClient.invalidateQueries({ queryKey: ["admin-planning-evaluations"] });
+      toast({ title: "Supprimé", description: "L'élément a été supprimé" });
     },
-    onError: (error) => {
-      toast({ title: "Erreur", description: "Impossible de supprimer l'élément", variant: "destructive" });
-      console.error(error);
+    onError: () => {
+      toast({ title: "Erreur", description: "Impossible de supprimer", variant: "destructive" });
     },
   });
 
-  const deleteAllMutation = useMutation({
-    mutationFn: async () => {
-      // Delete all files from storage
-      const files = items?.filter((i) => i.type === "file" && i.file_url) || [];
+  const deleteAllForCategory = useMutation({
+    mutationFn: async (category: string) => {
+      const catItems = items?.filter((i) => i.category === category) || [];
+      const files = catItems.filter((i) => i.type === "file" && i.file_url);
       for (const file of files) {
         const filePath = file.file_url!.split("/").slice(-2).join("/");
         await supabase.storage.from("files").remove([filePath]);
       }
-      // Delete all records
-      const { error } = await supabase
-        .from("file_manager")
-        .delete()
-        .not("id", "is", null);
-      if (error) throw error;
+      const ids = catItems.map((i) => i.id);
+      if (ids.length > 0) {
+        const { error } = await supabase.from("file_manager").delete().in("id", ids);
+        if (error) throw error;
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-file-manager"] });
-      toast({ title: "Tout supprimé", description: "Tous les emplois du temps ont été supprimés" });
+      queryClient.invalidateQueries({ queryKey: ["admin-planning-evaluations"] });
+      toast({ title: "Tout supprimé", description: "Tous les fichiers de cette catégorie ont été supprimés" });
     },
-    onError: (error) => {
+    onError: () => {
       toast({ title: "Erreur", description: "Impossible de tout supprimer", variant: "destructive" });
-      console.error(error);
     },
   });
 
-  const handleZipUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleZipUpload = async (e: React.ChangeEvent<HTMLInputElement>, category: string) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -111,11 +113,8 @@ const AdminEmploiTemps = () => {
       const zip = await JSZip.loadAsync(file);
       const entries = Object.entries(zip.files);
       const totalEntries = entries.length;
-
-      // Map folder paths to their DB ids
       const folderMap = new Map<string, string>();
 
-      // Sort entries so folders come before files
       const sorted = entries.sort(([a], [b]) => {
         const aIsDir = a.endsWith("/");
         const bIsDir = b.endsWith("/");
@@ -127,7 +126,6 @@ const AdminEmploiTemps = () => {
       let processed = 0;
 
       for (const [relativePath, zipEntry] of sorted) {
-        // Skip __MACOSX and hidden files
         if (relativePath.startsWith("__MACOSX") || relativePath.includes("/._") || relativePath.startsWith(".")) {
           processed++;
           continue;
@@ -137,36 +135,29 @@ const AdminEmploiTemps = () => {
         const name = parts[parts.length - 1];
         if (!name) { processed++; continue; }
 
-        // Determine parent folder path
         const parentPath = parts.slice(0, -1).join("/");
         const parentId = parentPath ? folderMap.get(parentPath) || null : null;
 
         if (zipEntry.dir) {
-          // Create folder in DB
           setProgressLabel(`Création du dossier: ${name}`);
           const { data, error } = await supabase
             .from("file_manager")
-            .insert({ name, type: "folder", parent_id: parentId, category: "emploi_temps" })
+            .insert({ name, type: "folder", parent_id: parentId, category })
             .select()
             .single();
           if (error) throw error;
           folderMap.set(relativePath.replace(/\/$/, ""), data.id);
         } else {
-          // Upload file to storage then record in DB
           setProgressLabel(`Téléchargement: ${name}`);
           const blob = await zipEntry.async("blob");
           const ext = name.split(".").pop() || "bin";
           const storageName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
-          const storagePath = `emploi-temps/${storageName}`;
+          const storagePath = `planning-evaluations/${storageName}`;
 
-          const { error: uploadError } = await supabase.storage
-            .from("files")
-            .upload(storagePath, blob);
+          const { error: uploadError } = await supabase.storage.from("files").upload(storagePath, blob);
           if (uploadError) throw uploadError;
 
-          const { data: { publicUrl } } = supabase.storage
-            .from("files")
-            .getPublicUrl(storagePath);
+          const { data: { publicUrl } } = supabase.storage.from("files").getPublicUrl(storagePath);
 
           const mimeGuess = ext === "pdf" ? "application/pdf"
             : ext === "docx" ? "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -177,15 +168,7 @@ const AdminEmploiTemps = () => {
 
           const { error: dbError } = await supabase
             .from("file_manager")
-            .insert({
-              name,
-              type: "file",
-              file_url: publicUrl,
-              file_size: blob.size,
-              mime_type: mimeGuess,
-              parent_id: parentId,
-              category: "emploi_temps",
-            });
+            .insert({ name, type: "file", file_url: publicUrl, file_size: blob.size, mime_type: mimeGuess, parent_id: parentId, category });
           if (dbError) throw dbError;
         }
 
@@ -193,8 +176,8 @@ const AdminEmploiTemps = () => {
         setProgress(Math.round((processed / totalEntries) * 100));
       }
 
-      queryClient.invalidateQueries({ queryKey: ["admin-file-manager"] });
-      toast({ title: "Import terminé", description: "Les emplois du temps ont été importés avec succès" });
+      queryClient.invalidateQueries({ queryKey: ["admin-planning-evaluations"] });
+      toast({ title: "Import terminé", description: "Les fichiers ont été importés avec succès" });
     } catch (err: any) {
       console.error("ZIP upload error:", err);
       toast({ title: "Erreur d'import", description: err?.message || "Impossible d'importer le fichier ZIP", variant: "destructive" });
@@ -202,13 +185,9 @@ const AdminEmploiTemps = () => {
       setUploading(false);
       setProgress(0);
       setProgressLabel("");
-      // Reset input
       e.target.value = "";
     }
   };
-
-  const folders = items?.filter((item) => item.type === "folder") || [];
-  const rootItems = items?.filter((item) => !item.parent_id) || [];
 
   const formatFileSize = (bytes: number | null | undefined) => {
     if (!bytes) return "N/A";
@@ -217,8 +196,8 @@ const AdminEmploiTemps = () => {
     return (bytes / (1024 * 1024)).toFixed(2) + " MB";
   };
 
-  const renderItem = (item: FileManagerItem, level: number = 0) => {
-    const children = items?.filter((i) => i.parent_id === item.id) || [];
+  const renderItem = (item: FileManagerItem, allItems: FileManagerItem[], level: number = 0) => {
+    const children = allItems.filter((i) => i.parent_id === item.id);
     return (
       <div key={item.id} className="space-y-1">
         <div
@@ -247,55 +226,82 @@ const AdminEmploiTemps = () => {
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
-        {item.type === "folder" && children.map((child) => renderItem(child, level + 1))}
+        {item.type === "folder" && children.map((child) => renderItem(child, allItems, level + 1))}
+      </div>
+    );
+  };
+
+  const renderCategoryContent = (categoryKey: string) => {
+    const catItems = items?.filter((i) => i.category === categoryKey) || [];
+    const rootItems = catItems.filter((i) => !i.parent_id);
+    const folders = catItems.filter((i) => i.type === "folder");
+
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-end gap-2">
+          {catItems.length > 0 && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                if (confirm("Supprimer tous les fichiers de cette catégorie ?")) {
+                  deleteAllForCategory.mutate(categoryKey);
+                }
+              }}
+              disabled={deleteAllForCategory.isPending || uploading}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Tout supprimer
+            </Button>
+          )}
+          <Button size="sm" asChild disabled={uploading}>
+            <label className="cursor-pointer">
+              {uploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Archive className="h-4 w-4 mr-2" />}
+              {uploading ? "Import en cours..." : "Importer un .zip"}
+              <input type="file" accept=".zip" onChange={(e) => handleZipUpload(e, categoryKey)} className="hidden" disabled={uploading} />
+            </label>
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between text-base">
+              <span>Structure des fichiers</span>
+              {catItems.length > 0 && (
+                <span className="text-sm font-normal text-muted-foreground">
+                  {folders.length} dossier(s), {catItems.length - folders.length} fichier(s)
+                </span>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : rootItems.length === 0 ? (
+              <div className="text-center py-12 space-y-3">
+                <Archive className="h-12 w-12 text-muted-foreground mx-auto" />
+                <p className="text-muted-foreground">Aucun fichier. Importez un fichier .zip pour commencer.</p>
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {rootItems.map((item) => renderItem(item, catItems))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     );
   };
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Gestion des Emplois du Temps</h1>
-          <p className="text-muted-foreground mt-2">
-            Importez un fichier .zip contenant les dossiers et fichiers des emplois du temps
-          </p>
-        </div>
-
-        <div className="flex gap-2">
-          {items && items.length > 0 && (
-            <Button
-              variant="destructive"
-              onClick={() => {
-                if (confirm("Êtes-vous sûr de vouloir supprimer tous les emplois du temps ?")) {
-                  deleteAllMutation.mutate();
-                }
-              }}
-              disabled={deleteAllMutation.isPending || uploading}
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Tout supprimer
-            </Button>
-          )}
-
-          <Button asChild disabled={uploading}>
-            <label className="cursor-pointer">
-              {uploading ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Archive className="h-4 w-4 mr-2" />
-              )}
-              {uploading ? "Import en cours..." : "Importer un .zip"}
-              <input
-                type="file"
-                accept=".zip"
-                onChange={handleZipUpload}
-                className="hidden"
-                disabled={uploading}
-              />
-            </label>
-          </Button>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-foreground">Planning & Calendrier des Évaluations</h1>
+        <p className="text-muted-foreground mt-2">
+          Importez des fichiers .zip pour le planning des évaluations et le calendrier de fin de semestre
+        </p>
       </div>
 
       {uploading && (
@@ -310,38 +316,20 @@ const AdminEmploiTemps = () => {
         </Card>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Structure des fichiers</span>
-            {items && items.length > 0 && (
-              <span className="text-sm font-normal text-muted-foreground">
-                {folders.length} dossier(s), {(items.length - folders.length)} fichier(s)
-              </span>
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          ) : rootItems.length === 0 ? (
-            <div className="text-center py-12 space-y-3">
-              <Archive className="h-12 w-12 text-muted-foreground mx-auto" />
-              <p className="text-muted-foreground">
-                Aucun emploi du temps. Importez un fichier .zip pour commencer.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-1">
-              {rootItems.map((item) => renderItem(item))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-2">
+          {CATEGORIES.map((cat) => (
+            <TabsTrigger key={cat.key} value={cat.key}>{cat.label}</TabsTrigger>
+          ))}
+        </TabsList>
+        {CATEGORIES.map((cat) => (
+          <TabsContent key={cat.key} value={cat.key}>
+            {renderCategoryContent(cat.key)}
+          </TabsContent>
+        ))}
+      </Tabs>
     </div>
   );
 };
 
-export default AdminEmploiTemps;
+export default AdminPlanningEvaluations;

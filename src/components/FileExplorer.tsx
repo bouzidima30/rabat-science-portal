@@ -26,9 +26,15 @@ const FileExplorer = ({ categoryFilter = "emploi_temps", showDownload = true }: 
   const { data: items, isLoading } = useQuery({
     queryKey: ['file-manager-items', categoryFilter],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('file_manager')
-        .select('*')
+        .select('*');
+      
+      if (categoryFilter) {
+        query = query.eq('category', categoryFilter);
+      }
+      
+      const { data, error } = await query
         .order('type', { ascending: false })
         .order('name');
       
