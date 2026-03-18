@@ -2,7 +2,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, Trash2 } from "lucide-react";
+import { FileText, Download, Trash2, Copy } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface FileItem {
   id: string;
