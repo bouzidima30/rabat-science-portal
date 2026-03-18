@@ -103,6 +103,19 @@ export const useFileManagement = () => {
 
     try {
       for (const fileItem of files) {
+        // Validate file type and size before uploading
+        try {
+          validateFile(fileItem.file);
+          await validateFileContent(fileItem.file);
+        } catch (validationError: any) {
+          toast({
+            title: "Fichier rejeté",
+            description: `${fileItem.file.name}: ${validationError.message}`,
+            variant: "destructive",
+          });
+          continue;
+        }
+
         const fileExt = fileItem.file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         const filePath = `files/${fileName}`;
