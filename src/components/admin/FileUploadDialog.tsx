@@ -88,6 +88,7 @@ const FileUploadDialog = ({
               ref={fileInputRef}
               type="file"
               multiple
+              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.webp"
               onChange={handleFileSelect}
               className="hidden"
             />

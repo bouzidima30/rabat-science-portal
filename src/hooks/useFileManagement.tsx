@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
+import { validateFile, validateFileContent } from "@/utils/fileValidation";
 
 interface FileWithMetadata {
   file: File;
