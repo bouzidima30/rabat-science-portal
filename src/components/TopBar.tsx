@@ -9,10 +9,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { useTheme } from "@/hooks/useTheme";
 import GlobalSearch from "@/components/GlobalSearch";
 
+import { useState } from "react";
+
 const TopBar = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const { isDarkMode, toggleTheme } = useTheme();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
