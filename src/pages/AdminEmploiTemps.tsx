@@ -145,7 +145,7 @@ const AdminEmploiTemps = () => {
           setProgressLabel(`Création du dossier: ${name}`);
           const { data, error } = await supabase
             .from("file_manager")
-            .insert({ name, type: "folder", parent_id: parentId })
+            .insert({ name, type: "folder", parent_id: parentId, category: "emploi_temps" })
             .select()
             .single();
           if (error) throw error;
