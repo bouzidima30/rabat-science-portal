@@ -31,6 +31,7 @@ const AdminEmploiTemps = () => {
       const { data, error } = await supabase
         .from("file_manager")
         .select("*")
+        .eq("category", "emploi_temps")
         .order("type", { ascending: false })
         .order("name");
       if (error) throw error;
