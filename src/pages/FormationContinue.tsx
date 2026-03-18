@@ -21,6 +21,7 @@ const FormationContinue = () => {
         .from('formations')
         .select('*')
         .eq('type_formation', 'Formation Continue')
+        .eq('status', 'published')
         .order('created_at', { ascending: false });
       
       if (error) throw error;

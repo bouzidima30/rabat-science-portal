@@ -17,6 +17,7 @@ const CooperationNationale = () => {
         .from('cooperations')
         .select('*')
         .eq('type_cooperation', 'nationale')
+        .eq('status', 'published')
         .order('created_at', { ascending: false });
       
       if (error) throw error;
