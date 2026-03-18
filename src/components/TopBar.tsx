@@ -99,6 +99,7 @@ const TopBar = () => {
           )}
         </div>
       </div>
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 };
