@@ -2,7 +2,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, Trash2 } from "lucide-react";
+import { FileText, Download, Trash2, Copy } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface FileItem {
   id: string;
@@ -34,6 +35,16 @@ const ExistingFilesList = ({
   onDownload,
   onDelete
 }: ExistingFilesListProps) => {
+  const { toast } = useToast();
+
+  const copyFileUrl = async (fileUrl: string) => {
+    try {
+      await navigator.clipboard.writeText(fileUrl);
+      toast({ title: "URL copiée", description: "L'URL du fichier a été copiée dans le presse-papiers." });
+    } catch {
+      toast({ title: "Erreur", description: "Impossible de copier l'URL", variant: "destructive" });
+    }
+  };
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -103,8 +114,17 @@ const ExistingFilesList = ({
                   <Button
                     variant="outline"
                     size="sm"
+                    onClick={() => copyFileUrl(file.file_url)}
+                    className="hover:bg-accent hover:border-primary/30"
+                    title="Copier l'URL"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => onDownload(file.file_url, file.original_name)}
-                    className="hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-900/20"
+                    className="hover:bg-accent hover:border-primary/30"
                   >
                     <Download className="h-4 w-4" />
                   </Button>
@@ -112,7 +132,7 @@ const ExistingFilesList = ({
                     variant="outline"
                     size="sm"
                     onClick={() => onDelete(file.id, file.file_url, file.original_name)}
-                    className="hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20 text-red-600"
+                    className="hover:bg-destructive/10 hover:border-destructive/30 text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
