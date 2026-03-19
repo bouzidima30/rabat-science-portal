@@ -309,11 +309,12 @@ const CeDoc = () => {
 
       {deleteTarget && (
         <ConfirmDialog
-          open={!!deleteTarget}
-          onOpenChange={() => setDeleteTarget(null)}
+          isOpen={!!deleteTarget}
+          onClose={() => setDeleteTarget(null)}
           title="Supprimer le document"
           description={`Voulez-vous vraiment supprimer "${deleteTarget.name}" ?`}
           onConfirm={() => deleteMutation.mutate(deleteTarget.id)}
+          variant="destructive"
         />
       )}
 
