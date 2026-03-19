@@ -103,6 +103,7 @@ const Admin = () => {
     { name: "Carousel", path: "/admin/carousel", icon: GripVertical, description: "Gestion des carousels" },
     { name: "Emplois du Temps", path: "/admin/emploi-temps", icon: Clock, description: "Gestion des emplois du temps" },
     { name: "Planning Évaluations", path: "/admin/planning-evaluations", icon: Calendar, description: "Planning & calendrier des évaluations" },
+    { name: "CeDoc", path: "/admin/cedoc", icon: FileText, description: "Documents CeDoc" },
     { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
     { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
     { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },

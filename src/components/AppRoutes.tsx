@@ -172,6 +172,11 @@ const AppRoutes = () => {
               <AdminPlanningEvaluations />
             </Suspense>
           } />
+          <Route path="cedoc" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminCeDoc />
+            </Suspense>
+          } />
         </Route>
 
         {/* Public Pages */}
