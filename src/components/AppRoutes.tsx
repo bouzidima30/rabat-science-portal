@@ -178,6 +178,11 @@ const AppRoutes = () => {
               <AdminCeDoc />
             </Suspense>
           } />
+          <Route path="listes-examens" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminListesExamens />
+            </Suspense>
+          } />
         </Route>
 
         {/* Public Pages */}
