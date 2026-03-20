@@ -1,52 +1,37 @@
-
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Download, Award, Users, GraduationCap } from "lucide-react";
+import LoadingSpinner from "@/components/LoadingSpinner";
+
+const CYCLES = [
+  { key: "preselection_licence", nom: "Cycle Licence d'Excellence", description: "Listes de présélection pour l'accès au cycle licence d'excellence", icon: Award, color: "bg-yellow-500" },
+  { key: "preselection_master", nom: "Cycle Master", description: "Listes de présélection pour l'accès aux différents masters", icon: Users, color: "bg-blue-500" },
+  { key: "preselection_doctorat", nom: "Cycle Doctorat", description: "Listes de présélection pour l'accès aux formations doctorales", icon: GraduationCap, color: "bg-purple-500" },
+];
 
 const Preselection = () => {
-  const cycles = [
-    {
-      nom: "Cycle Licence d'Excellence",
-      description: "Listes de présélection pour l'accès au cycle licence d'excellence",
-      icon: Award,
-      color: "bg-gold-500",
-      documents: [
-        { nom: "Licence Excellence - Sciences Mathématiques", fichier: "Preselection_LEX_SMath_2024.pdf", taille: "1.2 MB" },
-        { nom: "Licence Excellence - Sciences Physiques", fichier: "Preselection_LEX_SPhys_2024.pdf", taille: "1.1 MB" },
-        { nom: "Licence Excellence - Sciences de la Vie", fichier: "Preselection_LEX_SVie_2024.pdf", taille: "1.3 MB" },
-        { nom: "Licence Excellence - Informatique", fichier: "Preselection_LEX_Info_2024.pdf", taille: "1.0 MB" }
-      ]
+  const { data: files = [], isLoading } = useQuery({
+    queryKey: ["preselection-public-files"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("files")
+        .select("*")
+        .in("category", CYCLES.map(c => c.key))
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
     },
-    {
-      nom: "Cycle Master",
-      description: "Listes de présélection pour l'accès aux différents masters",
-      icon: Users,
-      color: "bg-blue-500",
-      documents: [
-        { nom: "Master Mathématiques Appliquées", fichier: "Preselection_Master_MathApp_2024.pdf", taille: "0.9 MB" },
-        { nom: "Master Physique des Matériaux", fichier: "Preselection_Master_PhysMat_2024.pdf", taille: "0.8 MB" },
-        { nom: "Master Informatique", fichier: "Preselection_Master_Info_2024.pdf", taille: "1.1 MB" },
-        { nom: "Master Chimie Organique", fichier: "Preselection_Master_ChimieOrg_2024.pdf", taille: "0.7 MB" },
-        { nom: "Master Biologie Moléculaire", fichier: "Preselection_Master_BioMol_2024.pdf", taille: "0.9 MB" }
-      ]
-    },
-    {
-      nom: "Cycle Doctorat",
-      description: "Listes de présélection pour l'accès aux formations doctorales",
-      icon: GraduationCap,
-      color: "bg-purple-500",
-      documents: [
-        { nom: "Doctorat Mathématiques", fichier: "Preselection_Doctorat_Math_2024.pdf", taille: "0.6 MB" },
-        { nom: "Doctorat Physique", fichier: "Preselection_Doctorat_Phys_2024.pdf", taille: "0.5 MB" },
-        { nom: "Doctorat Informatique", fichier: "Preselection_Doctorat_Info_2024.pdf", taille: "0.7 MB" },
-        { nom: "Doctorat Chimie", fichier: "Preselection_Doctorat_Chimie_2024.pdf", taille: "0.4 MB" },
-        { nom: "Doctorat Sciences de la Vie", fichier: "Preselection_Doctorat_SVie_2024.pdf", taille: "0.6 MB" }
-      ]
-    }
-  ];
+  });
+
+  const formatSize = (size: number | null) => {
+    if (!size) return "";
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -64,54 +49,62 @@ const Preselection = () => {
           </p>
         </div>
 
-        <div className="space-y-8">
-          {cycles.map((cycle, index) => {
-            const IconComponent = cycle.icon;
-            return (
-              <Card key={index} className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-xl text-[#006be5] flex items-center">
-                    <div className={`w-10 h-10 ${cycle.color} rounded-lg flex items-center justify-center mr-3`}>
-                      <IconComponent className="h-6 w-6 text-white" />
-                    </div>
-                    {cycle.nom}
-                  </CardTitle>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    {cycle.description}
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {cycle.documents.map((doc, docIndex) => (
-                      <div key={docIndex} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start">
-                            <FileText className="h-5 w-5 text-[#006be5] mr-3 mt-1" />
-                            <div>
-                              <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm">
-                                {doc.nom}
-                              </h4>
-                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                                PDF • {doc.taille}
-                              </p>
-                              <p className="text-xs text-gray-600 dark:text-gray-300">
-                                {doc.fichier}
-                              </p>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="space-y-8">
+            {CYCLES.map((cycle) => {
+              const IconComponent = cycle.icon;
+              const cycleFiles = files.filter(f => f.category === cycle.key);
+              return (
+                <Card key={cycle.key} className="shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-[#006be5] flex items-center">
+                      <div className={`w-10 h-10 ${cycle.color} rounded-lg flex items-center justify-center mr-3`}>
+                        <IconComponent className="h-6 w-6 text-white" />
+                      </div>
+                      {cycle.nom}
+                    </CardTitle>
+                    <p className="text-gray-600 dark:text-gray-300">{cycle.description}</p>
+                  </CardHeader>
+                  <CardContent>
+                    {cycleFiles.length === 0 ? (
+                      <p className="text-gray-500 text-center py-4">Aucun document disponible pour le moment.</p>
+                    ) : (
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {cycleFiles.map((file) => (
+                          <div key={file.id} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start min-w-0">
+                                <FileText className="h-5 w-5 text-[#006be5] mr-3 mt-1 shrink-0" />
+                                <div className="min-w-0">
+                                  <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm truncate">
+                                    {file.original_name}
+                                  </h4>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                    {file.mime_type?.includes("pdf") ? "PDF" : file.original_name.split(".").pop()?.toUpperCase()} • {formatSize(file.file_size)}
+                                  </p>
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                className="bg-[#006be5] hover:bg-[#0056b3] ml-2 shrink-0"
+                                onClick={() => window.open(file.file_url, "_blank")}
+                              >
+                                <Download className="h-3 w-3 mr-1" />
+                                PDF
+                              </Button>
                             </div>
                           </div>
-                          <Button size="sm" className="bg-[#006be5] hover:bg-[#0056b3] ml-2">
-                            <Download className="h-3 w-3 mr-1" />
-                            PDF
-                          </Button>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
 
         {/* Informations importantes */}
         <div className="grid md:grid-cols-2 gap-8 mt-12">
@@ -122,9 +115,7 @@ const Preselection = () => {
                   <span className="text-white text-sm font-bold">!</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-yellow-900 dark:text-yellow-100 mb-2">
-                    Étapes Suivantes
-                  </h3>
+                  <h3 className="text-lg font-semibold text-yellow-900 dark:text-yellow-100 mb-2">Étapes Suivantes</h3>
                   <p className="text-yellow-800 dark:text-yellow-200 text-sm">
                     Les candidats présélectionnés recevront une convocation pour les épreuves 
                     écrites et/ou orales. Surveillez votre email et le site web pour les mises à jour.
@@ -141,9 +132,7 @@ const Preselection = () => {
                   <FileText className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-2">
-                    Documents Requis
-                  </h3>
+                  <h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-2">Documents Requis</h3>
                   <p className="text-green-800 dark:text-green-200 text-sm">
                     Préparez vos documents : copies des diplômes, relevés de notes, 
                     lettre de motivation et pièce d'identité pour la suite du processus.
