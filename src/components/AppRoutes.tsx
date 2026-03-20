@@ -29,6 +29,7 @@ const AdminCarousel = lazy(() => import("../pages/AdminCarousel"));
 const AdminEmploiTemps = lazy(() => import("../pages/AdminEmploiTemps"));
 const AdminPlanningEvaluations = lazy(() => import("../pages/AdminPlanningEvaluations"));
 const AdminCeDoc = lazy(() => import("../pages/AdminCeDoc"));
+const AdminListesExamens = lazy(() => import("../pages/AdminListesExamens"));
 const Actualites = lazy(() => import("../pages/Actualites"));
 const ActualiteDetail = lazy(() => import("../pages/ActualiteDetail"));
 const Evenements = lazy(() => import("../pages/Evenements"));

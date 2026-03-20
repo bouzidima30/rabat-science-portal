@@ -106,6 +106,7 @@ const Admin = () => {
     { name: "CeDoc", path: "/admin/cedoc", icon: FileText, description: "Documents CeDoc" },
     { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
     { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
+    { name: "Listes Examens", path: "/admin/listes-examens", icon: FileText, description: "Listes des examens par session" },
     { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
     { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
   ];
