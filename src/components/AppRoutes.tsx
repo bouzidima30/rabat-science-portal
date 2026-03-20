@@ -184,6 +184,11 @@ const AppRoutes = () => {
               <AdminListesExamens />
             </Suspense>
           } />
+          <Route path="preselection" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminPreselection />
+            </Suspense>
+          } />
         </Route>
 
         {/* Public Pages */}
