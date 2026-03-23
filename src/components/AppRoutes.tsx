@@ -190,6 +190,11 @@ const AppRoutes = () => {
               <AdminPreselection />
             </Suspense>
           } />
+          <Route path="sections-groupes" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminSectionsGroupes />
+            </Suspense>
+          } />
         </Route>
 
         {/* Public Pages */}
