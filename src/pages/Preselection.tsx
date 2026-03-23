@@ -5,14 +5,22 @@ import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, Award, Users, GraduationCap } from "lucide-react";
+import { FileText, Download, Award, Users, GraduationCap, PenLine, Mic, CheckCircle } from "lucide-react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
-const CYCLES = [
-  { key: "preselection_licence", nom: "Cycle Licence d'Excellence", description: "Listes de présélection pour l'accès au cycle licence d'excellence", icon: Award, color: "bg-yellow-500" },
-  { key: "preselection_master", nom: "Cycle Master", description: "Listes de présélection pour l'accès aux différents masters", icon: Users, color: "bg-blue-500" },
-  { key: "preselection_doctorat", nom: "Cycle Doctorat", description: "Listes de présélection pour l'accès aux formations doctorales", icon: GraduationCap, color: "bg-purple-500" },
+const SUB_SECTIONS = [
+  { suffix: "ecrit", label: "Liste des Candidats convoqués pour passer l'examen écrit", icon: PenLine },
+  { suffix: "oral", label: "Liste des candidats admis pour passer l'examen oral", icon: Mic },
+  { suffix: "retenus", label: "Liste des candidats retenus", icon: CheckCircle },
 ];
+
+const CYCLES = [
+  { key: "preselection_licence", nom: "Cycle Licence d'Excellence", icon: Award, color: "bg-yellow-500" },
+  { key: "preselection_master", nom: "Cycle Master", icon: Users, color: "bg-blue-500" },
+  { key: "preselection_doctorat", nom: "Cycle Doctorat", icon: GraduationCap, color: "bg-purple-500" },
+];
+
+const ALL_CATEGORIES = CYCLES.flatMap(c => SUB_SECTIONS.map(s => `${c.key}_${s.suffix}`));
 
 const Preselection = () => {
   const { data: files = [], isLoading } = useQuery({
@@ -21,7 +29,7 @@ const Preselection = () => {
       const { data, error } = await supabase
         .from("files")
         .select("*")
-        .in("category", CYCLES.map(c => c.key))
+        .in("category", ALL_CATEGORIES)
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
@@ -52,53 +60,64 @@ const Preselection = () => {
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-10">
             {CYCLES.map((cycle) => {
-              const IconComponent = cycle.icon;
-              const cycleFiles = files.filter(f => f.category === cycle.key);
+              const CycleIcon = cycle.icon;
               return (
                 <Card key={cycle.key} className="shadow-lg">
                   <CardHeader>
                     <CardTitle className="text-xl text-[#006be5] flex items-center">
                       <div className={`w-10 h-10 ${cycle.color} rounded-lg flex items-center justify-center mr-3`}>
-                        <IconComponent className="h-6 w-6 text-white" />
+                        <CycleIcon className="h-6 w-6 text-white" />
                       </div>
                       {cycle.nom}
                     </CardTitle>
-                    <p className="text-gray-600 dark:text-gray-300">{cycle.description}</p>
                   </CardHeader>
-                  <CardContent>
-                    {cycleFiles.length === 0 ? (
-                      <p className="text-gray-500 text-center py-4">Aucun document disponible pour le moment.</p>
-                    ) : (
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {cycleFiles.map((file) => (
-                          <div key={file.id} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-start min-w-0">
-                                <FileText className="h-5 w-5 text-[#006be5] mr-3 mt-1 shrink-0" />
-                                <div className="min-w-0">
-                                  <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm truncate">
-                                    {file.original_name}
-                                  </h4>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    {file.mime_type?.includes("pdf") ? "PDF" : file.original_name.split(".").pop()?.toUpperCase()} • {formatSize(file.file_size)}
-                                  </p>
-                                </div>
-                              </div>
-                              <Button
-                                size="sm"
-                                className="bg-[#006be5] hover:bg-[#0056b3] ml-2 shrink-0"
-                                onClick={() => window.open(file.file_url, "_blank")}
-                              >
-                                <Download className="h-3 w-3 mr-1" />
-                                PDF
-                              </Button>
-                            </div>
+                  <CardContent className="space-y-6">
+                    {SUB_SECTIONS.map((sub) => {
+                      const SubIcon = sub.icon;
+                      const category = `${cycle.key}_${sub.suffix}`;
+                      const subFiles = files.filter(f => f.category === category);
+                      return (
+                        <div key={sub.suffix}>
+                          <div className="flex items-center gap-2 mb-3">
+                            <SubIcon className="h-5 w-5 text-[#006be5]" />
+                            <h3 className="font-semibold text-gray-800 dark:text-gray-200">{sub.label}</h3>
                           </div>
-                        ))}
-                      </div>
-                    )}
+                          {subFiles.length === 0 ? (
+                            <p className="text-gray-500 text-sm pl-7 py-2">Aucun document disponible pour le moment.</p>
+                          ) : (
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pl-7">
+                              {subFiles.map((file) => (
+                                <div key={file.id} className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                  <div className="flex items-start justify-between">
+                                    <div className="flex items-start min-w-0">
+                                      <FileText className="h-5 w-5 text-[#006be5] mr-2 mt-0.5 shrink-0" />
+                                      <div className="min-w-0">
+                                        <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm truncate">
+                                          {file.original_name}
+                                        </h4>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                          {file.mime_type?.includes("pdf") ? "PDF" : file.original_name.split(".").pop()?.toUpperCase()} • {formatSize(file.file_size)}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      size="sm"
+                                      className="bg-[#006be5] hover:bg-[#0056b3] ml-2 shrink-0"
+                                      onClick={() => window.open(file.file_url, "_blank")}
+                                    >
+                                      <Download className="h-3 w-3 mr-1" />
+                                      PDF
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </CardContent>
                 </Card>
               );
@@ -106,7 +125,6 @@ const Preselection = () => {
           </div>
         )}
 
-        {/* Informations importantes */}
         <div className="grid md:grid-cols-2 gap-8 mt-12">
           <Card className="bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800">
             <CardContent className="p-6">
