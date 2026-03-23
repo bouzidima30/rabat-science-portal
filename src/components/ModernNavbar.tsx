@@ -150,7 +150,7 @@ const ModernNavbar = React.memo(() => {
   ), [isScrolled]);
 
   return (
-    <nav className={`sticky top-0 border-b border-border transition-all duration-300 ${
+    <nav className={`sticky top-0 z-50 border-b border-border transition-all duration-300 ${
       isScrolled 
         ? 'bg-background/80 backdrop-blur-xl shadow-lg' 
         : 'bg-background shadow-sm'
