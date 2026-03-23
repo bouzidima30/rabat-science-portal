@@ -31,6 +31,7 @@ const AdminPlanningEvaluations = lazy(() => import("../pages/AdminPlanningEvalua
 const AdminCeDoc = lazy(() => import("../pages/AdminCeDoc"));
 const AdminListesExamens = lazy(() => import("../pages/AdminListesExamens"));
 const AdminPreselection = lazy(() => import("../pages/AdminPreselection"));
+const AdminSectionsGroupes = lazy(() => import("../pages/AdminSectionsGroupes"));
 const Actualites = lazy(() => import("../pages/Actualites"));
 const ActualiteDetail = lazy(() => import("../pages/ActualiteDetail"));
 const Evenements = lazy(() => import("../pages/Evenements"));
@@ -187,6 +188,11 @@ const AppRoutes = () => {
           <Route path="preselection" element={
             <Suspense fallback={<LoadingSpinner />}>
               <AdminPreselection />
+            </Suspense>
+          } />
+          <Route path="sections-groupes" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminSectionsGroupes />
             </Suspense>
           } />
         </Route>
