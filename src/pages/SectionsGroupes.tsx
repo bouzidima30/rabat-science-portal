@@ -2,36 +2,12 @@
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Users, Download, Calendar } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Users, Calendar } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import FileExplorer from "@/components/FileExplorer";
 
 const SectionsGroupes = () => {
-  const sessions = [
-    {
-      nom: "Session Automne 2023-2024",
-      date: "Septembre 2023",
-      documents: [
-        { niveau: "Licence S1", filiere: "Sciences Mathématiques", fichier: "Sections_L1_SMath_Automne.pdf", taille: "1.2 MB" },
-        { niveau: "Licence S1", filiere: "Sciences Physiques", fichier: "Sections_L1_SPhys_Automne.pdf", taille: "1.1 MB" },
-        { niveau: "Licence S3", filiere: "Sciences de la Vie", fichier: "Sections_L3_SVie_Automne.pdf", taille: "1.3 MB" },
-        { niveau: "Master M1", filiere: "Informatique", fichier: "Sections_M1_Info_Automne.pdf", taille: "0.8 MB" },
-        { niveau: "Master M1", filiere: "Chimie", fichier: "Sections_M1_Chimie_Automne.pdf", taille: "0.9 MB" }
-      ]
-    },
-    {
-      nom: "Session Printemps 2023-2024",
-      date: "Février 2024",
-      documents: [
-        { niveau: "Licence S2", filiere: "Sciences Mathématiques", fichier: "Sections_L2_SMath_Printemps.pdf", taille: "1.4 MB" },
-        { niveau: "Licence S2", filiere: "Sciences Physiques", fichier: "Sections_L2_SPhys_Printemps.pdf", taille: "1.2 MB" },
-        { niveau: "Licence S4", filiere: "Sciences de la Vie", fichier: "Sections_L4_SVie_Printemps.pdf", taille: "1.5 MB" },
-        { niveau: "Master M2", filiere: "Informatique", fichier: "Sections_M2_Info_Printemps.pdf", taille: "0.7 MB" },
-        { niveau: "Master M2", filiere: "Chimie", fichier: "Sections_M2_Chimie_Printemps.pdf", taille: "0.8 MB" }
-      ]
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopBar />
@@ -48,49 +24,20 @@ const SectionsGroupes = () => {
           </p>
         </div>
 
-        <div className="space-y-8">
-          {sessions.map((session, index) => (
-            <Card key={index} className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-xl text-[#006be5] flex items-center">
-                  <Calendar className="h-6 w-6 mr-2" />
-                  {session.nom}
-                </CardTitle>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Publiés en {session.date}
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="grid lg:grid-cols-2 gap-4">
-                  {session.documents.map((doc, docIndex) => (
-                    <div key={docIndex} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start">
-                          <Users className="h-5 w-5 text-[#006be5] mr-3 mt-1" />
-                          <div>
-                            <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-                              {doc.niveau} - {doc.filiere}
-                            </h4>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                              PDF • {doc.taille}
-                            </p>
-                            <p className="text-xs text-gray-600 dark:text-gray-300">
-                              {doc.fichier}
-                            </p>
-                          </div>
-                        </div>
-                        <Button size="sm" className="bg-[#006be5] hover:bg-[#0056b3] ml-2">
-                          <Download className="h-3 w-3 mr-1" />
-                          PDF
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Tabs defaultValue="sections_groupes_automne" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="sections_groupes_automne">Session d'Automne</TabsTrigger>
+            <TabsTrigger value="sections_groupes_printemps">Session de Printemps</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="sections_groupes_automne">
+            <FileExplorer categoryFilter="sections_groupes_automne" showDownload />
+          </TabsContent>
+
+          <TabsContent value="sections_groupes_printemps">
+            <FileExplorer categoryFilter="sections_groupes_printemps" showDownload />
+          </TabsContent>
+        </Tabs>
 
         {/* Informations utiles */}
         <div className="grid md:grid-cols-2 gap-8 mt-12">
