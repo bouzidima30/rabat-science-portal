@@ -4,9 +4,36 @@ import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, Clock, Phone, Mail } from "lucide-react";
+import { FileText, Download, Clock, Phone, Mail, Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+
+const CATEGORIES = [
+  { key: "scolarite_inscription", label: "Inscription", icon: FileText },
+  { key: "scolarite_examens", label: "Examens", icon: FileText },
+  { key: "scolarite_diplomes", label: "Diplômes", icon: FileText },
+];
 
 const ServiceScolarite = () => {
+  const { data: files = [], isLoading } = useQuery({
+    queryKey: ["scolarite-public-files"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("files")
+        .select("*")
+        .like("category", "scolarite_%")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const formatSize = (size: number | null) => {
+    if (!size) return "";
+    if (size < 1024) return `${size} B`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(0)} KB`;
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -56,7 +83,65 @@ const ServiceScolarite = () => {
           </Card>
         </div>
 
-
+        {/* Documents par catégorie */}
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-[#006be5]" />
+          </div>
+        ) : (
+          <div className="grid lg:grid-cols-3 gap-8">
+            {CATEGORIES.map((cat) => {
+              const catFiles = files.filter((f) => f.category === cat.key);
+              return (
+                <Card key={cat.key} className="shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-[#006be5] flex items-center">
+                      <FileText className="h-6 w-6 mr-2" />
+                      {cat.label}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {catFiles.length === 0 ? (
+                      <p className="text-sm text-muted-foreground text-center py-4">
+                        Aucun document disponible
+                      </p>
+                    ) : (
+                      <div className="space-y-3">
+                        {catFiles.map((doc) => (
+                          <div
+                            key={doc.id}
+                            className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                          >
+                            <div className="flex items-center min-w-0">
+                              <FileText className="h-4 w-4 text-[#006be5] mr-2 flex-shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                  {doc.original_name}
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                  {doc.mime_type?.split("/").pop()?.toUpperCase()} • {formatSize(doc.file_size)}
+                                </p>
+                              </div>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              asChild
+                            >
+                              <a href={doc.file_url} target="_blank" rel="noopener noreferrer">
+                                <Download className="h-3 w-3" />
+                              </a>
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </div>
       
       <Footer />

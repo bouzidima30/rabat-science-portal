@@ -109,6 +109,7 @@ const Admin = () => {
     { name: "Listes Examens", path: "/admin/listes-examens", icon: FileText, description: "Listes des examens par session" },
     { name: "Présélection", path: "/admin/preselection", icon: GraduationCap, description: "Documents de présélection" },
     { name: "Sections & Groupes", path: "/admin/sections-groupes", icon: Users, description: "Sections et groupes par session" },
+    { name: "Scolarité", path: "/admin/scolarite", icon: FileText, description: "Documents du service scolarité" },
     { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
     { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
   ];

@@ -32,6 +32,7 @@ const AdminCeDoc = lazy(() => import("../pages/AdminCeDoc"));
 const AdminListesExamens = lazy(() => import("../pages/AdminListesExamens"));
 const AdminPreselection = lazy(() => import("../pages/AdminPreselection"));
 const AdminSectionsGroupes = lazy(() => import("../pages/AdminSectionsGroupes"));
+const AdminScolarite = lazy(() => import("../pages/AdminScolarite"));
 const Actualites = lazy(() => import("../pages/Actualites"));
 const ActualiteDetail = lazy(() => import("../pages/ActualiteDetail"));
 const Evenements = lazy(() => import("../pages/Evenements"));
@@ -193,6 +194,11 @@ const AppRoutes = () => {
           <Route path="sections-groupes" element={
             <Suspense fallback={<LoadingSpinner />}>
               <AdminSectionsGroupes />
+            </Suspense>
+          } />
+          <Route path="scolarite" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminScolarite />
             </Suspense>
           } />
         </Route>
