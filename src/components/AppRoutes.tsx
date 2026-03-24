@@ -196,6 +196,11 @@ const AppRoutes = () => {
               <AdminSectionsGroupes />
             </Suspense>
           } />
+          <Route path="scolarite" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminScolarite />
+            </Suspense>
+          } />
         </Route>
 
         {/* Public Pages */}
