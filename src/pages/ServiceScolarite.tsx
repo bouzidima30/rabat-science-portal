@@ -7,32 +7,6 @@ import { Button } from "@/components/ui/button";
 import { FileText, Download, Clock, Phone, Mail } from "lucide-react";
 
 const ServiceScolarite = () => {
-  const formulaires = [
-    {
-      categorie: "Inscription",
-      documents: [
-        { nom: "Fiche d'inscription", format: "PDF", taille: "120 KB" },
-        { nom: "Demande de transfert", format: "DOC", taille: "85 KB" },
-        { nom: "Attestation d'inscription", format: "PDF", taille: "95 KB" }
-      ]
-    },
-    {
-      categorie: "Examens",
-      documents: [
-        { nom: "Demande de rattrapage", format: "PDF", taille: "110 KB" },
-        { nom: "Autorisation d'absence", format: "DOC", taille: "75 KB" },
-        { nom: "Relevé de notes", format: "PDF", taille: "130 KB" }
-      ]
-    },
-    {
-      categorie: "Diplômes",
-      documents: [
-        { nom: "Demande de diplôme", format: "PDF", taille: "140 KB" },
-        { nom: "Attestation de réussite", format: "DOC", taille: "90 KB" },
-        { nom: "Duplicata de diplôme", format: "PDF", taille: "105 KB" }
-      ]
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -82,39 +56,7 @@ const ServiceScolarite = () => {
           </Card>
         </div>
 
-        {/* Formulaires */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          {formulaires.map((section, index) => (
-            <Card key={index} className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-xl text-[#006be5] flex items-center">
-                  <FileText className="h-6 w-6 mr-2" />
-                  {section.categorie}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {section.documents.map((doc, docIndex) => (
-                    <div key={docIndex} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                      <div className="flex items-center">
-                        <FileText className="h-4 w-4 text-[#006be5] mr-2" />
-                        <div>
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">{doc.nom}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {doc.format} • {doc.taille}
-                          </p>
-                        </div>
-                      </div>
-                      <Button size="sm" variant="outline">
-                        <Download className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+
       </div>
       
       <Footer />
