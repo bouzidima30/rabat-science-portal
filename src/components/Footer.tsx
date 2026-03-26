@@ -6,7 +6,7 @@ const Footer = () => {
     href: "/formations"
   }, {
     title: "Recherche",
-    href: "/ecole-doctorale"
+    href: "/recherche/ecole-doctorale"
   }, {
     title: "Espace Étudiants",
     href: "/espace-etudiants"
@@ -19,16 +19,16 @@ const Footer = () => {
   }];
   const formations = [{
     title: "Formation Licence",
-    href: "/formation-licence"
+    href: "/formations/formation-licence"
   }, {
     title: "Formation Master",
-    href: "/formation-master"
+    href: "/formations/formation-master"
   }, {
     title: "Formation Doctorat",
-    href: "/formation-doctorat"
+    href: "/formations/formation-doctorat"
   }, {
     title: "Formation Continue",
-    href: "/formation-continue"
+    href: "/formations/formation-continue"
   }];
   const actualNews = [{
     title: "Nouvelle rentrée universitaire 2024-2025",
