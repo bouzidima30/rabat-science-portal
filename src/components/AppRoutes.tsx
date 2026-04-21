@@ -435,6 +435,27 @@ const AppRoutes = () => {
             </PageTransition>
           </Suspense>
         } />
+        <Route path="/bibliotheque/plan-acces" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition>
+              <PlanAcces />
+            </PageTransition>
+          </Suspense>
+        } />
+        <Route path="/bibliotheque/services" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition>
+              <ServicesBibliotheque />
+            </PageTransition>
+          </Suspense>
+        } />
+        <Route path="/bibliotheque/ressources-electroniques" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition>
+              <RessourcesElectroniques />
+            </PageTransition>
+          </Suspense>
+        } />
         <Route path="/services-bibliotheque" element={
           <Suspense fallback={<LoadingSpinner />}>
             <PageTransition>
