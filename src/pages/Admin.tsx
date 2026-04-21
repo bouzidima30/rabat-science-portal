@@ -110,6 +110,7 @@ const Admin = () => {
     { name: "Présélection", path: "/admin/preselection", icon: GraduationCap, description: "Documents de présélection" },
     { name: "Sections & Groupes", path: "/admin/sections-groupes", icon: Users, description: "Sections et groupes par session" },
     { name: "Scolarité", path: "/admin/scolarite", icon: FileText, description: "Documents du service scolarité" },
+    { name: "Résultats Examens", path: "/admin/resultats", icon: FileText, description: "Résultats par session" },
     { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
     { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
   ];
