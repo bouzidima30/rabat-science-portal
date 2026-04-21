@@ -1,186 +1,193 @@
-
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Monitor, BookOpen, Download, Users } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Monitor, BookOpen, Database, ExternalLink } from "lucide-react";
+
+type Resource = {
+  nom: string;
+  presentation: string;
+  site?: string;
+};
+
+const resources: Resource[] = [
+  {
+    nom: "ScienceDirect",
+    presentation:
+      "Couvre tous les domaines de la science : Sciences Physiques et Technologie, Sciences de la Vie, Sciences de la Santé, Sciences Humaines et Sociales.",
+    site: "http://www.sciencedirect.com/",
+  },
+  {
+    nom: "Web of Science",
+    presentation:
+      "La plate-forme Web of Science permet d'accéder à une quantité inégalée d'ouvrages de recherche grâce à des métadonnées et des liens de citations méticuleusement saisis. Elle connecte la collection Web of Science Core à des index de citations régionaux, des données de brevets, des index de sujets spécialisés, pour un total de plus de 33 000 revues.",
+    site: "http://www.webofknowledge.com/",
+  },
+  {
+    nom: "Cairn",
+    presentation:
+      "Base de données en Sciences Humaines et Sociales donnant accès à plus de 412 revues francophones en texte intégral.",
+  },
+  {
+    nom: "Scopus",
+    presentation:
+      "La plus grande base de données de références bibliographiques et de citations avec 15 000 titres de revues issues de plus de 4 000 éditeurs internationaux, dans les domaines de la science, de la technologie, de la médecine, des sciences sociales, des arts et des sciences humaines.",
+    site: "https://www.scopus.com/",
+  },
+  {
+    nom: "MathSciNet",
+    presentation: "Base de données des références bibliographiques en Mathématiques.",
+    site: "http://www.ams.org/mathscinet/",
+  },
+  {
+    nom: "SpringerLink",
+    presentation:
+      "Regroupe des milliers d'ouvrages électroniques en texte intégral dans les domaines de la science, de la technologie, de la médecine, des sciences sociales, des arts et des sciences humaines.",
+    site: "http://link.springer.com/",
+  },
+  {
+    nom: "Aluka",
+    presentation:
+      "Couvre les domaines de : Botanique, Ethnobotanique, Science Politique, développement international. Elle inclut trois collections : Les plantes d'Afrique, sites et paysages du patrimoine culturel Africain et lutte pour la liberté en Afrique australe.",
+    site: "https://www.aluka.org/",
+  },
+  {
+    nom: "JSTOR",
+    presentation:
+      "Donne accès aux archives électroniques de près de 700 périodiques : les mathématiques, la biologie, sciences humaines et sociales.",
+    site: "https://www.jstor.org/",
+  },
+  {
+    nom: "Catalogue national des thèses",
+    presentation:
+      "Comporte un nombre considérable de thèses soutenues dans l'ensemble des universités marocaines.",
+    site: "http://toubkal.imist.ma/",
+  },
+];
 
 const RessourcesElectroniques = () => {
-  const databases = [
-    {
-      nom: "ScienceDirect",
-      description: "Base de données multidisciplinaire d'Elsevier",
-      domaines: ["Sciences physiques", "Chimie", "Mathématiques", "Biologie"],
-      acces: "Campus + VPN"
-    },
-    {
-      nom: "Springer Link",
-      description: "Plateforme de livres et revues scientifiques",
-      domaines: ["Sciences exactes", "Informatique", "Médecine"],
-      acces: "Campus + VPN"
-    },
-    {
-      nom: "IEEE Xplore",
-      description: "Base de données en informatique et électronique",
-      domaines: ["Informatique", "Électronique", "Télécommunications"],
-      acces: "Campus uniquement"
-    },
-    {
-      nom: "MathSciNet",
-      description: "Base de données spécialisée en mathématiques",
-      domaines: ["Mathématiques pures", "Mathématiques appliquées"],
-      acces: "Campus + VPN"
-    }
-  ];
-
-  const revues = [
-    "Nature", "Science", "Physical Review", "Journal of Chemistry",
-    "Bioinformatics", "Computer Science", "Mathematical Reviews"
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
-      
+
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Ressources Électroniques
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Accédez à une vaste collection de bases de données, revues électroniques 
-            et ressources numériques pour vos recherches.
+        <div className="mb-10 border-l-4 border-primary pl-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">Ressources électroniques</h1>
+          <p className="text-muted-foreground mt-2">
+            Accès aux catalogues et bases de données de la bibliothèque de la FSR
           </p>
         </div>
 
-        {/* Statistiques */}
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
-          <Card className="text-center">
-            <CardContent className="p-6">
-              <Monitor className="h-8 w-8 text-[#006be5] mx-auto mb-2" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">15+</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Bases de données</p>
+        <div className="space-y-8">
+          {/* Catalogue des thèses */}
+          <Card className="shadow-md">
+            <CardContent className="p-6 space-y-3">
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                Catalogue des thèses et des mémoires
+              </h2>
+              <p className="text-foreground/80">
+                La recherche d'une thèse ou d'un mémoire se fait uniquement en{" "}
+                <strong>intranet</strong> en interrogeant :
+              </p>
+              <ul className="list-disc pl-6 space-y-1 text-foreground/80">
+                <li>
+                  Le catalogue de :{" "}
+                  <a
+                    href="http://sdic.fsr.ac.ma/opac_css/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    http://sdic.fsr.ac.ma/opac_css/
+                  </a>
+                </li>
+              </ul>
+              <p className="text-foreground/80">
+                Le catalogue national des thèses est consultable via internet sur :{" "}
+                <a
+                  href="http://toubkal.imist.ma/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  http://toubkal.imist.ma/
+                </a>
+              </p>
             </CardContent>
           </Card>
-          <Card className="text-center">
-            <CardContent className="p-6">
-              <BookOpen className="h-8 w-8 text-[#006be5] mx-auto mb-2" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">5000+</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Revues en ligne</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="p-6">
-              <Download className="h-8 w-8 text-[#006be5] mx-auto mb-2" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Illimité</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Téléchargements</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="p-6">
-              <Users className="h-8 w-8 text-[#006be5] mx-auto mb-2" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">24/7</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Accès disponible</p>
-            </CardContent>
-          </Card>
-        </div>
 
-        {/* Bases de données */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-            Principales Bases de Données
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {databases.map((db, index) => (
-              <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-lg text-[#006be5]">{db.nom}</CardTitle>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">{db.description}</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
-                        Domaines couverts :
-                      </h4>
-                      <div className="flex flex-wrap gap-1">
-                        {db.domaines.map((domaine, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded">
-                            {domaine}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600 dark:text-gray-300">
-                        Accès : {db.acces}
-                      </span>
-                      <Button size="sm" className="bg-[#006be5] hover:bg-[#0056b3]">
-                        Accéder
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+          {/* Catalogue de la bibliothèque */}
+          <Card className="shadow-md">
+            <CardContent className="p-6 space-y-3">
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                <Database className="h-5 w-5 text-primary" />
+                Catalogue de la bibliothèque
+              </h2>
+              <p className="text-foreground/80">
+                Accessible uniquement au niveau de la faculté, le catalogue de la bibliothèque
+                centrale contient les références bibliographiques de l'ensemble du fond documentaire
+                (ouvrages, thèses et mémoires). Il permet d'effectuer une recherche simple ou
+                avancée, de repérer les documents et de vérifier leur disponibilité dans la
+                bibliothèque. Ce catalogue regroupe également les références de la bibliothèque du
+                département de mathématiques.
+              </p>
+            </CardContent>
+          </Card>
 
-        {/* Revues populaires */}
-        <Card className="mb-12">
-          <CardHeader>
-            <CardTitle className="text-xl text-[#006be5] text-center">
-              Revues Scientifiques Populaires
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {revues.map((revue, index) => (
-                <div key={index} className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg text-center">
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">{revue}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+          {/* Ressources électroniques */}
+          <Card className="shadow-md">
+            <CardContent className="p-6 space-y-4">
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                <Monitor className="h-5 w-5 text-primary" />
+                Ressources électroniques
+              </h2>
+              <p className="text-foreground/80">
+                La bibliothèque de la Faculté des Sciences met à la disposition de ses usagers les
+                différentes bases de données à accès restreint auxquelles la Faculté et le
+                Consortium CNRST-Universités sont abonnés.
+              </p>
 
-        {/* Guide d'utilisation */}
-        <Card className="bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
-          <CardContent className="p-6">
-            <div className="text-center">
-              <h3 className="text-xl font-semibold text-green-900 dark:text-green-100 mb-4">
-                Comment Accéder aux Ressources ?
-              </h3>
-              <div className="grid md:grid-cols-3 gap-6 text-green-800 dark:text-green-200">
-                <div>
-                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-white font-bold">1</span>
-                  </div>
-                  <p className="font-medium mb-2">Depuis le Campus</p>
-                  <p className="text-sm">Connexion directe via le réseau FSR</p>
-                </div>
-                <div>
-                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-white font-bold">2</span>
-                  </div>
-                  <p className="font-medium mb-2">À Distance</p>
-                  <p className="text-sm">Utilisation du VPN institutionnel</p>
-                </div>
-                <div>
-                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-white font-bold">3</span>
-                  </div>
-                  <p className="font-medium mb-2">Support</p>
-                  <p className="text-sm">Formation et assistance disponibles</p>
-                </div>
+              <div className="overflow-x-auto rounded-md border border-border">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted">
+                    <tr>
+                      <th className="text-left p-3 font-semibold text-foreground w-1/5">Ressources</th>
+                      <th className="text-left p-3 font-semibold text-foreground">Présentation</th>
+                      <th className="text-left p-3 font-semibold text-foreground w-1/5">Site</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {resources.map((r) => (
+                      <tr key={r.nom} className="border-t border-border align-top">
+                        <td className="p-3 font-medium text-foreground">{r.nom}</td>
+                        <td className="p-3 text-foreground/80">{r.presentation}</td>
+                        <td className="p-3">
+                          {r.site ? (
+                            <a
+                              href={r.site}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline inline-flex items-center gap-1 break-all"
+                            >
+                              <ExternalLink className="h-3 w-3 flex-shrink-0" />
+                              <span>{r.site}</span>
+                            </a>
+                          ) : (
+                            <span className="text-muted-foreground italic">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-      
+
       <Footer />
     </div>
   );
