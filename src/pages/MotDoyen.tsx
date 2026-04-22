@@ -4,6 +4,7 @@ import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Quote } from "lucide-react";
+import doyenImage from "@/assets/doyen.jpg";
 
 const MotDoyen = () => {
   return (
@@ -118,9 +119,12 @@ const MotDoyen = () => {
             <Card className="shadow-lg">
               <CardContent className="p-6">
                 <div className="text-center">
-                  <div className="w-32 h-32 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-gray-500 dark:text-gray-400 text-sm">Photo du Doyen</span>
-                  </div>
+                  <img
+                    src={doyenImage}
+                    alt="Pr. Redouane Benaini, Doyen de la Faculté des Sciences de Rabat"
+                    className="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow-md ring-4 ring-[#006be5]/10"
+                    loading="lazy"
+                  />
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                     Pr. Redouane Benaini
                   </h3>
