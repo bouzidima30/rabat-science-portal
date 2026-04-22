@@ -79,27 +79,10 @@ const StructuresRecherche = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <Users className="h-4 w-4" />
-                    <span>Directeur: {structure.directeur}</span>
-                  </div>
-                  
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     {structure.description}
                   </p>
-                  
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                      <BookOpen className="h-4 w-4" />
-                      Équipes de recherche:
-                    </h4>
-                    <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                      {structure.equipes.map((equipe, idx) => (
-                        <li key={idx}>{equipe}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  
+
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                       <Microscope className="h-4 w-4" />
