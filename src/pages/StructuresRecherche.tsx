@@ -9,45 +9,40 @@ import { Building, Users, BookOpen, Microscope } from "lucide-react";
 const StructuresRecherche = () => {
   const structures = [
     {
-      nom: "Laboratoire de Mathématiques et Applications",
-      acronyme: "LMA",
-      directeur: "Prof. Ahmed BENALI",
-      equipes: ["Analyse Fonctionnelle", "Géométrie Différentielle", "Probabilités"],
-      description: "Le LMA développe des recherches de pointe en mathématiques pures et appliquées, avec un focus particulier sur l'analyse fonctionnelle et ses applications en physique mathématique.",
-      domaines: ["Mathématiques", "Analyse", "Géométrie"]
+      nom: "Centre de Recherche en Sciences Mathématiques et Applications",
+      acronyme: "Mathématiques",
+      description:
+        "Centre de recherche accrédité regroupant les laboratoires et équipes du Département de Mathématiques de la FSR.",
+      domaines: ["Analyse", "Algèbre", "Géométrie", "Probabilités"],
     },
     {
-      nom: "Laboratoire de Physique de la Matière Condensée",
-      acronyme: "LPMC",
-      directeur: "Prof. Fatima ZAHRA",
-      equipes: ["Physique des Matériaux", "Optique Quantique", "Nanotechnologies"],
-      description: "Le LPMC se consacre à l'étude des propriétés fondamentales de la matière condensée et au développement de nouveaux matériaux aux propriétés exceptionnelles.",
-      domaines: ["Physique", "Matériaux", "Nanotechnologies"]
+      nom: "Centre de Recherche en Sciences Physiques",
+      acronyme: "Physique",
+      description:
+        "Centre de recherche accrédité regroupant les laboratoires en physique fondamentale, hautes énergies, matière condensée et énergies renouvelables.",
+      domaines: ["Physique théorique", "Hautes énergies", "Matière condensée"],
     },
     {
-      nom: "Laboratoire de Chimie Organique et Analytique",
-      acronyme: "LCOA",
-      directeur: "Prof. Mohamed ALAMI",
-      equipes: ["Synthèse Organique", "Chimie Analytique", "Chimie Verte"],
-      description: "Le LCOA développe de nouvelles méthodes de synthèse respectueuses de l'environnement et met au point des techniques analytiques innovantes.",
-      domaines: ["Chimie", "Environnement", "Synthèse"]
+      nom: "Centre de Recherche en Sciences Chimiques",
+      acronyme: "Chimie",
+      description:
+        "Centre de recherche accrédité dédié à la chimie organique, inorganique, analytique et aux sciences des matériaux.",
+      domaines: ["Chimie organique", "Chimie verte", "Matériaux"],
     },
     {
-      nom: "Laboratoire de Biologie Moléculaire et Cellulaire",
-      acronyme: "LBMC",
-      directeur: "Prof. Aicha MERNISSI",
-      equipes: ["Génétique Moléculaire", "Biologie Cellulaire", "Biotechnologies"],
-      description: "Le LBMC étudie les mécanismes fondamentaux du vivant au niveau moléculaire et cellulaire, avec des applications en biotechnologie et médecine.",
-      domaines: ["Biologie", "Génétique", "Biotechnologies"]
+      nom: "Centre de Recherche en Sciences de la Vie",
+      acronyme: "Biologie",
+      description:
+        "Centre de recherche accrédité couvrant la biologie moléculaire, l'écologie, la microbiologie et les biotechnologies.",
+      domaines: ["Biologie moléculaire", "Microbiologie", "Biotechnologies"],
     },
     {
-      nom: "Laboratoire d'Informatique et Systèmes",
-      acronyme: "LIS",
-      directeur: "Prof. Omar BENALI",
-      equipes: ["Intelligence Artificielle", "Systèmes Distribués", "Sécurité Informatique"],
-      description: "Le LIS développe des solutions innovantes en informatique avec un focus sur l'IA, les systèmes distribués et la cybersécurité.",
-      domaines: ["Informatique", "IA", "Sécurité"]
-    }
+      nom: "Centre de Recherche en Sciences et Technologies de l'Information",
+      acronyme: "Informatique & Géosciences",
+      description:
+        "Centre de recherche accrédité couvrant l'informatique, l'IA, la cybersécurité et les sciences de la Terre.",
+      domaines: ["Intelligence artificielle", "Cybersécurité", "Géosciences"],
+    },
   ];
 
   return (
@@ -84,27 +79,10 @@ const StructuresRecherche = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <Users className="h-4 w-4" />
-                    <span>Directeur: {structure.directeur}</span>
-                  </div>
-                  
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     {structure.description}
                   </p>
-                  
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                      <BookOpen className="h-4 w-4" />
-                      Équipes de recherche:
-                    </h4>
-                    <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                      {structure.equipes.map((equipe, idx) => (
-                        <li key={idx}>{equipe}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  
+
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                       <Microscope className="h-4 w-4" />

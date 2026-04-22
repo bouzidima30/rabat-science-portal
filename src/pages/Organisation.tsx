@@ -9,56 +9,56 @@ import { Users, Building, GraduationCap, Award } from "lucide-react";
 const Organisation = () => {
   const departements = [
     {
-      nom: "Mathématiques",
-      description: "Département de mathématiques pures et appliquées",
-      specialites: ["Analyse", "Algèbre", "Géométrie", "Probabilités"]
+      nom: "Département de Biologie",
+      description: "Sciences de la vie : biologie moléculaire, écologie, microbiologie, génétique",
+      specialites: ["Biologie moléculaire", "Écologie", "Microbiologie", "Génétique"],
     },
     {
-      nom: "Physique",
-      description: "Département de physique fondamentale et appliquée",
-      specialites: ["Physique théorique", "Physique expérimentale", "Optique", "Matière condensée"]
+      nom: "Département de Chimie",
+      description: "Chimie fondamentale et appliquée, sciences des matériaux",
+      specialites: ["Chimie organique", "Chimie inorganique", "Chimie analytique", "Matériaux"],
     },
     {
-      nom: "Chimie",
-      description: "Département de chimie et sciences des matériaux",
-      specialites: ["Chimie organique", "Chimie inorganique", "Chimie analytique", "Matériaux"]
+      nom: "Département d'Informatique",
+      description: "Sciences et technologies de l'information",
+      specialites: ["Intelligence artificielle", "Réseaux", "Systèmes", "Génie logiciel"],
     },
     {
-      nom: "Biologie",
-      description: "Département des sciences de la vie",
-      specialites: ["Biologie moléculaire", "Écologie", "Microbiologie", "Génétique"]
+      nom: "Département de Mathématiques",
+      description: "Mathématiques pures et appliquées",
+      specialites: ["Analyse", "Algèbre", "Géométrie", "Probabilités"],
     },
     {
-      nom: "Géologie",
-      description: "Département des sciences de la Terre",
-      specialites: ["Géologie structurale", "Pétrologie", "Hydrogéologie", "Géophysique"]
+      nom: "Département de Physique",
+      description: "Physique fondamentale et appliquée",
+      specialites: ["Physique théorique", "Physique expérimentale", "Optique", "Hautes énergies"],
     },
     {
-      nom: "Informatique",
-      description: "Département d'informatique et technologies",
-      specialites: ["Intelligence artificielle", "Réseaux", "Systèmes", "Développement"]
-    }
+      nom: "Département de Géologie",
+      description: "Sciences de la Terre",
+      specialites: ["Géologie structurale", "Pétrologie", "Hydrogéologie", "Géophysique"],
+    },
   ];
 
   const services = [
     {
       nom: "Décanat",
-      description: "Direction générale de la faculté",
+      description: "Direction générale de la Faculté",
       icon: Building
     },
     {
-      nom: "Scolarité",
+      nom: "Service Scolarité",
       description: "Gestion des inscriptions et examens",
       icon: GraduationCap
     },
     {
-      nom: "Recherche",
-      description: "Coordination des activités de recherche",
+      nom: "Centre des Études Doctorales (CeDoc)",
+      description: "Coordination de la recherche doctorale (créé en 2008)",
       icon: Award
     },
     {
-      nom: "Relations Extérieures",
-      description: "Partenariats et coopération",
+      nom: "Coopération",
+      description: "Partenariats nationaux et internationaux",
       icon: Users
     }
   ];
@@ -72,13 +72,36 @@ const Organisation = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Organisation
+            Organisation Générale
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            La Faculté des Sciences de Rabat est structurée en départements spécialisés 
-            et services administratifs pour garantir l'excellence académique et la recherche.
+            La Faculté des Sciences de Rabat est structurée en six départements spécialisés et
+            plusieurs services administratifs pour garantir l'excellence académique et la
+            recherche scientifique.
           </p>
         </div>
+
+        {/* Organigramme officiel */}
+        <Card className="mb-12 shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center text-[#006be5]">
+              Organigramme officiel
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <figure className="text-center">
+              <img
+                src="https://www.fsr.ac.ma/sites/default/files/organigramme_0.jpg"
+                alt="Organigramme de la Faculté des Sciences de Rabat"
+                loading="lazy"
+                className="mx-auto rounded-md max-w-full h-auto border border-border"
+              />
+              <figcaption className="text-sm text-muted-foreground mt-3">
+                Organigramme officiel de la FSR — Université Mohammed V de Rabat
+              </figcaption>
+            </figure>
+          </CardContent>
+        </Card>
 
         {/* Structure générale */}
         <Card className="mb-12">
