@@ -27,31 +27,86 @@ const MotDoyen = () => {
                   <Quote className="h-8 w-8 text-[#006be5] mr-4 flex-shrink-0 mt-1" />
                   <div>
                     <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                      C'est avec un grand honneur que j'assume la responsabilité de diriger la Faculté des Sciences de Rabat, 
-                      une institution d'excellence qui forme depuis des décennies les cadres scientifiques et techniques 
-                      de notre pays.
+                      Ce mot se veut avant tout un engagement personnel et une invitation adressée à
+                      l'ensemble des étudiants, enseignants-chercheurs, personnels administratifs et
+                      partenaires institutionnels à œuvrer collectivement pour la promotion et le
+                      rayonnement de la Faculté des Sciences de Rabat, dans une dynamique de continuité
+                      et de renouveau.
                     </p>
-                    
+
                     <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                      Notre faculté s'engage résolument dans la voie de l'innovation pédagogique et de la recherche 
-                      scientifique de haut niveau. Nous œuvrons quotidiennement pour offrir à nos étudiants une formation 
-                      de qualité, adaptée aux défis du monde moderne et aux besoins du marché du travail.
+                      Parler de la Faculté des Sciences de Rabat, c'est évoquer l'histoire du premier
+                      établissement marocain d'enseignement supérieur et de recherche scientifique,
+                      reconnu pour l'excellence de ses réalisations, l'ambition de ses projets et son
+                      rayonnement constant aux niveaux national et international. Elle a formé des
+                      générations de scientifiques, des chercheurs confirmés, ainsi que des compétences
+                      de haut niveau, mises au service de la société marocaine.
                     </p>
-                    
+
                     <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                      L'excellence académique que nous poursuivons s'appuie sur un corps professoral qualifié, 
-                      des infrastructures modernes et des partenariats stratégiques avec des institutions nationales 
-                      et internationales de renom.
+                      Dans un contexte marqué par des transformations profondes, une course accrue à
+                      l'innovation et un renouvellement permanent des savoirs, notre faculté est
+                      appelée à renforcer son agilité et l'efficacité de son action à travers une
+                      gouvernance intelligente, fondée sur la culture du résultat, la responsabilité,
+                      la transparence, la participation, l'inclusion et le suivi-évaluation.
                     </p>
-                    
+
                     <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                      Nous encourageons nos étudiants à développer leur esprit critique, leur créativité et leur 
-                      capacité d'innovation pour devenir les acteurs du développement scientifique et technologique 
-                      de demain.
+                      Nous entamons aujourd'hui une nouvelle phase majeure de transformation de
+                      l'enseignement supérieur, portée par une vision nationale ambitieuse, insufflée
+                      par les Hautes Orientations Royales, la stratégie Maroc Digital 2030 et le projet
+                      de développement de l'Université Mohammed V. Cette dynamique nous invite à
+                      repenser notre stratégie académique, scientifique et administrative.
                     </p>
-                    
+
+                    <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                      C'est dans ce cadre que s'inscrit notre Projet de Développement de l'Établissement
+                      (PDE) 2025-2029. Fondé sur un diagnostic rigoureux, il propose une feuille de
+                      route claire et structurée visant à renforcer le rayonnement et l'attractivité de
+                      notre institution, à améliorer l'offre et la qualité des formations, et à
+                      consolider notre position en tant que pôle de recherche de référence.
+                    </p>
+
+                    <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                      Sur le plan pédagogique, la croissance des effectifs étudiants, la diversification
+                      de notre offre de formation et l'adoption des nouveaux régimes de Licence et de
+                      Master nous imposent des défis importants, notamment en matière d'encadrement,
+                      d'accompagnement pédagogique, de locaux et de modernisation des infrastructures.
+                    </p>
+
+                    <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                      Sur le plan scientifique, notre faculté est appelée à poursuivre son essor, à
+                      valoriser son potentiel et à renforcer sa dynamique de recherche en créant des
+                      conditions attractives pour accueillir les meilleurs doctorants et
+                      enseignants-chercheurs. L'innovation, l'interdisciplinarité et l'ouverture à
+                      l'international constituent les piliers de cette nouvelle phase, guidée par
+                      l'excellence.
+                    </p>
+
+                    <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                      La réussite de ce projet repose également sur l'adoption d'une gouvernance moderne
+                      et agile, soutenue par une digitalisation intégrée, considérée comme un levier
+                      stratégique et une condition sine qua non du déploiement du PDE.
+                    </p>
+
+                    <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                      Grâce à l'engagement de toutes et de tous, la Faculté des Sciences de Rabat
+                      poursuivra son rayonnement et contribuera pleinement au développement scientifique,
+                      économique et social de notre pays.
+                    </p>
+
+                    <blockquote className="border-l-4 border-[#006be5] pl-4 italic text-gray-600 dark:text-gray-400 my-6">
+                      « La réforme judicieuse du système d'éducation et de formation est la voie
+                      essentielle à emprunter pour relever les défis du développement […] nous n'avons
+                      d'autre choix que de promouvoir la recherche et l'innovation, et d'assurer la mise
+                      à niveau de nos ressources humaines, qui représentent notre principal atout. »
+                      <footer className="text-sm not-italic mt-2 text-gray-500">
+                        — Sa Majesté le Roi Mohammed VI, Discours du Trône, 30 juillet 2009
+                      </footer>
+                    </blockquote>
+
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                      Je vous souhaite une excellente année universitaire, riche en découvertes et en réussites.
+                      Œuvrons ensemble pour une faculté inclusive, innovante et tournée vers l'avenir.
                     </p>
                   </div>
                 </div>
@@ -67,28 +122,28 @@ const MotDoyen = () => {
                     <span className="text-gray-500 dark:text-gray-400 text-sm">Photo du Doyen</span>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    Professeur [Nom du Doyen]
+                    Pr. Redouane Benaini
                   </h3>
                   <p className="text-[#006be5] font-medium mb-4">
                     Doyen de la Faculté des Sciences
                   </p>
                   <div className="text-left space-y-3">
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm">Formation :</h4>
+                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm">Mandat :</h4>
                       <p className="text-gray-600 dark:text-gray-300 text-sm">
-                        Docteur en Sciences
+                        Depuis 2025
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm">Spécialité :</h4>
+                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm">Vision :</h4>
                       <p className="text-gray-600 dark:text-gray-300 text-sm">
-                        [Domaine de spécialité]
+                        Projet de Développement de l'Établissement (PDE) 2025-2029
                       </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 dark:text-white text-sm">Email :</h4>
                       <p className="text-gray-600 dark:text-gray-300 text-sm">
-                        doyen@fsr.ac.ma
+                        decanat@fsr.ac.ma
                       </p>
                     </div>
                   </div>
