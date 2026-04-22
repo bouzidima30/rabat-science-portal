@@ -171,30 +171,30 @@ const Historique = () => {
           </div>
         </div>
 
-        {/* Personnalités marquantes */}
+        {/* Doyens de la faculté */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Personnalités Marquantes
+            Doyens de la Faculté des Sciences
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {personnalites.map((personnalite, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-lg text-[#006be5]">
-                    {personnalite.nom}
-                  </CardTitle>
-                  <Badge variant="secondary" className="w-fit">
-                    {personnalite.poste}
-                  </Badge>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    {personnalite.contribution}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Card className="shadow-lg">
+            <CardContent className="p-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {doyens.map((doyen, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors"
+                  >
+                    <Badge variant="outline" className="mr-3 mt-1 shrink-0">
+                      {doyen.periode}
+                    </Badge>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">
+                      {doyen.nom}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Mission historique */}
@@ -207,10 +207,10 @@ const Historique = () => {
           <CardContent>
             <div className="text-center max-w-4xl mx-auto">
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-                Depuis sa création en 1957, la Faculté des Sciences de Rabat s'est imposée comme 
-                un pilier de l'enseignement supérieur scientifique au Maroc. Elle a formé des 
-                générations de scientifiques, chercheurs et cadres qui contribuent aujourd'hui 
-                au développement du pays dans tous les secteurs.
+                Depuis sa création en 1953, la Faculté des Sciences de Rabat s'est imposée comme
+                le premier établissement marocain d'enseignement supérieur et de recherche
+                scientifique. Elle a formé des générations de scientifiques, chercheurs et cadres
+                qui contribuent aujourd'hui au développement du pays dans tous les secteurs.
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 Notre faculté continue de porter les valeurs d'excellence, d'innovation et 
