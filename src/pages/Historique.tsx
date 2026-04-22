@@ -4,77 +4,88 @@ import Navbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Award, Users, Building } from "lucide-react";
+import { Award, Users, Building, GraduationCap, BookOpen } from "lucide-react";
 
 const Historique = () => {
   const periodes = [
     {
-      annee: "1957",
-      titre: "Création",
-      description: "Création de la Faculté des Sciences de Rabat dans le cadre de l'Université Mohammed V.",
+      annee: "1953",
+      titre: "Inauguration",
+      description: "Inauguration du Centre d'Études Supérieures Scientifiques de Rabat.",
       icon: Building,
-      type: "fondation"
     },
     {
-      annee: "1960-1970",
-      titre: "Premiers Développements",
-      description: "Mise en place des premiers départements et laboratoires de recherche.",
+      annee: "1956",
+      titre: "Conseil National Consultatif",
+      description: "Réunions du Conseil National Consultatif au grand amphithéâtre.",
       icon: Users,
-      type: "developpement"
     },
     {
-      annee: "1980-1990",
-      titre: "Expansion",
-      description: "Création de nouveaux cycles de formation et développement de la recherche.",
-      icon: Award,
-      type: "expansion"
+      annee: "1957",
+      titre: "Institut Supérieur des Sciences",
+      description: "Création de l'Institut Supérieur des Sciences.",
+      icon: BookOpen,
     },
     {
-      annee: "2000-2010",
-      titre: "Modernisation",
-      description: "Adoption du système LMD et modernisation des équipements de recherche.",
-      icon: Award,
-      type: "modernisation"
+      annee: "1958",
+      titre: "Faculté des Sciences",
+      description: "L'institut supérieur des sciences devient « Faculté des Sciences ».",
+      icon: Building,
     },
     {
-      annee: "2010-2020",
-      titre: "Excellence",
-      description: "Renforcement de la coopération internationale et développement de l'innovation.",
+      annee: "1959",
+      titre: "Officialisation",
+      description: "Officialisation du nom de la Faculté des Sciences de Rabat par le dahir n° 1-58-390 du 15 Moharrem 1379 (21 Juillet 1959).",
       icon: Award,
-      type: "excellence"
     },
     {
-      annee: "2020-Aujourd'hui",
-      titre: "Transformation Numérique",
-      description: "Digitalisation de l'enseignement et développement de nouveaux programmes.",
+      annee: "1960",
+      titre: "Premier Parlement",
+      description: "Réunions du premier parlement marocain au sein du grand amphithéâtre.",
+      icon: Users,
+    },
+    {
+      annee: "1997",
+      titre: "Formations DESA, DESS, Doctorat",
+      description: "Formations aux Diplôme d'Études Supérieures Approfondies (DESA), Diplôme d'Études Supérieures Spécialisées (DESS) et Doctorat National.",
+      icon: GraduationCap,
+    },
+    {
+      annee: "2003",
+      titre: "Système LMD",
+      description: "Mise en place du système Licence-Master-Doctorat (LMD), création d'une douzaine de Licences fondamentales et professionnelles et d'une vingtaine de Masters à vocation recherche et professionnelle.",
+      icon: GraduationCap,
+    },
+    {
+      annee: "2008",
+      titre: "Création du CeDoc",
+      description: "Création du Centre des Études Doctorales en Sciences et Technologies (CeDoc).",
       icon: Award,
-      type: "transformation"
-    }
+    },
   ];
 
   const chiffres = [
-    { label: "Années d'existence", valeur: "67+", description: "Depuis 1957" },
-    { label: "Générations formées", valeur: "100,000+", description: "Diplômés" },
-    { label: "Départements", valeur: "12", description: "Spécialisés" },
-    { label: "Laboratoires", valeur: "25+", description: "De recherche" }
+    { label: "Années d'existence", valeur: "70+", description: "Depuis 1953" },
+    { label: "Départements", valeur: "6", description: "Académiques" },
+    { label: "Cycles de formation", valeur: "LMD", description: "Licence, Master, Doctorat" },
+    { label: "Centre Doctoral", valeur: "CeDoc", description: "Depuis 2008" },
   ];
 
-  const personnalites = [
-    {
-      nom: "Pr. Ahmed Ben Bella",
-      poste: "Premier Doyen (1957-1965)",
-      contribution: "Fondateur de la faculté et architecte de sa vision académique."
-    },
-    {
-      nom: "Pr. Fatima Zahra Ammor",
-      poste: "Doyenne (1990-1998)",
-      contribution: "Pionnière dans le développement de la recherche en sciences de la vie."
-    },
-    {
-      nom: "Pr. Mohammed Benchrif",
-      poste: "Doyen (2000-2008)",
-      contribution: "Artisan de la modernisation et de l'adoption du système LMD."
-    }
+  const doyens = [
+    { periode: "1958-1960", nom: "Louis PASQUALINI" },
+    { periode: "1960-1963", nom: "Jean DESCHAMPS" },
+    { periode: "1963-1969", nom: "Albert SASSON" },
+    { periode: "1969-1975", nom: "Abdellatif BENABDEJLIL" },
+    { periode: "1975-1985", nom: "Idriss KHALIL" },
+    { periode: "1985-1987", nom: "Ahmed KARKOUR" },
+    { periode: "1987-1996", nom: "Abderahmane ESSAID" },
+    { periode: "1996-1999", nom: "Hajjoub MSOUGAR" },
+    { periode: "1999-2005", nom: "Hassan CHLYAH" },
+    { periode: "2005-2010", nom: "Wail BENJELLOUN" },
+    { periode: "2010-2015", nom: "Saaid AMZAZI" },
+    { periode: "2015-2020", nom: "Mourad EL BELKACEMI" },
+    { periode: "2020-2025", nom: "Mohammed REGRAGUI" },
+    { periode: "2025 à ce jour", nom: "Redouane BENAINI" },
   ];
 
   return (
@@ -89,8 +100,9 @@ const Historique = () => {
             Historique de la Faculté
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Plus de six décennies d'excellence académique et de contribution au développement 
-            scientifique du Maroc et de la région.
+            Depuis sa création, l'histoire de la Faculté des Sciences de Rabat a connu plusieurs
+            moments forts et marquants aussi bien du point de vue politique, scientifique que
+            pédagogique.
           </p>
         </div>
 
