@@ -2,72 +2,14 @@ import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
-  FileText, Download, Loader2, GraduationCap, Mail, Phone,
-  Users, Target, Building, ScrollText, BookOpen, Info,
+  GraduationCap, Mail, Phone,
+  Users, Target, Building, ScrollText, Info,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-
-const SECTIONS = [
-  {
-    key: "cedoc_soutenance",
-    titre: "Soutenance de Thèse Doctorale",
-    description: "Formulaires nécessaires pour la préparation et organisation de la soutenance",
-  },
-  {
-    key: "cedoc_inscription",
-    titre: "Inscription / Réinscription",
-    description: "Documents pour l'inscription et la réinscription en doctorat",
-  },
-];
-
-const formatFileSize = (bytes: number | null) => {
-  if (!bytes) return "N/A";
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-};
 
 const EcoleDoctorale = () => {
-  const { toast } = useToast();
-
-  const { data: files = [], isLoading } = useQuery({
-    queryKey: ["cedoc-files"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("files")
-        .select("*")
-        .in("category", ["cedoc_soutenance", "cedoc_inscription"])
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const handleDownload = async (fileUrl: string, fileName: string) => {
-    try {
-      const res = await fetch(fileUrl);
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch {
-      toast({ title: "Erreur", description: "Impossible de télécharger le fichier.", variant: "destructive" });
-    }
-  };
-
-  const getExtension = (name: string) => name.split(".").pop()?.toUpperCase() || "FICHIER";
-
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
