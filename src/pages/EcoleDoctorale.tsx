@@ -205,90 +205,100 @@ const EcoleDoctorale = () => {
             </Card>
           </TabsContent>
 
-          {/* Documents - Téléchargements */}
-          <TabsContent value="documents" className="mt-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
-                <BookOpen className="h-6 w-6 text-primary" />
-                Documents et Formulaires
-              </h2>
-              <p className="text-muted-foreground">
-                Téléchargez tous les formulaires nécessaires pour la soutenance de thèse doctorale
-                et les procédures d'inscription/réinscription.
-              </p>
-            </div>
+          {/* Charte des Thèses */}
+          <TabsContent value="charte" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-2xl">
+                  <ScrollText className="h-6 w-6 text-primary" />
+                  Charte des Thèses de l'Université Mohammed V
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+                <p>
+                  La charte formalise l'accord conclu entre le doctorant, le directeur de thèse,
+                  le directeur de l'unité de recherche, le directeur de l'école doctorale et le chef
+                  d'établissement. Elle s'appuie sur les principes énoncés par le Ministère de
+                  l'Éducation Nationale, de l'Enseignement Supérieur et de la Recherche (arrêté
+                  ministériel n°1371-07 du 23 septembre 2008).
+                </p>
+                <p>
+                  L'objectif de cette charte est de responsabiliser les partenaires et de définir les
+                  droits et devoirs de chacun.
+                </p>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          {SECTIONS.map((section) => {
-            const sectionFiles = files.filter((f) => f.category === section.key);
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Partenaires de la charte</h4>
+                  <ul className="space-y-2 list-disc list-inside marker:text-primary">
+                    <li><strong className="text-foreground">Le doctorant</strong> : remplit ses obligations administratives et respecte le règlement intérieur ; informe régulièrement son directeur de thèse de l'avancement de ses travaux.</li>
+                    <li><strong className="text-foreground">Le directeur de thèse</strong> : responsable de l'encadrement scientifique ; définit les étapes de la thèse et veille au respect des délais.</li>
+                    <li><strong className="text-foreground">Le directeur de la structure de recherche</strong> : assure l'intégration et l'accès aux moyens nécessaires au doctorant.</li>
+                    <li><strong className="text-foreground">Le directeur de l'école doctorale</strong> : rend publique chaque année la liste des doctorants et de leurs encadrants ; met en œuvre le programme de formations.</li>
+                    <li><strong className="text-foreground">Le chef de l'établissement</strong> : a la responsabilité administrative de la formation du doctorant.</li>
+                  </ul>
+                </div>
 
-            return (
-              <Card key={section.key} className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-xl text-primary flex items-center">
-                    <FileText className="h-6 w-6 mr-2" />
-                    {section.titre}
-                  </CardTitle>
-                  <p className="text-muted-foreground">{section.description}</p>
-                </CardHeader>
-                <CardContent>
-                  {isLoading ? (
-                    <div className="flex justify-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                    </div>
-                  ) : sectionFiles.length === 0 ? (
-                    <p className="text-center text-muted-foreground py-6">
-                      Aucun document disponible.
-                    </p>
-                  ) : (
-                    <div className="space-y-3">
-                      {sectionFiles.map((doc) => (
-                        <div
-                          key={doc.id}
-                          className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
-                        >
-                          <div className="flex items-center min-w-0">
-                            <FileText className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                            <div className="min-w-0">
-                              <p className="font-medium text-foreground truncate">{doc.original_name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {getExtension(doc.original_name)} • {formatFileSize(doc.file_size)}
-                              </p>
-                            </div>
-                          </div>
-                          <Button
-                            size="sm"
-                            className="bg-primary hover:bg-primary/90 flex-shrink-0 ml-2"
-                            onClick={() => handleDownload(doc.file_url, doc.original_name)}
-                          >
-                            <Download className="h-4 w-4 mr-1" />
-                            Télécharger
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Choix du sujet de thèse</h4>
+                  <p>
+                    Le choix du sujet repose sur l'accord entre le doctorant et le directeur de thèse,
+                    formalisé au moment de la première inscription conformément à la « norme D3 » du CNPNCD.
+                    Ce sujet doit aboutir à la réalisation d'un travail original, formateur et de qualité.
+                  </p>
+                </div>
 
-            <Card className="mt-8 bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800">
-              <CardContent className="p-6">
-                <div className="flex items-start">
-                  <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
-                    <span className="text-white text-sm font-bold">!</span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-yellow-900 dark:text-yellow-100 mb-2">
-                      Information importante
-                    </h3>
-                    <p className="text-yellow-800 dark:text-yellow-200">
-                      Tous les formulaires doivent être dûment remplis et signés avant soumission.
-                      Pour toute question, contactez le secrétariat du CEDoc.
-                    </p>
-                  </div>
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Encadrement et suivi</h4>
+                  <p>
+                    Conformément à la « norme D6 » du CNPNCD, le directeur de thèse est responsable
+                    de la thèse et doit consacrer une part significative de son temps au suivi régulier
+                    de la progression du travail. La direction d'une thèse ne peut en aucun cas être
+                    déléguée. Les co-directions sont autorisées après avis favorable du CEDoc.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Durée et prorogation</h4>
+                  <p>
+                    La durée maximale réglementaire est fixée par la « norme D5 » du CNPNCD. Au-delà
+                    de la troisième inscription, les demandes de dérogation doivent être assorties d'une
+                    lettre motivée du doctorant et d'un avis du directeur de thèse précisant la date
+                    prévisionnelle de soutenance.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Publication et valorisation</h4>
+                  <p>
+                    Le directeur de thèse doit faciliter la parution de <strong className="text-foreground">deux publications minimum</strong> avant la soutenance, dans des revues à comité de lecture reconnues. Le doctorant doit apparaître au <strong className="text-foreground">premier rang</strong> parmi les co-auteurs.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Soutenance et délivrance du diplôme</h4>
+                  <p>
+                    La soutenance se déroule conformément aux « normes D7 et D8 » du CNPNCD. Pour
+                    obtenir le diplôme de docteur, le récipiendaire est tenu de déposer
+                    <strong className="text-foreground"> 5 exemplaires</strong> de sa thèse après prise en compte des remarques du jury.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Médiation en cas de conflit</h4>
+                  <p>
+                    Tout conflit entre le doctorant et son directeur de thèse doit être porté à la
+                    connaissance du directeur de la structure d'accueil et du directeur de l'école doctorale.
+                    En cas de persistance, chaque signataire peut faire appel à la médiation du conseil
+                    du CEDoc, puis en dernier recours au Doyen de l'établissement.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                  <p className="text-foreground">
+                    <strong>Important :</strong> La charte doit être signée au moment de la première
+                    inscription en thèse par le doctorant, le(s) directeur(s) de thèse, le directeur
+                    de la structure d'accueil et le directeur de l'école doctorale.
+                  </p>
                 </div>
               </CardContent>
             </Card>
