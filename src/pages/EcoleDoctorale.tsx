@@ -203,62 +203,6 @@ const EcoleDoctorale = () => {
                 </div>
               </CardContent>
             </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl">
-                  <ScrollText className="h-6 w-6 text-primary" />
-                  Charte des Thèses de l'Université Mohammed V
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-                <p>
-                  La charte formalise l'accord conclu entre le doctorant, le directeur de thèse,
-                  le directeur de l'unité de recherche, le directeur de l'école doctorale et le chef
-                  d'établissement. Elle s'appuie sur les principes énoncés par le Ministère de
-                  l'Éducation Nationale, de l'Enseignement Supérieur et de la Recherche (arrêté
-                  ministériel n°1371-07 du 23 septembre 2008).
-                </p>
-                <p>
-                  L'objectif de cette charte est de responsabiliser les partenaires et de définir les
-                  droits et devoirs de chacun.
-                </p>
-
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Partenaires de la charte</h4>
-                  <ul className="space-y-2 list-disc list-inside marker:text-primary">
-                    <li><strong className="text-foreground">Le doctorant</strong> : remplit ses obligations administratives et respecte le règlement intérieur ; informe régulièrement son directeur de thèse de l'avancement de ses travaux.</li>
-                    <li><strong className="text-foreground">Le directeur de thèse</strong> : responsable de l'encadrement scientifique ; définit les étapes de la thèse et veille au respect des délais.</li>
-                    <li><strong className="text-foreground">Le directeur de la structure de recherche</strong> : assure l'intégration et l'accès aux moyens nécessaires au doctorant.</li>
-                    <li><strong className="text-foreground">Le directeur de l'école doctorale</strong> : rend publique chaque année la liste des doctorants et de leurs encadrants ; met en œuvre le programme de formations.</li>
-                    <li><strong className="text-foreground">Le chef de l'établissement</strong> : a la responsabilité administrative de la formation du doctorant.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Publication et valorisation</h4>
-                  <p>
-                    Le directeur de thèse doit faciliter la parution de <strong className="text-foreground">deux publications minimum</strong> avant la soutenance, dans des revues à comité de lecture reconnues. Le doctorant doit apparaître au <strong className="text-foreground">premier rang</strong> parmi les co-auteurs.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Délivrance du diplôme</h4>
-                  <p>
-                    Pour obtenir le diplôme de docteur, le récipiendaire est tenu de déposer
-                    <strong className="text-foreground"> 5 exemplaires</strong> de sa thèse après prise en compte des remarques du jury.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                  <p className="text-foreground">
-                    <strong>Important :</strong> La charte doit être signée au moment de la première
-                    inscription en thèse par le doctorant, le(s) directeur(s) de thèse, le directeur
-                    de la structure d'accueil et le directeur de l'école doctorale.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           {/* Documents - Téléchargements */}
