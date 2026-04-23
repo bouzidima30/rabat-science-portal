@@ -2,72 +2,14 @@ import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
-  FileText, Download, Loader2, GraduationCap, Mail, Phone,
-  Users, Target, Building, ScrollText, BookOpen, Info,
+  GraduationCap, Mail, Phone,
+  Users, Target, Building, ScrollText, Info,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-
-const SECTIONS = [
-  {
-    key: "cedoc_soutenance",
-    titre: "Soutenance de Thèse Doctorale",
-    description: "Formulaires nécessaires pour la préparation et organisation de la soutenance",
-  },
-  {
-    key: "cedoc_inscription",
-    titre: "Inscription / Réinscription",
-    description: "Documents pour l'inscription et la réinscription en doctorat",
-  },
-];
-
-const formatFileSize = (bytes: number | null) => {
-  if (!bytes) return "N/A";
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-};
 
 const EcoleDoctorale = () => {
-  const { toast } = useToast();
-
-  const { data: files = [], isLoading } = useQuery({
-    queryKey: ["cedoc-files"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("files")
-        .select("*")
-        .in("category", ["cedoc_soutenance", "cedoc_inscription"])
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const handleDownload = async (fileUrl: string, fileName: string) => {
-    try {
-      const res = await fetch(fileUrl);
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch {
-      toast({ title: "Erreur", description: "Impossible de télécharger le fichier.", variant: "destructive" });
-    }
-  };
-
-  const getExtension = (name: string) => name.split(".").pop()?.toUpperCase() || "FICHIER";
-
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
@@ -139,10 +81,10 @@ const EcoleDoctorale = () => {
               <span className="hidden sm:inline">Organisation</span>
               <span className="sm:hidden">Org.</span>
             </TabsTrigger>
-            <TabsTrigger value="documents" className="gap-2 py-2.5">
-              <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Documents</span>
-              <span className="sm:hidden">Docs</span>
+            <TabsTrigger value="charte" className="gap-2 py-2.5">
+              <ScrollText className="h-4 w-4" />
+              <span className="hidden sm:inline">Charte</span>
+              <span className="sm:hidden">Charte</span>
             </TabsTrigger>
           </TabsList>
 
@@ -261,7 +203,10 @@ const EcoleDoctorale = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
 
+          {/* Charte des Thèses */}
+          <TabsContent value="charte" className="mt-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-2xl">
@@ -294,6 +239,35 @@ const EcoleDoctorale = () => {
                 </div>
 
                 <div>
+                  <h4 className="font-semibold text-foreground mb-2">Choix du sujet de thèse</h4>
+                  <p>
+                    Le choix du sujet repose sur l'accord entre le doctorant et le directeur de thèse,
+                    formalisé au moment de la première inscription conformément à la « norme D3 » du CNPNCD.
+                    Ce sujet doit aboutir à la réalisation d'un travail original, formateur et de qualité.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Encadrement et suivi</h4>
+                  <p>
+                    Conformément à la « norme D6 » du CNPNCD, le directeur de thèse est responsable
+                    de la thèse et doit consacrer une part significative de son temps au suivi régulier
+                    de la progression du travail. La direction d'une thèse ne peut en aucun cas être
+                    déléguée. Les co-directions sont autorisées après avis favorable du CEDoc.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Durée et prorogation</h4>
+                  <p>
+                    La durée maximale réglementaire est fixée par la « norme D5 » du CNPNCD. Au-delà
+                    de la troisième inscription, les demandes de dérogation doivent être assorties d'une
+                    lettre motivée du doctorant et d'un avis du directeur de thèse précisant la date
+                    prévisionnelle de soutenance.
+                  </p>
+                </div>
+
+                <div>
                   <h4 className="font-semibold text-foreground mb-2">Publication et valorisation</h4>
                   <p>
                     Le directeur de thèse doit faciliter la parution de <strong className="text-foreground">deux publications minimum</strong> avant la soutenance, dans des revues à comité de lecture reconnues. Le doctorant doit apparaître au <strong className="text-foreground">premier rang</strong> parmi les co-auteurs.
@@ -301,10 +275,21 @@ const EcoleDoctorale = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">Délivrance du diplôme</h4>
+                  <h4 className="font-semibold text-foreground mb-2">Soutenance et délivrance du diplôme</h4>
                   <p>
-                    Pour obtenir le diplôme de docteur, le récipiendaire est tenu de déposer
+                    La soutenance se déroule conformément aux « normes D7 et D8 » du CNPNCD. Pour
+                    obtenir le diplôme de docteur, le récipiendaire est tenu de déposer
                     <strong className="text-foreground"> 5 exemplaires</strong> de sa thèse après prise en compte des remarques du jury.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-foreground mb-2">Médiation en cas de conflit</h4>
+                  <p>
+                    Tout conflit entre le doctorant et son directeur de thèse doit être porté à la
+                    connaissance du directeur de la structure d'accueil et du directeur de l'école doctorale.
+                    En cas de persistance, chaque signataire peut faire appel à la médiation du conseil
+                    du CEDoc, puis en dernier recours au Doyen de l'établissement.
                   </p>
                 </div>
 
@@ -314,95 +299,6 @@ const EcoleDoctorale = () => {
                     inscription en thèse par le doctorant, le(s) directeur(s) de thèse, le directeur
                     de la structure d'accueil et le directeur de l'école doctorale.
                   </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Documents - Téléchargements */}
-          <TabsContent value="documents" className="mt-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
-                <BookOpen className="h-6 w-6 text-primary" />
-                Documents et Formulaires
-              </h2>
-              <p className="text-muted-foreground">
-                Téléchargez tous les formulaires nécessaires pour la soutenance de thèse doctorale
-                et les procédures d'inscription/réinscription.
-              </p>
-            </div>
-
-        <div className="grid lg:grid-cols-2 gap-8">
-          {SECTIONS.map((section) => {
-            const sectionFiles = files.filter((f) => f.category === section.key);
-
-            return (
-              <Card key={section.key} className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-xl text-primary flex items-center">
-                    <FileText className="h-6 w-6 mr-2" />
-                    {section.titre}
-                  </CardTitle>
-                  <p className="text-muted-foreground">{section.description}</p>
-                </CardHeader>
-                <CardContent>
-                  {isLoading ? (
-                    <div className="flex justify-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                    </div>
-                  ) : sectionFiles.length === 0 ? (
-                    <p className="text-center text-muted-foreground py-6">
-                      Aucun document disponible.
-                    </p>
-                  ) : (
-                    <div className="space-y-3">
-                      {sectionFiles.map((doc) => (
-                        <div
-                          key={doc.id}
-                          className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
-                        >
-                          <div className="flex items-center min-w-0">
-                            <FileText className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                            <div className="min-w-0">
-                              <p className="font-medium text-foreground truncate">{doc.original_name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {getExtension(doc.original_name)} • {formatFileSize(doc.file_size)}
-                              </p>
-                            </div>
-                          </div>
-                          <Button
-                            size="sm"
-                            className="bg-primary hover:bg-primary/90 flex-shrink-0 ml-2"
-                            onClick={() => handleDownload(doc.file_url, doc.original_name)}
-                          >
-                            <Download className="h-4 w-4 mr-1" />
-                            Télécharger
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-            <Card className="mt-8 bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800">
-              <CardContent className="p-6">
-                <div className="flex items-start">
-                  <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
-                    <span className="text-white text-sm font-bold">!</span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-yellow-900 dark:text-yellow-100 mb-2">
-                      Information importante
-                    </h3>
-                    <p className="text-yellow-800 dark:text-yellow-200">
-                      Tous les formulaires doivent être dûment remplis et signés avant soumission.
-                      Pour toute question, contactez le secrétariat du CEDoc.
-                    </p>
-                  </div>
                 </div>
               </CardContent>
             </Card>
