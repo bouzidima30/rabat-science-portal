@@ -81,10 +81,10 @@ const EcoleDoctorale = () => {
               <span className="hidden sm:inline">Organisation</span>
               <span className="sm:hidden">Org.</span>
             </TabsTrigger>
-            <TabsTrigger value="documents" className="gap-2 py-2.5">
-              <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Documents</span>
-              <span className="sm:hidden">Docs</span>
+            <TabsTrigger value="charte" className="gap-2 py-2.5">
+              <ScrollText className="h-4 w-4" />
+              <span className="hidden sm:inline">Charte</span>
+              <span className="sm:hidden">Charte</span>
             </TabsTrigger>
           </TabsList>
 
