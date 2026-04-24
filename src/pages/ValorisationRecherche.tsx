@@ -3,41 +3,42 @@ import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lightbulb, TrendingUp, Building, Users, Award, Target } from "lucide-react";
+import { Lightbulb, TrendingUp, Building, Users, Award, Target, Mail, Phone, MapPin, CheckCircle2, Briefcase, Handshake, FileText, Search } from "lucide-react";
 
 const ValorisationRecherche = () => {
-  const axes = [
+  const missions = [
     {
-      titre: "Transfert de Technologie",
-      description: "Faciliter le transfert des innovations vers l'industrie",
-      icon: TrendingUp,
-      color: "bg-blue-500"
+      texte: "Développer les partenariats et les relations extérieures de la FSR, notamment avec les entreprises, la région, les organismes publics et privés et les autres acteurs socio-économiques.",
+      icon: Handshake,
     },
     {
-      titre: "Création d'Entreprises",
-      description: "Accompagnement des spin-offs et start-ups scientifiques",
-      icon: Building,
-      color: "bg-green-500"
-    },
-    {
-      titre: "Partenariats Industriels",
-      description: "Développement de collaborations avec le secteur privé",
+      texte: "Prospecter, organiser et gérer des sessions de formation continue au profit du monde socio-économique en coordination avec les enseignants-chercheurs de la FSR.",
       icon: Users,
-      color: "bg-purple-500"
     },
     {
-      titre: "Propriété Intellectuelle",
-      description: "Protection et valorisation des brevets et inventions",
+      texte: "Prospecter, négocier, rédiger et gérer des contrats de recherche et de prestations de service réalisés par les enseignants-chercheurs de la FSR.",
+      icon: FileText,
+    },
+    {
+      texte: "Développer l'esprit entrepreneurial au sein de l'Établissement et faire émerger les projets de création d'entreprises innovantes.",
+      icon: Lightbulb,
+    },
+    {
+      texte: "Incuber les projets d'entreprises innovantes.",
+      icon: Building,
+    },
+    {
+      texte: "Faciliter le transfert des résultats de la recherche vers le milieu socio-économique.",
+      icon: TrendingUp,
+    },
+    {
+      texte: "Accompagner les inventeurs dans la démarche d'acquisition du droit d'auteur par la protection de la propriété intellectuelle (dépôt d'un brevet, d'un modèle ou d'une invention).",
       icon: Award,
-      color: "bg-orange-500"
-    }
-  ];
-
-  const resultats = [
-    { titre: "Brevets Déposés", valeur: "15+", description: "Par année" },
-    { titre: "Spin-offs Créées", valeur: "5+", description: "Entreprises innovantes" },
-    { titre: "Contrats R&D", valeur: "30+", description: "Partenariats actifs" },
-    { titre: "Licences Accordées", valeur: "8+", description: "Technologies transférées" }
+    },
+    {
+      texte: "Assurer des activités de veille scientifique, technologique et économique.",
+      icon: Search,
+    },
   ];
 
   return (
@@ -51,52 +52,60 @@ const ValorisationRecherche = () => {
             Valorisation de la Recherche
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            La FSR s'engage activement dans la valorisation de ses recherches pour créer 
-            de la valeur économique et sociale à partir des découvertes scientifiques.
+            La structure de valorisation de la recherche « SV-Sciences » de la Faculté des Sciences de Rabat,
+            interface entre l'Université et l'Entreprise.
           </p>
         </div>
 
-        {/* Mission */}
+        {/* Présentation */}
         <Card className="mb-12 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl text-center text-[#006be5] flex items-center justify-center">
               <Target className="h-6 w-6 mr-2" />
-              Notre Mission
+              Présentation
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-center max-w-4xl mx-auto">
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                La valorisation de la recherche à la FSR vise à transformer les résultats 
-                de recherche en innovations concrètes bénéficiant à la société et à l'économie 
-                marocaine. Nous accompagnons nos chercheurs dans le processus de transfert 
-                technologique et de création de valeur.
+            <div className="max-w-4xl mx-auto space-y-4 text-gray-700 dark:text-gray-300 text-justify leading-relaxed">
+              <p>
+                Animée d'une ferme volonté et fidèle à son engagement, la Faculté des Sciences de Rabat,
+                l'un des leviers historiques du rebond économique, s'est assignée, entre autres, la mission
+                de développer des outils de valorisation, de permettre leur appropriation par les chercheurs
+                à travers des campagnes de sensibilisation et d'accompagner la maturation des projets des chercheurs.
+              </p>
+              <p>
+                Fortement impliquée dans les projets prioritaires, la Faculté des Sciences de Rabat définit
+                sa stratégie de valorisation en collaboration étroite avec ses partenaires socio-économiques
+                par l'intermédiaire de l'interface de la <strong>structure de la valorisation de la recherche</strong> à
+                la FSR « <strong>la SV-Sciences</strong> ».
+              </p>
+              <p>
+                Cette structure s'inscrit dans le cadre de la réforme universitaire qui vise à doter les
+                universités marocaines d'interfaces « Université-Entreprise » en vue de promouvoir la nouvelle
+                mission citoyenne et entrepreneuriale de l'Université.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Axes principaux */}
+        {/* Missions de la SV-Sciences */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Axes de Valorisation
+            Les principales missions de la SV-Sciences
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {axes.map((axe, index) => {
-              const IconComponent = axe.icon;
+          <div className="grid md:grid-cols-2 gap-6">
+            {missions.map((mission, index) => {
+              const IconComponent = mission.icon;
               return (
                 <Card key={index} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="text-center pb-4">
-                    <div className={`w-12 h-12 ${axe.color} rounded-lg flex items-center justify-center mx-auto mb-4`}>
-                      <IconComponent className="h-6 w-6 text-white" />
+                  <CardContent className="p-6 flex gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 bg-[#006be5]/10 rounded-lg flex items-center justify-center">
+                        <IconComponent className="h-6 w-6 text-[#006be5]" />
+                      </div>
                     </div>
-                    <CardTitle className="text-lg text-[#006be5]">
-                      {axe.titre}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm text-center">
-                      {axe.description}
+                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                      {mission.texte}
                     </p>
                   </CardContent>
                 </Card>
@@ -105,63 +114,47 @@ const ValorisationRecherche = () => {
           </div>
         </div>
 
-        {/* Résultats */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Nos Résultats
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {resultats.map((resultat, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <h3 className="text-3xl font-bold text-[#006be5] mb-2">
-                    {resultat.valeur}
-                  </h3>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    {resultat.titre}
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    {resultat.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Services */}
-        <Card className="shadow-lg">
+        {/* Contact */}
+        <Card className="shadow-lg bg-gradient-to-br from-[#006be5] to-blue-700 text-white">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5] flex items-center justify-center">
-              <Lightbulb className="h-6 w-6 mr-2" />
-              Services Offerts
+            <CardTitle className="text-2xl text-center text-white flex items-center justify-center">
+              <Briefcase className="h-6 w-6 mr-2" />
+              Contact SV-Sciences
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Accompagnement à l'Innovation
-                </h3>
-                <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                  <li>• Évaluation du potentiel de valorisation</li>
-                  <li>• Étude de marché et de faisabilité</li>
-                  <li>• Aide à la rédaction de brevets</li>
-                  <li>• Recherche de financements</li>
-                  <li>• Mise en relation avec les industriels</li>
-                </ul>
+            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <div className="flex items-start gap-3">
+                <MapPin className="h-5 w-5 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold mb-1">Adresse</h4>
+                  <p className="text-sm opacity-90">
+                    Faculté des Sciences Rabat<br />
+                    Avenue Ibn Batouta, B.P. 1014
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Support à l'Entrepreneuriat
-                </h3>
-                <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                  <li>• Formation à l'entrepreneuriat</li>
-                  <li>• Accompagnement business plan</li>
-                  <li>• Incubation de start-ups</li>
-                  <li>• Réseautage et mentoring</li>
-                  <li>• Accès aux espaces de co-working</li>
-                </ul>
+              <div className="flex items-start gap-3">
+                <Phone className="h-5 w-5 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold mb-1">Téléphone</h4>
+                  <p className="text-sm opacity-90">
+                    Tél. : +212 37 77 80 12<br />
+                    Fax : +212 37 77 54 61
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Mail className="h-5 w-5 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold mb-1">Email</h4>
+                  <a
+                    href="mailto:interface-sciences@fsr.ac.ma"
+                    className="text-sm opacity-90 hover:opacity-100 underline break-all"
+                  >
+                    interface-sciences@fsr.ac.ma
+                  </a>
+                </div>
               </div>
             </div>
           </CardContent>
