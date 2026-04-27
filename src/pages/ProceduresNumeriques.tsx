@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import TopBar from "@/components/TopBar";
 import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
@@ -19,7 +20,22 @@ import {
 } from "lucide-react";
 
 const ProceduresNumeriques = () => {
-  const procedures = [
+  type Lien = {
+    label: string;
+    url: string;
+    info?: string;
+    internal?: boolean;
+  };
+
+  type Procedure = {
+    titre: string;
+    description: string;
+    icon: typeof LayoutDashboard;
+    note?: string;
+    liens: Lien[];
+  };
+
+  const procedures: Procedure[] = [
     {
       titre: "Compte Institutionnel Microsoft",
       description:
@@ -33,7 +49,8 @@ const ProceduresNumeriques = () => {
         },
         {
           label: "Comment récupérer mon compte",
-          url: "http://www.fsr.ac.ma/content/comment-r%C3%A9cuperer-mon-mot-de-passe",
+          url: "/procedures-numeriques/recuperer-mot-de-passe",
+          internal: true,
         },
         {
           label: "Authentification multifacteur (MFA)",
@@ -41,7 +58,8 @@ const ProceduresNumeriques = () => {
         },
         {
           label: "Difficultés liées au compte",
-          url: "http://www.fsr.ac.ma/page/difficult%C3%A9-li%C3%A9e-au-mot-de-passe",
+          url: "/procedures-numeriques/difficulte-mot-de-passe",
+          internal: true,
         },
       ],
     },
@@ -61,15 +79,18 @@ const ProceduresNumeriques = () => {
       liens: [
         {
           label: "Demande de la carte étudiant",
-          url: "http://www.fsr.ac.ma/page/r%C3%A9cup%C3%A9ration-de-la-carte",
+          url: "/procedures-numeriques/recuperation-carte",
+          internal: true,
         },
         {
           label: "Suivi de l'état de la demande",
-          url: "http://www.fsr.ac.ma/page/suivie-d%E2%80%99impression-des-cartes",
+          url: "/procedures-numeriques/suivi-impression-cartes",
+          internal: true,
         },
         {
           label: "Réclamations",
-          url: "http://www.fsr.ac.ma/page/r%C3%A9clamation-li%C3%A9e-%C3%A0-la-carte-d%E2%80%99etudiant",
+          url: "/procedures-numeriques/reclamation-carte",
+          internal: true,
         },
         {
           label: "Prototype de déclaration de perte de la carte",
@@ -95,7 +116,8 @@ const ProceduresNumeriques = () => {
         },
         {
           label: "Tutoriel : Nouvel ENT « ETU 4.0 » pour les étudiants",
-          url: "http://www.fsr.ac.ma/content/tutoriel-nouvel-espace-num%C3%A9rique-de-travail-%C2%AB-etu-40-%C2%BB-pour-les-%C3%A9tudiants",
+          url: "/procedures-numeriques/tutoriel-ent",
+          internal: true,
         },
       ],
     },
@@ -107,7 +129,8 @@ const ProceduresNumeriques = () => {
       liens: [
         {
           label: "Comment récupérer mon mot de passe",
-          url: "http://www.fsr.ac.ma/content/comment-r%C3%A9cuperer-mon-mot-de-passe",
+          url: "/procedures-numeriques/recuperer-mot-de-passe",
+          internal: true,
         },
         {
           label: "Récupération du mot de passe",
@@ -133,7 +156,8 @@ const ProceduresNumeriques = () => {
         },
         {
           label: "Capsule Moodle",
-          url: "http://www.fsr.ac.ma/content/plate-forme-moodle",
+          url: "/procedures-numeriques/plateforme-moodle",
+          internal: true,
         },
       ],
     },
@@ -145,15 +169,18 @@ const ProceduresNumeriques = () => {
       liens: [
         {
           label: "Accéder à la plate-forme ROSETTA STONE",
-          url: "http://www.fsr.ac.ma/page/activer-votre-compte",
+          url: "/procedures-numeriques/activer-compte-rosetta",
+          internal: true,
         },
         {
           label: "Problèmes de configuration du compte Rosetta Stone",
-          url: "http://www.fsr.ac.ma/page/compte-%C2%AB-rosetta-stone-%C2%BB",
+          url: "/procedures-numeriques/probleme-rosetta",
+          internal: true,
         },
         {
           label: "Capsule Rosetta Stone",
-          url: "http://www.fsr.ac.ma/content/plate-forme-rosetta-stone",
+          url: "/procedures-numeriques/capsule-rosetta",
+          internal: true,
         },
       ],
     },
@@ -248,25 +275,37 @@ const ProceduresNumeriques = () => {
                       <ul className="space-y-2">
                         {procedure.liens.map((lien, idx) => (
                           <li key={idx}>
-                            <a
-                              href={lien.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-start text-sm text-gray-700 dark:text-gray-300 hover:text-[#006be5] dark:hover:text-[#006be5] group"
-                            >
-                              <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[#006be5] flex-shrink-0" />
-                              <span>
+                            {lien.internal ? (
+                              <Link
+                                to={lien.url}
+                                className="flex items-start text-sm text-gray-700 dark:text-gray-300 hover:text-[#006be5] dark:hover:text-[#006be5] group"
+                              >
+                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[#006be5] flex-shrink-0" />
                                 <span className="group-hover:underline">
                                   {lien.label}
                                 </span>
-                                {lien.info && (
-                                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-                                    ({lien.info})
+                              </Link>
+                            ) : (
+                              <a
+                                href={lien.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-start text-sm text-gray-700 dark:text-gray-300 hover:text-[#006be5] dark:hover:text-[#006be5] group"
+                              >
+                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[#006be5] flex-shrink-0" />
+                                <span>
+                                  <span className="group-hover:underline">
+                                    {lien.label}
                                   </span>
-                                )}
-                                <ExternalLink className="inline h-3 w-3 ml-1 opacity-60" />
-                              </span>
-                            </a>
+                                  {lien.info && (
+                                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                                      ({lien.info})
+                                    </span>
+                                  )}
+                                  <ExternalLink className="inline h-3 w-3 ml-1 opacity-60" />
+                                </span>
+                              </a>
+                            )}
                           </li>
                         ))}
                       </ul>
