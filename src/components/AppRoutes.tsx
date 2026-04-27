@@ -69,6 +69,16 @@ const ServicesBibliotheque = lazy(() => import("../pages/ServicesBibliotheque"))
 const RessourcesElectroniques = lazy(() => import("../pages/RessourcesElectroniques"));
 const ServiceScolarite = lazy(() => import("../pages/ServiceScolarite"));
 const ProceduresNumeriques = lazy(() => import("../pages/ProceduresNumeriques"));
+const PNRecupererMotDePasse = lazy(() => import("../pages/procedures-numeriques/RecupererMotDePasse"));
+const PNDifficulteMotDePasse = lazy(() => import("../pages/procedures-numeriques/DifficulteMotDePasse"));
+const PNRecuperationCarte = lazy(() => import("../pages/procedures-numeriques/RecuperationCarte"));
+const PNSuiviImpressionCartes = lazy(() => import("../pages/procedures-numeriques/SuiviImpressionCartes"));
+const PNReclamationCarte = lazy(() => import("../pages/procedures-numeriques/ReclamationCarte"));
+const PNTutorielENT = lazy(() => import("../pages/procedures-numeriques/TutorielENT"));
+const PNPlateformeMoodle = lazy(() => import("../pages/procedures-numeriques/PlateformeMoodle"));
+const PNActiverCompteRosetta = lazy(() => import("../pages/procedures-numeriques/ActiverCompteRosetta"));
+const PNProblemeRosetta = lazy(() => import("../pages/procedures-numeriques/ProblemeRosetta"));
+const PNCapsuleRosetta = lazy(() => import("../pages/procedures-numeriques/CapsuleRosetta"));
 const CalendrierEmploiTemps = lazy(() => import("../pages/CalendrierEmploiTemps"));
 const CoursTdsTps = lazy(() => import("../pages/CoursTdsTps"));
 const SectionsGroupes = lazy(() => import("../pages/SectionsGroupes"));
@@ -490,6 +500,56 @@ const AppRoutes = () => {
             <PageTransition>
               <ProceduresNumeriques />
             </PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/recuperer-mot-de-passe" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNRecupererMotDePasse /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/difficulte-mot-de-passe" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNDifficulteMotDePasse /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/recuperation-carte" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNRecuperationCarte /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/suivi-impression-cartes" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNSuiviImpressionCartes /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/reclamation-carte" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNReclamationCarte /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/tutoriel-ent" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNTutorielENT /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/plateforme-moodle" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNPlateformeMoodle /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/activer-compte-rosetta" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNActiverCompteRosetta /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/probleme-rosetta" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNProblemeRosetta /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/procedures-numeriques/capsule-rosetta" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><PNCapsuleRosetta /></PageTransition>
           </Suspense>
         } />
         <Route path="/calendrier-emploi-temps" element={
