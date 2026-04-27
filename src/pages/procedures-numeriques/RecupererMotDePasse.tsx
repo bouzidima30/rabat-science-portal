@@ -15,7 +15,7 @@ const RecupererMotDePasse = () => {
       </p>
       <div className="my-6 not-prose">
         <LazyYouTubeEmbed
-          videoId="ji9W64HmYCs"
+          url="https://www.youtube.com/watch?v=ji9W64HmYCs"
           title="Récupérer votre compte académique étudiant"
         />
       </div>
