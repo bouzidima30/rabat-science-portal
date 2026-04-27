@@ -4,77 +4,166 @@ import ModernNavbar from "@/components/ModernNavbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Monitor, Wifi, Mail, Key, HelpCircle, Download } from "lucide-react";
+import {
+  Monitor,
+  Mail,
+  ExternalLink,
+  IdCard,
+  LayoutDashboard,
+  LogIn,
+  GraduationCap,
+  Languages,
+  Smartphone,
+  HelpCircle,
+  ChevronRight,
+} from "lucide-react";
 
 const ProceduresNumeriques = () => {
   const procedures = [
     {
-      titre: "Création de Compte Utilisateur",
-      description: "Procédure pour obtenir un compte informatique FSR",
-      icon: Key,
-      etapes: [
-        "Remplir le formulaire de demande de compte",
-        "Fournir une copie de la CIN et photo",
-        "Déposer le dossier au service informatique",
-        "Récupérer les identifiants (48h après)"
-      ]
+      titre: "Compte Institutionnel Microsoft",
+      description:
+        "Récupération et gestion de votre compte institutionnel Microsoft (Université Mohammed V).",
+      icon: LayoutDashboard,
+      liens: [
+        {
+          label: "Récupérer mon compte institutionnel",
+          url: "https://etu.um5.ac.ma/index.php?:nav=comptes::index",
+          info: "site de l'Université Mohammed V",
+        },
+        {
+          label: "Comment récupérer mon compte",
+          url: "http://www.fsr.ac.ma/content/comment-r%C3%A9cuperer-mon-mot-de-passe",
+        },
+        {
+          label: "Authentification multifacteur (MFA)",
+          url: "https://youtu.be/t4hshW6Epio",
+        },
+        {
+          label: "Difficultés liées au compte",
+          url: "http://www.fsr.ac.ma/page/difficult%C3%A9-li%C3%A9e-au-mot-de-passe",
+        },
+      ],
     },
     {
-      titre: "Accès WiFi Campus",
-      description: "Configuration de l'accès réseau sans fil",
-      icon: Wifi,
-      etapes: [
-        "Obtenir ses identifiants réseau",
-        "Se connecter au réseau FSR-WiFi",
-        "Saisir login/mot de passe",
-        "Accepter les conditions d'utilisation"
-      ]
-    },
-    {
-      titre: "Messagerie Électronique",
-      description: "Configuration et utilisation de l'email institutionnel",
+      titre: "Compte Institutionnel Google",
+      description:
+        "Information importante concernant les comptes Google Classroom des étudiants.",
       icon: Mail,
-      etapes: [
-        "Activation du compte email",
-        "Configuration du client mail",
-        "Paramétrage IMAP/SMTP",
-        "Synchronisation multi-appareils"
-      ]
+      note: "Les comptes Google Classroom ne sont plus délivrés par l'Université Mohammed V.",
+      liens: [],
     },
     {
-      titre: "Support Technique",
-      description: "Procédure de demande d'assistance informatique",
-      icon: HelpCircle,
-      etapes: [
-        "Identifier le type de problème",
-        "Contacter le helpdesk par email/téléphone",
-        "Fournir les détails du problème",
-        "Suivre les instructions du technicien"
-      ]
-    }
-  ];
-
-  const ressources = [
-    {
-      nom: "Guide de Configuration WiFi",
-      description: "Instructions détaillées pour la connexion WiFi",
-      type: "PDF"
+      titre: "Carte d'Étudiant",
+      description:
+        "Demandes, suivis, réclamations et déclarations de perte liées à la carte d'étudiant.",
+      icon: IdCard,
+      liens: [
+        {
+          label: "Demande de la carte étudiant",
+          url: "http://www.fsr.ac.ma/page/r%C3%A9cup%C3%A9ration-de-la-carte",
+        },
+        {
+          label: "Suivi de l'état de la demande",
+          url: "http://www.fsr.ac.ma/page/suivie-d%E2%80%99impression-des-cartes",
+        },
+        {
+          label: "Réclamations",
+          url: "http://www.fsr.ac.ma/page/r%C3%A9clamation-li%C3%A9e-%C3%A0-la-carte-d%E2%80%99etudiant",
+        },
+        {
+          label: "Prototype de déclaration de perte de la carte",
+          url: "http://www.fsr.ac.ma/DOC/service-info/partage/Carte%20declaration%20de%20perte.pdf",
+        },
+        {
+          label:
+            "Prototype de déclaration de perte de l'attestation de dépôt de dossier",
+          url: "http://www.fsr.ac.ma/DOC/service-info/partage/Recus%20declaration%20de%20perte.pdf",
+        },
+      ],
     },
     {
-      nom: "Paramètres Messagerie",
-      description: "Configuration Outlook, Thunderbird, et clients mobiles",
-      type: "PDF"
+      titre: "Espace Numérique de Travail",
+      description:
+        "Accès à votre ENT (ETU 4.0) de l'Université Mohammed V et tutoriel d'utilisation.",
+      icon: LayoutDashboard,
+      liens: [
+        {
+          label: "Accéder à votre Espace Numérique de Travail",
+          url: "http://etu.um5.ac.ma/",
+          info: "site de l'Université Mohammed V",
+        },
+        {
+          label: "Tutoriel : Nouvel ENT « ETU 4.0 » pour les étudiants",
+          url: "http://www.fsr.ac.ma/content/tutoriel-nouvel-espace-num%C3%A9rique-de-travail-%C2%AB-etu-40-%C2%BB-pour-les-%C3%A9tudiants",
+        },
+      ],
     },
     {
-      nom: "Politique d'Usage IT",
-      description: "Règlement d'utilisation des ressources informatiques",
-      type: "PDF"
+      titre: "Connexion à Campus Connecté",
+      description:
+        "Méthode de connexion et récupération du mot de passe pour la plateforme Campus Connecté.",
+      icon: LogIn,
+      liens: [
+        {
+          label: "Comment récupérer mon mot de passe",
+          url: "http://www.fsr.ac.ma/content/comment-r%C3%A9cuperer-mon-mot-de-passe",
+        },
+        {
+          label: "Récupération du mot de passe",
+          url: "https://etu.um5.ac.ma/index.php?:nav=comptes::index",
+          info: "site de l'Université Mohammed V",
+        },
+        {
+          label: "Méthode de connexion",
+          url: "https://campusconnecte.online/",
+        },
+      ],
     },
     {
-      nom: "FAQ Informatique",
-      description: "Questions fréquemment posées et leurs réponses",
-      type: "PDF"
-    }
+      titre: "Plate-forme Moodle",
+      description:
+        "Plateforme d'enseignement à distance de l'Université Mohammed V et capsule explicative.",
+      icon: GraduationCap,
+      liens: [
+        {
+          label: "Accéder à la plate-forme Moodle",
+          url: "https://moodle-fsr.um5.ac.ma/",
+          info: "site de l'Université Mohammed V",
+        },
+        {
+          label: "Capsule Moodle",
+          url: "http://www.fsr.ac.ma/content/plate-forme-moodle",
+        },
+      ],
+    },
+    {
+      titre: "Compte ROSETTA STONE",
+      description:
+        "Activation de votre compte d'apprentissage des langues Rosetta Stone et résolution des problèmes liés.",
+      icon: Languages,
+      liens: [
+        {
+          label: "Accéder à la plate-forme ROSETTA STONE",
+          url: "http://www.fsr.ac.ma/page/activer-votre-compte",
+        },
+        {
+          label: "Problèmes de configuration du compte Rosetta Stone",
+          url: "http://www.fsr.ac.ma/page/compte-%C2%AB-rosetta-stone-%C2%BB",
+        },
+        {
+          label: "Capsule Rosetta Stone",
+          url: "http://www.fsr.ac.ma/content/plate-forme-rosetta-stone",
+        },
+      ],
+    },
+    {
+      titre: "Carte 4G SIM",
+      description: "Information sur la distribution des cartes SIM 4G.",
+      icon: Smartphone,
+      note: "Les cartes SIM sont délivrées lors de la première inscription à la FSR.",
+      liens: [],
+    },
   ];
 
   return (
@@ -88,30 +177,37 @@ const ProceduresNumeriques = () => {
             Procédures Numériques
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Guide complet des procédures liées aux services informatiques de la FSR. 
-            Trouvez toutes les informations nécessaires pour utiliser nos ressources numériques.
+            Les étudiants de la Faculté des Sciences de Rabat trouveront ici les
+            différentes procédures pour accéder aux services numériques de la FSR
+            et de l'Université Mohammed V.
           </p>
         </div>
 
-        {/* Contact Service Informatique */}
+        {/* HelpDesk officiel */}
         <Card className="mb-12 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
           <CardContent className="p-6">
             <div className="flex items-start">
-              <Monitor className="h-8 w-8 text-[#006be5] mr-4 flex-shrink-0 mt-1" />
+              <HelpCircle className="h-8 w-8 text-[#006be5] mr-4 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                  Service Informatique - Contact
+                  HelpDesk
                 </h3>
-                <div className="grid md:grid-cols-2 gap-4 text-blue-800 dark:text-blue-200">
-                  <div>
-                    <p><strong>Email :</strong> support-it@fsr.ac.ma</p>
-                    <p><strong>Téléphone :</strong> +212 5 37 77 18 50</p>
-                  </div>
-                  <div>
-                    <p><strong>Bureau :</strong> Bloc A, 1er étage</p>
-                    <p><strong>Horaires :</strong> 8h30-16h30 (Lun-Ven)</p>
-                  </div>
-                </div>
+                <p className="text-blue-800 dark:text-blue-200 mb-2">
+                  Pour toute demande d'information, merci de nous écrire à
+                  l'adresse :{" "}
+                  <a
+                    href="mailto:helpdesk@fsr.ac.ma"
+                    className="font-semibold underline hover:text-[#006be5]"
+                  >
+                    helpdesk@fsr.ac.ma
+                  </a>
+                </p>
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  Vous devez spécifier{" "}
+                  <strong>« Demande d'information »</strong> comme objet de votre
+                  e-mail et donner votre <strong>code Apogée</strong> ainsi qu'un{" "}
+                  <strong>numéro de téléphone</strong> où l'on peut vous joindre.
+                </p>
               </div>
             </div>
           </CardContent>
@@ -120,7 +216,7 @@ const ProceduresNumeriques = () => {
         {/* Procédures principales */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Procédures Principales
+            Services Numériques
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {procedures.map((procedure, index) => {
@@ -128,33 +224,53 @@ const ProceduresNumeriques = () => {
               return (
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-[#006be5] rounded-lg flex items-center justify-center mr-4">
+                    <div className="flex items-center mb-2">
+                      <div className="w-12 h-12 bg-[#006be5] rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                         <IconComponent className="h-6 w-6 text-white" />
                       </div>
                       <div>
                         <CardTitle className="text-lg text-[#006be5]">
                           {procedure.titre}
                         </CardTitle>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                          {procedure.description}
-                        </p>
                       </div>
                     </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      {procedure.description}
+                    </p>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
-                      {procedure.etapes.map((etape, idx) => (
-                        <div key={idx} className="flex items-start">
-                          <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 text-[#006be5] rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-xs font-bold">
-                            {idx + 1}
-                          </div>
-                          <p className="text-sm text-gray-700 dark:text-gray-300">
-                            {etape}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+                    {procedure.note && (
+                      <div className="mb-3 p-3 rounded-md bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200">
+                        {procedure.note}
+                      </div>
+                    )}
+                    {procedure.liens && procedure.liens.length > 0 && (
+                      <ul className="space-y-2">
+                        {procedure.liens.map((lien, idx) => (
+                          <li key={idx}>
+                            <a
+                              href={lien.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-start text-sm text-gray-700 dark:text-gray-300 hover:text-[#006be5] dark:hover:text-[#006be5] group"
+                            >
+                              <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[#006be5] flex-shrink-0" />
+                              <span>
+                                <span className="group-hover:underline">
+                                  {lien.label}
+                                </span>
+                                {lien.info && (
+                                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                                    ({lien.info})
+                                  </span>
+                                )}
+                                <ExternalLink className="inline h-3 w-3 ml-1 opacity-60" />
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </CardContent>
                 </Card>
               );
@@ -162,39 +278,35 @@ const ProceduresNumeriques = () => {
           </div>
         </div>
 
-        {/* Documents et ressources */}
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5]">
-              Documents et Ressources
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-4">
-              {ressources.map((ressource, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div className="flex items-center flex-1">
-                    <Download className="h-5 w-5 text-[#006be5] mr-3" />
-                    <div>
-                      <h4 className="font-medium text-gray-900 dark:text-white">
-                        {ressource.nom}
-                      </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
-                        {ressource.description}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs bg-[#006be5] text-white px-2 py-1 rounded">
-                      {ressource.type}
-                    </span>
-                    <Button size="sm" variant="outline">
-                      Télécharger
-                    </Button>
-                  </div>
-                </div>
-              ))}
+        {/* Source officielle */}
+        <Card className="shadow-lg bg-gradient-to-r from-[#006be5] to-blue-600 text-white">
+          <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center">
+              <Monitor className="h-8 w-8 mr-4 flex-shrink-0" />
+              <div>
+                <h3 className="text-lg font-semibold mb-1">
+                  Source officielle
+                </h3>
+                <p className="text-sm text-blue-50">
+                  Toutes les informations sont issues du site officiel de la
+                  Faculté des Sciences de Rabat.
+                </p>
+              </div>
             </div>
+            <Button
+              asChild
+              variant="secondary"
+              className="bg-white text-[#006be5] hover:bg-blue-50"
+            >
+              <a
+                href="https://www.fsr.ac.ma/content/proc%C3%A9dures-num%C3%A9riques"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Consulter sur fsr.ac.ma
+                <ExternalLink className="h-4 w-4 ml-2" />
+              </a>
+            </Button>
           </CardContent>
         </Card>
       </div>
