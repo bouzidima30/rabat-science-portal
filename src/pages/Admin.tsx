@@ -111,6 +111,7 @@ const Admin = () => {
     { name: "Sections & Groupes", path: "/admin/sections-groupes", icon: Users, description: "Sections et groupes par session" },
     { name: "Scolarité", path: "/admin/scolarite", icon: FileText, description: "Documents du service scolarité" },
     { name: "Résultats Examens", path: "/admin/resultats", icon: FileText, description: "Résultats par session" },
+    { name: "Clubs para-uni.", path: "/admin/clubs", icon: Users, description: "Gestion des clubs para-universitaires" },
     { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
     { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
   ];
