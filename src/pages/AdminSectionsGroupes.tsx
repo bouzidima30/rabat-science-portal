@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Folder, File, Trash2, Archive, Loader2, Copy } from "lucide-react";
+import { Folder, File, Trash2, Archive, Loader2, Copy, Users } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import JSZip from "jszip";
 
@@ -266,7 +266,7 @@ const AdminSectionsGroupes = () => {
               Tout supprimer
             </Button>
           )}
-          <Button size="sm" asChild disabled={uploading}>
+          <Button size="sm" asChild disabled={uploading} className="bg-teal-600 hover:bg-teal-700 shadow-lg">
             <label className="cursor-pointer">
               {uploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Archive className="h-4 w-4 mr-2" />}
               {uploading ? "Import en cours..." : "Importer un .zip"}
@@ -275,7 +275,7 @@ const AdminSectionsGroupes = () => {
           </Button>
         </div>
 
-        <Card>
+        <Card className="border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center justify-between text-base">
               <span>Structure des fichiers</span>
@@ -308,16 +308,45 @@ const AdminSectionsGroupes = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Sections et Groupes</h1>
-        <p className="text-muted-foreground mt-2">
-          Importez des fichiers .zip pour les sections et groupes de la session d'automne et de printemps
-        </p>
+    <div className="p-8">
+      <div className="mb-8">
+        <div className="flex items-center space-x-4">
+          <div className="p-3 bg-teal-100 dark:bg-teal-900/20 rounded-xl">
+            <Users className="h-8 w-8 text-teal-600 dark:text-teal-400" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Sections et Groupes</h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">
+              Importez des fichiers .zip pour les sections et groupes de la session d'automne et de printemps
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {CATEGORIES.map((cat, idx) => {
+          const count = items?.filter(i => i.category === cat.key).length || 0;
+          const theme = idx === 0
+            ? { grad: "from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20", color: "text-orange-600 dark:text-orange-400", bold: "text-orange-700 dark:text-orange-300" }
+            : { grad: "from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20", color: "text-green-600 dark:text-green-400", bold: "text-green-700 dark:text-green-300" };
+          return (
+            <Card key={cat.key} className={`border-0 shadow-lg bg-gradient-to-r ${theme.grad}`}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className={`${theme.color} text-sm font-medium`}>{cat.label}</p>
+                    <p className={`text-xl font-bold ${theme.bold}`}>{count}</p>
+                  </div>
+                  <Users className={`h-6 w-6 ${theme.color}`} />
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {uploading && (
-        <Card>
+        <Card className="border-0 shadow-lg mb-8">
           <CardContent className="pt-6 space-y-3">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{progressLabel}</span>
@@ -328,7 +357,7 @@ const AdminSectionsGroupes = () => {
         </Card>
       )}
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
           {CATEGORIES.map((cat) => (
             <TabsTrigger key={cat.key} value={cat.key}>{cat.label}</TabsTrigger>
