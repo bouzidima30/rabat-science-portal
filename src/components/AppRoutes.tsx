@@ -218,6 +218,11 @@ const AppRoutes = () => {
               <AdminResultats />
             </Suspense>
           } />
+          <Route path="clubs" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminClubs />
+            </Suspense>
+          } />
         </Route>
 
         {/* Public Pages */}
