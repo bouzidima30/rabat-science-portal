@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Upload, Trash2, FileText, Copy, Loader2 } from "lucide-react";
+import { Upload, Trash2, FileText, Copy, Loader2, GraduationCap } from "lucide-react";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
 const CATEGORIES = [
@@ -104,17 +104,49 @@ const AdminScolarite = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Service de Scolarité - Documents
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400">
-          Gérez les documents téléchargeables par catégorie
-        </p>
+    <div className="p-8">
+      <div className="mb-8">
+        <div className="flex items-center space-x-4">
+          <div className="p-3 bg-cyan-100 dark:bg-cyan-900/20 rounded-xl">
+            <GraduationCap className="h-8 w-8 text-cyan-600 dark:text-cyan-400" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Service de Scolarité - Documents
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">
+              Gérez les documents téléchargeables par catégorie
+            </p>
+          </div>
+        </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {CATEGORIES.map((cat, idx) => {
+          const count = files.filter(f => f.category === cat.key).length;
+          const themes = [
+            { grad: "from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20", color: "text-blue-600 dark:text-blue-400", bold: "text-blue-700 dark:text-blue-300" },
+            { grad: "from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20", color: "text-orange-600 dark:text-orange-400", bold: "text-orange-700 dark:text-orange-300" },
+            { grad: "from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20", color: "text-green-600 dark:text-green-400", bold: "text-green-700 dark:text-green-300" },
+          ];
+          const theme = themes[idx];
+          return (
+            <Card key={cat.key} className={`border-0 shadow-lg bg-gradient-to-r ${theme.grad}`}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className={`${theme.color} text-sm font-medium`}>{cat.label}</p>
+                    <p className={`text-xl font-bold ${theme.bold}`}>{count}</p>
+                  </div>
+                  <FileText className={`h-6 w-6 ${theme.color}`} />
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList>
           {CATEGORIES.map((cat) => (
             <TabsTrigger key={cat.key} value={cat.key}>
@@ -128,7 +160,7 @@ const AdminScolarite = () => {
           return (
             <TabsContent key={cat.key} value={cat.key} className="space-y-4">
               {/* Upload */}
-              <Card>
+              <Card className="border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Upload className="h-5 w-5" />
@@ -155,7 +187,7 @@ const AdminScolarite = () => {
               </Card>
 
               {/* File list */}
-              <Card>
+              <Card className="border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-lg">
                     Documents ({catFiles.length})
