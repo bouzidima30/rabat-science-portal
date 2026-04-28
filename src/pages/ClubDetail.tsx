@@ -64,7 +64,7 @@ const ClubDetail = () => {
                 <OptimizedImage
                   src={club.image_url}
                   alt={club.titre}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full
                   context="hero"
                 />
               ) : (
