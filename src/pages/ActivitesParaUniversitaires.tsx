@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import OptimizedImage from "@/components/OptimizedImage";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 interface Club {
   id: string;
@@ -55,29 +56,28 @@ const ActivitesParaUniversitaires = () => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {clubs.map((club) => (
-              <Card
-                key={club.id}
-                className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="aspect-video bg-gray-100 dark:bg-gray-800">
-                  {club.image_url ? (
-                    <OptimizedImage
-                      src={club.image_url}
-                      alt={club.titre}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <Users className="h-16 w-16" />
-                    </div>
-                  )}
-                </div>
-                <CardContent className="p-5">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {club.titre}
-                  </h2>
-                </CardContent>
-              </Card>
+              <Link key={club.id} to={`/club/${club.id}`} className="block group">
+                <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 h-full">
+                  <div className="aspect-video bg-gray-100 dark:bg-gray-800">
+                    {club.image_url ? (
+                      <OptimizedImage
+                        src={club.image_url}
+                        alt={club.titre}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <Users className="h-16 w-16" />
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className="p-5">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#006be5] transition-colors">
+                      {club.titre}
+                    </h2>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         )}
