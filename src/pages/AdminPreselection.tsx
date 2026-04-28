@@ -126,19 +126,53 @@ const AdminPreselection = () => {
   const currentSubLabel = SUB_SECTIONS.find(s => s.suffix === activeSub)?.label;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="p-3 bg-indigo-100 dark:bg-indigo-900/20 rounded-xl">
-          <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Listes de Présélection</h1>
-          <p className="text-muted-foreground">Gérez les documents de présélection par cycle et par étape</p>
+    <div className="p-8">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center space-x-4">
+          <div className="p-3 bg-indigo-100 dark:bg-indigo-900/20 rounded-xl">
+            <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Listes de Présélection
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">
+              Gérez les documents de présélection par cycle et par étape
+            </p>
+          </div>
         </div>
       </div>
 
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {CYCLES.map((c) => {
+          const Icon = c.icon;
+          const count = files.filter(f => f.category.startsWith(c.key)).length;
+          const themes: Record<string, { grad: string; color: string; bold: string }> = {
+            preselection_licence: { grad: "from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20", color: "text-yellow-600 dark:text-yellow-400", bold: "text-yellow-700 dark:text-yellow-300" },
+            preselection_master: { grad: "from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20", color: "text-blue-600 dark:text-blue-400", bold: "text-blue-700 dark:text-blue-300" },
+            preselection_doctorat: { grad: "from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20", color: "text-purple-600 dark:text-purple-400", bold: "text-purple-700 dark:text-purple-300" },
+          };
+          const theme = themes[c.key];
+          return (
+            <Card key={c.key} className={`border-0 shadow-lg bg-gradient-to-r ${theme.grad}`}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className={`${theme.color} text-sm font-medium`}>{c.label}</p>
+                    <p className={`text-xl font-bold ${theme.bold}`}>{count}</p>
+                  </div>
+                  <Icon className={`h-6 w-6 ${theme.color}`} />
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
       {/* Cycle tabs */}
-      <Tabs value={activeCycle} onValueChange={setActiveCycle}>
+      <Tabs value={activeCycle} onValueChange={setActiveCycle} className="mb-6">
         <TabsList className="grid w-full grid-cols-3">
           {CYCLES.map(c => {
             const Icon = c.icon;
@@ -154,7 +188,7 @@ const AdminPreselection = () => {
 
       {/* Sub-section selector */}
       <Select value={activeSub} onValueChange={setActiveSub}>
-        <SelectTrigger className="w-full sm:w-96">
+        <SelectTrigger className="w-full sm:w-96 mb-6">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -173,7 +207,7 @@ const AdminPreselection = () => {
       </Select>
 
       {/* File list */}
-      <Card>
+      <Card className="border-0 shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
           <CardTitle className="text-lg">
             {currentCycleLabel} — {currentSubLabel} ({catFiles.length} fichiers)
@@ -181,7 +215,7 @@ const AdminPreselection = () => {
           <Button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="bg-[#006be5] hover:bg-[#0056b3]"
+            className="bg-indigo-600 hover:bg-indigo-700 shadow-lg"
           >
             <Upload className="h-4 w-4 mr-2" />
             {uploading ? "Upload..." : "Ajouter des fichiers"}
