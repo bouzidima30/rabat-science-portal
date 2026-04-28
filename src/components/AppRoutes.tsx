@@ -88,6 +88,7 @@ const ListesExamens = lazy(() => import("../pages/ListesExamens"));
 const Resultats = lazy(() => import("../pages/Resultats"));
 const Preselection = lazy(() => import("../pages/Preselection"));
 const ActivitesParaUniversitaires = lazy(() => import("../pages/ActivitesParaUniversitaires"));
+const ClubDetail = lazy(() => import("../pages/ClubDetail"));
 const Profil = lazy(() => import("../pages/Profil"));
 const DynamicPage = lazy(() => import("../pages/[slug]"));
 const SecurityTest = lazy(() => import("../pages/SecurityTest"));
@@ -611,6 +612,13 @@ const AppRoutes = () => {
           <Suspense fallback={<LoadingSpinner />}>
             <PageTransition>
               <ActivitesParaUniversitaires />
+            </PageTransition>
+          </Suspense>
+        } />
+        <Route path="/club/:id" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition>
+              <ClubDetail />
             </PageTransition>
           </Suspense>
         } />

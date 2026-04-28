@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
@@ -24,6 +25,7 @@ interface Club {
   titre: string;
   image_url: string | null;
   display_order: number;
+  description: string | null;
 }
 
 const clubSchema = z.object({
@@ -32,6 +34,11 @@ const clubSchema = z.object({
     .trim()
     .nonempty({ message: "Le titre est requis" })
     .max(150, { message: "Le titre doit faire moins de 150 caractères" }),
+  description: z
+    .string()
+    .trim()
+    .max(5000, { message: "La description doit faire moins de 5000 caractères" })
+    .optional(),
 });
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -42,6 +49,7 @@ const AdminClubs = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Club | null>(null);
   const [titre, setTitre] = useState("");
+  const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [existingImage, setExistingImage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -63,6 +71,7 @@ const AdminClubs = () => {
   const resetForm = () => {
     setEditing(null);
     setTitre("");
+    setDescription("");
     setFile(null);
     setExistingImage(null);
   };
@@ -75,6 +84,7 @@ const AdminClubs = () => {
   const openEdit = (club: Club) => {
     setEditing(club);
     setTitre(club.titre);
+    setDescription(club.description ?? "");
     setExistingImage(club.image_url);
     setFile(null);
     setDialogOpen(true);
@@ -123,7 +133,7 @@ const AdminClubs = () => {
   };
 
   const handleSubmit = async () => {
-    const parsed = clubSchema.safeParse({ titre });
+    const parsed = clubSchema.safeParse({ titre, description });
     if (!parsed.success) {
       toast({
         title: "Erreur de validation",
@@ -147,7 +157,11 @@ const AdminClubs = () => {
       if (editing) {
         const { error } = await supabase
           .from("clubs")
-          .update({ titre: parsed.data.titre, image_url: imageUrl })
+          .update({
+            titre: parsed.data.titre,
+            image_url: imageUrl,
+            description: parsed.data.description || null,
+          })
           .eq("id", editing.id);
         if (error) throw error;
         toast({ title: "Club modifié avec succès" });
@@ -158,6 +172,7 @@ const AdminClubs = () => {
         const { error } = await supabase.from("clubs").insert({
           titre: parsed.data.titre,
           image_url: imageUrl,
+          description: parsed.data.description || null,
           display_order: nextOrder,
         });
         if (error) throw error;
@@ -296,6 +311,20 @@ const AdminClubs = () => {
                 placeholder="Ex. Club Scientifique"
                 maxLength={150}
               />
+            </div>
+            <div>
+              <Label htmlFor="club-description">Description</Label>
+              <Textarea
+                id="club-description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Présentation du club, activités, objectifs..."
+                rows={6}
+                maxLength={5000}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Affichée sur la page de détail du club. Les sauts de ligne sont conservés.
+              </p>
             </div>
             <div>
               <Label htmlFor="club-image">Photo du club</Label>
