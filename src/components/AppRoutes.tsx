@@ -34,6 +34,7 @@ const AdminPreselection = lazy(() => import("../pages/AdminPreselection"));
 const AdminSectionsGroupes = lazy(() => import("../pages/AdminSectionsGroupes"));
 const AdminScolarite = lazy(() => import("../pages/AdminScolarite"));
 const AdminResultats = lazy(() => import("../pages/AdminResultats"));
+const AdminClubs = lazy(() => import("../pages/AdminClubs"));
 const Actualites = lazy(() => import("../pages/Actualites"));
 const ActualiteDetail = lazy(() => import("../pages/ActualiteDetail"));
 const Evenements = lazy(() => import("../pages/Evenements"));
@@ -215,6 +216,11 @@ const AppRoutes = () => {
           <Route path="resultats" element={
             <Suspense fallback={<LoadingSpinner />}>
               <AdminResultats />
+            </Suspense>
+          } />
+          <Route path="clubs" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminClubs />
             </Suspense>
           } />
         </Route>
