@@ -94,6 +94,33 @@ export type Database = {
           },
         ]
       }
+      clubs: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string | null
+          titre: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          titre: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          titre?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
