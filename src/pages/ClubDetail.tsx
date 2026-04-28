@@ -64,7 +64,7 @@ const ClubDetail = () => {
                 <OptimizedImage
                   src={club.image_url}
                   alt={club.titre}
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">
