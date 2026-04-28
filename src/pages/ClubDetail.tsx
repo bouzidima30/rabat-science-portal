@@ -61,10 +61,10 @@ const ClubDetail = () => {
           <article>
             <div className="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden mb-8">
               {club.image_url ? (
-                <OptimizedImage
+                <img
                   src={club.image_url}
                   alt={club.titre}
-                  className=""w-full h-full object-cover"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">
