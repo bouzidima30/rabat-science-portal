@@ -59,7 +59,7 @@ const ClubDetail = () => {
           </div>
         ) : (
           <article>
-            <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden mb-8">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden mb-8">
               {club.image_url ? (
                 <OptimizedImage
                   src={club.image_url}
