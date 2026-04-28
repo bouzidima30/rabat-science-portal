@@ -253,16 +253,24 @@ const AdminEmploiTemps = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Gestion des Emplois du Temps</h1>
-          <p className="text-muted-foreground mt-2">
-            Importez un fichier .zip contenant les dossiers et fichiers des emplois du temps
-          </p>
-        </div>
-
-        <div className="flex gap-2">
+    <div className="p-8">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-xl">
+              <Archive className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Gestion des Emplois du Temps
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">
+                Importez un fichier .zip contenant les dossiers et fichiers des emplois du temps
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2">
           {items && items.length > 0 && (
             <Button
               variant="destructive"
@@ -278,7 +286,7 @@ const AdminEmploiTemps = () => {
             </Button>
           )}
 
-          <Button asChild disabled={uploading}>
+          <Button asChild disabled={uploading} className="bg-blue-600 hover:bg-blue-700 shadow-lg">
             <label className="cursor-pointer">
               {uploading ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -295,11 +303,38 @@ const AdminEmploiTemps = () => {
               />
             </label>
           </Button>
+          </div>
         </div>
       </div>
 
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Dossiers</p>
+                <p className="text-xl font-bold text-blue-700 dark:text-blue-300">{folders.length}</p>
+              </div>
+              <Folder className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-600 dark:text-green-400 text-sm font-medium">Fichiers</p>
+                <p className="text-xl font-bold text-green-700 dark:text-green-300">{(items?.length || 0) - folders.length}</p>
+              </div>
+              <File className="h-6 w-6 text-green-600 dark:text-green-400" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {uploading && (
-        <Card>
+        <Card className="border-0 shadow-lg mb-8">
           <CardContent className="pt-6 space-y-3">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{progressLabel}</span>
@@ -310,7 +345,7 @@ const AdminEmploiTemps = () => {
         </Card>
       )}
 
-      <Card>
+      <Card className="border-0 shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Structure des fichiers</span>
