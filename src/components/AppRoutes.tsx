@@ -615,6 +615,13 @@ const AppRoutes = () => {
             </PageTransition>
           </Suspense>
         } />
+        <Route path="/club/:id" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition>
+              <ClubDetail />
+            </PageTransition>
+          </Suspense>
+        } />
         
         {/* Dynamic Pages */}
         <Route path="/:slug" element={
