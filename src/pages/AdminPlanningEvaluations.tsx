@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Folder, File, Trash2, Archive, Loader2 } from "lucide-react";
+import { Folder, File, Trash2, Archive, Loader2, CalendarClock } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import JSZip from "jszip";
 
@@ -254,7 +254,7 @@ const AdminPlanningEvaluations = () => {
               Tout supprimer
             </Button>
           )}
-          <Button size="sm" asChild disabled={uploading}>
+          <Button size="sm" asChild disabled={uploading} className="bg-purple-600 hover:bg-purple-700 shadow-lg">
             <label className="cursor-pointer">
               {uploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Archive className="h-4 w-4 mr-2" />}
               {uploading ? "Import en cours..." : "Importer un .zip"}
@@ -263,7 +263,7 @@ const AdminPlanningEvaluations = () => {
           </Button>
         </div>
 
-        <Card>
+        <Card className="border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center justify-between text-base">
               <span>Structure des fichiers</span>
@@ -296,16 +296,51 @@ const AdminPlanningEvaluations = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Planning & Calendrier des Évaluations</h1>
-        <p className="text-muted-foreground mt-2">
-          Importez des fichiers .zip pour le planning des évaluations et le calendrier de fin de semestre
-        </p>
+    <div className="p-8">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center space-x-4">
+          <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-xl">
+            <CalendarClock className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Planning & Calendrier des Évaluations
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">
+              Importez des fichiers .zip pour le planning des évaluations et le calendrier de fin de semestre
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {CATEGORIES.map((cat, idx) => {
+          const count = items?.filter(i => i.category === cat.key).length || 0;
+          const gradients = [
+            "from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 text-purple-600 dark:text-purple-400",
+            "from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 text-pink-600 dark:text-pink-400",
+          ];
+          const [grad, color] = [gradients[idx].split(" ").slice(0, 4).join(" "), gradients[idx].split(" ").slice(4).join(" ")];
+          return (
+            <Card key={cat.key} className={`border-0 shadow-lg bg-gradient-to-r ${grad}`}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className={`${color} text-sm font-medium`}>{cat.label}</p>
+                    <p className={`text-xl font-bold ${color.replace('600', '700').replace('400', '300')}`}>{count}</p>
+                  </div>
+                  <Archive className={`h-6 w-6 ${color}`} />
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {uploading && (
-        <Card>
+        <Card className="border-0 shadow-lg mb-8">
           <CardContent className="pt-6 space-y-3">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{progressLabel}</span>
@@ -316,7 +351,7 @@ const AdminPlanningEvaluations = () => {
         </Card>
       )}
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
           {CATEGORIES.map((cat) => (
             <TabsTrigger key={cat.key} value={cat.key}>{cat.label}</TabsTrigger>
