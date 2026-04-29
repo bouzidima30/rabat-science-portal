@@ -53,9 +53,8 @@ const CarouselIndicators = ({ api, count }: { api: CarouselApi | undefined; coun
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
+  const [newsApi, setNewsApi] = useState<CarouselApi>();
+  const [youtubeApi, setYoutubeApi] = useState<CarouselApi>();
 
   const { prefetchNews, prefetchEvents, prefetchFormations } = usePrefetchQueries();
 
@@ -261,7 +260,7 @@ const Index = () => {
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">Actualités</h2>
               </div>
-              <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+              <Carousel className="w-full" opts={{ align: "start", loop: true }} setApi={setNewsApi}>
                 <CarouselContent>
                   {carouselNews.map((article: any, index) => (
                     <CarouselItem key={index}>
@@ -306,6 +305,7 @@ const Index = () => {
                 <CarouselPrevious className="left-2" />
                 <CarouselNext className="right-2" />
               </Carousel>
+              <CarouselIndicators api={newsApi} count={carouselNews.length} />
             </div>
 
             {/* YouTube Carousel */}
@@ -316,7 +316,7 @@ const Index = () => {
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">Vidéos</h2>
               </div>
-              <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+              <Carousel className="w-full" opts={{ align: "start", loop: true }} setApi={setYoutubeApi}>
                 <CarouselContent>
                   {carouselYoutube.map((video: any, index) => (
                     <CarouselItem key={index}>
@@ -344,6 +344,7 @@ const Index = () => {
                 <CarouselPrevious className="left-2" />
                 <CarouselNext className="right-2" />
               </Carousel>
+              <CarouselIndicators api={youtubeApi} count={carouselYoutube.length} />
             </div>
           </div>
         </section>
