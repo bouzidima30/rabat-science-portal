@@ -170,15 +170,6 @@ const Index = () => {
     }
   }, [carouselNews]);
 
-  useEffect(() => {
-    if (!api) return;
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-    const handleSelect = () => setCurrent(api.selectedScrollSnap() + 1);
-    api.on("select", handleSelect);
-    return () => { api.off("select", handleSelect); };
-  }, [api]);
-
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
