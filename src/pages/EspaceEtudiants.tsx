@@ -66,7 +66,7 @@ const EspaceEtudiants = () => {
       title: "Activités para-universitaires",
       description: "Liste des clubs de la faculté",
       icon: Users,
-      path: "/activites-para-universitaires",
+      path: "/activites-parauniversitaire",
       color: "bg-pink-500"
     },
     {
