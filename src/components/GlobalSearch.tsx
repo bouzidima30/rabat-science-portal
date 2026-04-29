@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Search, X, FileText, Calendar, File, Users, GraduationCap } from "lucide-react";
@@ -173,7 +174,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-start justify-center pt-20">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 border border-gray-200 dark:border-gray-700">
         <div className="p-6">
@@ -253,7 +254,8 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
