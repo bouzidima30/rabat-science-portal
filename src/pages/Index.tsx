@@ -16,11 +16,45 @@ import OptimizedImage from "@/components/OptimizedImage";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { optimizeImageUrl } from "@/utils/imageOptimization";
 
+// Indicators (dots) for a Carousel — pass setApi to the Carousel and the count of items
+const CarouselIndicators = ({ api, count }: { api: CarouselApi | undefined; count: number }) => {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    setCurrent(api.selectedScrollSnap());
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    api.on("select", onSelect);
+    api.on("reInit", onSelect);
+    return () => {
+      api.off("select", onSelect);
+      api.off("reInit", onSelect);
+    };
+  }, [api]);
+
+  if (count <= 1) return null;
+
+  return (
+    <div className="flex justify-center gap-2 mt-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <button
+          key={i}
+          type="button"
+          aria-label={`Aller à la diapositive ${i + 1}`}
+          onClick={() => api?.scrollTo(i)}
+          className={`h-2 rounded-full transition-all duration-300 ${
+            i === current ? "w-6 bg-primary" : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
+  const [newsApi, setNewsApi] = useState<CarouselApi>();
+  const [youtubeApi, setYoutubeApi] = useState<CarouselApi>();
 
   const { prefetchNews, prefetchEvents, prefetchFormations } = usePrefetchQueries();
 
@@ -136,15 +170,6 @@ const Index = () => {
     }
   }, [carouselNews]);
 
-  useEffect(() => {
-    if (!api) return;
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-    const handleSelect = () => setCurrent(api.selectedScrollSnap() + 1);
-    api.on("select", handleSelect);
-    return () => { api.off("select", handleSelect); };
-  }, [api]);
-
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
@@ -226,7 +251,7 @@ const Index = () => {
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">Actualités</h2>
               </div>
-              <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+              <Carousel className="w-full" opts={{ align: "start", loop: true }} setApi={setNewsApi}>
                 <CarouselContent>
                   {carouselNews.map((article: any, index) => (
                     <CarouselItem key={index}>
@@ -271,6 +296,7 @@ const Index = () => {
                 <CarouselPrevious className="left-2" />
                 <CarouselNext className="right-2" />
               </Carousel>
+              <CarouselIndicators api={newsApi} count={carouselNews.length} />
             </div>
 
             {/* YouTube Carousel */}
@@ -281,7 +307,7 @@ const Index = () => {
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">Vidéos</h2>
               </div>
-              <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+              <Carousel className="w-full" opts={{ align: "start", loop: true }} setApi={setYoutubeApi}>
                 <CarouselContent>
                   {carouselYoutube.map((video: any, index) => (
                     <CarouselItem key={index}>
@@ -309,6 +335,7 @@ const Index = () => {
                 <CarouselPrevious className="left-2" />
                 <CarouselNext className="right-2" />
               </Carousel>
+              <CarouselIndicators api={youtubeApi} count={carouselYoutube.length} />
             </div>
           </div>
         </section>
