@@ -267,11 +267,11 @@ const AdminEvenements = () => {
                     />
                   )}
                   <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                         {event.titre}
                       </h3>
-                      <div className="flex space-x-2 ml-4">
+                      <div className="flex flex-wrap gap-2 sm:ml-4">
                         <Button
                           variant="outline"
                           size="sm"

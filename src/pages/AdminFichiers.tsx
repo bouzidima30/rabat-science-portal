@@ -261,7 +261,7 @@ const AdminFichiers = () => {
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                         {file.name}
                       </h3>
-                      <div className="flex space-x-2 ml-4">
+                      <div className="flex flex-wrap gap-2 sm:ml-4">
                         <Button
                           variant="outline"
                           size="sm"

@@ -286,7 +286,7 @@ const AdminContact = () => {
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
                         {message.name}
@@ -295,7 +295,7 @@ const AdminContact = () => {
                         {message.subject}
                       </p>
                     </div>
-                    <div className="flex space-x-2 ml-4">
+                    <div className="flex flex-wrap gap-2 sm:ml-4">
                       {message.status === 'unread' && (
                         <Button
                           variant="outline"
