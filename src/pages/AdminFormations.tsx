@@ -158,7 +158,7 @@ const AdminFormations = () => {
               <GraduationCap className="h-8 w-8 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 Formations
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">

@@ -43,7 +43,7 @@ const AdminUploadFiles = () => {
               <Upload className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 Gestion des Fichiers
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">

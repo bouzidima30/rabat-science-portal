@@ -134,7 +134,7 @@ const AdminPreselection = () => {
             <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Listes de Présélection
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-1">

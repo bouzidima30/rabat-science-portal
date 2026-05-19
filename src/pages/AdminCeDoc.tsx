@@ -153,7 +153,7 @@ const AdminCeDoc = () => {
             <FileText className="h-8 w-8 text-purple-600 dark:text-purple-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Gestion CeDoc
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-1">
