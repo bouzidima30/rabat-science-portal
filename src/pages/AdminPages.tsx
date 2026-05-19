@@ -291,7 +291,7 @@ const AdminPages = () => {
     <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-xl">
               <FileText className="h-8 w-8 text-orange-600 dark:text-orange-400" />
