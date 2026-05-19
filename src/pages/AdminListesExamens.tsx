@@ -296,14 +296,14 @@ const AdminListesExamens = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       <div className="mb-8">
         <div className="flex items-center space-x-4">
           <div className="p-3 bg-indigo-100 dark:bg-indigo-900/20 rounded-xl">
             <ClipboardList className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Listes des Examens</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Listes des Examens</h1>
             <p className="text-gray-600 dark:text-gray-300 mt-1">
               Importez des fichiers .zip pour les listes d'examens de la session d'automne et de printemps
             </p>

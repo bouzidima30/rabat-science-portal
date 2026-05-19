@@ -279,7 +279,7 @@ const AdminPages = () => {
 
   if (isLoading) {
     return (
-      <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -288,16 +288,16 @@ const AdminPages = () => {
   }
 
   return (
-    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-xl">
               <FileText className="h-8 w-8 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 Gestion des Pages
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">

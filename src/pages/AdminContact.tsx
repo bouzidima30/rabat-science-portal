@@ -170,7 +170,7 @@ const AdminContact = () => {
 
   if (isLoading) {
     return (
-      <div className="p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -179,16 +179,16 @@ const AdminContact = () => {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       {/* Header Section */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-xl">
               <Mail className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 Messages de Contact
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">
@@ -200,7 +200,7 @@ const AdminContact = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -286,7 +286,7 @@ const AdminContact = () => {
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
                         {message.name}
@@ -295,7 +295,7 @@ const AdminContact = () => {
                         {message.subject}
                       </p>
                     </div>
-                    <div className="flex space-x-2 ml-4">
+                    <div className="flex flex-wrap gap-2 sm:ml-4">
                       {message.status === 'unread' && (
                         <Button
                           variant="outline"

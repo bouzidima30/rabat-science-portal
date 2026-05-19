@@ -126,7 +126,7 @@ const AdminPreselection = () => {
   const currentSubLabel = SUB_SECTIONS.find(s => s.suffix === activeSub)?.label;
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center space-x-4">
@@ -134,7 +134,7 @@ const AdminPreselection = () => {
             <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Listes de Présélection
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-1">
@@ -145,7 +145,7 @@ const AdminPreselection = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {CYCLES.map((c) => {
           const Icon = c.icon;
           const count = files.filter(f => f.category.startsWith(c.key)).length;

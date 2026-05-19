@@ -94,7 +94,7 @@ const AdminUtilisateurs = () => {
 
   if (isLoading) {
     return (
-      <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -103,7 +103,7 @@ const AdminUtilisateurs = () => {
   }
 
   return (
-    <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center space-x-4">
@@ -111,7 +111,7 @@ const AdminUtilisateurs = () => {
             <Users className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Gestion des Utilisateurs
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-1">
@@ -122,7 +122,7 @@ const AdminUtilisateurs = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <Card className="border-0 shadow-lg bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
