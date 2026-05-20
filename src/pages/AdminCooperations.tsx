@@ -400,14 +400,37 @@ const AdminCooperations = () => {
       {/* Search Bar */}
       <Card className="mb-8 border-0 shadow-lg">
         <CardContent className="p-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <Input
-              placeholder="Rechercher une coopération..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
-            />
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Input
+                placeholder="Rechercher une coopération..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+              />
+            </div>
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="h-12 px-3 rounded-md border-0 bg-gray-50 dark:bg-gray-800 text-sm w-full lg:w-56"
+            >
+              <option value="all">Tous les types</option>
+              <option value="internationale">Internationale</option>
+              <option value="nationale">Nationale</option>
+            </select>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="h-12 px-3 rounded-md border-0 bg-gray-50 dark:bg-gray-800 text-sm w-full lg:w-56"
+            >
+              <option value="all">Tous les statuts</option>
+              <option value="draft">Brouillon</option>
+              <option value="pending_review">En attente</option>
+              <option value="approved">Approuvé</option>
+              <option value="published">Publié</option>
+              <option value="rejected">Rejeté</option>
+            </select>
           </div>
         </CardContent>
       </Card>
