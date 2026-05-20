@@ -10,6 +10,7 @@ import { Upload, X, Save, FileText, Send } from "lucide-react";
 import type { News } from "@/types/news";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
 import QuillEditor from "./QuillEditor";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NewsFormProps {
   news?: News | null;
@@ -32,6 +33,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
+  const { user } = useAuth();
 
   const categories = [
     { value: "reunion_travail" as NewsCategory, label: "Réunion de travail" },
@@ -145,7 +147,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
         // Create new news
         const { error } = await supabase
           .from('news')
-          .insert(newsData);
+          .insert({ ...newsData, author_id: user?.id });
 
         if (error) throw error;
 
