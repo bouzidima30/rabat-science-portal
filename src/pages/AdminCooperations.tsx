@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useActivityLogger } from "@/hooks/useActivityLogger";
 import CooperationImageUpload from "@/components/admin/CooperationImageUpload";
+import ContentStatusBadge from "@/components/ContentStatusBadge";
 import { usePagination, Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/utils/adminPagination";
 
 interface Cooperation {
@@ -29,6 +30,7 @@ interface Cooperation {
   image_url: string | null;
   created_at: string;
   updated_at: string;
+  status?: string | null;
 }
 
 const AdminCooperations = () => {
@@ -50,7 +52,8 @@ const AdminCooperations = () => {
     appel_offre: '',
     annee_debut: '',
     annee_fin: '',
-    image_url: ''
+    image_url: '',
+    status: 'draft'
   });
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
@@ -107,6 +110,7 @@ const AdminCooperations = () => {
     annee_debut: z.string().optional(),
     annee_fin: z.string().optional(),
     image_url: z.string().optional(),
+    status: z.enum(['draft', 'pending_review', 'approved', 'published', 'rejected']).optional(),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -155,6 +159,7 @@ const AdminCooperations = () => {
         annee_debut: anneeDebut,
         annee_fin: anneeFin,
         image_url: formData.image_url || null,
+        status: formData.status || 'draft',
         updated_at: new Date().toISOString()
       };
 
@@ -229,7 +234,8 @@ const AdminCooperations = () => {
       appel_offre: '',
       annee_debut: '',
       annee_fin: '',
-      image_url: ''
+      image_url: '',
+      status: 'draft'
     });
   };
 
@@ -277,7 +283,8 @@ const AdminCooperations = () => {
       appel_offre: cooperation.appel_offre || '',
       annee_debut: cooperation.annee_debut ? cooperation.annee_debut.toString() : '',
       annee_fin: cooperation.annee_fin ? cooperation.annee_fin.toString() : '',
-      image_url: cooperation.image_url || ''
+      image_url: cooperation.image_url || '',
+      status: (cooperation as any).status || 'draft'
     });
     setIsFormOpen(true);
   };
@@ -443,6 +450,7 @@ const AdminCooperations = () => {
                       >
                         {typeCooperationLabels[cooperation.type_cooperation as keyof typeof typeCooperationLabels]}
                       </Badge>
+                      <ContentStatusBadge status={(cooperation as any).status || 'draft'} />
                       {cooperation.coordinateur && (
                         <Badge variant="outline">
                           {cooperation.coordinateur}
