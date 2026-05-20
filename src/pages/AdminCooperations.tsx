@@ -37,6 +37,8 @@ const AdminCooperations = () => {
   const [cooperations, setCooperations] = useState<Cooperation[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedCooperation, setSelectedCooperation] = useState<Cooperation | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -295,11 +297,17 @@ const AdminCooperations = () => {
     setIsFormOpen(true);
   };
 
-  const filteredCooperations = cooperations.filter(cooperation =>
-    cooperation.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    cooperation.type_cooperation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (cooperation.coordinateur && cooperation.coordinateur.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredCooperations = cooperations.filter((cooperation) => {
+    const q = searchQuery.toLowerCase();
+    const matchesSearch =
+      cooperation.titre.toLowerCase().includes(q) ||
+      cooperation.type_cooperation.toLowerCase().includes(q) ||
+      (cooperation.coordinateur && cooperation.coordinateur.toLowerCase().includes(q));
+    const matchesType = typeFilter === "all" || cooperation.type_cooperation === typeFilter;
+    const status = (cooperation as any).status || 'draft';
+    const matchesStatus = statusFilter === "all" || status === statusFilter;
+    return matchesSearch && matchesType && matchesStatus;
+  });
 
   const cooperationsByType = cooperations.reduce((acc, cooperation) => {
     acc[cooperation.type_cooperation] = (acc[cooperation.type_cooperation] || 0) + 1;
@@ -392,14 +400,37 @@ const AdminCooperations = () => {
       {/* Search Bar */}
       <Card className="mb-8 border-0 shadow-lg">
         <CardContent className="p-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <Input
-              placeholder="Rechercher une coopération..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
-            />
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Input
+                placeholder="Rechercher une coopération..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+              />
+            </div>
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="h-12 px-3 rounded-md border-0 bg-gray-50 dark:bg-gray-800 text-sm w-full lg:w-56"
+            >
+              <option value="all">Tous les types</option>
+              <option value="internationale">Internationale</option>
+              <option value="nationale">Nationale</option>
+            </select>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="h-12 px-3 rounded-md border-0 bg-gray-50 dark:bg-gray-800 text-sm w-full lg:w-56"
+            >
+              <option value="all">Tous les statuts</option>
+              <option value="draft">Brouillon</option>
+              <option value="pending_review">En attente</option>
+              <option value="approved">Approuvé</option>
+              <option value="published">Publié</option>
+              <option value="rejected">Rejeté</option>
+            </select>
           </div>
         </CardContent>
       </Card>
