@@ -37,6 +37,8 @@ const AdminCooperations = () => {
   const [cooperations, setCooperations] = useState<Cooperation[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedCooperation, setSelectedCooperation] = useState<Cooperation | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -295,11 +297,17 @@ const AdminCooperations = () => {
     setIsFormOpen(true);
   };
 
-  const filteredCooperations = cooperations.filter(cooperation =>
-    cooperation.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    cooperation.type_cooperation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (cooperation.coordinateur && cooperation.coordinateur.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredCooperations = cooperations.filter((cooperation) => {
+    const q = searchQuery.toLowerCase();
+    const matchesSearch =
+      cooperation.titre.toLowerCase().includes(q) ||
+      cooperation.type_cooperation.toLowerCase().includes(q) ||
+      (cooperation.coordinateur && cooperation.coordinateur.toLowerCase().includes(q));
+    const matchesType = typeFilter === "all" || cooperation.type_cooperation === typeFilter;
+    const status = (cooperation as any).status || 'draft';
+    const matchesStatus = statusFilter === "all" || status === statusFilter;
+    return matchesSearch && matchesType && matchesStatus;
+  });
 
   const cooperationsByType = cooperations.reduce((acc, cooperation) => {
     acc[cooperation.type_cooperation] = (acc[cooperation.type_cooperation] || 0) + 1;
