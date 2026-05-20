@@ -633,6 +633,20 @@ const AdminCooperations = () => {
                 onChange={(e) => setFormData({...formData, annee_fin: e.target.value})} 
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Statut</label>
+              <select
+                value={formData.status}
+                onChange={(e) => setFormData({...formData, status: e.target.value})}
+                className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+              >
+                <option value="draft">Brouillon</option>
+                <option value="pending_review">En attente</option>
+                <option value="approved">Approuvé</option>
+                <option value="published">Publié</option>
+                <option value="rejected">Rejeté</option>
+              </select>
+            </div>
             <div className="flex gap-2">
               <Button type="submit" disabled={saving}>
                 {saving ? "Enregistrement..." : (selectedCooperation ? "Modifier" : "Créer")}
