@@ -342,7 +342,7 @@ const AdminActualites = () => {
                     </div>
                     
                     <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {item.excerpt || item.content.substring(0, 200) + "..."}
+                      {item.excerpt || (item.content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 200) + "...")}
                     </p>
                   </div>
                 </div>
