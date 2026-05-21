@@ -92,6 +92,12 @@ const ClubDetail = lazy(() => import("../pages/ClubDetail"));
 const Profil = lazy(() => import("../pages/Profil"));
 const DynamicPage = lazy(() => import("../pages/[slug]"));
 const SecurityTest = lazy(() => import("../pages/SecurityTest"));
+const DepartementBiologie = lazy(() => import("../pages/departements/DepartementBiologie"));
+const DepartementChimie = lazy(() => import("../pages/departements/DepartementChimie"));
+const DepartementGeologie = lazy(() => import("../pages/departements/DepartementGeologie"));
+const DepartementInformatique = lazy(() => import("../pages/departements/DepartementInformatique"));
+const DepartementMathematiques = lazy(() => import("../pages/departements/DepartementMathematiques"));
+const DepartementPhysique = lazy(() => import("../pages/departements/DepartementPhysique"));
 
 const AppRoutes = () => {
   return (
@@ -410,6 +416,38 @@ const AppRoutes = () => {
             <PageTransition>
               <CooperationNationale />
             </PageTransition>
+          </Suspense>
+        } />
+
+        {/* Départements */}
+        <Route path="/departements/biologie" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementBiologie /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/chimie" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementChimie /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/geologie" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementGeologie /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/informatique" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementInformatique /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/mathematiques" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementMathematiques /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/physique" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementPhysique /></PageTransition>
           </Suspense>
         } />
         <Route path="/cooperation-internationale" element={

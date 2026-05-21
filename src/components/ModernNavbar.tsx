@@ -102,6 +102,19 @@ const ModernNavbar = React.memo(() => {
       ]
     },
     {
+      name: "Départements",
+      path: "/departements",
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "Département Biologie", path: "/departements/biologie" },
+        { name: "Département Chimie", path: "/departements/chimie" },
+        { name: "Département Géologie", path: "/departements/geologie" },
+        { name: "Département Informatique", path: "/departements/informatique" },
+        { name: "Département Mathématiques", path: "/departements/mathematiques" },
+        { name: "Département Physique", path: "/departements/physique" }
+      ]
+    },
+    {
       name: "Contact",
       path: "/contact",
       hasDropdown: false
