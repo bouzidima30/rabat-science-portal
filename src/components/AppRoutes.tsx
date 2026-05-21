@@ -418,6 +418,38 @@ const AppRoutes = () => {
             </PageTransition>
           </Suspense>
         } />
+
+        {/* Départements */}
+        <Route path="/departements/biologie" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementBiologie /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/chimie" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementChimie /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/geologie" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementGeologie /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/informatique" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementInformatique /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/mathematiques" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementMathematiques /></PageTransition>
+          </Suspense>
+        } />
+        <Route path="/departements/physique" element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PageTransition><DepartementPhysique /></PageTransition>
+          </Suspense>
+        } />
         <Route path="/cooperation-internationale" element={
           <Suspense fallback={<LoadingSpinner />}>
             <PageTransition>
