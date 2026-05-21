@@ -92,6 +92,12 @@ const ClubDetail = lazy(() => import("../pages/ClubDetail"));
 const Profil = lazy(() => import("../pages/Profil"));
 const DynamicPage = lazy(() => import("../pages/[slug]"));
 const SecurityTest = lazy(() => import("../pages/SecurityTest"));
+const DepartementBiologie = lazy(() => import("../pages/departements/DepartementBiologie"));
+const DepartementChimie = lazy(() => import("../pages/departements/DepartementChimie"));
+const DepartementGeologie = lazy(() => import("../pages/departements/DepartementGeologie"));
+const DepartementInformatique = lazy(() => import("../pages/departements/DepartementInformatique"));
+const DepartementMathematiques = lazy(() => import("../pages/departements/DepartementMathematiques"));
+const DepartementPhysique = lazy(() => import("../pages/departements/DepartementPhysique"));
 
 const AppRoutes = () => {
   return (
