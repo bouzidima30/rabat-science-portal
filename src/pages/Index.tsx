@@ -175,16 +175,6 @@ const Index = () => {
       <TopBar />
       <Navbar />
 
-      {/* ─── Quick Stats Bar ─── */}
-      <section className="relative pt-8 max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <AnimatedCounter icon={Users} value={15000} suffix="+" label="Étudiants" color="text-primary" bgColor="bg-accent" />
-          <AnimatedCounter icon={BookOpen} value={50} suffix="+" label="Formations" color="text-orange-600 dark:text-orange-400" bgColor="bg-orange-100 dark:bg-orange-900/20" />
-          <AnimatedCounter icon={Award} value={200} suffix="+" label="Enseignants" color="text-emerald-600 dark:text-emerald-400" bgColor="bg-emerald-100 dark:bg-emerald-900/20" />
-          <AnimatedCounter icon={Building} value={12} label="Laboratoires" color="text-rose-600 dark:text-rose-400" bgColor="bg-rose-100 dark:bg-rose-900/20" />
-        </div>
-      </section>
-
       <div className="max-w-7xl mx-auto px-4">
         {/* ─── Carousels Section ─── */}
         <section className="py-16">
@@ -312,6 +302,16 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+          </div>
+        </section>
+
+        {/* ─── Quick Stats Bar ─── */}
+        <section className="pb-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <AnimatedCounter icon={Users} value={15000} suffix="+" label="Étudiants" color="text-primary" bgColor="bg-accent" />
+            <AnimatedCounter icon={BookOpen} value={50} suffix="+" label="Formations" color="text-orange-600 dark:text-orange-400" bgColor="bg-orange-100 dark:bg-orange-900/20" />
+            <AnimatedCounter icon={Award} value={200} suffix="+" label="Enseignants" color="text-emerald-600 dark:text-emerald-400" bgColor="bg-emerald-100 dark:bg-emerald-900/20" />
+            <AnimatedCounter icon={Building} value={12} label="Laboratoires" color="text-rose-600 dark:text-rose-400" bgColor="bg-rose-100 dark:bg-rose-900/20" />
           </div>
         </section>
 
