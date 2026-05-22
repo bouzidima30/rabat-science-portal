@@ -176,7 +176,7 @@ const ModernNavbar = React.memo(() => {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden xl:flex items-center space-x-0.5">
             {menuItems.map((item) => (
               <div
                 key={item.name}
@@ -188,14 +188,15 @@ const ModernNavbar = React.memo(() => {
                   <>
                     <Button
                       variant="ghost"
-                      className={`text-foreground/80 hover:text-primary text-sm font-semibold transition-colors duration-200 ${
+                      size="sm"
+                      className={`text-foreground/80 hover:text-primary text-[13px] font-semibold px-2 transition-colors duration-200 ${
                         location.pathname.startsWith(item.path) 
                           ? "text-primary" 
                           : ""
                       }`}
                     >
                       {item.name}
-                      <ChevronDown className="ml-1 h-4 w-4" />
+                      <ChevronDown className="ml-0.5 h-3.5 w-3.5" />
                     </Button>
                     {hoveredMenu === item.name && (
                       <div className="absolute top-full left-0 w-72 bg-popover/95 backdrop-blur-xl rounded-xl shadow-2xl border border-border z-50 overflow-hidden animate-fade-in">
@@ -215,7 +216,8 @@ const ModernNavbar = React.memo(() => {
                   <Link to={item.path}>
                     <Button
                       variant="ghost"
-                      className={`text-foreground/80 hover:text-primary text-sm font-semibold transition-colors duration-200 ${
+                      size="sm"
+                      className={`text-foreground/80 hover:text-primary text-[13px] font-semibold px-2 transition-colors duration-200 ${
                         location.pathname === item.path 
                           ? "text-primary bg-accent" 
                           : ""
@@ -234,7 +236,7 @@ const ModernNavbar = React.memo(() => {
             variant="ghost"
             size="icon"
             onClick={toggleMobileMenu}
-            className="lg:hidden text-foreground hover:text-primary relative"
+            className="xl:hidden text-foreground hover:text-primary relative"
           >
             {isMobileMenuOpen ? (
               <X className="h-6 w-6" />
@@ -248,13 +250,13 @@ const ModernNavbar = React.memo(() => {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="lg:hidden fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm" 
+          className="xl:hidden fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm" 
           onClick={closeMobileMenu} 
         />
       )}
 
       {/* Mobile Menu */}
-      <div className={`lg:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-background shadow-2xl z-[55] transform transition-transform duration-300 ease-in-out ${
+      <div className={`xl:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-background shadow-2xl z-[55] transform transition-transform duration-300 ease-in-out ${
         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="flex flex-col h-full">
