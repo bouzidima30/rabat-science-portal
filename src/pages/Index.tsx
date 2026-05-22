@@ -177,7 +177,7 @@ const Index = () => {
 
       <div className="max-w-7xl mx-auto px-4">
         {/* ─── Carousels Section ─── */}
-        <section className="py-16">
+        <section className="py-8">
           <div className="grid md:grid-cols-2 gap-8">
             {/* News Carousel */}
             <div>
