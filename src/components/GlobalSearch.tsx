@@ -45,7 +45,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
           type: 'actualite' as const,
           title: item.title,
           description: item.excerpt,
-          url: `/actualites/${item.id}`
+          url: `/actualite/${item.id}`
         })));
       }
 
@@ -62,7 +62,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
           type: 'evenement' as const,
           title: item.titre,
           description: item.description,
-          url: `/evenements/${item.id}`
+          url: `/evenement/${item.id}`
         })));
       }
 
