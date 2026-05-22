@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, memo, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building, FileText, Youtube, Tag, Sparkles, Globe } from "lucide-react";
+import { Calendar, ArrowRight, Users, BookOpen, Award, MapPin, Clock, ChevronRight, GraduationCap, Microscope, Building, FileText, Youtube, Tag, Globe } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
@@ -175,62 +175,8 @@ const Index = () => {
       <TopBar />
       <Navbar />
 
-      {/* ─── Hero Section ─── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-blue-800 dark:from-primary/80 dark:via-blue-900 dark:to-slate-900">
-        {/* Decorative elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-300 rounded-full blur-3xl" />
-        </div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC41IiBvcGFjaXR5PSIwLjA1Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30" />
-
-        <div className="relative max-w-7xl mx-auto px-4 py-20 lg:py-28">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white space-y-6">
-              <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium">
-                <Sparkles className="h-4 w-4" />
-                Université Mohammed V — Rabat
-              </div>
-              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Faculté des Sciences
-                <span className="block text-blue-200">de Rabat</span>
-              </h1>
-              <p className="text-lg text-blue-100/90 max-w-lg leading-relaxed">
-                Former les scientifiques de demain et contribuer au développement du Maroc grâce à l'excellence académique et la recherche de pointe.
-              </p>
-              <div className="flex flex-wrap gap-4 pt-2">
-                <Link to="/formations">
-                  <Button size="lg" className="bg-white text-primary hover:bg-blue-50 font-semibold rounded-full px-8 shadow-lg shadow-black/10">
-                    Découvrir nos formations
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button size="lg" className="bg-white text-blue-600 hover:bg-white/90 rounded-full px-8">
-                    Nous contacter
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Hero image / FSR logo area */}
-            <div className="hidden lg:flex justify-center">
-              <div className="relative">
-                <div className="absolute inset-0 bg-white/10 rounded-3xl blur-xl scale-110" />
-                <img
-                  src="/lovable-uploads/FSR.webp"
-                  alt="FSR Logo"
-                  className="relative w-72 h-auto drop-shadow-2xl"
-                  loading="eager"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ─── Quick Stats Bar ─── */}
-      <section className="relative -mt-8 z-10 max-w-6xl mx-auto px-4">
+      <section className="relative pt-8 max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <AnimatedCounter icon={Users} value={15000} suffix="+" label="Étudiants" color="text-primary" bgColor="bg-accent" />
           <AnimatedCounter icon={BookOpen} value={50} suffix="+" label="Formations" color="text-orange-600 dark:text-orange-400" bgColor="bg-orange-100 dark:bg-orange-900/20" />
