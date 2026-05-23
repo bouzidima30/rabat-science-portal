@@ -163,6 +163,7 @@ const ModernNavbar = React.memo(() => {
   ), [isScrolled]);
 
   return (
+    <>
     <nav className={`sticky top-0 z-50 border-b border-border transition-all duration-300 ${
       isScrolled 
         ? 'bg-background/80 backdrop-blur-xl shadow-lg' 
@@ -246,17 +247,18 @@ const ModernNavbar = React.memo(() => {
           </Button>
         </div>
       </div>
+    </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - rendered outside <nav> so backdrop-filter doesn't create a containing block */}
       {isMobileMenuOpen && (
-        <div 
-          className="xl:hidden fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm" 
-          onClick={closeMobileMenu} 
+        <div
+          className="xl:hidden fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm"
+          onClick={closeMobileMenu}
         />
       )}
 
       {/* Mobile Menu */}
-      <div className={`xl:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-background shadow-2xl z-[55] transform transition-transform duration-300 ease-in-out ${
+      <div className={`xl:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-background shadow-2xl z-[60] transform transition-transform duration-300 ease-in-out ${
         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="flex flex-col h-full">
@@ -338,7 +340,7 @@ const ModernNavbar = React.memo(() => {
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 });
 
