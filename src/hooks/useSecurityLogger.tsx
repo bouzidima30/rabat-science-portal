@@ -42,8 +42,6 @@ export const useSecurityLogger = (userId?: string | null) => {
 
       if (error) {
         console.error('Erreur lors de l\'enregistrement du log de sécurité:', error);
-      } else {
-        console.log('Événement de sécurité enregistré:', entry.action);
       }
 
       // Déclenchement d'alertes pour les événements critiques

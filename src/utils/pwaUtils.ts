@@ -26,12 +26,10 @@ class PWAManager {
       e.preventDefault();
       this.deferredPrompt = e as BeforeInstallPromptEvent;
       this.isInstallable = true;
-      console.log('PWA install prompt available');
     });
 
     // Listen for app installed event
     window.addEventListener('appinstalled', () => {
-      console.log('PWA was installed');
       this.deferredPrompt = null;
       this.isInstallable = false;
     });
@@ -39,7 +37,6 @@ class PWAManager {
 
   async installApp(): Promise<boolean> {
     if (!this.deferredPrompt) {
-      console.log('No install prompt available');
       return false;
     }
 
@@ -48,10 +45,8 @@ class PWAManager {
       const choiceResult = await this.deferredPrompt.userChoice;
       
       if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted PWA install');
         return true;
       } else {
-        console.log('User dismissed PWA install');
         return false;
       }
     } catch (error) {
@@ -77,8 +72,7 @@ class PWAManager {
   async registerServiceWorker(): Promise<boolean> {
     if ('serviceWorker' in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register('/sw.js');
-        console.log('Service Worker registered:', registration);
+        await navigator.serviceWorker.register('/sw.js');
         return true;
       } catch (error) {
         console.error('Service Worker registration failed:', error);

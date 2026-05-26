@@ -67,7 +67,6 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
   useEffect(() => {
     if (isOpen) {
       if (formation) {
-        console.log('Formation data loaded:', formation);
         setFormData({
           titre: formation.titre || '',
           description: formation.description || '',
@@ -233,9 +232,6 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
         updated_at: new Date().toISOString(),
       };
 
-      console.log('Formation data being sent:', formationData);
-      console.log('Type formation value:', formData.type_formation);
-
       let result;
       if (formation) {
         result = await supabase
@@ -247,8 +243,6 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
           .from('formations')
           .insert([formationData]);
       }
-
-      console.log('Supabase result:', result);
 
       if (result.error) {
         console.error('Supabase error details:', result.error);

@@ -90,9 +90,6 @@ export const quarantineFile = async (file: File, reason: string) => {
       }
     };
     
-    // This would typically call a security monitoring system
-    console.log('Security event logged:', event);
-    
     return {
       quarantined: true,
       reason,
