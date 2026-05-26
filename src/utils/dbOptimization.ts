@@ -171,7 +171,6 @@ export const preloadCriticalData = async () => {
 
   try {
     await Promise.all(criticalQueries);
-    console.log('Critical data preloaded successfully');
   } catch (error) {
     console.error('Error preloading critical data:', error);
   }

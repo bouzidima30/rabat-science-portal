@@ -165,8 +165,6 @@ const AdminCooperations = () => {
         updated_at: new Date().toISOString()
       };
 
-      console.log('Processed cooperation data:', cooperationData);
-
       if (selectedCooperation) {
         // Update existing cooperation
         const { error } = await supabase

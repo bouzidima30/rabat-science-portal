@@ -39,20 +39,6 @@ export const usePerformanceMonitor = (componentName: string) => {
 
     setMetrics(performanceMetrics);
 
-    // Log performance metrics in development
-    if (process.env.NODE_ENV === 'development') {
-      console.group(`🚀 Performance Metrics: ${componentName}`);
-      console.log(`Render time: ${renderTime.toFixed(2)}ms`);
-      console.log(`Load time: ${loadTime.toFixed(2)}ms`);
-      if (memoryUsage) {
-        console.log(`Memory usage: ${(memoryUsage / 1024 / 1024).toFixed(2)}MB`);
-      }
-      if (connectionType) {
-        console.log(`Connection: ${connectionType}`);
-      }
-      console.groupEnd();
-    }
-
     // Report slow renders
     if (renderTime > 100) {
       console.warn(`⚠️ Slow render detected in ${componentName}: ${renderTime.toFixed(2)}ms`);
@@ -114,9 +100,7 @@ export const useBundleMonitor = () => {
 
     // Log bundle information
     setTimeout(() => {
-      if (totalSize > 0) {
-        console.log(`📦 Estimated bundle size: ${(totalSize / 1024).toFixed(2)}KB`);
-      }
+      void totalSize;
     }, 1000);
   }, []);
 };
