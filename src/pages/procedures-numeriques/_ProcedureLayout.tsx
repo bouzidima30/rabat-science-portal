@@ -21,7 +21,7 @@ const ProcedureLayout = ({
   children,
 }: ProcedureLayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
 
@@ -30,7 +30,7 @@ const ProcedureLayout = ({
           asChild
           variant="ghost"
           size="sm"
-          className="mb-6 text-[#006be5] hover:text-[#006be5]/80"
+          className="mb-6 text-primary hover:text-primary/80"
         >
           <Link to="/procedures-numeriques">
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -38,11 +38,11 @@ const ProcedureLayout = ({
           </Link>
         </Button>
 
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-4">
           {title}
         </h1>
         {intro && (
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 mb-8">
             {intro}
           </p>
         )}
@@ -54,13 +54,13 @@ const ProcedureLayout = ({
         </Card>
 
         {sourceUrl && (
-          <div className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
+          <div className="mt-6 text-sm text-muted-foreground dark:text-muted-foreground text-center">
             Source officielle :{" "}
             <a
               href={sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#006be5] hover:underline inline-flex items-center"
+              className="text-primary hover:underline inline-flex items-center"
             >
               fsr.ac.ma
               <ExternalLink className="h-3 w-3 ml-1" />

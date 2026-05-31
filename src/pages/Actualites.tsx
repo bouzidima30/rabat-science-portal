@@ -74,11 +74,11 @@ const Actualites = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>
@@ -86,23 +86,23 @@ const Actualites = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Actualités
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg text-muted-foreground dark:text-gray-300">
             Restez informés des dernières nouvelles de la Faculté des Sciences de Rabat
           </p>
         </div>
 
         <div className="mb-8 space-y-4">
           <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Rechercher dans les actualités..."
               value={searchQuery}
@@ -115,7 +115,7 @@ const Actualites = () => {
             <Button
               variant={selectedCategory === null ? "default" : "outline"}
               onClick={() => setSelectedCategory(null)}
-              className={selectedCategory === null ? "bg-[#006be5] hover:bg-[#0056b3]" : ""}
+              className={selectedCategory === null ? "bg-primary hover:bg-primary/90" : ""}
             >
               Toutes
             </Button>
@@ -124,7 +124,7 @@ const Actualites = () => {
                 key={category.value}
                 variant={selectedCategory === category.value ? "default" : "outline"}
                 onClick={() => setSelectedCategory(category.value)}
-                className={selectedCategory === category.value ? "bg-[#006be5] hover:bg-[#0056b3]" : ""}
+                className={selectedCategory === category.value ? "bg-primary hover:bg-primary/90" : ""}
               >
                 {category.label}
               </Button>
@@ -154,7 +154,7 @@ const Actualites = () => {
                       <Badge variant="secondary">
                         {categoryOptions.find(cat => cat.value === item.category)?.label}
                       </Badge>
-                      <div className="flex items-center text-sm text-gray-500">
+                      <div className="flex items-center text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(item.created_at).toLocaleDateString('fr-FR', {
                           year: 'numeric',
@@ -168,12 +168,12 @@ const Actualites = () => {
                   <CardContent>
                     <SafeHTMLRenderer 
                       content={formatContent(item.excerpt || item.content.substring(0, 300) + "...")}
-                      className="prose prose-sm max-w-none text-gray-600 dark:text-gray-300 mb-4"
+                      className="prose prose-sm max-w-none text-muted-foreground dark:text-gray-300 mb-4"
                     />
                     
                     <div className="flex flex-wrap items-center gap-4">
                       <Link to={`/actualite/${item.id}`}>
-                        <Button className="bg-[#006be5] hover:bg-[#0056b3]">
+                        <Button className="bg-primary hover:bg-primary/90">
                           Lire la suite
                           <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>
@@ -199,7 +199,7 @@ const Actualites = () => {
 
         {filteredNews.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-gray-400 text-lg">
+            <p className="text-muted-foreground dark:text-muted-foreground text-lg">
               Aucune actualité trouvée.
             </p>
           </div>

@@ -148,10 +148,10 @@ const AdminActualites = () => {
               <FileText className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
                 Actualités
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground dark:text-gray-300 mt-1">
                 Gérez et publiez les actualités de la faculté
               </p>
             </div>
@@ -187,10 +187,10 @@ const AdminActualites = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Brouillons</p>
-                <p className="text-xl font-bold text-gray-700 dark:text-gray-300">{statusCounts.draft}</p>
+                <p className="text-muted-foreground dark:text-muted-foreground text-sm font-medium">Brouillons</p>
+                <p className="text-xl font-bold text-muted-foreground dark:text-gray-300">{statusCounts.draft}</p>
               </div>
-              <Edit className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+              <Edit className="h-6 w-6 text-muted-foreground dark:text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -237,19 +237,19 @@ const AdminActualites = () => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Rechercher une actualité..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+                className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
               />
             </div>
             <div>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full h-12 px-3 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 rounded-md transition-colors"
+                className="w-full h-12 px-3 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 rounded-md transition-colors"
               >
                 <option value="all">Tous les statuts</option>
                 <option value="draft">Brouillons</option>
@@ -266,7 +266,7 @@ const AdminActualites = () => {
       {/* News List */}
       <div className="space-y-6">
         {paginatedNews.map((item) => (
-          <Card key={item.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
+          <Card key={item.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex space-x-4 flex-1">
@@ -279,7 +279,7 @@ const AdminActualites = () => {
                   )}
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      <h3 className="text-xl font-bold text-foreground dark:text-white">
                         {item.title}
                       </h3>
                       <div className="flex flex-wrap gap-2 sm:ml-4">
@@ -331,7 +331,7 @@ const AdminActualites = () => {
                         {categoryLabels[item.category as keyof typeof categoryLabels]}
                       </Badge>
                       <ContentStatusBadge status={(item as any).status || (item.published ? 'published' : 'draft')} />
-                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(item.created_at).toLocaleDateString('fr-FR', {
                           year: 'numeric',
@@ -341,7 +341,7 @@ const AdminActualites = () => {
                       </div>
                     </div>
                     
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    <p className="text-muted-foreground dark:text-gray-300 leading-relaxed">
                       {item.excerpt || (item.content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 200) + "...")}
                     </p>
                   </div>
@@ -354,11 +354,11 @@ const AdminActualites = () => {
         {filteredNews.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
-              <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                 Aucune actualité trouvée
               </h3>
-              <p className="text-gray-500 mb-6">
+              <p className="text-muted-foreground mb-6">
                 {searchQuery ? "Aucun résultat pour votre recherche." : "Créez votre première actualité pour commencer."}
               </p>
               {!searchQuery && (

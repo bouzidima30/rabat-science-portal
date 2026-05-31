@@ -174,8 +174,8 @@ const VersionHistoryDialog = ({
           ) : versions.length === 0 ? (
             <Card>
               <CardContent className="p-6 text-center">
-                <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500">Aucune version trouvée</p>
+                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Aucune version trouvée</p>
               </CardContent>
             </Card>
           ) : (
@@ -195,23 +195,23 @@ const VersionHistoryDialog = ({
                         {version.status === 'published' && 'Publié'}
                       </Badge>
                     </div>
-                    <div className="text-sm text-gray-500 flex items-center gap-1">
+                    <div className="text-sm text-muted-foreground flex items-center gap-1">
                       <Clock className="h-4 w-4" />
                       {formatDate(version.created_at)}
                     </div>
                   </div>
                   
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                  <h4 className="font-medium text-foreground dark:text-white mb-2">
                     {getVersionTitle(version)}
                   </h4>
                   
                   {version.change_summary && (
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 italic">
+                    <p className="text-sm text-muted-foreground dark:text-gray-300 mb-2 italic">
                       "{version.change_summary}"
                     </p>
                   )}
                   
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-muted-foreground">
                     {getVersionContent(version) && (
                       <p className="mb-2">
                         {getVersionContent(version).length > 200 
@@ -222,7 +222,7 @@ const VersionHistoryDialog = ({
                     )}
                   </div>
                   
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mt-2">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2">
                     <User className="h-3 w-3" />
                     Modifié par {version.created_by_profile?.full_name || version.created_by_profile?.email || 'Utilisateur inconnu'}
                   </div>

@@ -110,17 +110,17 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+            <CardTitle className="text-2xl font-bold text-foreground dark:text-white">
               Connexion
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-300">
+            <CardDescription className="text-muted-foreground dark:text-gray-300">
               Accédez à votre espace personnel FSR
             </CardDescription>
           </CardHeader>
@@ -130,7 +130,7 @@ const Login = () => {
               <div className="space-y-2">
                 <Label htmlFor="email">Adresse email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -147,7 +147,7 @@ const Login = () => {
               <div className="space-y-2">
                 <Label htmlFor="password">Mot de passe</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -162,7 +162,7 @@ const Login = () => {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-muted-foreground"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={loading}
                   >
@@ -173,7 +173,7 @@ const Login = () => {
               
               <Button
                 type="submit"
-                className="w-full bg-[#006be5] hover:bg-[#0056b3] text-white"
+                className="w-full bg-primary hover:bg-primary/90 text-white"
                 disabled={loading}
               >
                 {loading ? "Connexion..." : "Se connecter"}
@@ -181,9 +181,9 @@ const Login = () => {
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-muted-foreground dark:text-gray-300">
                 Pas encore de compte ?{" "}
-                <Link to="/register" className="text-[#006be5] hover:underline font-medium">
+                <Link to="/register" className="text-primary hover:underline font-medium">
                   Créer un compte
                 </Link>
               </p>

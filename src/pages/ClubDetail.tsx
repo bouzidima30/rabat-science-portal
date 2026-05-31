@@ -34,7 +34,7 @@ const ClubDetail = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
 
@@ -50,16 +50,16 @@ const ClubDetail = () => {
           <LoadingSpinner />
         ) : !club || error ? (
           <div className="text-center py-12">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-semibold text-foreground dark:text-white mb-2">
               Club introuvable
             </h1>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-muted-foreground dark:text-gray-300">
               Ce club n'existe pas ou a été supprimé.
             </p>
           </div>
         ) : (
           <article>
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden mb-8">
+            <div className="bg-muted dark:bg-gray-800 rounded-lg overflow-hidden mb-8">
               {club.image_url ? (
                 <img
                   src={club.image_url}
@@ -67,13 +67,13 @@ const ClubDetail = () => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                   <Users className="h-24 w-24" />
                 </div>
               )}
             </div>
 
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
+            <h1 className="text-4xl font-bold text-foreground dark:text-white mb-6">
               {club.titre}
             </h1>
 
@@ -81,14 +81,14 @@ const ClubDetail = () => {
               <div className="prose dark:prose-invert max-w-none">
                 {club.description.split("\n").map((p, i) =>
                   p.trim() ? (
-                    <p key={i} className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    <p key={i} className="text-muted-foreground dark:text-gray-300 leading-relaxed mb-4">
                       {p}
                     </p>
                   ) : null
                 )}
               </div>
             ) : (
-              <p className="text-gray-500 italic">
+              <p className="text-muted-foreground italic">
                 Aucune description disponible pour ce club.
               </p>
             )}

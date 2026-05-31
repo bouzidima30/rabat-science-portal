@@ -36,16 +36,16 @@ const ServiceScolarite = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Service de Scolarité
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Téléchargez tous les formulaires et documents administratifs nécessaires 
             pour vos démarches académiques.
           </p>
@@ -55,9 +55,9 @@ const ServiceScolarite = () => {
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card>
             <CardContent className="p-6 text-center">
-              <Clock className="h-8 w-8 text-[#006be5] mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Horaires</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <Clock className="h-8 w-8 text-primary mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground dark:text-white mb-2">Horaires</h3>
+              <p className="text-sm text-muted-foreground dark:text-gray-300">
                 Lun - Ven: 8h - 16h<br />
                 Sam: 8h - 12h
               </p>
@@ -65,18 +65,18 @@ const ServiceScolarite = () => {
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Phone className="h-8 w-8 text-[#006be5] mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Téléphone</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground dark:text-white mb-2">Téléphone</h3>
+              <p className="text-sm text-muted-foreground dark:text-gray-300">
                 +212 5 37 77 18 34
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Mail className="h-8 w-8 text-[#006be5] mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Email</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <Mail className="h-8 w-8 text-primary mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground dark:text-white mb-2">Email</h3>
+              <p className="text-sm text-muted-foreground dark:text-gray-300">
                 scolarite@fsr.ac.ma
               </p>
             </CardContent>
@@ -86,7 +86,7 @@ const ServiceScolarite = () => {
         {/* Documents par catégorie */}
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[#006be5]" />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-8">
@@ -95,7 +95,7 @@ const ServiceScolarite = () => {
               return (
                 <Card key={cat.key} className="shadow-lg">
                   <CardHeader>
-                    <CardTitle className="text-xl text-[#006be5] flex items-center">
+                    <CardTitle className="text-xl text-primary flex items-center">
                       <FileText className="h-6 w-6 mr-2" />
                       {cat.label}
                     </CardTitle>
@@ -110,15 +110,15 @@ const ServiceScolarite = () => {
                         {catFiles.map((doc) => (
                           <div
                             key={doc.id}
-                            className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                            className="flex items-center justify-between p-3 bg-muted/30 dark:bg-gray-700 rounded-lg"
                           >
                             <div className="flex items-center min-w-0">
-                              <FileText className="h-4 w-4 text-[#006be5] mr-2 flex-shrink-0" />
+                              <FileText className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                               <div className="min-w-0">
-                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                <p className="text-sm font-medium text-foreground dark:text-white truncate">
                                   {doc.original_name}
                                 </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                                   {doc.mime_type?.split("/").pop()?.toUpperCase()} • {formatSize(doc.file_size)}
                                 </p>
                               </div>

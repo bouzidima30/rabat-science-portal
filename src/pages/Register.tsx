@@ -95,7 +95,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
@@ -109,10 +109,10 @@ const Register = () => {
                 className="h-16 w-auto"
               />
             </div>
-            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+            <CardTitle className="text-2xl font-bold text-foreground dark:text-white">
               Inscription
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-300">
+            <CardDescription className="text-muted-foreground dark:text-gray-300">
               Créez votre compte FSR
             </CardDescription>
           </CardHeader>
@@ -122,7 +122,7 @@ const Register = () => {
               <div className="space-y-2">
                 <Label htmlFor="fullName">Nom complet</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="fullName"
                     type="text"
@@ -138,7 +138,7 @@ const Register = () => {
               <div className="space-y-2">
                 <Label htmlFor="email">Adresse email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -154,7 +154,7 @@ const Register = () => {
               <div className="space-y-2">
                 <Label htmlFor="password">Mot de passe</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -168,7 +168,7 @@ const Register = () => {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-muted-foreground"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -179,7 +179,7 @@ const Register = () => {
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
@@ -193,7 +193,7 @@ const Register = () => {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-muted-foreground"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -203,7 +203,7 @@ const Register = () => {
               
               <Button
                 type="submit"
-                className="w-full bg-[#006be5] hover:bg-[#0056b3] text-white"
+                className="w-full bg-primary hover:bg-primary/90 text-white"
                 disabled={loading}
               >
                 {loading ? "Création..." : "Créer un compte"}
@@ -211,9 +211,9 @@ const Register = () => {
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-muted-foreground dark:text-gray-300">
                 Déjà un compte ?{" "}
-                <Link to="/login" className="text-[#006be5] hover:underline font-medium">
+                <Link to="/login" className="text-primary hover:underline font-medium">
                   Se connecter
                 </Link>
               </p>

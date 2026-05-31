@@ -118,11 +118,11 @@ const SecurityTest = () => {
       case 'failed': return <AlertTriangle className="h-5 w-5 text-red-500" />;
       case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
       case 'info': return <AlertTriangle className="h-5 w-5 text-blue-500" />;
-      default: return <Clock className="h-5 w-5 text-gray-500" />;
+      default: return <Clock className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
-  const getStatusColor = (status: string) => STATUS_COLORS[status as keyof typeof STATUS_COLORS] || 'text-gray-600';
+  const getStatusColor = (status: string) => STATUS_COLORS[status as keyof typeof STATUS_COLORS] || 'text-muted-foreground';
 
   const getSeverityColor = (severity: string) => SEVERITY_COLORS[severity as keyof typeof SEVERITY_COLORS] || 'secondary';
 
@@ -142,7 +142,7 @@ const SecurityTest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900 p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center">
@@ -151,10 +151,10 @@ const SecurityTest = () => {
               <Shield className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Centre de Sécurité et Performance
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg text-muted-foreground dark:text-gray-300">
             Tests complets de sécurité, analyse de performance et monitoring
           </p>
         </div>
@@ -177,7 +177,7 @@ const SecurityTest = () => {
                   {securityScore}/100
                 </div>
               </div>
-              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              <div className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
                 {securityScore >= SECURITY_SCORE_THRESHOLDS.excellent ? "Excellent" : 
                  securityScore >= SECURITY_SCORE_THRESHOLDS.good ? "Bon" :
                  securityScore >= SECURITY_SCORE_THRESHOLDS.acceptable ? "Acceptable" : "À améliorer"}
@@ -187,25 +187,25 @@ const SecurityTest = () => {
                   <div className="text-lg font-semibold text-green-600">
                     {testResults.filter(t => t.status === 'passed').length}
                   </div>
-                  <div className="text-gray-600">Tests réussis</div>
+                  <div className="text-muted-foreground">Tests réussis</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-yellow-600">
                     {testResults.filter(t => t.status === 'warning').length}
                   </div>
-                  <div className="text-gray-600">Avertissements</div>
+                  <div className="text-muted-foreground">Avertissements</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-red-600">
                     {testResults.filter(t => t.status === 'failed').length}
                   </div>
-                  <div className="text-gray-600">Échecs</div>
+                  <div className="text-muted-foreground">Échecs</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-blue-600">
                     {testResults.filter(t => t.status === 'info').length}
                   </div>
-                  <div className="text-gray-600">Informations</div>
+                  <div className="text-muted-foreground">Informations</div>
                 </div>
               </div>
             </CardContent>
@@ -241,7 +241,7 @@ const SecurityTest = () => {
                       }`}>
                         {metric.value}
                       </div>
-                      <div className="text-sm text-gray-600">{metric.description}</div>
+                      <div className="text-sm text-muted-foreground">{metric.description}</div>
                     </div>
                   ))}
                 </div>
@@ -251,20 +251,20 @@ const SecurityTest = () => {
                       <div className="text-2xl font-bold text-blue-600">
                         {performanceMetrics.renderTime.toFixed(2)}ms
                       </div>
-                      <div className="text-sm text-gray-600">Temps de rendu actuel</div>
+                      <div className="text-sm text-muted-foreground">Temps de rendu actuel</div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-green-600">
                         {performanceMetrics.loadTime.toFixed(2)}ms
                       </div>
-                      <div className="text-sm text-gray-600">Chargement actuel</div>
+                      <div className="text-sm text-muted-foreground">Chargement actuel</div>
                     </div>
                     {performanceMetrics.memoryUsage && (
                       <div className="text-center">
                         <div className="text-2xl font-bold text-purple-600">
                           {(performanceMetrics.memoryUsage / 1024 / 1024).toFixed(2)}MB
                         </div>
-                        <div className="text-sm text-gray-600">Mémoire actuelle</div>
+                        <div className="text-sm text-muted-foreground">Mémoire actuelle</div>
                       </div>
                     )}
                     {performanceMetrics.connectionType && (
@@ -272,7 +272,7 @@ const SecurityTest = () => {
                         <div className="text-2xl font-bold text-orange-600">
                           {performanceMetrics.connectionType}
                         </div>
-                        <div className="text-sm text-gray-600">Connexion</div>
+                        <div className="text-sm text-muted-foreground">Connexion</div>
                       </div>
                     )}
                   </div>
@@ -317,7 +317,7 @@ const SecurityTest = () => {
                 </CardHeader>
                 <CardContent>
                   <Progress value={testProgress} className="mb-2" />
-                  <div className="text-sm text-gray-600">{testProgress.toFixed(0)}% terminé</div>
+                  <div className="text-sm text-muted-foreground">{testProgress.toFixed(0)}% terminé</div>
                 </CardContent>
               </Card>
             )}
@@ -337,7 +337,7 @@ const SecurityTest = () => {
                             {getStatusIcon(result.status)}
                             <div>
                               <h4 className="font-semibold">{result.test}</h4>
-                              <p className="text-sm text-gray-600">{result.description}</p>
+                              <p className="text-sm text-muted-foreground">{result.description}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -458,9 +458,9 @@ const SecurityTest = () => {
                   {newsData && newsData.length > 0 ? (
                     <div className="space-y-2">
                       {newsData.slice(0, 3).map((news: any) => (
-                        <div key={news.id} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div key={news.id} className="p-3 bg-muted/30 dark:bg-gray-800 rounded-lg">
                           <h4 className="font-medium text-sm">{news.title}</h4>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                          <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                             {new Date(news.created_at).toLocaleDateString()}
                           </p>
                         </div>
@@ -487,9 +487,9 @@ const SecurityTest = () => {
                   {eventsData && eventsData.length > 0 ? (
                     <div className="space-y-2">
                       {eventsData.slice(0, 3).map((event: any) => (
-                        <div key={event.id} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div key={event.id} className="p-3 bg-muted/30 dark:bg-gray-800 rounded-lg">
                           <h4 className="font-medium text-sm">{event.titre}</h4>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                          <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                             {new Date(event.date_debut).toLocaleDateString()}
                           </p>
                         </div>
@@ -518,19 +518,19 @@ const SecurityTest = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <div className="text-2xl font-bold text-green-600">0</div>
-                    <div className="text-sm text-gray-600">Tentatives d'intrusion</div>
+                    <div className="text-sm text-muted-foreground">Tentatives d'intrusion</div>
                   </div>
                   <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                     <div className="text-2xl font-bold text-blue-600">15</div>
-                    <div className="text-sm text-gray-600">Connexions actives</div>
+                    <div className="text-sm text-muted-foreground">Connexions actives</div>
                   </div>
                   <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
                     <div className="text-2xl font-bold text-yellow-600">2</div>
-                    <div className="text-sm text-gray-600">Alertes mineures</div>
+                    <div className="text-sm text-muted-foreground">Alertes mineures</div>
                   </div>
                   <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <div className="text-2xl font-bold text-purple-600">99.9%</div>
-                    <div className="text-sm text-gray-600">Disponibilité</div>
+                    <div className="text-sm text-muted-foreground">Disponibilité</div>
                   </div>
                 </div>
               </CardContent>
@@ -548,7 +548,7 @@ const SecurityTest = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Outils de chiffrement et déchiffrement des données sensibles.
                   </p>
                   <Button variant="outline" className="w-full">
@@ -565,7 +565,7 @@ const SecurityTest = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Génération et gestion sécurisée des clés d'API et certificats.
                   </p>
                   <Button variant="outline" className="w-full">
@@ -582,7 +582,7 @@ const SecurityTest = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Suivi et audit des accès utilisateurs et des permissions.
                   </p>
                   <Button variant="outline" className="w-full">
@@ -599,7 +599,7 @@ const SecurityTest = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Surveillance en temps réel des performances serveur.
                   </p>
                   <Button variant="outline" className="w-full">
@@ -616,7 +616,7 @@ const SecurityTest = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Diagnostic et test de la connectivité réseau.
                   </p>
                   <Button variant="outline" className="w-full">
@@ -633,7 +633,7 @@ const SecurityTest = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Analyse automatisée des vulnérabilités de sécurité.
                   </p>
                   <Button variant="outline" className="w-full">

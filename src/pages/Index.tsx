@@ -281,7 +281,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-6">
             <Link to="/formations" className="group">
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-8 text-white shadow-lg shadow-emerald-500/20 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-500">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8 group-hover:scale-150 transition-transform duration-700" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-card/10 rounded-full -translate-y-8 translate-x-8 group-hover:scale-150 transition-transform duration-700" />
                 <div className="relative">
                   <BookOpen className="h-10 w-10 mb-4 opacity-80" />
                   <h3 className="text-2xl font-bold mb-2">Découvrir nos Formations</h3>
@@ -293,7 +293,7 @@ const Index = () => {
 
             <Link to="/recherche/ecole-doctorale" className="group">
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 p-8 text-white shadow-lg shadow-violet-500/20 hover:shadow-xl hover:shadow-violet-500/30 transition-all duration-500">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8 group-hover:scale-150 transition-transform duration-700" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-card/10 rounded-full -translate-y-8 translate-x-8 group-hover:scale-150 transition-transform duration-700" />
                 <div className="relative">
                   <Microscope className="h-10 w-10 mb-4 opacity-80" />
                   <h3 className="text-2xl font-bold mb-2">Explorer la Recherche</h3>

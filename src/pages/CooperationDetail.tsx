@@ -31,11 +31,11 @@ const CooperationDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>
@@ -44,12 +44,12 @@ const CooperationDetail = () => {
 
   if (!cooperation) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="max-w-4xl mx-auto px-4 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-2xl font-bold text-foreground dark:text-white mb-4">
               Coopération non trouvée
             </h1>
             <Link to="/cooperations">
@@ -66,7 +66,7 @@ const CooperationDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
@@ -82,7 +82,7 @@ const CooperationDetail = () => {
 
         <Card className="shadow-lg">
           {cooperation.image_url && (
-            <div className="bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+            <div className="bg-muted dark:bg-gray-700 rounded-t-lg overflow-hidden">
               <img 
                 src={cooperation.image_url} 
                 alt={cooperation.titre}
@@ -92,15 +92,15 @@ const CooperationDetail = () => {
           )}
           
           <CardHeader>
-            <CardTitle className="text-3xl text-[#006be5] mb-4">
+            <CardTitle className="text-3xl text-primary mb-4">
               {cooperation.titre}
             </CardTitle>
             <div className="flex flex-wrap gap-4 text-sm">
-              <span className="bg-[#006be5] text-white px-3 py-1 rounded-full">
+              <span className="bg-primary text-white px-3 py-1 rounded-full">
                 {cooperation.type_cooperation}
               </span>
               {cooperation.domaine_recherche && (
-                <span className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full">
+                <span className="bg-muted dark:bg-gray-700 text-muted-foreground dark:text-gray-300 px-3 py-1 rounded-full">
                   {cooperation.domaine_recherche}
                 </span>
               )}
@@ -109,7 +109,7 @@ const CooperationDetail = () => {
           
           <CardContent className="space-y-6">
             <div className="prose dark:prose-invert max-w-none">
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-lg text-muted-foreground dark:text-gray-300 leading-relaxed">
                 {cooperation.description}
               </p>
             </div>
@@ -117,10 +117,10 @@ const CooperationDetail = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-[#006be5]" />
+                  <Calendar className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Période</p>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="font-medium text-foreground dark:text-white">Période</p>
+                    <p className="text-muted-foreground dark:text-muted-foreground">
                       {cooperation.annee_debut}
                       {cooperation.annee_fin && ` - ${cooperation.annee_fin}`}
                     </p>
@@ -129,10 +129,10 @@ const CooperationDetail = () => {
 
                 {cooperation.pays && cooperation.pays.length > 0 && (
                   <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-[#006be5] mt-1" />
+                    <MapPin className="h-5 w-5 text-primary mt-1" />
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Pays</p>
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <p className="font-medium text-foreground dark:text-white">Pays</p>
+                      <p className="text-muted-foreground dark:text-muted-foreground">
                         {cooperation.pays.join(', ')}
                       </p>
                     </div>
@@ -141,14 +141,14 @@ const CooperationDetail = () => {
 
                 {cooperation.coordinateur && (
                   <div className="flex items-start gap-3">
-                    <Users className="h-5 w-5 text-[#006be5] mt-1" />
+                    <Users className="h-5 w-5 text-primary mt-1" />
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Coordinateur</p>
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <p className="font-medium text-foreground dark:text-white">Coordinateur</p>
+                      <p className="text-muted-foreground dark:text-muted-foreground">
                         {cooperation.coordinateur}
                       </p>
                       {cooperation.email_coordinateur && canViewCoordinatorEmail() && (
-                        <p className="text-gray-600 dark:text-gray-400">
+                        <p className="text-muted-foreground dark:text-muted-foreground">
                           <Mail className="h-4 w-4 inline mr-1" />
                           {cooperation.email_coordinateur}
                         </p>
@@ -166,8 +166,8 @@ const CooperationDetail = () => {
               <div className="space-y-4">
                 {cooperation.appel_offre && (
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white mb-2">Appel d'offre</p>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="font-medium text-foreground dark:text-white mb-2">Appel d'offre</p>
+                    <p className="text-muted-foreground dark:text-muted-foreground">
                       {cooperation.appel_offre}
                     </p>
                   </div>
@@ -175,8 +175,8 @@ const CooperationDetail = () => {
 
                 {cooperation.partenaires && cooperation.partenaires.length > 0 && (
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white mb-2">Partenaires</p>
-                    <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                    <p className="font-medium text-foreground dark:text-white mb-2">Partenaires</p>
+                    <ul className="list-disc list-inside space-y-1 text-muted-foreground dark:text-muted-foreground">
                       {cooperation.partenaires.map((partenaire, index) => (
                         <li key={index}>{partenaire}</li>
                       ))}

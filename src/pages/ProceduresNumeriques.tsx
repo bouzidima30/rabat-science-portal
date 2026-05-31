@@ -194,16 +194,16 @@ const ProceduresNumeriques = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Procédures Numériques
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Les étudiants de la Faculté des Sciences de Rabat trouveront ici les
             différentes procédures pour accéder aux services numériques de la FSR
             et de l'Université Mohammed V.
@@ -214,7 +214,7 @@ const ProceduresNumeriques = () => {
         <Card className="mb-12 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
           <CardContent className="p-6">
             <div className="flex items-start">
-              <HelpCircle className="h-8 w-8 text-[#006be5] mr-4 flex-shrink-0 mt-1" />
+              <HelpCircle className="h-8 w-8 text-primary mr-4 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
                   HelpDesk
@@ -224,7 +224,7 @@ const ProceduresNumeriques = () => {
                   l'adresse :{" "}
                   <a
                     href="mailto:helpdesk@fsr.ac.ma"
-                    className="font-semibold underline hover:text-[#006be5]"
+                    className="font-semibold underline hover:text-primary"
                   >
                     helpdesk@fsr.ac.ma
                   </a>
@@ -242,7 +242,7 @@ const ProceduresNumeriques = () => {
 
         {/* Procédures principales */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
             Services Numériques
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -252,16 +252,16 @@ const ProceduresNumeriques = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-center mb-2">
-                      <div className="w-12 h-12 bg-[#006be5] rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                         <IconComponent className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg text-[#006be5]">
+                        <CardTitle className="text-lg text-primary">
                           {procedure.titre}
                         </CardTitle>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">
                       {procedure.description}
                     </p>
                   </CardHeader>
@@ -278,9 +278,9 @@ const ProceduresNumeriques = () => {
                             {lien.internal ? (
                               <Link
                                 to={lien.url}
-                                className="flex items-start text-sm text-gray-700 dark:text-gray-300 hover:text-[#006be5] dark:hover:text-[#006be5] group"
+                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary group"
                               >
-                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[#006be5] flex-shrink-0" />
+                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-primary flex-shrink-0" />
                                 <span className="group-hover:underline">
                                   {lien.label}
                                 </span>
@@ -290,15 +290,15 @@ const ProceduresNumeriques = () => {
                                 href={lien.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-start text-sm text-gray-700 dark:text-gray-300 hover:text-[#006be5] dark:hover:text-[#006be5] group"
+                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary group"
                               >
-                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[#006be5] flex-shrink-0" />
+                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-primary flex-shrink-0" />
                                 <span>
                                   <span className="group-hover:underline">
                                     {lien.label}
                                   </span>
                                   {lien.info && (
-                                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                                    <span className="text-xs text-muted-foreground dark:text-muted-foreground ml-1">
                                       ({lien.info})
                                     </span>
                                   )}
@@ -318,7 +318,7 @@ const ProceduresNumeriques = () => {
         </div>
 
         {/* Source officielle */}
-        <Card className="shadow-lg bg-gradient-to-r from-[#006be5] to-blue-600 text-white">
+        <Card className="shadow-lg bg-gradient-to-r from-primary to-blue-600 text-white">
           <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center">
               <Monitor className="h-8 w-8 mr-4 flex-shrink-0" />
@@ -335,7 +335,7 @@ const ProceduresNumeriques = () => {
             <Button
               asChild
               variant="secondary"
-              className="bg-white text-[#006be5] hover:bg-blue-50"
+              className="bg-card text-primary hover:bg-blue-50"
             >
               <a
                 href="https://www.fsr.ac.ma/content/proc%C3%A9dures-num%C3%A9riques"

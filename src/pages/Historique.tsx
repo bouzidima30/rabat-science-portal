@@ -89,17 +89,17 @@ const Historique = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Historique de la Faculté
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Depuis sa création, l'histoire de la Faculté des Sciences de Rabat a connu plusieurs
             moments forts et marquants aussi bien du point de vue politique, scientifique que
             pédagogique.
@@ -111,13 +111,13 @@ const Historique = () => {
           {chiffres.map((chiffre, index) => (
             <Card key={index} className="text-center">
               <CardContent className="pt-6">
-                <div className="text-3xl font-bold text-[#006be5] mb-2">
+                <div className="text-3xl font-bold text-primary mb-2">
                   {chiffre.valeur}
                 </div>
-                <div className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                <div className="text-lg font-semibold text-foreground dark:text-white mb-1">
                   {chiffre.label}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-300">
+                <div className="text-sm text-muted-foreground dark:text-gray-300">
                   {chiffre.description}
                 </div>
               </CardContent>
@@ -127,12 +127,12 @@ const Historique = () => {
 
         {/* Timeline */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
             Chronologie Historique
           </h2>
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#006be5] hidden md:block"></div>
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary hidden md:block"></div>
             
             <div className="space-y-8">
               {periodes.map((periode, index) => {
@@ -140,26 +140,26 @@ const Historique = () => {
                 return (
                   <div key={index} className="relative flex items-start">
                     {/* Timeline dot */}
-                    <div className="hidden md:block absolute left-6 w-4 h-4 bg-[#006be5] rounded-full -ml-2 mt-6"></div>
+                    <div className="hidden md:block absolute left-6 w-4 h-4 bg-primary rounded-full -ml-2 mt-6"></div>
                     
                     <Card className="md:ml-16 w-full hover:shadow-lg transition-shadow">
                       <CardHeader>
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center">
-                            <div className="w-10 h-10 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center mr-3">
-                              <IconComponent className="h-5 w-5 text-[#006be5]" />
+                            <div className="w-10 h-10 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center mr-3">
+                              <IconComponent className="h-5 w-5 text-primary" />
                             </div>
                             <CardTitle className="text-xl">
                               {periode.titre}
                             </CardTitle>
                           </div>
-                          <Badge variant="outline" className="bg-[#006be5] text-white">
+                          <Badge variant="outline" className="bg-primary text-white">
                             {periode.annee}
                           </Badge>
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-gray-700 dark:text-gray-300">
+                        <p className="text-muted-foreground dark:text-gray-300">
                           {periode.description}
                         </p>
                       </CardContent>
@@ -173,7 +173,7 @@ const Historique = () => {
 
         {/* Doyens de la faculté */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
             Doyens de la Faculté des Sciences
           </h2>
           <Card className="shadow-lg">
@@ -187,7 +187,7 @@ const Historique = () => {
                     <Badge variant="outline" className="mr-3 mt-1 shrink-0">
                       {doyen.periode}
                     </Badge>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">
+                    <span className="text-muted-foreground dark:text-gray-300 font-medium">
                       {doyen.nom}
                     </span>
                   </div>
@@ -200,19 +200,19 @@ const Historique = () => {
         {/* Mission historique */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5]">
+            <CardTitle className="text-2xl text-center text-primary">
               Mission Historique
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center max-w-4xl mx-auto">
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+              <p className="text-lg text-muted-foreground dark:text-gray-300 leading-relaxed mb-6">
                 Depuis sa création en 1953, la Faculté des Sciences de Rabat s'est imposée comme
                 le premier établissement marocain d'enseignement supérieur et de recherche
                 scientifique. Elle a formé des générations de scientifiques, chercheurs et cadres
                 qui contribuent aujourd'hui au développement du pays dans tous les secteurs.
               </p>
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-lg text-muted-foreground dark:text-gray-300 leading-relaxed">
                 Notre faculté continue de porter les valeurs d'excellence, d'innovation et 
                 d'ouverture qui ont marqué son histoire, tout en s'adaptant aux défis 
                 contemporains de la science et de la technologie.

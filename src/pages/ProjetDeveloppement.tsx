@@ -47,17 +47,17 @@ const ProjetDeveloppement = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Projet de Développement
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             La Faculté des Sciences de Rabat s'engage dans une démarche de développement continu 
             pour maintenir son excellence académique et répondre aux défis du 21e siècle.
           </p>
@@ -66,12 +66,12 @@ const ProjetDeveloppement = () => {
         {/* Vision Section */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5]">
+            <CardTitle className="text-2xl text-center text-primary">
               Notre Vision
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-gray-700 dark:text-gray-300 text-center leading-relaxed">
+            <p className="text-lg text-muted-foreground dark:text-gray-300 text-center leading-relaxed">
               Être une faculté de référence dans l'enseignement supérieur scientifique et la recherche, 
               contribuant activement au développement socio-économique du Maroc et de la région, 
               tout en maintenant des standards internationaux d'excellence.
@@ -81,7 +81,7 @@ const ProjetDeveloppement = () => {
 
         {/* Objectifs */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
             Objectifs Stratégiques
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -89,10 +89,10 @@ const ProjetDeveloppement = () => {
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
                   <div className="flex items-start">
-                    <div className="w-8 h-8 bg-[#006be5] text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-1">
+                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-1">
                       {index + 1}
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300">
+                    <p className="text-muted-foreground dark:text-gray-300">
                       {objectif}
                     </p>
                   </div>
@@ -104,7 +104,7 @@ const ProjetDeveloppement = () => {
 
         {/* Projets en cours */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
             Projets de Développement
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -114,8 +114,8 @@ const ProjetDeveloppement = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 bg-[#006be5] bg-opacity-10 rounded-lg flex items-center justify-center">
-                        <IconComponent className="h-6 w-6 text-[#006be5]" />
+                      <div className="w-12 h-12 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center">
+                        <IconComponent className="h-6 w-6 text-primary" />
                       </div>
                       <Badge className={projet.color}>
                         {projet.status}
@@ -126,7 +126,7 @@ const ProjetDeveloppement = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <p className="text-muted-foreground dark:text-gray-300">
                       {projet.description}
                     </p>
                   </CardContent>
@@ -139,17 +139,17 @@ const ProjetDeveloppement = () => {
         {/* Axes de développement */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5]">
+            <CardTitle className="text-2xl text-center text-primary">
               Axes de Développement Prioritaires
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                <h3 className="text-xl font-semibold mb-4 text-foreground dark:text-white">
                   Formation et Pédagogie
                 </h3>
-                <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                <ul className="space-y-2 text-muted-foreground dark:text-gray-300">
                   <li>• Digitalisation des contenus pédagogiques</li>
                   <li>• Formation continue des enseignants</li>
                   <li>• Développement de nouvelles filières</li>
@@ -157,10 +157,10 @@ const ProjetDeveloppement = () => {
                 </ul>
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                <h3 className="text-xl font-semibold mb-4 text-foreground dark:text-white">
                   Recherche et Innovation
                 </h3>
-                <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                <ul className="space-y-2 text-muted-foreground dark:text-gray-300">
                   <li>• Création de nouveaux laboratoires de recherche</li>
                   <li>• Développement de projets multidisciplinaires</li>
                   <li>• Valorisation des résultats de recherche</li>

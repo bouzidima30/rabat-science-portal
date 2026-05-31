@@ -146,17 +146,17 @@ const AdminCeDoc = () => {
   const getExtension = (name: string) => name.split(".").pop()?.toUpperCase() || "FICHIER";
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
       <div className="mb-8">
         <div className="flex items-center space-x-4">
           <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-xl">
             <FileText className="h-8 w-8 text-purple-600 dark:text-purple-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
               Gestion CeDoc
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground dark:text-gray-300 mt-1">
               Gérez les documents de soutenance et d'inscription/réinscription
             </p>
           </div>

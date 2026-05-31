@@ -152,10 +152,10 @@ const AdminEvenements = () => {
               <Calendar className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
                 Événements
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground dark:text-gray-300 mt-1">
                 Gérez et organisez les événements de la faculté
               </p>
             </div>
@@ -226,19 +226,19 @@ const AdminEvenements = () => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Rechercher un événement..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+                className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
               />
             </div>
             <div>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full h-12 px-3 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 rounded-md transition-colors"
+                className="w-full h-12 px-3 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 rounded-md transition-colors"
               >
                 <option value="all">Tous les statuts</option>
                 <option value="draft">Brouillons</option>
@@ -255,7 +255,7 @@ const AdminEvenements = () => {
       {/* Events List */}
       <div className="space-y-6">
         {paginatedEvents.map((event) => (
-          <Card key={event.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
+          <Card key={event.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex space-x-4 flex-1">
@@ -268,7 +268,7 @@ const AdminEvenements = () => {
                   )}
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      <h3 className="text-xl font-bold text-foreground dark:text-white">
                         {event.titre}
                       </h3>
                       <div className="flex flex-wrap gap-2 sm:ml-4">
@@ -319,7 +319,7 @@ const AdminEvenements = () => {
                     
                     <div className="flex items-center space-x-4 mb-3">
                       <ContentStatusBadge status={event.status || 'draft'} />
-                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(event.date_debut).toLocaleDateString('fr-FR')}
                         {event.date_fin && event.date_fin !== event.date_debut && (
@@ -327,14 +327,14 @@ const AdminEvenements = () => {
                         )}
                       </div>
                       {event.heure_debut && (
-                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                           <Clock className="h-4 w-4 mr-1" />
                           {event.heure_debut}
                           {event.heure_fin && ` - ${event.heure_fin}`}
                         </div>
                       )}
                       {event.lieu && (
-                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                           <MapPin className="h-4 w-4 mr-1" />
                           {event.lieu}
                         </div>
@@ -342,7 +342,7 @@ const AdminEvenements = () => {
                     </div>
                     
                     {event.description && (
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                      <p className="text-muted-foreground dark:text-gray-300 leading-relaxed">
                         {event.description.length > 200 
                           ? event.description.substring(0, 200) + "..." 
                           : event.description
@@ -359,11 +359,11 @@ const AdminEvenements = () => {
         {paginatedEvents.length === 0 && filteredEvents.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
-              <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                 Aucun événement trouvé
               </h3>
-              <p className="text-gray-500 mb-6">
+              <p className="text-muted-foreground mb-6">
                 {searchQuery ? "Aucun résultat pour votre recherche." : "Créez votre premier événement pour commencer."}
               </p>
               {!searchQuery && (

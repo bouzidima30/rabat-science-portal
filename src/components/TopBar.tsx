@@ -45,7 +45,7 @@ const TopBar = () => {
             variant="ghost" 
             size="icon"
             onClick={() => setIsSearchOpen(true)} 
-            className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10 h-8 w-8"
+            className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-card/10 h-8 w-8"
             aria-label="Rechercher"
           >
             <Search className="h-4 w-4" />
@@ -55,7 +55,7 @@ const TopBar = () => {
             variant="ghost" 
             size="icon"
             onClick={toggleTheme} 
-            className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10 h-8 w-8"
+            className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-card/10 h-8 w-8"
             aria-label={isDarkMode ? "Mode clair" : "Mode sombre"}
           >
             {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -64,7 +64,7 @@ const TopBar = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10 gap-2">
+                <Button variant="ghost" size="sm" className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-card/10 gap-2">
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline text-sm">{user.email}</span>
                 </Button>
@@ -86,12 +86,12 @@ const TopBar = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Link to="/login">
-                <Button variant="ghost" size="sm" className="text-primary-foreground/90 hover:text-primary-foreground hover:bg-white/10 text-sm font-medium">
+                <Button variant="ghost" size="sm" className="text-primary-foreground/90 hover:text-primary-foreground hover:bg-card/10 text-sm font-medium">
                   Connexion
                 </Button>
               </Link>
               <Link to="/register">
-                <Button size="sm" className="bg-white text-primary hover:bg-white/90 text-sm font-semibold rounded-full px-5 shadow-sm">
+                <Button size="sm" className="bg-card text-primary hover:bg-card/90 text-sm font-semibold rounded-full px-5 shadow-sm">
                   Inscription
                 </Button>
               </Link>

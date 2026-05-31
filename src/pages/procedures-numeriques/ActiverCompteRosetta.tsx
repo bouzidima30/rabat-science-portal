@@ -47,7 +47,7 @@ const ActiverCompteRosetta = () => {
           href="http://www.fsr.ac.ma/DOC/Diffusion/si/Coonnexion_a_Rosetta_stone.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#006be5] text-white hover:bg-[#006be5]/90 no-underline"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 no-underline"
         >
           <FileText className="h-4 w-4" />
           Document d'aide (PDF)

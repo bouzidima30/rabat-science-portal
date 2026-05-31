@@ -53,11 +53,11 @@ const ActualiteDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>
@@ -66,20 +66,20 @@ const ActualiteDetail = () => {
 
   if (!actualite) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <Navbar />
         <div className="max-w-4xl mx-auto px-4 py-8">
           <Card>
             <CardContent className="pt-6 text-center">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              <h1 className="text-2xl font-bold text-foreground dark:text-white mb-4">
                 Actualité non trouvée
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-muted-foreground dark:text-gray-300 mb-6">
                 L'actualité que vous recherchez n'existe pas ou a été supprimée.
               </p>
               <Link to="/actualites">
-                <Button className="bg-[#006be5] hover:bg-[#0056b3]">
+                <Button className="bg-primary hover:bg-primary/90">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Retour aux actualités
                 </Button>
@@ -93,7 +93,7 @@ const ActualiteDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
@@ -126,7 +126,7 @@ const ActualiteDetail = () => {
               <Badge variant="secondary">
                 {categoryLabels[actualite.category as keyof typeof categoryLabels]}
               </Badge>
-              <div className="flex items-center text-sm text-gray-500">
+              <div className="flex items-center text-sm text-muted-foreground">
                 <Calendar className="h-4 w-4 mr-1" />
                 {new Date(actualite.created_at).toLocaleDateString('fr-FR', {
                   year: 'numeric',
@@ -141,7 +141,7 @@ const ActualiteDetail = () => {
             <CardTitle className="text-3xl mb-4">{actualite.title}</CardTitle>
             
             {actualite.excerpt && (
-              <div className="text-lg text-gray-600 dark:text-gray-300 italic mb-6">
+              <div className="text-lg text-muted-foreground dark:text-gray-300 italic mb-6">
                 {actualite.excerpt}
               </div>
             )}
@@ -150,12 +150,12 @@ const ActualiteDetail = () => {
           <CardContent>
             <SafeHTMLRenderer 
               content={actualite.content}
-              className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 leading-relaxed"
+              className="prose prose-lg max-w-none text-muted-foreground dark:text-gray-300 leading-relaxed"
             />
             
             {actualite.document_url && (
-              <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+              <div className="mt-8 pt-6 border-t border-border dark:border-gray-700">
+                <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">
                   Document associé
                 </h3>
                 <Button
