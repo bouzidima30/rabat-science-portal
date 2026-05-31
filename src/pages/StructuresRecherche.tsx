@@ -379,12 +379,12 @@ const StructureCard = ({
   <AccordionItem value={acronyme} className="border rounded-lg px-4 bg-card dark:bg-gray-800">
     <AccordionTrigger className="hover:no-underline py-4">
       <div className="flex items-start gap-3 text-left flex-1">
-        <div className="flex-shrink-0 w-10 h-10 bg-[hsl(var(--primary))]/10 rounded-lg flex items-center justify-center">
-          <Icon className="h-5 w-5 text-[hsl(var(--primary))]" />
+        <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+          <Icon className="h-5 w-5 text-primary" />
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <Badge variant="default" className="bg-[hsl(var(--primary))]">{acronyme}</Badge>
+            <Badge variant="default" className="bg-primary">{acronyme}</Badge>
             {centre && (
               <Badge variant="outline" className="text-xs">
                 Adhésion : {centre}
@@ -399,7 +399,7 @@ const StructureCard = ({
       <div className="space-y-3 pl-13 ml-13">
         <div className="grid md:grid-cols-2 gap-3 text-sm">
           <div className="flex items-start gap-2">
-            <User className="h-4 w-4 text-[hsl(var(--primary))] mt-0.5 flex-shrink-0" />
+            <User className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
             <div>
               <span className="font-semibold text-foreground dark:text-white">Responsable : </span>
               <span className="text-muted-foreground dark:text-gray-300">{responsable}</span>
@@ -407,10 +407,10 @@ const StructureCard = ({
           </div>
           {email && (
             <div className="flex items-start gap-2">
-              <Mail className="h-4 w-4 text-[hsl(var(--primary))] mt-0.5 flex-shrink-0" />
+              <Mail className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
               <a
                 href={`mailto:${email}`}
-                className="text-[hsl(var(--primary))] hover:underline break-all"
+                className="text-primary hover:underline break-all"
               >
                 {email}
               </a>
@@ -452,22 +452,22 @@ const StructuresRecherche = () => {
         <div className="grid grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
           <Card className="text-center bg-card dark:bg-gray-800">
             <CardContent className="p-4">
-              <Building className="h-6 w-6 text-[hsl(var(--primary))] mx-auto mb-2" />
-              <div className="text-3xl font-bold text-[hsl(var(--primary))]">{centres.length}</div>
+              <Building className="h-6 w-6 text-primary mx-auto mb-2" />
+              <div className="text-3xl font-bold text-primary">{centres.length}</div>
               <div className="text-xs text-muted-foreground dark:text-muted-foreground">Centres</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-card dark:bg-gray-800">
             <CardContent className="p-4">
-              <FlaskConical className="h-6 w-6 text-[hsl(var(--primary))] mx-auto mb-2" />
-              <div className="text-3xl font-bold text-[hsl(var(--primary))]">{laboratoires.length}</div>
+              <FlaskConical className="h-6 w-6 text-primary mx-auto mb-2" />
+              <div className="text-3xl font-bold text-primary">{laboratoires.length}</div>
               <div className="text-xs text-muted-foreground dark:text-muted-foreground">Laboratoires</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-card dark:bg-gray-800">
             <CardContent className="p-4">
-              <Users className="h-6 w-6 text-[hsl(var(--primary))] mx-auto mb-2" />
-              <div className="text-3xl font-bold text-[hsl(var(--primary))]">{equipes.length}</div>
+              <Users className="h-6 w-6 text-primary mx-auto mb-2" />
+              <div className="text-3xl font-bold text-primary">{equipes.length}</div>
               <div className="text-xs text-muted-foreground dark:text-muted-foreground">Équipes</div>
             </CardContent>
           </Card>
@@ -492,7 +492,7 @@ const StructuresRecherche = () => {
           <TabsContent value="centres">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center gap-2">
+                <CardTitle className="text-2xl text-primary flex items-center gap-2">
                   <Building className="h-6 w-6" />
                   Centres de Recherche
                 </CardTitle>
@@ -510,7 +510,7 @@ const StructuresRecherche = () => {
           <TabsContent value="laboratoires">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center gap-2">
+                <CardTitle className="text-2xl text-primary flex items-center gap-2">
                   <FlaskConical className="h-6 w-6" />
                   Laboratoires
                 </CardTitle>
@@ -528,7 +528,7 @@ const StructuresRecherche = () => {
           <TabsContent value="equipes">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center gap-2">
+                <CardTitle className="text-2xl text-primary flex items-center gap-2">
                   <Users className="h-6 w-6" />
                   Équipes de Recherche
                 </CardTitle>

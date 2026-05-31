@@ -111,7 +111,7 @@ const Historique = () => {
           {chiffres.map((chiffre, index) => (
             <Card key={index} className="text-center">
               <CardContent className="pt-6">
-                <div className="text-3xl font-bold text-[hsl(var(--primary))] mb-2">
+                <div className="text-3xl font-bold text-primary mb-2">
                   {chiffre.valeur}
                 </div>
                 <div className="text-lg font-semibold text-foreground dark:text-white mb-1">
@@ -132,7 +132,7 @@ const Historique = () => {
           </h2>
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[hsl(var(--primary))] hidden md:block"></div>
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary hidden md:block"></div>
             
             <div className="space-y-8">
               {periodes.map((periode, index) => {
@@ -140,20 +140,20 @@ const Historique = () => {
                 return (
                   <div key={index} className="relative flex items-start">
                     {/* Timeline dot */}
-                    <div className="hidden md:block absolute left-6 w-4 h-4 bg-[hsl(var(--primary))] rounded-full -ml-2 mt-6"></div>
+                    <div className="hidden md:block absolute left-6 w-4 h-4 bg-primary rounded-full -ml-2 mt-6"></div>
                     
                     <Card className="md:ml-16 w-full hover:shadow-lg transition-shadow">
                       <CardHeader>
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center">
-                            <div className="w-10 h-10 bg-[hsl(var(--primary))] bg-opacity-10 rounded-lg flex items-center justify-center mr-3">
-                              <IconComponent className="h-5 w-5 text-[hsl(var(--primary))]" />
+                            <div className="w-10 h-10 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center mr-3">
+                              <IconComponent className="h-5 w-5 text-primary" />
                             </div>
                             <CardTitle className="text-xl">
                               {periode.titre}
                             </CardTitle>
                           </div>
-                          <Badge variant="outline" className="bg-[hsl(var(--primary))] text-white">
+                          <Badge variant="outline" className="bg-primary text-white">
                             {periode.annee}
                           </Badge>
                         </div>
@@ -200,7 +200,7 @@ const Historique = () => {
         {/* Mission historique */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Mission Historique
             </CardTitle>
           </CardHeader>

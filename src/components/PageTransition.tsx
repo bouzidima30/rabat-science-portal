@@ -14,7 +14,7 @@ const FullPageLoader = () => (
     <ModernNavbar />
     <div className="flex-1 flex items-center justify-center">
       <div className="flex flex-col items-center space-y-4">
-        <LoadingSpinner size="lg" className="border-[hsl(var(--primary))]" />
+        <LoadingSpinner size="lg" className="border-primary" />
         <p className="text-muted-foreground dark:text-muted-foreground">Chargement...</p>
       </div>
     </div>

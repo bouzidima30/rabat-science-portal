@@ -93,7 +93,7 @@ const EspaceEnseignants = () => {
                     <div className={`w-12 h-12 ${service.color} rounded-lg flex items-center justify-center mb-4`}>
                       <IconComponent className="h-6 w-6 text-white" />
                     </div>
-                    <CardTitle className="text-xl text-[hsl(var(--primary))]">
+                    <CardTitle className="text-xl text-primary">
                       {service.titre}
                     </CardTitle>
                   </CardHeader>
@@ -102,7 +102,7 @@ const EspaceEnseignants = () => {
                       {service.description}
                     </p>
                     <Button 
-                      className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3]"
+                      className="w-full bg-primary hover:bg-primary/90"
                       onClick={() => window.open(service.link, '_blank')}
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
@@ -125,8 +125,8 @@ const EspaceEnseignants = () => {
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center mb-4">
-                    <FileText className="h-6 w-6 text-[hsl(var(--primary))] mr-2" />
-                    <CardTitle className="text-xl text-[hsl(var(--primary))]">
+                    <FileText className="h-6 w-6 text-primary mr-2" />
+                    <CardTitle className="text-xl text-primary">
                       {doc.categorie}
                     </CardTitle>
                   </div>
@@ -144,7 +144,7 @@ const EspaceEnseignants = () => {
                             {fichier.nom}
                           </span>
                         </div>
-                        <span className="text-xs bg-[hsl(var(--primary))] text-white px-2 py-1 rounded">
+                        <span className="text-xs bg-primary text-white px-2 py-1 rounded">
                           {fichier.type}
                         </span>
                       </div>
@@ -159,7 +159,7 @@ const EspaceEnseignants = () => {
         {/* Organisation d'événements */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))] flex items-center justify-center">
+            <CardTitle className="text-2xl text-center text-primary flex items-center justify-center">
               <Calendar className="h-6 w-6 mr-2" />
               Organisation d'Événements
             </CardTitle>
@@ -171,7 +171,7 @@ const EspaceEnseignants = () => {
                 veuillez renseigner le formulaire ci-dessous et le déposer au décanat.
               </p>
               <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg max-w-2xl mx-auto">
-                <h3 className="text-lg font-semibold text-[hsl(var(--primary))] mb-4">
+                <h3 className="text-lg font-semibold text-primary mb-4">
                   Procédure d'organisation
                 </h3>
                 <ol className="text-left space-y-2 text-muted-foreground dark:text-gray-300">
@@ -180,7 +180,7 @@ const EspaceEnseignants = () => {
                   <li>3. Déposer le dossier complet au décanat</li>
                   <li>4. Attendre la validation et les instructions</li>
                 </ol>
-                <Button className="mt-4 bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                <Button className="mt-4 bg-primary hover:bg-primary/90">
                   <Download className="h-4 w-4 mr-2" />
                   Télécharger le formulaire
                 </Button>

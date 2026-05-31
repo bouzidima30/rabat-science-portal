@@ -98,11 +98,11 @@ const FormationDetail = () => {
           <CardHeader>
             <div className="flex justify-between items-start">
               <div>
-                <CardTitle className="text-3xl text-[hsl(var(--primary))] mb-2">
+                <CardTitle className="text-3xl text-primary mb-2">
                   {formation.titre}
                 </CardTitle>
                 <div className="flex gap-4 text-sm text-muted-foreground dark:text-muted-foreground">
-                  <span className="bg-[hsl(var(--primary))] text-white px-3 py-1 rounded-full">
+                  <span className="bg-primary text-white px-3 py-1 rounded-full">
                     {formation.type_formation}
                   </span>
                   {formation.departement && (

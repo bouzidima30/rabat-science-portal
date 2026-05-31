@@ -16,14 +16,14 @@ const FormationDoctorat = () => {
           <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Formation Doctorat
           </h1>
-          <div className="w-24 h-1 bg-[hsl(var(--primary))] mx-auto"></div>
+          <div className="w-24 h-1 bg-primary mx-auto"></div>
         </div>
 
         <div className="max-w-4xl mx-auto">
           <Card className="shadow-lg">
             <CardContent className="p-8">
               <div className="flex items-center mb-6">
-                <GraduationCap className="h-8 w-8 text-[hsl(var(--primary))] mr-4" />
+                <GraduationCap className="h-8 w-8 text-primary mr-4" />
                 <h2 className="text-2xl font-semibold text-foreground dark:text-white">
                   Le Doctorat à la FSR
                 </h2>

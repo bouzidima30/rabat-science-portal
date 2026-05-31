@@ -31,7 +31,7 @@ const CooperationNationale = () => {
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>
@@ -66,7 +66,7 @@ const CooperationNationale = () => {
                 </div>
               )}
               <CardHeader>
-                <CardTitle className="text-xl text-[hsl(var(--primary))]">
+                <CardTitle className="text-xl text-primary">
                   {cooperation.titre}
                 </CardTitle>
                 {cooperation.domaine_recherche && (
@@ -89,7 +89,7 @@ const CooperationNationale = () => {
                 </div>
 
                 <Link to={`/cooperation/${cooperation.id}`}>
-                  <Button size="sm" className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                  <Button size="sm" className="w-full bg-primary hover:bg-primary/90">
                     <Eye className="h-4 w-4 mr-1" />
                     Voir détails
                   </Button>

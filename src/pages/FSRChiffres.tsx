@@ -88,32 +88,32 @@ const FSRChiffres = () => {
         </div>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Ressources Humaines</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6">Ressources Humaines</h2>
           {renderStatGrid(ressourcesHumaines)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Effectifs Étudiants</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6">Effectifs Étudiants</h2>
           {renderStatGrid(effectifsEtudiants)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Offre de Formation</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6">Offre de Formation</h2>
           {renderStatGrid(formations)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Recherche & Coopération</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6">Recherche & Coopération</h2>
           {renderStatGrid(recherche)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Bibliothèque</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6">Bibliothèque</h2>
           {renderStatGrid(bibliotheque)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Lauréats par an</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6">Lauréats par an</h2>
           {renderStatGrid(laureats)}
         </section>
       </div>

@@ -57,7 +57,7 @@ const ActualiteDetail = () => {
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>
@@ -79,7 +79,7 @@ const ActualiteDetail = () => {
                 L'actualité que vous recherchez n'existe pas ou a été supprimée.
               </p>
               <Link to="/actualites">
-                <Button className="bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                <Button className="bg-primary hover:bg-primary/90">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Retour aux actualités
                 </Button>

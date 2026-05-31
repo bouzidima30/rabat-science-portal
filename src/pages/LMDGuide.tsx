@@ -51,7 +51,7 @@ const LMDGuide = () => {
           <TabsContent value="licence">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center">
+                <CardTitle className="text-2xl text-primary flex items-center">
                   <GraduationCap className="h-6 w-6 mr-2" />
                   Cycle Licence
                 </CardTitle>
@@ -165,7 +165,7 @@ const LMDGuide = () => {
           <TabsContent value="master">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center">
+                <CardTitle className="text-2xl text-primary flex items-center">
                   <Award className="h-6 w-6 mr-2" />
                   Cycle Master
                 </CardTitle>
@@ -298,7 +298,7 @@ const LMDGuide = () => {
           <TabsContent value="doctorat">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center">
+                <CardTitle className="text-2xl text-primary flex items-center">
                   <Users className="h-6 w-6 mr-2" />
                   Cycle Doctoral
                 </CardTitle>
@@ -339,7 +339,7 @@ const LMDGuide = () => {
                   </p>
                   <a
                     href="/cedoc"
-                    className="inline-block mt-3 text-[hsl(var(--primary))] hover:underline font-medium"
+                    className="inline-block mt-3 text-primary hover:underline font-medium"
                   >
                     → Accéder à la page du CeDoc
                   </a>
@@ -352,7 +352,7 @@ const LMDGuide = () => {
           <TabsContent value="general">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center">
+                <CardTitle className="text-2xl text-primary flex items-center">
                   <Info className="h-6 w-6 mr-2" />
                   Informations générales sur le système LMD
                 </CardTitle>
@@ -456,9 +456,9 @@ const LMDGuide = () => {
         </Tabs>
 
         {/* Source */}
-        <Card className="bg-blue-50 dark:bg-blue-950/30 border-[hsl(var(--primary))]/30">
+        <Card className="bg-blue-50 dark:bg-blue-950/30 border-primary/30">
           <CardContent className="p-6 flex items-start gap-3">
-            <BookOpen className="h-5 w-5 text-[hsl(var(--primary))] mt-1 flex-shrink-0" />
+            <BookOpen className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
             <p className="text-sm text-muted-foreground dark:text-gray-300">
               Contenu issu du cahier des normes pédagogiques nationales et du règlement intérieur
               de la Faculté des Sciences de Rabat – Université Mohammed V.

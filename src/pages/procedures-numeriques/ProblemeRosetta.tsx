@@ -14,7 +14,7 @@ const ProblemeRosetta = () => {
       </p>
 
       <div className="not-prose my-6 p-5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 flex items-start gap-4">
-        <UserCheck className="h-8 w-8 text-[hsl(var(--primary))] flex-shrink-0 mt-1" />
+        <UserCheck className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
         <div>
           <p className="text-sm text-blue-900 dark:text-blue-100 mb-1">
             Personne à contacter

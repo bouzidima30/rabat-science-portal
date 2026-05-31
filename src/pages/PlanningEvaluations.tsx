@@ -25,7 +25,7 @@ const PlanningEvaluations = () => {
         {/* Planning des évaluations */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6 flex items-center">
-            <Calendar className="h-6 w-6 mr-2 text-[hsl(var(--primary))]" />
+            <Calendar className="h-6 w-6 mr-2 text-primary" />
             Planning des Évaluations
           </h2>
           <FileExplorer categoryFilter="planning_evaluations" showDownload={true} />
@@ -34,7 +34,7 @@ const PlanningEvaluations = () => {
         {/* Calendrier des évaluations de fin de semestre */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6 flex items-center">
-            <Clock className="h-6 w-6 mr-2 text-[hsl(var(--primary))]" />
+            <Clock className="h-6 w-6 mr-2 text-primary" />
             Calendrier des Évaluations de Fin de Semestre
           </h2>
           <FileExplorer categoryFilter="calendrier_evaluations" showDownload={true} />

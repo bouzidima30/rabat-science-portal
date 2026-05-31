@@ -35,7 +35,7 @@ const CooperationDetail = () => {
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>
@@ -92,11 +92,11 @@ const CooperationDetail = () => {
           )}
           
           <CardHeader>
-            <CardTitle className="text-3xl text-[hsl(var(--primary))] mb-4">
+            <CardTitle className="text-3xl text-primary mb-4">
               {cooperation.titre}
             </CardTitle>
             <div className="flex flex-wrap gap-4 text-sm">
-              <span className="bg-[hsl(var(--primary))] text-white px-3 py-1 rounded-full">
+              <span className="bg-primary text-white px-3 py-1 rounded-full">
                 {cooperation.type_cooperation}
               </span>
               {cooperation.domaine_recherche && (
@@ -117,7 +117,7 @@ const CooperationDetail = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-[hsl(var(--primary))]" />
+                  <Calendar className="h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium text-foreground dark:text-white">Période</p>
                     <p className="text-muted-foreground dark:text-muted-foreground">
@@ -129,7 +129,7 @@ const CooperationDetail = () => {
 
                 {cooperation.pays && cooperation.pays.length > 0 && (
                   <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-[hsl(var(--primary))] mt-1" />
+                    <MapPin className="h-5 w-5 text-primary mt-1" />
                     <div>
                       <p className="font-medium text-foreground dark:text-white">Pays</p>
                       <p className="text-muted-foreground dark:text-muted-foreground">
@@ -141,7 +141,7 @@ const CooperationDetail = () => {
 
                 {cooperation.coordinateur && (
                   <div className="flex items-start gap-3">
-                    <Users className="h-5 w-5 text-[hsl(var(--primary))] mt-1" />
+                    <Users className="h-5 w-5 text-primary mt-1" />
                     <div>
                       <p className="font-medium text-foreground dark:text-white">Coordinateur</p>
                       <p className="text-muted-foreground dark:text-muted-foreground">

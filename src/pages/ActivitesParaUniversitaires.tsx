@@ -72,7 +72,7 @@ const ActivitesParaUniversitaires = () => {
                     )}
                   </div>
                   <CardContent className="p-5">
-                    <h2 className="text-lg font-semibold text-foreground dark:text-white group-hover:text-[hsl(var(--primary))] transition-colors">
+                    <h2 className="text-lg font-semibold text-foreground dark:text-white group-hover:text-primary transition-colors">
                       {club.titre}
                     </h2>
                   </CardContent>

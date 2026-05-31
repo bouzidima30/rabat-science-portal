@@ -157,7 +157,7 @@ const DomainesRecherche = () => {
                   <div className={`w-10 h-10 rounded-full ${d.couleur} flex items-center justify-center mx-auto mb-2`}>
                     <Icon className="h-5 w-5" />
                   </div>
-                  <div className="text-2xl font-bold text-[hsl(var(--primary))]">{d.axes.length}</div>
+                  <div className="text-2xl font-bold text-primary">{d.axes.length}</div>
                   <div className="text-[10px] text-muted-foreground dark:text-muted-foreground leading-tight">
                     Axes
                   </div>
@@ -170,7 +170,7 @@ const DomainesRecherche = () => {
         {/* Accordéon des domaines */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-primary">
               Liste des domaines scientifiques
             </CardTitle>
           </CardHeader>
@@ -206,7 +206,7 @@ const DomainesRecherche = () => {
                             key={idx}
                             className="flex items-start gap-2 text-sm text-muted-foreground dark:text-gray-300"
                           >
-                            <CheckCircle2 className="h-4 w-4 text-[hsl(var(--primary))] mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                             <span>{axe}</span>
                           </li>
                         ))}

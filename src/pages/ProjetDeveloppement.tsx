@@ -66,7 +66,7 @@ const ProjetDeveloppement = () => {
         {/* Vision Section */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Notre Vision
             </CardTitle>
           </CardHeader>
@@ -89,7 +89,7 @@ const ProjetDeveloppement = () => {
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
                   <div className="flex items-start">
-                    <div className="w-8 h-8 bg-[hsl(var(--primary))] text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-1">
+                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-1">
                       {index + 1}
                     </div>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -114,8 +114,8 @@ const ProjetDeveloppement = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 bg-[hsl(var(--primary))] bg-opacity-10 rounded-lg flex items-center justify-center">
-                        <IconComponent className="h-6 w-6 text-[hsl(var(--primary))]" />
+                      <div className="w-12 h-12 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center">
+                        <IconComponent className="h-6 w-6 text-primary" />
                       </div>
                       <Badge className={projet.color}>
                         {projet.status}
@@ -139,7 +139,7 @@ const ProjetDeveloppement = () => {
         {/* Axes de développement */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Axes de Développement Prioritaires
             </CardTitle>
           </CardHeader>

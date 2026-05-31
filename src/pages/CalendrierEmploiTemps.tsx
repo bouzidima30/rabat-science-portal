@@ -71,7 +71,7 @@ const CalendrierEmploiTemps = () => {
         {/* Emplois du temps */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6 flex items-center">
-            <Clock className="h-6 w-6 mr-2 text-[hsl(var(--primary))]" />
+            <Clock className="h-6 w-6 mr-2 text-primary" />
             Emplois du Temps
           </h2>
           <FileExplorer categoryFilter="emploi_temps" showDownload={true} />
@@ -86,7 +86,7 @@ const CalendrierEmploiTemps = () => {
             {calendriers.map((calendrier, index) => (
               <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow">
                 <CardHeader>
-                  <CardTitle className="text-lg text-[hsl(var(--primary))] flex items-center">
+                  <CardTitle className="text-lg text-primary flex items-center">
                     <Calendar className="h-5 w-5 mr-2" />
                     {calendrier.type}
                   </CardTitle>
@@ -104,7 +104,7 @@ const CalendrierEmploiTemps = () => {
                         {calendrier.taille}
                       </p>
                     </div>
-                    <Button className="bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                    <Button className="bg-primary hover:bg-primary/90">
                       <Download className="h-4 w-4 mr-2" />
                       Télécharger
                     </Button>
@@ -118,7 +118,7 @@ const CalendrierEmploiTemps = () => {
         {/* Périodes de vacances */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl text-[hsl(var(--primary))] flex items-center">
+            <CardTitle className="text-xl text-primary flex items-center">
               <Plane className="h-6 w-6 mr-2" />
               Vacances Universitaires 2024-2025
             </CardTitle>

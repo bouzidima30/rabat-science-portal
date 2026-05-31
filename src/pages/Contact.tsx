@@ -94,13 +94,13 @@ const Contact = () => {
           <div>
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))]">
+                <CardTitle className="text-2xl text-primary">
                   Informations de Contact
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-start">
-                  <MapPin className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
+                  <MapPin className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold text-foreground dark:text-white">Adresse</h3>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -111,7 +111,7 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Phone className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
+                  <Phone className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold text-foreground dark:text-white">Téléphone</h3>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -122,7 +122,7 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Mail className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
+                  <Mail className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold text-foreground dark:text-white">Email</h3>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -133,7 +133,7 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Clock className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
+                  <Clock className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold text-foreground dark:text-white">Horaires d'ouverture</h3>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -148,13 +148,13 @@ const Contact = () => {
             {/* Services administratifs */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl text-[hsl(var(--primary))]">
+                <CardTitle className="text-xl text-primary">
                   Services Administratifs
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="border-l-4 border-[hsl(var(--primary))] pl-4">
+                  <div className="border-l-4 border-primary pl-4">
                     <h4 className="font-semibold text-foreground dark:text-white">Décanat</h4>
                     <p className="text-sm text-muted-foreground dark:text-gray-300">
                       Bureau 101 - Bâtiment Administration<br />
@@ -162,7 +162,7 @@ const Contact = () => {
                     </p>
                   </div>
                   
-                  <div className="border-l-4 border-[hsl(var(--primary))] pl-4">
+                  <div className="border-l-4 border-primary pl-4">
                     <h4 className="font-semibold text-foreground dark:text-white">Service Scolarité</h4>
                     <p className="text-sm text-muted-foreground dark:text-gray-300">
                       Bureau 201 - Bâtiment Administration<br />
@@ -170,7 +170,7 @@ const Contact = () => {
                     </p>
                   </div>
                   
-                  <div className="border-l-4 border-[hsl(var(--primary))] pl-4">
+                  <div className="border-l-4 border-primary pl-4">
                     <h4 className="font-semibold text-foreground dark:text-white">Service Recherche</h4>
                     <p className="text-sm text-muted-foreground dark:text-gray-300">
                       Bureau 301 - Bâtiment Administration<br />
@@ -186,7 +186,7 @@ const Contact = () => {
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[hsl(var(--primary))]">
+                <CardTitle className="text-2xl text-primary">
                   Envoyez-nous un message
                 </CardTitle>
               </CardHeader>
@@ -269,7 +269,7 @@ const Contact = () => {
                     
                     <Button 
                       type="submit" 
-                      className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3]"
+                      className="w-full bg-primary hover:bg-primary/90"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Envoi en cours..." : "Envoyer le message"}
@@ -284,7 +284,7 @@ const Contact = () => {
         {/* Plan d'accès */}
         <Card className="mt-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Plan d'Accès
             </CardTitle>
           </CardHeader>

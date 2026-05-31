@@ -31,7 +31,7 @@ const ListesExamens = () => {
           {sections.map((section) => (
             <Card key={section.category} className="shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl text-[hsl(var(--primary))] flex items-center">
+                <CardTitle className="text-xl text-primary flex items-center">
                   <FileText className="h-6 w-6 mr-2" />
                   {section.title}
                 </CardTitle>

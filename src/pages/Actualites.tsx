@@ -78,7 +78,7 @@ const Actualites = () => {
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>
@@ -115,7 +115,7 @@ const Actualites = () => {
             <Button
               variant={selectedCategory === null ? "default" : "outline"}
               onClick={() => setSelectedCategory(null)}
-              className={selectedCategory === null ? "bg-[hsl(var(--primary))] hover:bg-[#0056b3]" : ""}
+              className={selectedCategory === null ? "bg-primary hover:bg-primary/90" : ""}
             >
               Toutes
             </Button>
@@ -124,7 +124,7 @@ const Actualites = () => {
                 key={category.value}
                 variant={selectedCategory === category.value ? "default" : "outline"}
                 onClick={() => setSelectedCategory(category.value)}
-                className={selectedCategory === category.value ? "bg-[hsl(var(--primary))] hover:bg-[#0056b3]" : ""}
+                className={selectedCategory === category.value ? "bg-primary hover:bg-primary/90" : ""}
               >
                 {category.label}
               </Button>
@@ -173,7 +173,7 @@ const Actualites = () => {
                     
                     <div className="flex flex-wrap items-center gap-4">
                       <Link to={`/actualite/${item.id}`}>
-                        <Button className="bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                        <Button className="bg-primary hover:bg-primary/90">
                           Lire la suite
                           <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>

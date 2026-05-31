@@ -55,7 +55,7 @@ const ServiceScolarite = () => {
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card>
             <CardContent className="p-6 text-center">
-              <Clock className="h-8 w-8 text-[hsl(var(--primary))] mx-auto mb-3" />
+              <Clock className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold text-foreground dark:text-white mb-2">Horaires</h3>
               <p className="text-sm text-muted-foreground dark:text-gray-300">
                 Lun - Ven: 8h - 16h<br />
@@ -65,7 +65,7 @@ const ServiceScolarite = () => {
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Phone className="h-8 w-8 text-[hsl(var(--primary))] mx-auto mb-3" />
+              <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold text-foreground dark:text-white mb-2">Téléphone</h3>
               <p className="text-sm text-muted-foreground dark:text-gray-300">
                 +212 5 37 77 18 34
@@ -74,7 +74,7 @@ const ServiceScolarite = () => {
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Mail className="h-8 w-8 text-[hsl(var(--primary))] mx-auto mb-3" />
+              <Mail className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold text-foreground dark:text-white mb-2">Email</h3>
               <p className="text-sm text-muted-foreground dark:text-gray-300">
                 scolarite@fsr.ac.ma
@@ -86,7 +86,7 @@ const ServiceScolarite = () => {
         {/* Documents par catégorie */}
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-8">
@@ -95,7 +95,7 @@ const ServiceScolarite = () => {
               return (
                 <Card key={cat.key} className="shadow-lg">
                   <CardHeader>
-                    <CardTitle className="text-xl text-[hsl(var(--primary))] flex items-center">
+                    <CardTitle className="text-xl text-primary flex items-center">
                       <FileText className="h-6 w-6 mr-2" />
                       {cat.label}
                     </CardTitle>
@@ -113,7 +113,7 @@ const ServiceScolarite = () => {
                             className="flex items-center justify-between p-3 bg-muted/30 dark:bg-gray-700 rounded-lg"
                           >
                             <div className="flex items-center min-w-0">
-                              <FileText className="h-4 w-4 text-[hsl(var(--primary))] mr-2 flex-shrink-0" />
+                              <FileText className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                               <div className="min-w-0">
                                 <p className="text-sm font-medium text-foreground dark:text-white truncate">
                                   {doc.original_name}

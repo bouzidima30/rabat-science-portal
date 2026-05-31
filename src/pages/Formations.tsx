@@ -54,7 +54,7 @@ const Formations = () => {
             scientifiques de haute qualité, du niveau Licence au Doctorat, ainsi que 
             des formations continues pour les professionnels.
           </p>
-          <div className="w-24 h-1 bg-[hsl(var(--primary))] mx-auto mt-6"></div>
+          <div className="w-24 h-1 bg-primary mx-auto mt-6"></div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
@@ -77,7 +77,7 @@ const Formations = () => {
                     {formation.description}
                   </p>
                   <Link to={formation.link}>
-                    <Button className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3] text-white">
+                    <Button className="w-full bg-primary hover:bg-primary/90 text-white">
                       Découvrir les formations
                     </Button>
                   </Link>
@@ -88,7 +88,7 @@ const Formations = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <Card className="shadow-lg bg-gradient-to-r from-[hsl(var(--primary))] to-[#0056b3] text-white">
+          <Card className="shadow-lg bg-gradient-to-r from-primary to-primary/80 text-white">
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold mb-4">
                 Besoin d'aide pour choisir votre formation ?

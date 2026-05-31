@@ -139,7 +139,7 @@ const EspaceEtudiants = () => {
                     {service.description}
                   </p>
                   <Link to={service.path}>
-                    <Button className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                    <Button className="w-full bg-primary hover:bg-primary/90">
                       Accéder
                     </Button>
                   </Link>

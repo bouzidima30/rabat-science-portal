@@ -84,7 +84,7 @@ const Organisation = () => {
         {/* Organigramme officiel */}
         <Card className="mb-12 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Organigramme officiel
             </CardTitle>
           </CardHeader>
@@ -106,7 +106,7 @@ const Organisation = () => {
         {/* Structure générale */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Structure Générale
             </CardTitle>
           </CardHeader>
@@ -116,8 +116,8 @@ const Organisation = () => {
                 const IconComponent = service.icon;
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-16 h-16 bg-[hsl(var(--primary))] bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <IconComponent className="h-8 w-8 text-[hsl(var(--primary))]" />
+                    <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <IconComponent className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="text-lg font-semibold text-foreground dark:text-white mb-2">
                       {service.nom}
@@ -141,7 +141,7 @@ const Organisation = () => {
             {departements.map((dept, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <CardTitle className="text-xl text-[hsl(var(--primary))]">
+                  <CardTitle className="text-xl text-primary">
                     {dept.nom}
                   </CardTitle>
                 </CardHeader>
@@ -165,20 +165,20 @@ const Organisation = () => {
         {/* Organigramme */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Organigramme
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center">
-              <div className="bg-[hsl(var(--primary))] text-white p-4 rounded-lg inline-block mb-6">
+              <div className="bg-primary text-white p-4 rounded-lg inline-block mb-6">
                 <h3 className="text-lg font-semibold">Décanat</h3>
                 <p className="text-sm opacity-90">Direction Générale</p>
               </div>
               
               <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold text-[hsl(var(--primary))] mb-2">Vice-Décanat Académique</h4>
+                  <h4 className="font-semibold text-primary mb-2">Vice-Décanat Académique</h4>
                   <p className="text-sm text-muted-foreground dark:text-gray-300">
                     Coordination pédagogique et académique
                   </p>

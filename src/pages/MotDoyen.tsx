@@ -17,7 +17,7 @@ const MotDoyen = () => {
           <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Mot du Doyen
           </h1>
-          <div className="w-24 h-1 bg-[hsl(var(--primary))] mx-auto"></div>
+          <div className="w-24 h-1 bg-primary mx-auto"></div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -25,7 +25,7 @@ const MotDoyen = () => {
             <Card className="shadow-lg">
               <CardContent className="p-8">
                 <div className="flex items-start mb-6">
-                  <Quote className="h-8 w-8 text-[hsl(var(--primary))] mr-4 flex-shrink-0 mt-1" />
+                  <Quote className="h-8 w-8 text-primary mr-4 flex-shrink-0 mt-1" />
                   <div>
                     <p className="text-lg text-muted-foreground dark:text-gray-300 mb-6 leading-relaxed">
                       Ce mot se veut avant tout un engagement personnel et une invitation adressée à
@@ -96,7 +96,7 @@ const MotDoyen = () => {
                       économique et social de notre pays.
                     </p>
 
-                    <blockquote className="border-l-4 border-[hsl(var(--primary))] pl-4 italic text-muted-foreground dark:text-muted-foreground my-6">
+                    <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground dark:text-muted-foreground my-6">
                       « La réforme judicieuse du système d'éducation et de formation est la voie
                       essentielle à emprunter pour relever les défis du développement […] nous n'avons
                       d'autre choix que de promouvoir la recherche et l'innovation, et d'assurer la mise
@@ -128,7 +128,7 @@ const MotDoyen = () => {
                   <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
                     Pr. Redouane Benaini
                   </h3>
-                  <p className="text-[hsl(var(--primary))] font-medium mb-4">
+                  <p className="text-primary font-medium mb-4">
                     Doyen de la Faculté des Sciences
                   </p>
                   <div className="text-left space-y-3">

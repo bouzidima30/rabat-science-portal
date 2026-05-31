@@ -101,7 +101,7 @@ const PlateformesTechniques = () => {
         <Card className="mb-12 shadow-lg">
           <CardContent className="p-8">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold text-[hsl(var(--primary))] mb-6">
+              <h2 className="text-2xl font-semibold text-primary mb-6">
                 Des Équipements d'Excellence au Service de la Recherche
               </h2>
               <p className="text-lg text-muted-foreground dark:text-gray-300 mb-6">
@@ -111,15 +111,15 @@ const PlateformesTechniques = () => {
               </p>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
-                  <h3 className="text-xl font-bold text-[hsl(var(--primary))] mb-2">6+</h3>
+                  <h3 className="text-xl font-bold text-primary mb-2">6+</h3>
                   <p className="text-muted-foreground dark:text-gray-300">Plateformes Actives</p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[hsl(var(--primary))] mb-2">50+</h3>
+                  <h3 className="text-xl font-bold text-primary mb-2">50+</h3>
                   <p className="text-muted-foreground dark:text-gray-300">Équipements Majeurs</p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[hsl(var(--primary))] mb-2">200+</h3>
+                  <h3 className="text-xl font-bold text-primary mb-2">200+</h3>
                   <p className="text-muted-foreground dark:text-gray-300">Utilisateurs/An</p>
                 </div>
               </div>
@@ -137,7 +137,7 @@ const PlateformesTechniques = () => {
                   <div className={`w-12 h-12 ${plateforme.color} rounded-lg flex items-center justify-center mb-4`}>
                     <IconComponent className="h-6 w-6 text-white" />
                   </div>
-                  <CardTitle className="text-xl text-[hsl(var(--primary))]">
+                  <CardTitle className="text-xl text-primary">
                     {plateforme.nom}
                   </CardTitle>
                   <p className="text-muted-foreground dark:text-gray-300">
@@ -151,7 +151,7 @@ const PlateformesTechniques = () => {
                   <ul className="space-y-2">
                     {plateforme.equipements.map((equipement, idx) => (
                       <li key={idx} className="flex items-start text-sm text-muted-foreground dark:text-gray-300">
-                        <div className="w-2 h-2 bg-[hsl(var(--primary))] rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary rounded-full mr-3 mt-2 flex-shrink-0"></div>
                         {equipement}
                       </li>
                     ))}
@@ -165,7 +165,7 @@ const PlateformesTechniques = () => {
         {/* Accès et tarification */}
         <Card className="mt-12 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
+            <CardTitle className="text-2xl text-center text-primary">
               Accès aux Plateformes
             </CardTitle>
           </CardHeader>
@@ -177,7 +177,7 @@ const PlateformesTechniques = () => {
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-start">
-                    <div className="w-8 h-8 bg-[hsl(var(--primary))] text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
+                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       1
                     </div>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -185,7 +185,7 @@ const PlateformesTechniques = () => {
                     </p>
                   </div>
                   <div className="flex items-start">
-                    <div className="w-8 h-8 bg-[hsl(var(--primary))] text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
+                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       2
                     </div>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -193,7 +193,7 @@ const PlateformesTechniques = () => {
                     </p>
                   </div>
                   <div className="flex items-start">
-                    <div className="w-8 h-8 bg-[hsl(var(--primary))] text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
+                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       3
                     </div>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -201,7 +201,7 @@ const PlateformesTechniques = () => {
                     </p>
                   </div>
                   <div className="flex items-start">
-                    <div className="w-8 h-8 bg-[hsl(var(--primary))] text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
+                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       4
                     </div>
                     <p className="text-muted-foreground dark:text-gray-300">
@@ -216,7 +216,7 @@ const PlateformesTechniques = () => {
                 </h3>
                 <div className="space-y-4">
                   <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                    <h4 className="font-semibold text-[hsl(var(--primary))] mb-2">Utilisateurs Internes</h4>
+                    <h4 className="font-semibold text-primary mb-2">Utilisateurs Internes</h4>
                     <p className="text-sm text-muted-foreground dark:text-gray-300">
                       Tarifs préférentiels pour les enseignants-chercheurs et étudiants de la FSR
                     </p>

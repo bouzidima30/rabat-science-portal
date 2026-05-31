@@ -62,7 +62,7 @@ const CoursTdsTps = () => {
         </div>
 
         {/* Accès Moodle */}
-        <Card className="mb-12 bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 text-white">
+        <Card className="mb-12 bg-gradient-to-r from-primary to-blue-600 text-white">
           <CardContent className="p-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -76,7 +76,7 @@ const CoursTdsTps = () => {
                 </div>
               </div>
               <Button 
-                className="bg-card text-[hsl(var(--primary))] hover:bg-muted font-semibold px-6 py-3"
+                className="bg-card text-primary hover:bg-muted font-semibold px-6 py-3"
                 onClick={() => window.open('https://moodle-fsr.um5.ac.ma/', '_blank')}
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
@@ -91,7 +91,7 @@ const CoursTdsTps = () => {
           {cours.map((niveau, index) => (
             <Card key={index} className="shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl text-[hsl(var(--primary))] flex items-center">
+                <CardTitle className="text-xl text-primary flex items-center">
                   <BookOpen className="h-6 w-6 mr-2" />
                   {niveau.niveau}
                 </CardTitle>
@@ -102,7 +102,7 @@ const CoursTdsTps = () => {
                     <div key={matiereIndex} className="bg-muted/30 dark:bg-gray-700 p-4 rounded-lg">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-start">
-                          <FileText className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1" />
+                          <FileText className="h-5 w-5 text-primary mr-3 mt-1" />
                           <div>
                             <h4 className="font-medium text-foreground dark:text-white mb-1">
                               {matiere.nom}
@@ -120,7 +120,7 @@ const CoursTdsTps = () => {
                             </p>
                           </div>
                         </div>
-                        <Button size="sm" className="bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                        <Button size="sm" className="bg-primary hover:bg-primary/90">
                           <Download className="h-3 w-3 mr-1" />
                           PDF
                         </Button>

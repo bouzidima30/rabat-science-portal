@@ -49,7 +49,7 @@ const Evenements = () => {
               />
             )}
             <div className="flex-1">
-              <h3 className="text-xl font-semibold text-[hsl(var(--primary))] mb-2">
+              <h3 className="text-xl font-semibold text-primary mb-2">
                 {event.titre}
               </h3>
               <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-muted-foreground mb-3">
@@ -92,7 +92,7 @@ const Evenements = () => {
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <Footer />
       </div>

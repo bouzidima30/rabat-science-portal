@@ -214,7 +214,7 @@ const ProceduresNumeriques = () => {
         <Card className="mb-12 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
           <CardContent className="p-6">
             <div className="flex items-start">
-              <HelpCircle className="h-8 w-8 text-[hsl(var(--primary))] mr-4 flex-shrink-0 mt-1" />
+              <HelpCircle className="h-8 w-8 text-primary mr-4 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
                   HelpDesk
@@ -224,7 +224,7 @@ const ProceduresNumeriques = () => {
                   l'adresse :{" "}
                   <a
                     href="mailto:helpdesk@fsr.ac.ma"
-                    className="font-semibold underline hover:text-[hsl(var(--primary))]"
+                    className="font-semibold underline hover:text-primary"
                   >
                     helpdesk@fsr.ac.ma
                   </a>
@@ -252,11 +252,11 @@ const ProceduresNumeriques = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-center mb-2">
-                      <div className="w-12 h-12 bg-[hsl(var(--primary))] rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                         <IconComponent className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg text-[hsl(var(--primary))]">
+                        <CardTitle className="text-lg text-primary">
                           {procedure.titre}
                         </CardTitle>
                       </div>
@@ -278,9 +278,9 @@ const ProceduresNumeriques = () => {
                             {lien.internal ? (
                               <Link
                                 to={lien.url}
-                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-[hsl(var(--primary))] dark:hover:text-[hsl(var(--primary))] group"
+                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary group"
                               >
-                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[hsl(var(--primary))] flex-shrink-0" />
+                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-primary flex-shrink-0" />
                                 <span className="group-hover:underline">
                                   {lien.label}
                                 </span>
@@ -290,9 +290,9 @@ const ProceduresNumeriques = () => {
                                 href={lien.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-[hsl(var(--primary))] dark:hover:text-[hsl(var(--primary))] group"
+                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary group"
                               >
-                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-[hsl(var(--primary))] flex-shrink-0" />
+                                <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-primary flex-shrink-0" />
                                 <span>
                                   <span className="group-hover:underline">
                                     {lien.label}
@@ -318,7 +318,7 @@ const ProceduresNumeriques = () => {
         </div>
 
         {/* Source officielle */}
-        <Card className="shadow-lg bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 text-white">
+        <Card className="shadow-lg bg-gradient-to-r from-primary to-blue-600 text-white">
           <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center">
               <Monitor className="h-8 w-8 mr-4 flex-shrink-0" />
@@ -335,7 +335,7 @@ const ProceduresNumeriques = () => {
             <Button
               asChild
               variant="secondary"
-              className="bg-card text-[hsl(var(--primary))] hover:bg-blue-50"
+              className="bg-card text-primary hover:bg-blue-50"
             >
               <a
                 href="https://www.fsr.ac.ma/content/proc%C3%A9dures-num%C3%A9riques"

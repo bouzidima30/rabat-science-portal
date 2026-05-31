@@ -30,7 +30,7 @@ const ProcedureLayout = ({
           asChild
           variant="ghost"
           size="sm"
-          className="mb-6 text-[hsl(var(--primary))] hover:text-[hsl(var(--primary))]/80"
+          className="mb-6 text-primary hover:text-primary/80"
         >
           <Link to="/procedures-numeriques">
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -60,7 +60,7 @@ const ProcedureLayout = ({
               href={sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[hsl(var(--primary))] hover:underline inline-flex items-center"
+              className="text-primary hover:underline inline-flex items-center"
             >
               fsr.ac.ma
               <ExternalLink className="h-3 w-3 ml-1" />

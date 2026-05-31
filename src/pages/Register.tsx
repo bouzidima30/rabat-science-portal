@@ -203,7 +203,7 @@ const Register = () => {
               
               <Button
                 type="submit"
-                className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3] text-white"
+                className="w-full bg-primary hover:bg-primary/90 text-white"
                 disabled={loading}
               >
                 {loading ? "Création..." : "Créer un compte"}
@@ -213,7 +213,7 @@ const Register = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground dark:text-gray-300">
                 Déjà un compte ?{" "}
-                <Link to="/login" className="text-[hsl(var(--primary))] hover:underline font-medium">
+                <Link to="/login" className="text-primary hover:underline font-medium">
                   Se connecter
                 </Link>
               </p>

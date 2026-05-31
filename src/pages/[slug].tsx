@@ -97,7 +97,7 @@ const DynamicPage = () => {
           )}
           
           <CardContent className="p-8">
-            <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-8">
+            <h1 className="text-4xl font-bold text-primary mb-8">
               {page.titre}
             </h1>
             

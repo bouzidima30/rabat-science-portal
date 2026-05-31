@@ -60,7 +60,7 @@ const ValorisationRecherche = () => {
         {/* Présentation */}
         <Card className="mb-12 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))] flex items-center justify-center">
+            <CardTitle className="text-2xl text-center text-primary flex items-center justify-center">
               <Target className="h-6 w-6 mr-2" />
               Présentation
             </CardTitle>
@@ -100,8 +100,8 @@ const ValorisationRecherche = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-6 flex gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-[hsl(var(--primary))]/10 rounded-lg flex items-center justify-center">
-                        <IconComponent className="h-6 w-6 text-[hsl(var(--primary))]" />
+                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <IconComponent className="h-6 w-6 text-primary" />
                       </div>
                     </div>
                     <p className="text-muted-foreground dark:text-gray-300 text-sm leading-relaxed">
@@ -115,7 +115,7 @@ const ValorisationRecherche = () => {
         </div>
 
         {/* Contact */}
-        <Card className="shadow-lg bg-gradient-to-br from-[hsl(var(--primary))] to-blue-700 text-white">
+        <Card className="shadow-lg bg-gradient-to-br from-primary to-blue-700 text-white">
           <CardHeader>
             <CardTitle className="text-2xl text-center text-white flex items-center justify-center">
               <Briefcase className="h-6 w-6 mr-2" />

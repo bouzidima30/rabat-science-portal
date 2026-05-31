@@ -51,7 +51,7 @@ const Bibliotheque = () => {
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card>
             <CardContent className="p-6 text-center">
-              <Clock className="h-8 w-8 text-[hsl(var(--primary))] mx-auto mb-3" />
+              <Clock className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold text-foreground dark:text-white mb-2">Horaires</h3>
               <p className="text-sm text-muted-foreground dark:text-gray-300">
                 Lun - Ven: 8h - 20h<br />
@@ -62,7 +62,7 @@ const Bibliotheque = () => {
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Phone className="h-8 w-8 text-[hsl(var(--primary))] mx-auto mb-3" />
+              <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold text-foreground dark:text-white mb-2">Contact</h3>
               <p className="text-sm text-muted-foreground dark:text-gray-300">
                 +212 5 37 77 18 50
@@ -71,7 +71,7 @@ const Bibliotheque = () => {
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Mail className="h-8 w-8 text-[hsl(var(--primary))] mx-auto mb-3" />
+              <Mail className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold text-foreground dark:text-white mb-2">Email</h3>
               <p className="text-sm text-muted-foreground dark:text-gray-300">
                 bibliotheque@fsr.ac.ma
@@ -99,7 +99,7 @@ const Bibliotheque = () => {
                     {service.description}
                   </p>
                   <Link to={service.path}>
-                    <Button className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
+                    <Button className="w-full bg-primary hover:bg-primary/90">
                       Accéder
                     </Button>
                   </Link>
@@ -112,7 +112,7 @@ const Bibliotheque = () => {
         {/* Présentation */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))] flex items-center justify-center">
+            <CardTitle className="text-2xl text-center text-primary flex items-center justify-center">
               <BookOpen className="h-6 w-6 mr-2" />
               À Propos de Notre Bibliothèque
             </CardTitle>
