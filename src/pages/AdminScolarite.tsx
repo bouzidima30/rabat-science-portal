@@ -111,10 +111,10 @@ const AdminScolarite = () => {
             <GraduationCap className="h-8 w-8 text-cyan-600 dark:text-cyan-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
               Service de Scolarité - Documents
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground dark:text-gray-300 mt-1">
               Gérez les documents téléchargeables par catégorie
             </p>
           </div>

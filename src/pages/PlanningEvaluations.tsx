@@ -7,16 +7,16 @@ import { Calendar, Clock } from "lucide-react";
 
 const PlanningEvaluations = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Planning & Calendrier des Évaluations
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Consultez les plannings détaillés des évaluations et les calendriers 
             des évaluations de fin de semestre pour tous les niveaux d'études.
           </p>
@@ -24,8 +24,8 @@ const PlanningEvaluations = () => {
 
         {/* Planning des évaluations */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-            <Calendar className="h-6 w-6 mr-2 text-[#006be5]" />
+          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6 flex items-center">
+            <Calendar className="h-6 w-6 mr-2 text-[hsl(var(--primary))]" />
             Planning des Évaluations
           </h2>
           <FileExplorer categoryFilter="planning_evaluations" showDownload={true} />
@@ -33,8 +33,8 @@ const PlanningEvaluations = () => {
 
         {/* Calendrier des évaluations de fin de semestre */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-            <Clock className="h-6 w-6 mr-2 text-[#006be5]" />
+          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6 flex items-center">
+            <Clock className="h-6 w-6 mr-2 text-[hsl(var(--primary))]" />
             Calendrier des Évaluations de Fin de Semestre
           </h2>
           <FileExplorer categoryFilter="calendrier_evaluations" showDownload={true} />

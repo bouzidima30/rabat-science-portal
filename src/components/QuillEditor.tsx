@@ -91,7 +91,7 @@ const QuillEditor = ({ value, onChange, placeholder = "Écrivez votre contenu...
 
   if (!ReactQuill) {
     return (
-      <div className={`border border-gray-300 rounded-lg h-64 flex items-center justify-center ${className}`}>
+      <div className={`border border-input rounded-lg h-64 flex items-center justify-center ${className}`}>
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );

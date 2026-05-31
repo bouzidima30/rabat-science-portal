@@ -28,11 +28,11 @@ const CooperationInternationale = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
         </div>
         <Footer />
       </div>
@@ -40,16 +40,16 @@ const CooperationInternationale = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Coopération Internationale
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Découvrez nos partenariats et collaborations avec les institutions internationales
           </p>
         </div>
@@ -58,7 +58,7 @@ const CooperationInternationale = () => {
           {cooperations?.map((cooperation) => (
             <Card key={cooperation.id} className="shadow-lg hover:shadow-xl transition-shadow">
               {cooperation.image_url && (
-                <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+                <div className="aspect-video bg-muted dark:bg-gray-700 rounded-t-lg overflow-hidden">
                   <img 
                     src={cooperation.image_url} 
                     alt={cooperation.titre}
@@ -67,29 +67,29 @@ const CooperationInternationale = () => {
                 </div>
               )}
               <CardHeader>
-                <CardTitle className="text-xl text-[#006be5]">
+                <CardTitle className="text-xl text-[hsl(var(--primary))]">
                   {cooperation.titre}
                 </CardTitle>
                 {cooperation.domaine_recherche && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     {cooperation.domaine_recherche}
                   </p>
                 )}
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                <p className="text-muted-foreground dark:text-gray-300 mb-4 line-clamp-3">
                   {cooperation.description}
                 </p>
                 
                 <div className="space-y-2 mb-4">
                   {cooperation.pays && cooperation.pays.length > 0 && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
                       <MapPin className="h-4 w-4" />
                       <span>{cooperation.pays.join(', ')}</span>
                     </div>
                   )}
                   
-                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     <span>
                       {cooperation.annee_debut}
@@ -99,7 +99,7 @@ const CooperationInternationale = () => {
                 </div>
 
                 <Link to={`/cooperation/${cooperation.id}`}>
-                  <Button size="sm" className="w-full bg-[#006be5] hover:bg-[#0056b3]">
+                  <Button size="sm" className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
                     <Eye className="h-4 w-4 mr-1" />
                     Voir détails
                   </Button>
@@ -111,11 +111,11 @@ const CooperationInternationale = () => {
 
         {!cooperations?.length && (
           <div className="text-center py-12">
-            <Globe className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+            <Globe className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
               Aucune coopération disponible
             </h3>
-            <p className="text-gray-500 dark:text-gray-500">
+            <p className="text-muted-foreground dark:text-muted-foreground">
               Les coopérations internationales seront bientôt disponibles.
             </p>
           </div>

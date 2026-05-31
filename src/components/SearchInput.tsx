@@ -28,20 +28,20 @@ const SearchInput = ({
 
   return (
     <div className={`relative ${className}`}>
-      <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+      <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
       <Input
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className="pl-10 pr-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+        className="pl-10 pr-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
       />
       {value && (
         <Button
           variant="ghost"
           size="sm"
           onClick={handleClear}
-          className="absolute right-1 top-1 h-10 w-10 p-0 hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="absolute right-1 top-1 h-10 w-10 p-0 hover:bg-muted dark:hover:bg-gray-700"
         >
           <X className="h-4 w-4" />
         </Button>

@@ -74,14 +74,14 @@ const FileUploadDialog = ({
         
         <div className="space-y-6">
           <div 
-            className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-green-400 transition-colors cursor-pointer"
+            className="border-2 border-dashed border-input dark:border-gray-600 rounded-lg p-8 text-center hover:border-green-400 transition-colors cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
           >
-            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-lg font-medium text-gray-600 dark:text-gray-300">
+            <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-lg font-medium text-muted-foreground dark:text-gray-300">
               Cliquez pour sélectionner des fichiers
             </p>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               Ou glissez-déposez vos fichiers ici
             </p>
             <input
@@ -99,11 +99,11 @@ const FileUploadDialog = ({
               <h3 className="text-lg font-semibold">Fichiers à télécharger ({files.length})</h3>
               <div className="space-y-4">
                 {files.map((fileItem) => (
-                  <div key={fileItem.id} className="flex items-start gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  <div key={fileItem.id} className="flex items-start gap-4 p-4 border border-border dark:border-gray-700 rounded-lg">
                     <div className="flex-1 space-y-3">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-900 dark:text-white">
+                          <h4 className="font-medium text-foreground dark:text-white">
                             {fileItem.file.name}
                           </h4>
                           <div className="flex items-center gap-2 mt-1">
@@ -131,7 +131,7 @@ const FileUploadDialog = ({
                           <select
                             value={fileItem.category}
                             onChange={(e) => updateFile(fileItem.id, 'category', e.target.value)}
-                            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+                            className="w-full p-2 border border-input dark:border-gray-600 rounded-md bg-card dark:bg-gray-800"
                           >
                             {categories.map((cat) => (
                               <option key={cat} value={cat}>{cat}</option>

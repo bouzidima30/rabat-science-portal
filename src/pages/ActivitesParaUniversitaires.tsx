@@ -30,16 +30,16 @@ const ActivitesParaUniversitaires = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Activités Para-universitaires
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Découvrez tous les clubs et associations de la Faculté des Sciences de Rabat.
             Participez aux activités qui enrichiront votre parcours universitaire !
           </p>
@@ -49,7 +49,7 @@ const ActivitesParaUniversitaires = () => {
           <LoadingSpinner />
         ) : clubs.length === 0 ? (
           <Card>
-            <CardContent className="py-12 text-center text-gray-500">
+            <CardContent className="py-12 text-center text-muted-foreground">
               Aucun club disponible pour le moment.
             </CardContent>
           </Card>
@@ -58,7 +58,7 @@ const ActivitesParaUniversitaires = () => {
             {clubs.map((club) => (
               <Link key={club.id} to={`/club/${club.id}`} className="block group">
                 <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 h-full">
-                  <div className="aspect-video bg-gray-100 dark:bg-gray-800">
+                  <div className="aspect-video bg-muted dark:bg-gray-800">
                     {club.image_url ? (
                       <OptimizedImage
                         src={club.image_url}
@@ -66,13 +66,13 @@ const ActivitesParaUniversitaires = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                         <Users className="h-16 w-16" />
                       </div>
                     )}
                   </div>
                   <CardContent className="p-5">
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#006be5] transition-colors">
+                    <h2 className="text-lg font-semibold text-foreground dark:text-white group-hover:text-[hsl(var(--primary))] transition-colors">
                       {club.titre}
                     </h2>
                   </CardContent>

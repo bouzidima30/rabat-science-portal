@@ -75,16 +75,16 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Contact
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Contactez la Faculté des Sciences de Rabat pour toute information ou demande.
           </p>
         </div>
@@ -94,16 +94,16 @@ const Contact = () => {
           <div>
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle className="text-2xl text-[#006be5]">
+                <CardTitle className="text-2xl text-[hsl(var(--primary))]">
                   Informations de Contact
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-start">
-                  <MapPin className="h-5 w-5 text-[#006be5] mr-3 mt-1 flex-shrink-0" />
+                  <MapPin className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Adresse</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground dark:text-white">Adresse</h3>
+                    <p className="text-muted-foreground dark:text-gray-300">
                       Avenue Ibn Battouta, B.P. 1014 RP<br />
                       Rabat, Maroc
                     </p>
@@ -111,10 +111,10 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Phone className="h-5 w-5 text-[#006be5] mr-3 mt-1 flex-shrink-0" />
+                  <Phone className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Téléphone</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground dark:text-white">Téléphone</h3>
+                    <p className="text-muted-foreground dark:text-gray-300">
                       +212 5 37 77 18 34<br />
                       +212 5 37 77 18 35
                     </p>
@@ -122,10 +122,10 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Mail className="h-5 w-5 text-[#006be5] mr-3 mt-1 flex-shrink-0" />
+                  <Mail className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Email</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground dark:text-white">Email</h3>
+                    <p className="text-muted-foreground dark:text-gray-300">
                       contact@fsr.ac.ma<br />
                       doyen@fsr.ac.ma
                     </p>
@@ -133,10 +133,10 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Clock className="h-5 w-5 text-[#006be5] mr-3 mt-1 flex-shrink-0" />
+                  <Clock className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Horaires d'ouverture</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground dark:text-white">Horaires d'ouverture</h3>
+                    <p className="text-muted-foreground dark:text-gray-300">
                       Lundi - Vendredi : 8h00 - 18h00<br />
                       Samedi : 8h00 - 12h00
                     </p>
@@ -148,31 +148,31 @@ const Contact = () => {
             {/* Services administratifs */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl text-[#006be5]">
+                <CardTitle className="text-xl text-[hsl(var(--primary))]">
                   Services Administratifs
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="border-l-4 border-[#006be5] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Décanat</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <div className="border-l-4 border-[hsl(var(--primary))] pl-4">
+                    <h4 className="font-semibold text-foreground dark:text-white">Décanat</h4>
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">
                       Bureau 101 - Bâtiment Administration<br />
                       Tél: +212 5 37 77 18 34
                     </p>
                   </div>
                   
-                  <div className="border-l-4 border-[#006be5] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Service Scolarité</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <div className="border-l-4 border-[hsl(var(--primary))] pl-4">
+                    <h4 className="font-semibold text-foreground dark:text-white">Service Scolarité</h4>
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">
                       Bureau 201 - Bâtiment Administration<br />
                       Tél: +212 5 37 77 18 35
                     </p>
                   </div>
                   
-                  <div className="border-l-4 border-[#006be5] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Service Recherche</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <div className="border-l-4 border-[hsl(var(--primary))] pl-4">
+                    <h4 className="font-semibold text-foreground dark:text-white">Service Recherche</h4>
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">
                       Bureau 301 - Bâtiment Administration<br />
                       Tél: +212 5 37 77 18 36
                     </p>
@@ -186,7 +186,7 @@ const Contact = () => {
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[#006be5]">
+                <CardTitle className="text-2xl text-[hsl(var(--primary))]">
                   Envoyez-nous un message
                 </CardTitle>
               </CardHeader>
@@ -269,7 +269,7 @@ const Contact = () => {
                     
                     <Button 
                       type="submit" 
-                      className="w-full bg-[#006be5] hover:bg-[#0056b3]"
+                      className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3]"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Envoi en cours..." : "Envoyer le message"}
@@ -284,7 +284,7 @@ const Contact = () => {
         {/* Plan d'accès */}
         <Card className="mt-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5]">
+            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))]">
               Plan d'Accès
             </CardTitle>
           </CardHeader>
@@ -302,7 +302,7 @@ const Contact = () => {
               />
             </div>
             <div className="mt-4 text-center">
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-muted-foreground dark:text-gray-300">
                 La Faculté des Sciences de Rabat est située sur l'Avenue Ibn Battouta, 
                 facilement accessible par les transports en commun.
               </p>

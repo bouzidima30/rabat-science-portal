@@ -9,13 +9,13 @@ interface PageTransitionProps {
 }
 
 const FullPageLoader = () => (
-  <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+  <div className="min-h-screen bg-muted/30 dark:bg-gray-900 flex flex-col">
     <TopBar />
     <ModernNavbar />
     <div className="flex-1 flex items-center justify-center">
       <div className="flex flex-col items-center space-y-4">
-        <LoadingSpinner size="lg" className="border-[#006be5]" />
-        <p className="text-gray-600 dark:text-gray-400">Chargement...</p>
+        <LoadingSpinner size="lg" className="border-[hsl(var(--primary))]" />
+        <p className="text-muted-foreground dark:text-muted-foreground">Chargement...</p>
       </div>
     </div>
     <Footer />

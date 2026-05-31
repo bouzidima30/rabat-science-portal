@@ -55,9 +55,9 @@ const FSRChiffres = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex-1 pr-3">
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</p>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{stat.title}</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{stat.description}</p>
+                  <p className="text-3xl font-bold text-foreground dark:text-white mb-1">{stat.value}</p>
+                  <p className="text-sm font-semibold text-foreground dark:text-gray-200">{stat.title}</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">{stat.description}</p>
                 </div>
                 <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
                   <IconComponent className="h-6 w-6 text-white" />
@@ -71,16 +71,16 @@ const FSRChiffres = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             FSR en Chiffres
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             60 ans au service de l'excellence — Découvrez les chiffres clés de la
             Faculté des Sciences de Rabat, témoignant de son rayonnement et de
             son excellence académique.
@@ -88,32 +88,32 @@ const FSRChiffres = () => {
         </div>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[#006be5] mb-6">Ressources Humaines</h2>
+          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Ressources Humaines</h2>
           {renderStatGrid(ressourcesHumaines)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[#006be5] mb-6">Effectifs Étudiants</h2>
+          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Effectifs Étudiants</h2>
           {renderStatGrid(effectifsEtudiants)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[#006be5] mb-6">Offre de Formation</h2>
+          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Offre de Formation</h2>
           {renderStatGrid(formations)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[#006be5] mb-6">Recherche & Coopération</h2>
+          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Recherche & Coopération</h2>
           {renderStatGrid(recherche)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[#006be5] mb-6">Bibliothèque</h2>
+          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Bibliothèque</h2>
           {renderStatGrid(bibliotheque)}
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-[#006be5] mb-6">Lauréats par an</h2>
+          <h2 className="text-2xl font-bold text-[hsl(var(--primary))] mb-6">Lauréats par an</h2>
           {renderStatGrid(laureats)}
         </section>
       </div>

@@ -53,16 +53,16 @@ const CalendrierEmploiTemps = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Calendrier & Emploi du Temps
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Consultez les emplois du temps, calendriers des semaines et planning 
             des vacances pour l'année universitaire en cours.
           </p>
@@ -70,8 +70,8 @@ const CalendrierEmploiTemps = () => {
 
         {/* Emplois du temps */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-            <Clock className="h-6 w-6 mr-2 text-[#006be5]" />
+          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6 flex items-center">
+            <Clock className="h-6 w-6 mr-2 text-[hsl(var(--primary))]" />
             Emplois du Temps
           </h2>
           <FileExplorer categoryFilter="emploi_temps" showDownload={true} />
@@ -79,32 +79,32 @@ const CalendrierEmploiTemps = () => {
 
         {/* Calendriers */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6">
             Calendriers Officiels
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {calendriers.map((calendrier, index) => (
               <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow">
                 <CardHeader>
-                  <CardTitle className="text-lg text-[#006be5] flex items-center">
+                  <CardTitle className="text-lg text-[hsl(var(--primary))] flex items-center">
                     <Calendar className="h-5 w-5 mr-2" />
                     {calendrier.type}
                   </CardTitle>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <p className="text-sm text-muted-foreground dark:text-gray-300">
                     {calendrier.description}
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                         {calendrier.fichier}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                         {calendrier.taille}
                       </p>
                     </div>
-                    <Button className="bg-[#006be5] hover:bg-[#0056b3]">
+                    <Button className="bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
                       <Download className="h-4 w-4 mr-2" />
                       Télécharger
                     </Button>
@@ -118,7 +118,7 @@ const CalendrierEmploiTemps = () => {
         {/* Périodes de vacances */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl text-[#006be5] flex items-center">
+            <CardTitle className="text-xl text-[hsl(var(--primary))] flex items-center">
               <Plane className="h-6 w-6 mr-2" />
               Vacances Universitaires 2024-2025
             </CardTitle>
@@ -126,13 +126,13 @@ const CalendrierEmploiTemps = () => {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               {periodes.map((periode, index) => (
-                <div key={index} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <div key={index} className="bg-muted/30 dark:bg-gray-700 p-4 rounded-lg">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+                      <h4 className="font-semibold text-foreground dark:text-white mb-1">
                         {periode.nom}
                       </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <p className="text-sm text-muted-foreground dark:text-gray-300">
                         {periode.dates}
                       </p>
                     </div>

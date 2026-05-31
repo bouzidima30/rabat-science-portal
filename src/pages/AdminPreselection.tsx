@@ -134,10 +134,10 @@ const AdminPreselection = () => {
             <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
               Listes de Présélection
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground dark:text-gray-300 mt-1">
               Gérez les documents de présélection par cycle et par étape
             </p>
           </div>
@@ -231,7 +231,7 @@ const AdminPreselection = () => {
               {catFiles.map(file => (
                 <div key={file.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="flex items-center gap-3 min-w-0">
-                    <FileText className="h-5 w-5 text-[#006be5] shrink-0" />
+                    <FileText className="h-5 w-5 text-[hsl(var(--primary))] shrink-0" />
                     <div className="min-w-0">
                       <p className="font-medium text-sm truncate">{file.original_name}</p>
                       <p className="text-xs text-muted-foreground">{formatSize(file.file_size)} • {new Date(file.created_at).toLocaleDateString("fr-FR")}</p>

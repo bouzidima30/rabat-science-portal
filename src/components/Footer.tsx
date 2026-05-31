@@ -165,22 +165,22 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            <div className="text-gray-400 text-sm text-center lg:text-left">
+            <div className="text-muted-foreground text-sm text-center lg:text-left">
               © 2025 Faculté des Sciences de Rabat. Tous droits réservés.
               <span className="mx-2">•</span>
               Université Mohammed V
             </div>
             <div className="flex flex-wrap justify-center gap-6">
-              <Link to="/privacy" className="text-gray-400 hover:text-blue-300 text-sm transition-colors">
+              <Link to="/privacy" className="text-muted-foreground hover:text-blue-300 text-sm transition-colors">
                 Politique de confidentialité
               </Link>
-              <Link to="/terms" className="text-gray-400 hover:text-blue-300 text-sm transition-colors">
+              <Link to="/terms" className="text-muted-foreground hover:text-blue-300 text-sm transition-colors">
                 Conditions d'utilisation
               </Link>
-              <Link to="/plan-acces" className="text-gray-400 hover:text-blue-300 text-sm transition-colors">
+              <Link to="/plan-acces" className="text-muted-foreground hover:text-blue-300 text-sm transition-colors">
                 Plan d'accès
               </Link>
-              <Link to="/contact" className="text-gray-400 hover:text-blue-300 text-sm transition-colors">
+              <Link to="/contact" className="text-muted-foreground hover:text-blue-300 text-sm transition-colors">
                 Nous contacter
               </Link>
             </div>

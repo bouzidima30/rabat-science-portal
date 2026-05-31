@@ -41,28 +41,28 @@ const CoursTdsTps = () => {
       case "Cours": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
       case "TD": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
       case "TP": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+      default: return "bg-muted text-foreground dark:bg-gray-900 dark:text-gray-200";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Cours / TDs / TPs
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Accédez aux supports de cours, travaux dirigés et travaux pratiques 
             de tous les niveaux d'études.
           </p>
         </div>
 
         {/* Accès Moodle */}
-        <Card className="mb-12 bg-gradient-to-r from-[#006be5] to-blue-600 text-white">
+        <Card className="mb-12 bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 text-white">
           <CardContent className="p-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -76,7 +76,7 @@ const CoursTdsTps = () => {
                 </div>
               </div>
               <Button 
-                className="bg-white text-[#006be5] hover:bg-gray-100 font-semibold px-6 py-3"
+                className="bg-card text-[hsl(var(--primary))] hover:bg-muted font-semibold px-6 py-3"
                 onClick={() => window.open('https://moodle-fsr.um5.ac.ma/', '_blank')}
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
@@ -91,7 +91,7 @@ const CoursTdsTps = () => {
           {cours.map((niveau, index) => (
             <Card key={index} className="shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl text-[#006be5] flex items-center">
+                <CardTitle className="text-xl text-[hsl(var(--primary))] flex items-center">
                   <BookOpen className="h-6 w-6 mr-2" />
                   {niveau.niveau}
                 </CardTitle>
@@ -99,28 +99,28 @@ const CoursTdsTps = () => {
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {niveau.matieres.map((matiere, matiereIndex) => (
-                    <div key={matiereIndex} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <div key={matiereIndex} className="bg-muted/30 dark:bg-gray-700 p-4 rounded-lg">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-start">
-                          <FileText className="h-5 w-5 text-[#006be5] mr-3 mt-1" />
+                          <FileText className="h-5 w-5 text-[hsl(var(--primary))] mr-3 mt-1" />
                           <div>
-                            <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+                            <h4 className="font-medium text-foreground dark:text-white mb-1">
                               {matiere.nom}
                             </h4>
                             <div className="flex items-center gap-2 mb-2">
                               <span className={`text-xs px-2 py-1 rounded ${getTypeColor(matiere.type)}`}>
                                 {matiere.type}
                               </span>
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                              <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                                 {matiere.taille}
                               </span>
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-300">
+                            <p className="text-xs text-muted-foreground dark:text-gray-300">
                               {matiere.fichier}
                             </p>
                           </div>
                         </div>
-                        <Button size="sm" className="bg-[#006be5] hover:bg-[#0056b3]">
+                        <Button size="sm" className="bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
                           <Download className="h-3 w-3 mr-1" />
                           PDF
                         </Button>

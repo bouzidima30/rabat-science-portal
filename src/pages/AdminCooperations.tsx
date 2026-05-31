@@ -322,7 +322,7 @@ const AdminCooperations = () => {
 
   if (loading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
         </div>
@@ -331,7 +331,7 @@ const AdminCooperations = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -340,10 +340,10 @@ const AdminCooperations = () => {
               <Globe className="h-8 w-8 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
                 Coopérations
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground dark:text-gray-300 mt-1">
                 Gérez les partenariats et coopérations de la faculté
               </p>
             </div>
@@ -400,18 +400,18 @@ const AdminCooperations = () => {
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Rechercher une coopération..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+                className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
               />
             </div>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="h-12 px-3 rounded-md border-0 bg-gray-50 dark:bg-gray-800 text-sm w-full lg:w-56"
+              className="h-12 px-3 rounded-md border-0 bg-muted/30 dark:bg-gray-800 text-sm w-full lg:w-56"
             >
               <option value="all">Tous les types</option>
               <option value="internationale">Internationale</option>
@@ -420,7 +420,7 @@ const AdminCooperations = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-12 px-3 rounded-md border-0 bg-gray-50 dark:bg-gray-800 text-sm w-full lg:w-56"
+              className="h-12 px-3 rounded-md border-0 bg-muted/30 dark:bg-gray-800 text-sm w-full lg:w-56"
             >
               <option value="all">Tous les statuts</option>
               <option value="draft">Brouillon</option>
@@ -436,7 +436,7 @@ const AdminCooperations = () => {
       {/* Cooperations List */}
       <div className="space-y-6">
         {paginatedCooperations.map((cooperation) => (
-          <Card key={cooperation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
+          <Card key={cooperation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex space-x-4 flex-1">
@@ -449,7 +449,7 @@ const AdminCooperations = () => {
                   )}
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      <h3 className="text-xl font-bold text-foreground dark:text-white">
                         {cooperation.titre}
                       </h3>
                       <div className="flex flex-wrap gap-2 sm:ml-4">
@@ -486,7 +486,7 @@ const AdminCooperations = () => {
                         </Badge>
                       )}
                       {cooperation.annee_debut && (
-                        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                           <Calendar className="h-4 w-4 mr-1" />
                           {cooperation.annee_debut}
                           {cooperation.annee_fin && ` - ${cooperation.annee_fin}`}
@@ -495,7 +495,7 @@ const AdminCooperations = () => {
                     </div>
                     
                     {cooperation.description && (
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-3">
+                      <p className="text-muted-foreground dark:text-gray-300 leading-relaxed mb-3">
                         {cooperation.description.length > 200 
                           ? cooperation.description.substring(0, 200) + "..." 
                           : cooperation.description
@@ -527,11 +527,11 @@ const AdminCooperations = () => {
         {paginatedCooperations.length === 0 && filteredCooperations.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
-              <Globe className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              <Globe className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                 Aucune coopération trouvée
               </h3>
-              <p className="text-gray-500 mb-6">
+              <p className="text-muted-foreground mb-6">
                 {searchQuery ? "Aucun résultat pour votre recherche." : "Créez votre première coopération pour commencer."}
               </p>
               {!searchQuery && (
@@ -608,7 +608,7 @@ const AdminCooperations = () => {
                 <select
                   value={formData.type_cooperation}
                   onChange={(e) => setFormData({...formData, type_cooperation: e.target.value})}
-                  className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+                  className="w-full p-2 border border-input rounded-md bg-card dark:bg-gray-800"
                 >
                   <option value="internationale">Internationale</option>
                   <option value="nationale">Nationale</option>
@@ -667,7 +667,7 @@ const AdminCooperations = () => {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({...formData, status: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+                className="w-full p-2 border border-input rounded-md bg-card dark:bg-gray-800"
               >
                 <option value="draft">Brouillon</option>
                 <option value="pending_review">En attente</option>

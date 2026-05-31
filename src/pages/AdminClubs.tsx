@@ -215,17 +215,17 @@ const AdminClubs = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
           <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-xl">
             <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
               Clubs para-universitaires
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground dark:text-gray-300 mt-1">
               Gérez les clubs affichés sur la page des activités para-universitaires
             </p>
           </div>
@@ -239,7 +239,7 @@ const AdminClubs = () => {
         <LoadingSpinner />
       ) : clubs.length === 0 ? (
         <Card>
-          <CardContent className="py-12 text-center text-gray-500">
+          <CardContent className="py-12 text-center text-muted-foreground">
             Aucun club pour le moment. Cliquez sur « Ajouter un club » pour commencer.
           </CardContent>
         </Card>
@@ -247,7 +247,7 @@ const AdminClubs = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {clubs.map((club) => (
             <Card key={club.id} className="overflow-hidden">
-              <div className="aspect-video bg-gray-100 dark:bg-gray-800">
+              <div className="aspect-video bg-muted dark:bg-gray-800">
                 {club.image_url ? (
                   <OptimizedImage
                     src={club.image_url}
@@ -255,13 +255,13 @@ const AdminClubs = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                     <Users className="h-12 w-12" />
                   </div>
                 )}
               </div>
               <CardContent className="p-4">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3 line-clamp-2">
+                <h3 className="font-semibold text-foreground dark:text-white mb-3 line-clamp-2">
                   {club.titre}
                 </h3>
                 <div className="flex gap-2">
@@ -322,7 +322,7 @@ const AdminClubs = () => {
                 rows={6}
                 maxLength={5000}
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Affichée sur la page de détail du club. Les sauts de ligne sont conservés.
               </p>
             </div>
@@ -334,11 +334,11 @@ const AdminClubs = () => {
                 accept="image/jpeg,image/png,image/webp,image/gif"
                 onChange={handleFileChange}
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 JPG, PNG, WEBP ou GIF — 5 Mo maximum
               </p>
               {(file || existingImage) && (
-                <div className="mt-3 aspect-video bg-gray-100 dark:bg-gray-800 rounded overflow-hidden">
+                <div className="mt-3 aspect-video bg-muted dark:bg-gray-800 rounded overflow-hidden">
                   <img
                     src={file ? URL.createObjectURL(file) : existingImage!}
                     alt="Aperçu"

@@ -49,10 +49,10 @@ const Evenements = () => {
               />
             )}
             <div className="flex-1">
-              <h3 className="text-xl font-semibold text-[#006be5] mb-2">
+              <h3 className="text-xl font-semibold text-[hsl(var(--primary))] mb-2">
                 {event.titre}
               </h3>
-              <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-3">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-muted-foreground mb-3">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
                   {formatDate(event.date_debut)}
@@ -75,7 +75,7 @@ const Evenements = () => {
                 )}
               </div>
               {event.description && (
-                <p className="text-gray-700 dark:text-gray-300 line-clamp-3">
+                <p className="text-muted-foreground dark:text-gray-300 line-clamp-3">
                   {event.description}
                 </p>
               )}
@@ -88,11 +88,11 @@ const Evenements = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
         </div>
         <Footer />
       </div>
@@ -100,23 +100,23 @@ const Evenements = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Événements
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
+          <p className="text-xl text-muted-foreground dark:text-muted-foreground">
             Découvrez les événements de la Faculté des Sciences de Rabat
           </p>
         </div>
 
         {/* Événements à venir */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6">
             Événements à venir
           </h2>
           {upcomingEvents.length > 0 ? (
@@ -127,18 +127,18 @@ const Evenements = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                 Aucun événement à venir
               </h3>
-              <p className="text-gray-500">Revenez bientôt pour découvrir nos prochains événements.</p>
+              <p className="text-muted-foreground">Revenez bientôt pour découvrir nos prochains événements.</p>
             </div>
           )}
         </section>
 
         {/* Événements passés */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6">
             Événements passés
           </h2>
           {pastEvents.length > 0 ? (
@@ -149,8 +149,8 @@ const Evenements = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                 Aucun événement passé
               </h3>
             </div>

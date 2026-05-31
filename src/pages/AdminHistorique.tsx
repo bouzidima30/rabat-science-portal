@@ -136,7 +136,7 @@ const AdminHistorique = () => {
         return <Trash className="h-4 w-4 text-red-600" />;
       case 'view':
       case 'access':
-        return <Eye className="h-4 w-4 text-gray-600" />;
+        return <Eye className="h-4 w-4 text-muted-foreground" />;
       case 'login':
       case 'logout':
         return <User className="h-4 w-4 text-purple-600" />;
@@ -156,7 +156,7 @@ const AdminHistorique = () => {
       return 'bg-red-100 text-red-800 hover:bg-red-200';
     }
     if (action.includes('view') || action.includes('access')) {
-      return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+      return 'bg-muted text-foreground hover:bg-muted';
     }
     if (action.includes('login') || action.includes('logout')) {
       return 'bg-purple-100 text-purple-800 hover:bg-purple-200';
@@ -166,7 +166,7 @@ const AdminHistorique = () => {
 
   if (isLoading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -175,7 +175,7 @@ const AdminHistorique = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center space-x-4">
@@ -183,10 +183,10 @@ const AdminHistorique = () => {
             <Activity className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
               Journal d'Activité
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground dark:text-gray-300 mt-1">
               Historique des actions effectuées par les utilisateurs
             </p>
           </div>
@@ -227,7 +227,7 @@ const AdminHistorique = () => {
               <select
                 value={selectedUser}
                 onChange={(e) => setSelectedUser(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md bg-white dark:bg-gray-800"
+                className="w-full p-2 border border-input rounded-md bg-card dark:bg-gray-800"
               >
                 <option value="all">Tous les utilisateurs</option>
                 {users.map((user) => (
@@ -242,7 +242,7 @@ const AdminHistorique = () => {
             <div>
               <label className="block text-sm font-medium mb-3">Recherche</label>
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Rechercher dans les activités..."
                   value={searchQuery}
@@ -326,9 +326,9 @@ const AdminHistorique = () => {
               {filteredActivities.map((activity) => (
                 <div 
                   key={activity.id} 
-                  className="flex items-start gap-4 p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="flex items-start gap-4 p-6 border border-border dark:border-gray-700 rounded-xl hover:bg-muted/30 dark:hover:bg-gray-800/50 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
-                  <div className="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
+                  <div className="flex-shrink-0 w-10 h-10 bg-muted dark:bg-gray-800 rounded-full flex items-center justify-center">
                     {getActionIcon(activity.action)}
                   </div>
                   
@@ -337,28 +337,28 @@ const AdminHistorique = () => {
                       <Badge className={`${getActionColor(activity.action)} flex items-center gap-1`}>
                         {activity.action}
                       </Badge>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-muted-foreground dark:text-muted-foreground">
                         {new Date(activity.created_at).toLocaleString('fr-FR')}
                       </span>
                     </div>
                     
                     <div className="flex items-center gap-2 mb-2">
-                      <User className="h-4 w-4 text-gray-400" />
-                      <span className="font-medium text-gray-900 dark:text-white">
+                      <User className="h-4 w-4 text-muted-foreground" />
+                      <span className="font-medium text-foreground dark:text-white">
                         {activity.profiles?.full_name || 'Utilisateur inconnu'}
                       </span>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-muted-foreground dark:text-muted-foreground">
                         ({activity.profiles?.email || 'Email non trouvé'})
                       </span>
                     </div>
                     
                     {activity.details && (
-                      <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                      <p className="text-muted-foreground dark:text-gray-300 text-sm mb-3">
                         {activity.details}
                       </p>
                     )}
                     
-                    <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground dark:text-muted-foreground">
                       {activity.ip_address && (
                         <div className="flex items-center gap-1">
                           <Globe className="h-3 w-3" />
@@ -378,11 +378,11 @@ const AdminHistorique = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <Activity className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              <Activity className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                 Aucune activité trouvée
               </h3>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 {searchQuery || selectedAction !== 'all' || selectedUser !== 'all'
                   ? "Aucun résultat pour les filtres sélectionnés" 
                   : "Les activités des utilisateurs apparaîtront ici"

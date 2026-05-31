@@ -45,11 +45,11 @@ const FormationMaster = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
         </div>
         <Footer />
       </div>
@@ -57,16 +57,16 @@ const FormationMaster = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Formations Master
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Découvrez nos formations de niveau Master proposées par la Faculté des Sciences de Rabat
           </p>
         </div>
@@ -76,7 +76,7 @@ const FormationMaster = () => {
           <Card className="shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <Filter className="h-5 w-5 text-gray-500" />
+                <Filter className="h-5 w-5 text-muted-foreground" />
                 <div className="flex-1">
                   <Select value={selectedDepartement} onValueChange={setSelectedDepartement}>
                     <SelectTrigger className="w-64">
@@ -110,22 +110,22 @@ const FormationMaster = () => {
           {filteredFormations?.map((formation) => (
             <Card key={formation.id} className="shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
-                <CardTitle className="text-xl text-[#006be5]">
+                <CardTitle className="text-xl text-[hsl(var(--primary))]">
                   {formation.titre}
                 </CardTitle>
                 {formation.departement && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     Département: {formation.departement}
                   </p>
                 )}
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                <p className="text-muted-foreground dark:text-gray-300 mb-4 line-clamp-3">
                   {formation.description}
                 </p>
                 <div className="flex gap-2">
                   <Link to={`/formation/${formation.id}`}>
-                    <Button size="sm" className="bg-[#006be5] hover:bg-[#0056b3]">
+                    <Button size="sm" className="bg-[hsl(var(--primary))] hover:bg-[#0056b3]">
                       <Eye className="h-4 w-4 mr-1" />
                       Voir détails
                     </Button>
@@ -146,11 +146,11 @@ const FormationMaster = () => {
 
         {!filteredFormations?.length && (
           <div className="text-center py-12">
-            <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+            <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
               Aucune formation disponible
             </h3>
-            <p className="text-gray-500 dark:text-gray-500">
+            <p className="text-muted-foreground dark:text-muted-foreground">
               {selectedDepartement !== "all" 
                 ? `Aucune formation trouvée pour le département ${selectedDepartement}.`
                 : "Les formations Master seront bientôt disponibles."

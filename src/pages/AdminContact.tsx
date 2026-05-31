@@ -106,7 +106,7 @@ const AdminContact = () => {
       case 'unread': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
       case 'read': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
       case 'responded': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      default: return 'bg-muted text-foreground dark:bg-gray-900 dark:text-gray-200';
     }
   };
 
@@ -188,10 +188,10 @@ const AdminContact = () => {
               <Mail className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
                 Messages de Contact
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground dark:text-gray-300 mt-1">
                 Gérez les messages reçus via le formulaire de contact
               </p>
             </div>
@@ -255,19 +255,19 @@ const AdminContact = () => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Rechercher un message..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors"
+                className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
               />
             </div>
             <div>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full h-12 px-3 border-0 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 rounded-md transition-colors"
+                className="w-full h-12 px-3 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 rounded-md transition-colors"
               >
                 <option value="all">Tous les statuts</option>
                 <option value="unread">Non lus</option>
@@ -282,16 +282,16 @@ const AdminContact = () => {
       {/* Messages List */}
       <div className="space-y-6">
         {paginatedMessages.map((message) => (
-          <Card key={message.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
+          <Card key={message.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card dark:bg-gray-800">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                      <h3 className="text-xl font-bold text-foreground dark:text-white mb-1">
                         {message.name}
                       </h3>
-                      <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
+                      <p className="text-lg text-muted-foreground dark:text-gray-300 font-medium">
                         {message.subject}
                       </p>
                     </div>
@@ -361,7 +361,7 @@ const AdminContact = () => {
                             {selectedMessage?.response && (
                               <div>
                                 <label className="font-semibold">Réponse précédente:</label>
-                                <p className="whitespace-pre-wrap bg-gray-50 dark:bg-gray-800 p-3 rounded">
+                                <p className="whitespace-pre-wrap bg-muted/30 dark:bg-gray-800 p-3 rounded">
                                   {selectedMessage.response}
                                 </p>
                               </div>
@@ -411,23 +411,23 @@ const AdminContact = () => {
                     <Badge className={getStatusColor(message.status)}>
                       {getStatusLabel(message.status)}
                     </Badge>
-                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                       <Mail className="h-4 w-4 mr-1" />
                       {message.email}
                     </div>
                     {message.phone && (
-                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                         <Phone className="h-4 w-4 mr-1" />
                         {message.phone}
                       </div>
                     )}
-                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                       <Calendar className="h-4 w-4 mr-1" />
                       {format(new Date(message.created_at), 'PPp', { locale: fr })}
                     </div>
                   </div>
                   
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <p className="text-muted-foreground dark:text-gray-300 leading-relaxed">
                     {message.message}
                   </p>
                 </div>
@@ -439,11 +439,11 @@ const AdminContact = () => {
         {filteredMessages.length === 0 && (
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
-              <Mail className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              <Mail className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                 Aucun message trouvé
               </h3>
-              <p className="text-gray-500 mb-6">
+              <p className="text-muted-foreground mb-6">
                 {searchQuery ? "Aucun résultat pour votre recherche." : "Aucun message de contact n'a été reçu pour le moment."}
               </p>
             </CardContent>

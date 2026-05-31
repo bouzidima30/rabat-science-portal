@@ -36,7 +36,7 @@ const DynamicPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -49,12 +49,12 @@ const DynamicPage = () => {
 
   if (!page) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="max-w-4xl mx-auto px-4 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-2xl font-bold text-foreground dark:text-white mb-4">
               Page non trouvée
             </h1>
             <Link to="/">
@@ -71,7 +71,7 @@ const DynamicPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
@@ -87,7 +87,7 @@ const DynamicPage = () => {
 
         <Card className="shadow-lg">
           {page.image_url && (
-            <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+            <div className="aspect-video bg-muted dark:bg-gray-700 rounded-t-lg overflow-hidden">
               <img 
                 src={page.image_url} 
                 alt={page.titre}
@@ -97,7 +97,7 @@ const DynamicPage = () => {
           )}
           
           <CardContent className="p-8">
-            <h1 className="text-4xl font-bold text-[#006be5] mb-8">
+            <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-8">
               {page.titre}
             </h1>
             
@@ -107,8 +107,8 @@ const DynamicPage = () => {
             />
             
             {page.fichiers && page.fichiers.length > 0 && (
-              <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              <div className="mt-8 pt-6 border-t border-border dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-foreground dark:text-white mb-4">
                   Fichiers attachés
                 </h3>
                 <div className="grid gap-3">

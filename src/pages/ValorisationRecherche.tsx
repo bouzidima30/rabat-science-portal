@@ -42,16 +42,16 @@ const ValorisationRecherche = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Valorisation de la Recherche
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             La structure de valorisation de la recherche « SV-Sciences » de la Faculté des Sciences de Rabat,
             interface entre l'Université et l'Entreprise.
           </p>
@@ -60,13 +60,13 @@ const ValorisationRecherche = () => {
         {/* Présentation */}
         <Card className="mb-12 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-[#006be5] flex items-center justify-center">
+            <CardTitle className="text-2xl text-center text-[hsl(var(--primary))] flex items-center justify-center">
               <Target className="h-6 w-6 mr-2" />
               Présentation
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="max-w-4xl mx-auto space-y-4 text-gray-700 dark:text-gray-300 text-justify leading-relaxed">
+            <div className="max-w-4xl mx-auto space-y-4 text-muted-foreground dark:text-gray-300 text-justify leading-relaxed">
               <p>
                 Animée d'une ferme volonté et fidèle à son engagement, la Faculté des Sciences de Rabat,
                 l'un des leviers historiques du rebond économique, s'est assignée, entre autres, la mission
@@ -90,7 +90,7 @@ const ValorisationRecherche = () => {
 
         {/* Missions de la SV-Sciences */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
             Les principales missions de la SV-Sciences
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -100,11 +100,11 @@ const ValorisationRecherche = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-6 flex gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-[#006be5]/10 rounded-lg flex items-center justify-center">
-                        <IconComponent className="h-6 w-6 text-[#006be5]" />
+                      <div className="w-12 h-12 bg-[hsl(var(--primary))]/10 rounded-lg flex items-center justify-center">
+                        <IconComponent className="h-6 w-6 text-[hsl(var(--primary))]" />
                       </div>
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                    <p className="text-muted-foreground dark:text-gray-300 text-sm leading-relaxed">
                       {mission.texte}
                     </p>
                   </CardContent>
@@ -115,7 +115,7 @@ const ValorisationRecherche = () => {
         </div>
 
         {/* Contact */}
-        <Card className="shadow-lg bg-gradient-to-br from-[#006be5] to-blue-700 text-white">
+        <Card className="shadow-lg bg-gradient-to-br from-[hsl(var(--primary))] to-blue-700 text-white">
           <CardHeader>
             <CardTitle className="text-2xl text-center text-white flex items-center justify-center">
               <Briefcase className="h-6 w-6 mr-2" />

@@ -40,21 +40,21 @@ const Formations = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Formations
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             La Faculté des Sciences de Rabat propose une gamme complète de formations 
             scientifiques de haute qualité, du niveau Licence au Doctorat, ainsi que 
             des formations continues pour les professionnels.
           </p>
-          <div className="w-24 h-1 bg-[#006be5] mx-auto mt-6"></div>
+          <div className="w-24 h-1 bg-[hsl(var(--primary))] mx-auto mt-6"></div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
@@ -67,17 +67,17 @@ const Formations = () => {
                     <div className={`p-3 rounded-full ${formation.color} mr-4`}>
                       <IconComponent className="h-6 w-6 text-white" />
                     </div>
-                    <CardTitle className="text-2xl text-gray-900 dark:text-white">
+                    <CardTitle className="text-2xl text-foreground dark:text-white">
                       {formation.title}
                     </CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                  <p className="text-muted-foreground dark:text-gray-300 mb-6 leading-relaxed">
                     {formation.description}
                   </p>
                   <Link to={formation.link}>
-                    <Button className="w-full bg-[#006be5] hover:bg-[#0056b3] text-white">
+                    <Button className="w-full bg-[hsl(var(--primary))] hover:bg-[#0056b3] text-white">
                       Découvrir les formations
                     </Button>
                   </Link>
@@ -88,7 +88,7 @@ const Formations = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <Card className="shadow-lg bg-gradient-to-r from-[#006be5] to-[#0056b3] text-white">
+          <Card className="shadow-lg bg-gradient-to-r from-[hsl(var(--primary))] to-[#0056b3] text-white">
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold mb-4">
                 Besoin d'aide pour choisir votre formation ?

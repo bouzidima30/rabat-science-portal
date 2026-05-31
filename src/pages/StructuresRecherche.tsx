@@ -376,22 +376,22 @@ const StructureCard = ({
   centre?: string;
   icon: typeof Building;
 }) => (
-  <AccordionItem value={acronyme} className="border rounded-lg px-4 bg-white dark:bg-gray-800">
+  <AccordionItem value={acronyme} className="border rounded-lg px-4 bg-card dark:bg-gray-800">
     <AccordionTrigger className="hover:no-underline py-4">
       <div className="flex items-start gap-3 text-left flex-1">
-        <div className="flex-shrink-0 w-10 h-10 bg-[#006be5]/10 rounded-lg flex items-center justify-center">
-          <Icon className="h-5 w-5 text-[#006be5]" />
+        <div className="flex-shrink-0 w-10 h-10 bg-[hsl(var(--primary))]/10 rounded-lg flex items-center justify-center">
+          <Icon className="h-5 w-5 text-[hsl(var(--primary))]" />
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <Badge variant="default" className="bg-[#006be5]">{acronyme}</Badge>
+            <Badge variant="default" className="bg-[hsl(var(--primary))]">{acronyme}</Badge>
             {centre && (
               <Badge variant="outline" className="text-xs">
                 Adhésion : {centre}
               </Badge>
             )}
           </div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">{nom}</h3>
+          <h3 className="font-semibold text-foreground dark:text-white">{nom}</h3>
         </div>
       </div>
     </AccordionTrigger>
@@ -399,18 +399,18 @@ const StructureCard = ({
       <div className="space-y-3 pl-13 ml-13">
         <div className="grid md:grid-cols-2 gap-3 text-sm">
           <div className="flex items-start gap-2">
-            <User className="h-4 w-4 text-[#006be5] mt-0.5 flex-shrink-0" />
+            <User className="h-4 w-4 text-[hsl(var(--primary))] mt-0.5 flex-shrink-0" />
             <div>
-              <span className="font-semibold text-gray-900 dark:text-white">Responsable : </span>
-              <span className="text-gray-700 dark:text-gray-300">{responsable}</span>
+              <span className="font-semibold text-foreground dark:text-white">Responsable : </span>
+              <span className="text-muted-foreground dark:text-gray-300">{responsable}</span>
             </div>
           </div>
           {email && (
             <div className="flex items-start gap-2">
-              <Mail className="h-4 w-4 text-[#006be5] mt-0.5 flex-shrink-0" />
+              <Mail className="h-4 w-4 text-[hsl(var(--primary))] mt-0.5 flex-shrink-0" />
               <a
                 href={`mailto:${email}`}
-                className="text-[#006be5] hover:underline break-all"
+                className="text-[hsl(var(--primary))] hover:underline break-all"
               >
                 {email}
               </a>
@@ -418,10 +418,10 @@ const StructureCard = ({
           )}
         </div>
         <div>
-          <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+          <p className="text-sm font-semibold text-foreground dark:text-white mb-1">
             Domaines de recherche :
           </p>
-          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+          <p className="text-sm text-muted-foreground dark:text-gray-300 leading-relaxed">
             {domaines}
           </p>
         </div>
@@ -432,16 +432,16 @@ const StructureCard = ({
 
 const StructuresRecherche = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
             Structures de Recherche
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
             Vous trouverez ci-dessous l'ensemble des structures de recherche adossées à
             la Faculté des Sciences de Rabat ainsi que celles auxquelles certains
             chercheurs de l'établissement sont attachés.
@@ -450,25 +450,25 @@ const StructuresRecherche = () => {
 
         {/* Statistiques */}
         <div className="grid grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
-          <Card className="text-center bg-white dark:bg-gray-800">
+          <Card className="text-center bg-card dark:bg-gray-800">
             <CardContent className="p-4">
-              <Building className="h-6 w-6 text-[#006be5] mx-auto mb-2" />
-              <div className="text-3xl font-bold text-[#006be5]">{centres.length}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">Centres</div>
+              <Building className="h-6 w-6 text-[hsl(var(--primary))] mx-auto mb-2" />
+              <div className="text-3xl font-bold text-[hsl(var(--primary))]">{centres.length}</div>
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">Centres</div>
             </CardContent>
           </Card>
-          <Card className="text-center bg-white dark:bg-gray-800">
+          <Card className="text-center bg-card dark:bg-gray-800">
             <CardContent className="p-4">
-              <FlaskConical className="h-6 w-6 text-[#006be5] mx-auto mb-2" />
-              <div className="text-3xl font-bold text-[#006be5]">{laboratoires.length}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">Laboratoires</div>
+              <FlaskConical className="h-6 w-6 text-[hsl(var(--primary))] mx-auto mb-2" />
+              <div className="text-3xl font-bold text-[hsl(var(--primary))]">{laboratoires.length}</div>
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">Laboratoires</div>
             </CardContent>
           </Card>
-          <Card className="text-center bg-white dark:bg-gray-800">
+          <Card className="text-center bg-card dark:bg-gray-800">
             <CardContent className="p-4">
-              <Users className="h-6 w-6 text-[#006be5] mx-auto mb-2" />
-              <div className="text-3xl font-bold text-[#006be5]">{equipes.length}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">Équipes</div>
+              <Users className="h-6 w-6 text-[hsl(var(--primary))] mx-auto mb-2" />
+              <div className="text-3xl font-bold text-[hsl(var(--primary))]">{equipes.length}</div>
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">Équipes</div>
             </CardContent>
           </Card>
         </div>
@@ -492,7 +492,7 @@ const StructuresRecherche = () => {
           <TabsContent value="centres">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[#006be5] flex items-center gap-2">
+                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center gap-2">
                   <Building className="h-6 w-6" />
                   Centres de Recherche
                 </CardTitle>
@@ -510,7 +510,7 @@ const StructuresRecherche = () => {
           <TabsContent value="laboratoires">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[#006be5] flex items-center gap-2">
+                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center gap-2">
                   <FlaskConical className="h-6 w-6" />
                   Laboratoires
                 </CardTitle>
@@ -528,7 +528,7 @@ const StructuresRecherche = () => {
           <TabsContent value="equipes">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-[#006be5] flex items-center gap-2">
+                <CardTitle className="text-2xl text-[hsl(var(--primary))] flex items-center gap-2">
                   <Users className="h-6 w-6" />
                   Équipes de Recherche
                 </CardTitle>

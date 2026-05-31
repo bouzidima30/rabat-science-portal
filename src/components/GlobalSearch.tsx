@@ -170,22 +170,22 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
       case 'page': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
       case 'cooperation': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
       case 'formation': return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+      default: return 'bg-muted text-foreground dark:bg-gray-700 dark:text-gray-200';
     }
   };
 
   return createPortal(
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-start justify-center pt-20">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 border border-gray-200 dark:border-gray-700">
+      <div className="bg-card dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 border border-border dark:border-gray-700">
         <div className="p-6">
           <div className="flex items-center gap-4 mb-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Rechercher dans tout le site..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 text-lg border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+                className="pl-10 h-12 text-lg border-input dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
                 autoFocus
               />
             </div>
@@ -199,7 +199,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
               {isLoading ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto"></div>
-                  <p className="text-sm text-gray-500 mt-2">Recherche en cours...</p>
+                  <p className="text-sm text-muted-foreground mt-2">Recherche en cours...</p>
                 </div>
               ) : searchResults && searchResults.length > 0 ? (
                 <div className="space-y-2">
@@ -208,7 +208,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
                       key={`${result.type}-${result.id}`}
                       to={result.url}
                       onClick={onClose}
-                      className="block p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700"
+                      className="block p-4 rounded-lg hover:bg-muted/30 dark:hover:bg-gray-700 transition-colors border border-border dark:border-gray-700"
                     >
                       <div className="flex items-start gap-3">
                         <div className={`flex items-center gap-2 px-3 py-1 text-xs font-medium rounded-full ${getTypeColor(result.type)}`}>
@@ -216,11 +216,11 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
                           {getTypeLabel(result.type)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                          <h3 className="font-medium text-foreground dark:text-white truncate">
                             {result.title}
                           </h3>
                           {result.description && (
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">
+                            <p className="text-sm text-muted-foreground dark:text-gray-300 mt-1 line-clamp-2">
                               {result.description}
                             </p>
                           )}
@@ -232,8 +232,8 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
               ) : (
                 <div className="text-center py-8">
                   <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500 dark:text-gray-400">Aucun résultat trouvé</p>
-                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                  <p className="text-muted-foreground dark:text-muted-foreground">Aucun résultat trouvé</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     Essayez avec d'autres mots-clés
                   </p>
                 </div>
@@ -244,10 +244,10 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
           {searchQuery.length < 2 && (
             <div className="text-center py-8">
               <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 dark:text-gray-400 mb-2">
+              <p className="text-muted-foreground dark:text-muted-foreground mb-2">
                 Rechercher dans tout le contenu
               </p>
-              <p className="text-sm text-gray-400 dark:text-gray-500">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Actualités • Événements • Pages • Coopérations • Formations
               </p>
             </div>

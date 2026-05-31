@@ -104,7 +104,7 @@ const SIEMDashboard = () => {
             <div className="flex items-center space-x-2">
               <Activity className="h-4 w-4 text-blue-600" />
               <div>
-                <p className="text-sm text-gray-600">Total Événements</p>
+                <p className="text-sm text-muted-foreground">Total Événements</p>
                 <p className="text-2xl font-bold">{metrics.total_events}</p>
               </div>
             </div>
@@ -116,7 +116,7 @@ const SIEMDashboard = () => {
             <div className="flex items-center space-x-2">
               <AlertTriangle className="h-4 w-4 text-red-600" />
               <div>
-                <p className="text-sm text-gray-600">Critiques</p>
+                <p className="text-sm text-muted-foreground">Critiques</p>
                 <p className="text-2xl font-bold text-red-600">{metrics.critical_events}</p>
               </div>
             </div>
@@ -128,7 +128,7 @@ const SIEMDashboard = () => {
             <div className="flex items-center space-x-2">
               <Shield className="h-4 w-4 text-orange-600" />
               <div>
-                <p className="text-sm text-gray-600">Échecs Connexion</p>
+                <p className="text-sm text-muted-foreground">Échecs Connexion</p>
                 <p className="text-2xl font-bold">{metrics.failed_logins}</p>
               </div>
             </div>
@@ -140,7 +140,7 @@ const SIEMDashboard = () => {
             <div className="flex items-center space-x-2">
               <Eye className="h-4 w-4 text-yellow-600" />
               <div>
-                <p className="text-sm text-gray-600">Activités Suspectes</p>
+                <p className="text-sm text-muted-foreground">Activités Suspectes</p>
                 <p className="text-2xl font-bold">{metrics.suspicious_activities}</p>
               </div>
             </div>
@@ -152,7 +152,7 @@ const SIEMDashboard = () => {
             <div className="flex items-center space-x-2">
               <Server className="h-4 w-4 text-purple-600" />
               <div>
-                <p className="text-sm text-gray-600">IPs Bloquées</p>
+                <p className="text-sm text-muted-foreground">IPs Bloquées</p>
                 <p className="text-2xl font-bold">{metrics.blocked_ips}</p>
               </div>
             </div>
@@ -164,7 +164,7 @@ const SIEMDashboard = () => {
             <div className="flex items-center space-x-2">
               <Activity className="h-4 w-4 text-green-600" />
               <div>
-                <p className="text-sm text-gray-600">Sessions Actives</p>
+                <p className="text-sm text-muted-foreground">Sessions Actives</p>
                 <p className="text-2xl font-bold text-green-600">{metrics.active_sessions}</p>
               </div>
             </div>
@@ -227,8 +227,8 @@ const SIEMDashboard = () => {
               <div key={event.id} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <Clock className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm text-gray-600">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
                       {event.timestamp.toLocaleString()}
                     </span>
                   </div>
@@ -244,7 +244,7 @@ const SIEMDashboard = () => {
                 
                 <div>
                   <h4 className="font-semibold text-lg">{event.event_type}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{event.details}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{event.details}</p>
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">

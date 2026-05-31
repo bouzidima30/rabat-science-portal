@@ -61,10 +61,10 @@ const Admin = () => {
   // Show loading while checking role
   if (roleLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-muted/30 dark:bg-gray-900">
         <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#006be5]"></div>
-          <p className="text-gray-600 dark:text-gray-400">Vérification des permissions...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--primary))]"></div>
+          <p className="text-muted-foreground dark:text-muted-foreground">Vérification des permissions...</p>
         </div>
       </div>
     );
@@ -73,12 +73,12 @@ const Admin = () => {
   // Redirect non-admin users
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-muted/30 dark:bg-gray-900">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-2xl font-bold text-foreground dark:text-white mb-4">
             Accès refusé
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6">
             Vous n'avez pas les permissions nécessaires pour accéder à cette section.
           </p>
           <Link to="/">
@@ -120,17 +120,17 @@ const Admin = () => {
 
   return (
     <AuthGuard requireAdmin>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900 flex">
         {/* Fixed Sidebar */}
-        <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-white dark:bg-gray-900 shadow-xl transform ${
+        <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-card dark:bg-gray-900 shadow-xl transform ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-all duration-300 ease-out lg:translate-x-0 border-r border-gray-200 dark:border-gray-800 flex flex-col`}>
+        } transition-all duration-300 ease-out lg:translate-x-0 border-r border-border dark:border-gray-800 flex flex-col`}>
           
           {/* Sidebar Header */}
-          <div className="h-16 px-6 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-600 to-blue-700 flex-shrink-0">
+          <div className="h-16 px-6 border-b border-border dark:border-gray-800 bg-gradient-to-r from-blue-600 to-blue-700 flex-shrink-0">
             <div className="flex items-center justify-between h-full">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-card/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
                   <LayoutDashboard className="h-6 w-6 text-white" />
                 </div>
                 <div>
@@ -140,7 +140,7 @@ const Admin = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden text-white hover:bg-white/20"
+                className="lg:hidden text-white hover:bg-card/20"
                 onClick={() => setSidebarOpen(false)}
               >
                 <X className="h-5 w-5" />
@@ -161,17 +161,17 @@ const Admin = () => {
                   className={`group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                     isActive
                       ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-700"
+                      : "text-muted-foreground dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-700"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
                   <IconComponent className={`h-5 w-5 mr-3 ${
-                    isActive ? "text-white" : "text-gray-500 group-hover:text-blue-600"
+                    isActive ? "text-white" : "text-muted-foreground group-hover:text-blue-600"
                   }`} />
                   <div className="flex-1">
                     <div className="font-medium">{item.name}</div>
                     <div className={`text-xs ${
-                      isActive ? "text-blue-100" : "text-gray-500 group-hover:text-blue-600"
+                      isActive ? "text-blue-100" : "text-muted-foreground group-hover:text-blue-600"
                     }`}>
                       {item.description}
                     </div>
@@ -182,12 +182,12 @@ const Admin = () => {
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800 flex-shrink-0">
+          <div className="p-4 border-t border-border dark:border-gray-800 flex-shrink-0">
             <div className="text-center space-y-1">
-              <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+              <p className="text-xs font-medium text-muted-foreground dark:text-muted-foreground">
                 FSR Administration
               </p>
-              <p className="text-xs text-gray-500">© 2025</p>
+              <p className="text-xs text-muted-foreground">© 2025</p>
             </div>
           </div>
         </div>
@@ -195,22 +195,22 @@ const Admin = () => {
         {/* Main content with fixed sidebar offset */}
         <div className="flex-1 lg:ml-80">
           {/* Fixed TopBar */}
-          <div className="fixed top-0 right-0 left-0 lg:left-80 z-40 h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+          <div className="fixed top-0 right-0 left-0 lg:left-80 z-40 h-16 bg-card dark:bg-gray-900 border-b border-border dark:border-gray-800 shadow-sm">
             <div className="flex items-center justify-between h-full px-4 sm:px-6 gap-2">
               <div className="flex items-center space-x-3 min-w-0 flex-1">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setSidebarOpen(true)}
-                  className="lg:hidden text-gray-600 hover:text-blue-600"
+                  className="lg:hidden text-muted-foreground hover:text-blue-600"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-white truncate">
+                  <h1 className="text-base sm:text-xl font-semibold text-foreground dark:text-white truncate">
                     {currentPage?.name || "Administration"}
                   </h1>
-                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate hidden sm:block">
+                  <p className="text-xs sm:text-sm text-muted-foreground dark:text-muted-foreground truncate hidden sm:block">
                     {currentPage?.description || "Panneau de contrôle"}
                   </p>
                 </div>
@@ -228,7 +228,7 @@ const Admin = () => {
                   variant="ghost" 
                   size="icon" 
                   onClick={toggleTheme}
-                  className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                  className="text-muted-foreground hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
                 >
                   {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </Button>
@@ -236,7 +236,7 @@ const Admin = () => {
                 {user && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
+                      <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-muted-foreground hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
                         <User className="h-4 w-4" />
                         <span className="hidden sm:inline text-sm">{user.email}</span>
                       </Button>
@@ -257,7 +257,7 @@ const Admin = () => {
                   </DropdownMenu>
                 )}
 
-                <Button variant="ghost" size="icon" className="text-gray-600 hover:text-blue-600">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-blue-600">
                   <Bell className="h-4 w-4" />
                 </Button>
               </div>
@@ -265,7 +265,7 @@ const Admin = () => {
           </div>
           
           {/* Page Content with top padding for fixed header */}
-          <main className="pt-16 min-h-screen bg-gray-50 dark:bg-gray-900">
+          <main className="pt-16 min-h-screen bg-muted/30 dark:bg-gray-900">
             <Outlet />
           </main>
         </div>

@@ -315,8 +315,8 @@ const AdminResultats = () => {
             <Award className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Résultats des Examens</h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Résultats des Examens</h1>
+            <p className="text-muted-foreground dark:text-gray-300 mt-1">
               Importez des fichiers .zip contenant les résultats de la session d'automne et de printemps
             </p>
           </div>

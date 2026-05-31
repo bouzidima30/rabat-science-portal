@@ -56,7 +56,7 @@ const FileFilters = ({
           <div>
             <label className="block text-sm font-medium mb-3">Recherche</label>
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Rechercher un fichier..."
                 value={searchQuery}

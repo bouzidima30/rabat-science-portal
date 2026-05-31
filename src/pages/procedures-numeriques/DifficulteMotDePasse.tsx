@@ -38,7 +38,7 @@ const DifficulteMotDePasse = () => {
       <p className="not-prose my-4">
         <a
           href="mailto:si_fsr@fsr.ac.ma"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#006be5] text-white hover:bg-[#006be5]/90 no-underline"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90 no-underline"
         >
           <Mail className="h-4 w-4" />
           si_fsr@fsr.ac.ma

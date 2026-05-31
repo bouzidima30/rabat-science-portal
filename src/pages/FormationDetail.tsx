@@ -35,7 +35,7 @@ const FormationDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -48,12 +48,12 @@ const FormationDetail = () => {
 
   if (!formation) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
         <TopBar />
         <ModernNavbar />
         <div className="max-w-4xl mx-auto px-4 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-2xl font-bold text-foreground dark:text-white mb-4">
               Formation non trouvée
             </h1>
             <Link to="/formations">
@@ -70,7 +70,7 @@ const FormationDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
       <TopBar />
       <ModernNavbar />
       
@@ -86,7 +86,7 @@ const FormationDetail = () => {
 
         <Card className="shadow-lg">
           {formation.image_url && (
-            <div className="bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+            <div className="bg-muted dark:bg-gray-700 rounded-t-lg overflow-hidden">
               <img 
                 src={formation.image_url} 
                 alt={formation.titre}
@@ -98,11 +98,11 @@ const FormationDetail = () => {
           <CardHeader>
             <div className="flex justify-between items-start">
               <div>
-                <CardTitle className="text-3xl text-[#006be5] mb-2">
+                <CardTitle className="text-3xl text-[hsl(var(--primary))] mb-2">
                   {formation.titre}
                 </CardTitle>
-                <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
-                  <span className="bg-[#006be5] text-white px-3 py-1 rounded-full">
+                <div className="flex gap-4 text-sm text-muted-foreground dark:text-muted-foreground">
+                  <span className="bg-[hsl(var(--primary))] text-white px-3 py-1 rounded-full">
                     {formation.type_formation}
                   </span>
                   {formation.departement && (
@@ -123,7 +123,7 @@ const FormationDetail = () => {
           
           <CardContent>
             <div className="prose dark:prose-invert max-w-none">
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-lg text-muted-foreground dark:text-gray-300 leading-relaxed">
                 {formation.description}
               </p>
             </div>
