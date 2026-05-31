@@ -122,7 +122,7 @@ const MotDoyen = () => {
                   <img
                     src={doyenImage}
                     alt="Pr. Redouane Benaini, Doyen de la Faculté des Sciences de Rabat"
-                    className="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow-md ring-4 ring-[hsl(var(--primary))]/10"
+                    className="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow-md ring-4 ring-primary/10"
                     loading="lazy"
                   />
                   <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
