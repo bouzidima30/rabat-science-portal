@@ -35,7 +35,7 @@ const FormationDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -48,7 +48,7 @@ const FormationDetail = () => {
 
   if (!formation) {
     return (
-      <div className="min-h-screen bg-muted/30">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <ModernNavbar />
         <div className="max-w-4xl mx-auto px-4 py-12">
@@ -70,7 +70,7 @@ const FormationDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
       

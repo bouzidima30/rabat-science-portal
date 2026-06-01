@@ -120,7 +120,7 @@ const Admin = () => {
 
   return (
     <AuthGuard requireAdmin>
-      <div className="min-h-screen bg-muted/30 flex">
+      <div className="min-h-screen bg-background flex">
         {/* Fixed Sidebar */}
         <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-card shadow-xl transform ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -265,7 +265,7 @@ const Admin = () => {
           </div>
           
           {/* Page Content with top padding for fixed header */}
-          <main className="pt-16 min-h-screen bg-muted/30">
+          <main className="pt-16 min-h-screen bg-background">
             <Outlet />
           </main>
         </div>

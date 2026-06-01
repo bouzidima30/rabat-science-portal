@@ -8,7 +8,7 @@ import { BookOpen, GraduationCap, Award, Users, Info } from "lucide-react";
 
 const LMDGuide = () => {
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
 

@@ -34,7 +34,7 @@ const ClubDetail = () => {
   });
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
 

@@ -74,7 +74,7 @@ const Actualites = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
@@ -86,7 +86,7 @@ const Actualites = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       

@@ -88,7 +88,7 @@ const Evenements = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -100,7 +100,7 @@ const Evenements = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
       

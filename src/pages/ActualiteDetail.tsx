@@ -53,7 +53,7 @@ const ActualiteDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-muted/30">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
@@ -66,7 +66,7 @@ const ActualiteDetail = () => {
 
   if (!actualite) {
     return (
-      <div className="min-h-screen bg-muted/30">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <Navbar />
         <div className="max-w-4xl mx-auto px-4 py-8">
@@ -93,7 +93,7 @@ const ActualiteDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
