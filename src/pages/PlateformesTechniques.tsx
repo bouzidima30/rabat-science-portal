@@ -82,16 +82,16 @@ const PlateformesTechniques = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Plateformes Techniques
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             La FSR dispose de plateformes techniques de pointe mettant à disposition 
             des équipements scientifiques de haute technologie pour la recherche et la formation.
           </p>
@@ -104,7 +104,7 @@ const PlateformesTechniques = () => {
               <h2 className="text-2xl font-semibold text-primary mb-6">
                 Des Équipements d'Excellence au Service de la Recherche
               </h2>
-              <p className="text-lg text-muted-foreground dark:text-gray-300 mb-6">
+              <p className="text-lg text-muted-foreground mb-6">
                 Nos plateformes techniques constituent un atout majeur pour la qualité 
                 de la recherche menée à la FSR. Elles offrent un accès privilégié à 
                 des technologies de pointe dans différents domaines scientifiques.
@@ -112,15 +112,15 @@ const PlateformesTechniques = () => {
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
                   <h3 className="text-xl font-bold text-primary mb-2">6+</h3>
-                  <p className="text-muted-foreground dark:text-gray-300">Plateformes Actives</p>
+                  <p className="text-muted-foreground">Plateformes Actives</p>
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-primary mb-2">50+</h3>
-                  <p className="text-muted-foreground dark:text-gray-300">Équipements Majeurs</p>
+                  <p className="text-muted-foreground">Équipements Majeurs</p>
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-primary mb-2">200+</h3>
-                  <p className="text-muted-foreground dark:text-gray-300">Utilisateurs/An</p>
+                  <p className="text-muted-foreground">Utilisateurs/An</p>
                 </div>
               </div>
             </div>
@@ -140,17 +140,17 @@ const PlateformesTechniques = () => {
                   <CardTitle className="text-xl text-primary">
                     {plateforme.nom}
                   </CardTitle>
-                  <p className="text-muted-foreground dark:text-gray-300">
+                  <p className="text-muted-foreground">
                     {plateforme.description}
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <h4 className="font-semibold text-foreground dark:text-white mb-3">
+                  <h4 className="font-semibold text-foreground mb-3">
                     Équipements Disponibles :
                   </h4>
                   <ul className="space-y-2">
                     {plateforme.equipements.map((equipement, idx) => (
-                      <li key={idx} className="flex items-start text-sm text-muted-foreground dark:text-gray-300">
+                      <li key={idx} className="flex items-start text-sm text-muted-foreground">
                         <div className="w-2 h-2 bg-primary rounded-full mr-3 mt-2 flex-shrink-0"></div>
                         {equipement}
                       </li>
@@ -172,7 +172,7 @@ const PlateformesTechniques = () => {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xl font-semibold mb-4 text-foreground dark:text-white">
+                <h3 className="text-xl font-semibold mb-4 text-foreground">
                   Procédure d'Accès
                 </h3>
                 <div className="space-y-3">
@@ -180,7 +180,7 @@ const PlateformesTechniques = () => {
                     <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       1
                     </div>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <p className="text-muted-foreground">
                       Demande d'accès via le formulaire en ligne
                     </p>
                   </div>
@@ -188,7 +188,7 @@ const PlateformesTechniques = () => {
                     <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       2
                     </div>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <p className="text-muted-foreground">
                       Validation du projet par le responsable de plateforme
                     </p>
                   </div>
@@ -196,7 +196,7 @@ const PlateformesTechniques = () => {
                     <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       3
                     </div>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <p className="text-muted-foreground">
                       Formation sur les équipements si nécessaire
                     </p>
                   </div>
@@ -204,32 +204,32 @@ const PlateformesTechniques = () => {
                     <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 mr-3 text-sm font-bold">
                       4
                     </div>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <p className="text-muted-foreground">
                       Planification et réalisation des analyses
                     </p>
                   </div>
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-4 text-foreground dark:text-white">
+                <h3 className="text-xl font-semibold mb-4 text-foreground">
                   Tarification
                 </h3>
                 <div className="space-y-4">
                   <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                     <h4 className="font-semibold text-primary mb-2">Utilisateurs Internes</h4>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                    <p className="text-sm text-muted-foreground">
                       Tarifs préférentiels pour les enseignants-chercheurs et étudiants de la FSR
                     </p>
                   </div>
                   <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                     <h4 className="font-semibold text-green-600 mb-2">Partenaires Académiques</h4>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                    <p className="text-sm text-muted-foreground">
                       Tarifs négociés dans le cadre de collaborations de recherche
                     </p>
                   </div>
                   <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
                     <h4 className="font-semibold text-orange-600 mb-2">Secteur Privé</h4>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                    <p className="text-sm text-muted-foreground">
                       Tarifs de prestation pour les entreprises et organismes privés
                     </p>
                   </div>

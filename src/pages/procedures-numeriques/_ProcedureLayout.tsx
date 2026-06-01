@@ -21,7 +21,7 @@ const ProcedureLayout = ({
   children,
 }: ProcedureLayoutProps) => {
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
 
@@ -38,11 +38,11 @@ const ProcedureLayout = ({
           </Link>
         </Button>
 
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
           {title}
         </h1>
         {intro && (
-          <p className="text-lg text-muted-foreground dark:text-gray-300 mb-8">
+          <p className="text-lg text-muted-foreground mb-8">
             {intro}
           </p>
         )}
@@ -54,7 +54,7 @@ const ProcedureLayout = ({
         </Card>
 
         {sourceUrl && (
-          <div className="mt-6 text-sm text-muted-foreground dark:text-muted-foreground text-center">
+          <div className="mt-6 text-sm text-muted-foreground text-center">
             Source officielle :{" "}
             <a
               href={sourceUrl}

@@ -315,8 +315,8 @@ const AdminSectionsGroupes = () => {
             <Users className="h-8 w-8 text-teal-600 dark:text-teal-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">Sections et Groupes</h1>
-            <p className="text-muted-foreground dark:text-gray-300 mt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Sections et Groupes</h1>
+            <p className="text-muted-foreground mt-1">
               Importez des fichiers .zip pour les sections et groupes de la session d'automne et de printemps
             </p>
           </div>

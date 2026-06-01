@@ -34,14 +34,14 @@ const SuiviImpressionCartes = () => {
             href={a.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 p-4 rounded-lg border border-border dark:border-gray-700 hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+            className="flex items-center gap-3 p-4 rounded-lg border border-border hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
           >
             <FileText className="h-6 w-6 text-primary flex-shrink-0" />
             <div>
-              <div className="font-semibold text-foreground dark:text-white">
+              <div className="font-semibold text-foreground">
                 Année universitaire {a.annee}
               </div>
-              <div className="text-xs text-muted-foreground dark:text-muted-foreground">
+              <div className="text-xs text-muted-foreground">
                 Document PDF
               </div>
             </div>

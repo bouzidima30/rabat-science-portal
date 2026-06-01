@@ -75,16 +75,16 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Contact
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Contactez la Faculté des Sciences de Rabat pour toute information ou demande.
           </p>
         </div>
@@ -102,8 +102,8 @@ const Contact = () => {
                 <div className="flex items-start">
                   <MapPin className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-foreground dark:text-white">Adresse</h3>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground">Adresse</h3>
+                    <p className="text-muted-foreground">
                       Avenue Ibn Battouta, B.P. 1014 RP<br />
                       Rabat, Maroc
                     </p>
@@ -113,8 +113,8 @@ const Contact = () => {
                 <div className="flex items-start">
                   <Phone className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-foreground dark:text-white">Téléphone</h3>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground">Téléphone</h3>
+                    <p className="text-muted-foreground">
                       +212 5 37 77 18 34<br />
                       +212 5 37 77 18 35
                     </p>
@@ -124,8 +124,8 @@ const Contact = () => {
                 <div className="flex items-start">
                   <Mail className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-foreground dark:text-white">Email</h3>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground">Email</h3>
+                    <p className="text-muted-foreground">
                       contact@fsr.ac.ma<br />
                       doyen@fsr.ac.ma
                     </p>
@@ -135,8 +135,8 @@ const Contact = () => {
                 <div className="flex items-start">
                   <Clock className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-foreground dark:text-white">Horaires d'ouverture</h3>
-                    <p className="text-muted-foreground dark:text-gray-300">
+                    <h3 className="font-semibold text-foreground">Horaires d'ouverture</h3>
+                    <p className="text-muted-foreground">
                       Lundi - Vendredi : 8h00 - 18h00<br />
                       Samedi : 8h00 - 12h00
                     </p>
@@ -155,24 +155,24 @@ const Contact = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="border-l-4 border-primary pl-4">
-                    <h4 className="font-semibold text-foreground dark:text-white">Décanat</h4>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                    <h4 className="font-semibold text-foreground">Décanat</h4>
+                    <p className="text-sm text-muted-foreground">
                       Bureau 101 - Bâtiment Administration<br />
                       Tél: +212 5 37 77 18 34
                     </p>
                   </div>
                   
                   <div className="border-l-4 border-primary pl-4">
-                    <h4 className="font-semibold text-foreground dark:text-white">Service Scolarité</h4>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                    <h4 className="font-semibold text-foreground">Service Scolarité</h4>
+                    <p className="text-sm text-muted-foreground">
                       Bureau 201 - Bâtiment Administration<br />
                       Tél: +212 5 37 77 18 35
                     </p>
                   </div>
                   
                   <div className="border-l-4 border-primary pl-4">
-                    <h4 className="font-semibold text-foreground dark:text-white">Service Recherche</h4>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                    <h4 className="font-semibold text-foreground">Service Recherche</h4>
+                    <p className="text-sm text-muted-foreground">
                       Bureau 301 - Bâtiment Administration<br />
                       Tél: +212 5 37 77 18 36
                     </p>
@@ -302,7 +302,7 @@ const Contact = () => {
               />
             </div>
             <div className="mt-4 text-center">
-              <p className="text-muted-foreground dark:text-gray-300">
+              <p className="text-muted-foreground">
                 La Faculté des Sciences de Rabat est située sur l'Avenue Ibn Battouta, 
                 facilement accessible par les transports en commun.
               </p>

@@ -36,16 +36,16 @@ const ServiceScolarite = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Service de Scolarité
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Téléchargez tous les formulaires et documents administratifs nécessaires 
             pour vos démarches académiques.
           </p>
@@ -56,8 +56,8 @@ const ServiceScolarite = () => {
           <Card>
             <CardContent className="p-6 text-center">
               <Clock className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-foreground dark:text-white mb-2">Horaires</h3>
-              <p className="text-sm text-muted-foreground dark:text-gray-300">
+              <h3 className="font-semibold text-foreground mb-2">Horaires</h3>
+              <p className="text-sm text-muted-foreground">
                 Lun - Ven: 8h - 16h<br />
                 Sam: 8h - 12h
               </p>
@@ -66,8 +66,8 @@ const ServiceScolarite = () => {
           <Card>
             <CardContent className="p-6 text-center">
               <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-foreground dark:text-white mb-2">Téléphone</h3>
-              <p className="text-sm text-muted-foreground dark:text-gray-300">
+              <h3 className="font-semibold text-foreground mb-2">Téléphone</h3>
+              <p className="text-sm text-muted-foreground">
                 +212 5 37 77 18 34
               </p>
             </CardContent>
@@ -75,8 +75,8 @@ const ServiceScolarite = () => {
           <Card>
             <CardContent className="p-6 text-center">
               <Mail className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-foreground dark:text-white mb-2">Email</h3>
-              <p className="text-sm text-muted-foreground dark:text-gray-300">
+              <h3 className="font-semibold text-foreground mb-2">Email</h3>
+              <p className="text-sm text-muted-foreground">
                 scolarite@fsr.ac.ma
               </p>
             </CardContent>
@@ -110,15 +110,15 @@ const ServiceScolarite = () => {
                         {catFiles.map((doc) => (
                           <div
                             key={doc.id}
-                            className="flex items-center justify-between p-3 bg-muted/30 dark:bg-gray-700 rounded-lg"
+                            className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
                           >
                             <div className="flex items-center min-w-0">
                               <FileText className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                               <div className="min-w-0">
-                                <p className="text-sm font-medium text-foreground dark:text-white truncate">
+                                <p className="text-sm font-medium text-foreground truncate">
                                   {doc.original_name}
                                 </p>
-                                <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                                <p className="text-xs text-muted-foreground">
                                   {doc.mime_type?.split("/").pop()?.toUpperCase()} • {formatSize(doc.file_size)}
                                 </p>
                               </div>

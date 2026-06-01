@@ -76,7 +76,7 @@ const ExistingFilesList = ({
         ) : filteredFiles.length > 0 ? (
           <div className="space-y-4">
             {filteredFiles.map((file) => (
-              <div key={file.id} className="flex items-center justify-between p-4 border border-border dark:border-gray-700 rounded-lg hover:bg-muted/30 dark:hover:bg-gray-800/50 transition-colors">
+              <div key={file.id} className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-muted/30 dark:hover:bg-gray-800/50 transition-colors">
                 <div className="flex items-center space-x-4">
                   <div className="text-2xl">
                     {file.mime_type?.startsWith('image/') ? '🖼️' : 
@@ -85,7 +85,7 @@ const ExistingFilesList = ({
                      file.mime_type?.includes('excel') ? '📊' : '📎'}
                   </div>
                   <div>
-                    <h4 className="font-medium text-foreground dark:text-white">
+                    <h4 className="font-medium text-foreground">
                       {file.original_name}
                     </h4>
                     <div className="flex items-center gap-2 mt-1">
@@ -104,7 +104,7 @@ const ExistingFilesList = ({
                       )}
                     </div>
                     {file.description && (
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {file.description}
                       </p>
                     )}
@@ -143,7 +143,7 @@ const ExistingFilesList = ({
         ) : (
           <div className="text-center py-12">
             <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
+            <h3 className="text-xl font-semibold text-muted-foreground mb-2">
               Aucun fichier trouvé
             </h3>
             <p className="text-muted-foreground">

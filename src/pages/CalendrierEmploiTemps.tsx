@@ -53,16 +53,16 @@ const CalendrierEmploiTemps = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Calendrier & Emploi du Temps
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Consultez les emplois du temps, calendriers des semaines et planning 
             des vacances pour l'année universitaire en cours.
           </p>
@@ -70,7 +70,7 @@ const CalendrierEmploiTemps = () => {
 
         {/* Emplois du temps */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6 flex items-center">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center">
             <Clock className="h-6 w-6 mr-2 text-primary" />
             Emplois du Temps
           </h2>
@@ -79,7 +79,7 @@ const CalendrierEmploiTemps = () => {
 
         {/* Calendriers */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground dark:text-white mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
             Calendriers Officiels
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -90,17 +90,17 @@ const CalendrierEmploiTemps = () => {
                     <Calendar className="h-5 w-5 mr-2" />
                     {calendrier.type}
                   </CardTitle>
-                  <p className="text-sm text-muted-foreground dark:text-gray-300">
+                  <p className="text-sm text-muted-foreground">
                     {calendrier.description}
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         {calendrier.fichier}
                       </p>
-                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         {calendrier.taille}
                       </p>
                     </div>
@@ -126,13 +126,13 @@ const CalendrierEmploiTemps = () => {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               {periodes.map((periode, index) => (
-                <div key={index} className="bg-muted/30 dark:bg-gray-700 p-4 rounded-lg">
+                <div key={index} className="bg-muted/30 p-4 rounded-lg">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h4 className="font-semibold text-foreground dark:text-white mb-1">
+                      <h4 className="font-semibold text-foreground mb-1">
                         {periode.nom}
                       </h4>
-                      <p className="text-sm text-muted-foreground dark:text-gray-300">
+                      <p className="text-sm text-muted-foreground">
                         {periode.dates}
                       </p>
                     </div>

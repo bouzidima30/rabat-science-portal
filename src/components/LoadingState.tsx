@@ -10,11 +10,11 @@ interface LoadingStateProps {
 const LoadingState = ({ message = "Chargement...", fullPage = false }: LoadingStateProps) => {
   if (fullPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-muted/30">
         <Card className="p-8">
           <CardContent className="flex flex-col items-center space-y-4">
             <LoadingSpinner size="lg" className="border-blue-600" />
-            <p className="text-muted-foreground dark:text-gray-300">{message}</p>
+            <p className="text-muted-foreground">{message}</p>
           </CardContent>
         </Card>
       </div>
@@ -25,7 +25,7 @@ const LoadingState = ({ message = "Chargement...", fullPage = false }: LoadingSt
     <div className="flex items-center justify-center p-8">
       <div className="flex flex-col items-center space-y-4">
         <LoadingSpinner size="lg" className="border-blue-600" />
-        <p className="text-muted-foreground dark:text-gray-300">{message}</p>
+        <p className="text-muted-foreground">{message}</p>
       </div>
     </div>
   );

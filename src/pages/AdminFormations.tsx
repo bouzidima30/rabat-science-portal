@@ -158,10 +158,10 @@ const AdminFormations = () => {
               <GraduationCap className="h-8 w-8 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                 Formations
               </h1>
-              <p className="text-muted-foreground dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground mt-1">
                 Gérez l'offre de formations de la faculté
               </p>
             </div>
@@ -236,7 +236,7 @@ const AdminFormations = () => {
               placeholder="Rechercher une formation..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
+              className="pl-10 h-12 border-0 bg-muted/30 focus:bg-card dark:focus:bg-gray-700 transition-colors"
             />
           </div>
         </CardContent>
@@ -245,7 +245,7 @@ const AdminFormations = () => {
       {/* Formations List */}
       <div className="space-y-6">
         {paginatedFormations.map((formation) => (
-          <Card key={formation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card dark:bg-gray-800">
+          <Card key={formation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex space-x-4 flex-1">
@@ -258,7 +258,7 @@ const AdminFormations = () => {
                   )}
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
-                      <h3 className="text-xl font-bold text-foreground dark:text-white">
+                      <h3 className="text-xl font-bold text-foreground">
                         {formation.titre}
                       </h3>
                       <div className="flex flex-wrap gap-2 sm:ml-4">
@@ -310,14 +310,14 @@ const AdminFormations = () => {
                         </Badge>
                       )}
                       <ContentStatusBadge status={formation.status || 'draft'} />
-                      <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
+                      <div className="flex items-center text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(formation.created_at).toLocaleDateString('fr-FR')}
                       </div>
                     </div>
                     
                     {formation.description && (
-                      <p className="text-muted-foreground dark:text-gray-300 leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed">
                         {formation.description.length > 200 
                           ? formation.description.substring(0, 200) + "..." 
                           : formation.description
@@ -335,7 +335,7 @@ const AdminFormations = () => {
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <GraduationCap className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
+              <h3 className="text-xl font-semibold text-muted-foreground mb-2">
                 Aucune formation trouvée
               </h3>
               <p className="text-muted-foreground mb-6">

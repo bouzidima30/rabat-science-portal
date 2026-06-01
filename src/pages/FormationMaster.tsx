@@ -45,7 +45,7 @@ const FormationMaster = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -57,16 +57,16 @@ const FormationMaster = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Formations Master
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Découvrez nos formations de niveau Master proposées par la Faculté des Sciences de Rabat
           </p>
         </div>
@@ -114,13 +114,13 @@ const FormationMaster = () => {
                   {formation.titre}
                 </CardTitle>
                 {formation.departement && (
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     Département: {formation.departement}
                   </p>
                 )}
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground dark:text-gray-300 mb-4 line-clamp-3">
+                <p className="text-muted-foreground mb-4 line-clamp-3">
                   {formation.description}
                 </p>
                 <div className="flex gap-2">
@@ -147,10 +147,10 @@ const FormationMaster = () => {
         {!filteredFormations?.length && (
           <div className="text-center py-12">
             <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
+            <h3 className="text-xl font-semibold text-muted-foreground mb-2">
               Aucune formation disponible
             </h3>
-            <p className="text-muted-foreground dark:text-muted-foreground">
+            <p className="text-muted-foreground">
               {selectedDepartement !== "all" 
                 ? `Aucune formation trouvée pour le département ${selectedDepartement}.`
                 : "Les formations Master seront bientôt disponibles."

@@ -64,17 +64,17 @@ const Organisation = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Organisation Générale
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             La Faculté des Sciences de Rabat est structurée en six départements spécialisés et
             plusieurs services administratifs pour garantir l'excellence académique et la
             recherche scientifique.
@@ -119,10 +119,10 @@ const Organisation = () => {
                     <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
                       <IconComponent className="h-8 w-8 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">
                       {service.nom}
                     </h3>
-                    <p className="text-muted-foreground dark:text-gray-300 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       {service.description}
                     </p>
                   </div>
@@ -134,7 +134,7 @@ const Organisation = () => {
 
         {/* Départements */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             Départements Académiques
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -146,7 +146,7 @@ const Organisation = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground dark:text-gray-300 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {dept.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -179,21 +179,21 @@ const Organisation = () => {
               <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                   <h4 className="font-semibold text-primary mb-2">Vice-Décanat Académique</h4>
-                  <p className="text-sm text-muted-foreground dark:text-gray-300">
+                  <p className="text-sm text-muted-foreground">
                     Coordination pédagogique et académique
                   </p>
                 </div>
                 
                 <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                   <h4 className="font-semibold text-green-600 mb-2">Vice-Décanat Recherche</h4>
-                  <p className="text-sm text-muted-foreground dark:text-gray-300">
+                  <p className="text-sm text-muted-foreground">
                     Coordination recherche et partenariats
                   </p>
                 </div>
                 
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
                   <h4 className="font-semibold text-purple-600 mb-2">Secrétariat Général</h4>
-                  <p className="text-sm text-muted-foreground dark:text-gray-300">
+                  <p className="text-sm text-muted-foreground">
                     Administration et services
                   </p>
                 </div>

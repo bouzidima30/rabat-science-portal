@@ -134,10 +134,10 @@ const AdminPreselection = () => {
             <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
               Listes de Présélection
             </h1>
-            <p className="text-muted-foreground dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground mt-1">
               Gérez les documents de présélection par cycle et par étape
             </p>
           </div>

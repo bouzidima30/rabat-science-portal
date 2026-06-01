@@ -262,10 +262,10 @@ const AdminEmploiTemps = () => {
               <Archive className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                 Gestion des Emplois du Temps
               </h1>
-              <p className="text-muted-foreground dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground mt-1">
                 Importez un fichier .zip contenant les dossiers et fichiers des emplois du temps
               </p>
             </div>

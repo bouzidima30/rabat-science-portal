@@ -53,7 +53,7 @@ const ActualiteDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
@@ -66,16 +66,16 @@ const ActualiteDetail = () => {
 
   if (!actualite) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <Navbar />
         <div className="max-w-4xl mx-auto px-4 py-8">
           <Card>
             <CardContent className="pt-6 text-center">
-              <h1 className="text-2xl font-bold text-foreground dark:text-white mb-4">
+              <h1 className="text-2xl font-bold text-foreground mb-4">
                 Actualité non trouvée
               </h1>
-              <p className="text-muted-foreground dark:text-gray-300 mb-6">
+              <p className="text-muted-foreground mb-6">
                 L'actualité que vous recherchez n'existe pas ou a été supprimée.
               </p>
               <Link to="/actualites">
@@ -93,7 +93,7 @@ const ActualiteDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
@@ -141,7 +141,7 @@ const ActualiteDetail = () => {
             <CardTitle className="text-3xl mb-4">{actualite.title}</CardTitle>
             
             {actualite.excerpt && (
-              <div className="text-lg text-muted-foreground dark:text-gray-300 italic mb-6">
+              <div className="text-lg text-muted-foreground italic mb-6">
                 {actualite.excerpt}
               </div>
             )}
@@ -150,12 +150,12 @@ const ActualiteDetail = () => {
           <CardContent>
             <SafeHTMLRenderer 
               content={actualite.content}
-              className="prose prose-lg max-w-none text-muted-foreground dark:text-gray-300 leading-relaxed"
+              className="prose prose-lg max-w-none text-muted-foreground leading-relaxed"
             />
             
             {actualite.document_url && (
-              <div className="mt-8 pt-6 border-t border-border dark:border-gray-700">
-                <h3 className="text-lg font-semibold mb-4 text-foreground dark:text-white">
+              <div className="mt-8 pt-6 border-t border-border">
+                <h3 className="text-lg font-semibold mb-4 text-foreground">
                   Document associé
                 </h3>
                 <Button

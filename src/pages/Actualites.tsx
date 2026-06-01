@@ -74,7 +74,7 @@ const Actualites = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <TopBar />
         <Navbar />
         <div className="flex items-center justify-center h-64">
@@ -86,16 +86,16 @@ const Actualites = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Actualités
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300">
+          <p className="text-lg text-muted-foreground">
             Restez informés des dernières nouvelles de la Faculté des Sciences de Rabat
           </p>
         </div>
@@ -168,7 +168,7 @@ const Actualites = () => {
                   <CardContent>
                     <SafeHTMLRenderer 
                       content={formatContent(item.excerpt || item.content.substring(0, 300) + "...")}
-                      className="prose prose-sm max-w-none text-muted-foreground dark:text-gray-300 mb-4"
+                      className="prose prose-sm max-w-none text-muted-foreground mb-4"
                     />
                     
                     <div className="flex flex-wrap items-center gap-4">
@@ -199,7 +199,7 @@ const Actualites = () => {
 
         {filteredNews.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground dark:text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-lg">
               Aucune actualité trouvée.
             </p>
           </div>

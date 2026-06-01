@@ -107,16 +107,16 @@ const EspaceEtudiants = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Espace Étudiants
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Accédez à tous les services et ressources dédiés aux étudiants de la Faculté des Sciences de Rabat.
           </p>
         </div>
@@ -130,12 +130,12 @@ const EspaceEtudiants = () => {
                   <div className={`w-12 h-12 ${service.color} rounded-lg flex items-center justify-center mb-4`}>
                     <IconComponent className="h-6 w-6 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-foreground dark:text-white">
+                  <CardTitle className="text-lg text-foreground">
                     {service.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground dark:text-gray-300 mb-4 text-sm">
+                  <p className="text-muted-foreground mb-4 text-sm">
                     {service.description}
                   </p>
                   <Link to={service.path}>

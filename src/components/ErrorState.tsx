@@ -28,10 +28,10 @@ const ErrorState = ({
         <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400" />
       </div>
       <div>
-        <h3 className="text-lg font-semibold text-foreground dark:text-white mb-2">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           {title}
         </h3>
-        <p className="text-muted-foreground dark:text-gray-300 mb-4">
+        <p className="text-muted-foreground mb-4">
           {description || message}
         </p>
       </div>
@@ -55,7 +55,7 @@ const ErrorState = ({
 
   if (fullPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-muted/30">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="p-8">
             {content}

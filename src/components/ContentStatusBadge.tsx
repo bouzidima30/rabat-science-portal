@@ -9,7 +9,7 @@ const ContentStatusBadge = ({ status }: ContentStatusBadgeProps) => {
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'draft':
-        return { label: 'Brouillon', variant: 'secondary' as const, className: 'bg-muted text-muted-foreground dark:bg-gray-800 dark:text-gray-300' };
+        return { label: 'Brouillon', variant: 'secondary' as const, className: 'bg-muted text-muted-foreground' };
       case 'pending_review':
         return { label: 'En attente', variant: 'default' as const, className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-300' };
       case 'approved':

@@ -89,17 +89,17 @@ const Historique = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Historique de la Faculté
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Depuis sa création, l'histoire de la Faculté des Sciences de Rabat a connu plusieurs
             moments forts et marquants aussi bien du point de vue politique, scientifique que
             pédagogique.
@@ -114,10 +114,10 @@ const Historique = () => {
                 <div className="text-3xl font-bold text-primary mb-2">
                   {chiffre.valeur}
                 </div>
-                <div className="text-lg font-semibold text-foreground dark:text-white mb-1">
+                <div className="text-lg font-semibold text-foreground mb-1">
                   {chiffre.label}
                 </div>
-                <div className="text-sm text-muted-foreground dark:text-gray-300">
+                <div className="text-sm text-muted-foreground">
                   {chiffre.description}
                 </div>
               </CardContent>
@@ -127,7 +127,7 @@ const Historique = () => {
 
         {/* Timeline */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             Chronologie Historique
           </h2>
           <div className="relative">
@@ -159,7 +159,7 @@ const Historique = () => {
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground dark:text-gray-300">
+                        <p className="text-muted-foreground">
                           {periode.description}
                         </p>
                       </CardContent>
@@ -173,7 +173,7 @@ const Historique = () => {
 
         {/* Doyens de la faculté */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             Doyens de la Faculté des Sciences
           </h2>
           <Card className="shadow-lg">
@@ -187,7 +187,7 @@ const Historique = () => {
                     <Badge variant="outline" className="mr-3 mt-1 shrink-0">
                       {doyen.periode}
                     </Badge>
-                    <span className="text-muted-foreground dark:text-gray-300 font-medium">
+                    <span className="text-muted-foreground font-medium">
                       {doyen.nom}
                     </span>
                   </div>
@@ -206,13 +206,13 @@ const Historique = () => {
           </CardHeader>
           <CardContent>
             <div className="text-center max-w-4xl mx-auto">
-              <p className="text-lg text-muted-foreground dark:text-gray-300 leading-relaxed mb-6">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
                 Depuis sa création en 1953, la Faculté des Sciences de Rabat s'est imposée comme
                 le premier établissement marocain d'enseignement supérieur et de recherche
                 scientifique. Elle a formé des générations de scientifiques, chercheurs et cadres
                 qui contribuent aujourd'hui au développement du pays dans tous les secteurs.
               </p>
-              <p className="text-lg text-muted-foreground dark:text-gray-300 leading-relaxed">
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 Notre faculté continue de porter les valeurs d'excellence, d'innovation et 
                 d'ouverture qui ont marqué son histoire, tout en s'adaptant aux défis 
                 contemporains de la science et de la technologie.

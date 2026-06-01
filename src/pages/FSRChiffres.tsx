@@ -55,9 +55,9 @@ const FSRChiffres = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex-1 pr-3">
-                  <p className="text-3xl font-bold text-foreground dark:text-white mb-1">{stat.value}</p>
-                  <p className="text-sm font-semibold text-foreground dark:text-gray-200">{stat.title}</p>
-                  <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">{stat.description}</p>
+                  <p className="text-3xl font-bold text-foreground mb-1">{stat.value}</p>
+                  <p className="text-sm font-semibold text-foreground">{stat.title}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{stat.description}</p>
                 </div>
                 <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
                   <IconComponent className="h-6 w-6 text-white" />
@@ -71,16 +71,16 @@ const FSRChiffres = () => {
   );
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             FSR en Chiffres
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             60 ans au service de l'excellence — Découvrez les chiffres clés de la
             Faculté des Sciences de Rabat, témoignant de son rayonnement et de
             son excellence académique.
