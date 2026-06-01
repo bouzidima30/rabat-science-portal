@@ -114,7 +114,7 @@ const ProjetDeveloppement = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                         <IconComponent className="h-6 w-6 text-primary" />
                       </div>
                       <Badge className={projet.color}>
