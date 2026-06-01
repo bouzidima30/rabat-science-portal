@@ -146,7 +146,7 @@ const Historique = () => {
                       <CardHeader>
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center">
-                            <div className="w-10 h-10 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center mr-3">
+                            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
                               <IconComponent className="h-5 w-5 text-primary" />
                             </div>
                             <CardTitle className="text-xl">

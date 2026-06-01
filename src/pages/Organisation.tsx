@@ -116,7 +116,7 @@ const Organisation = () => {
                 const IconComponent = service.icon;
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                       <IconComponent className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="text-lg font-semibold text-foreground mb-2">
