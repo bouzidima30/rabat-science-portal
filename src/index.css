@@ -4,19 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Page transition CSS to prevent white flash */
+/* Smooth background transitions between themes */
 body {
-  background-color: #f9fafb;
   transition: background-color 0.2s ease-in-out;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #111827;
-  }
-}
-
-/* Ensure smooth page transitions */
 #root {
   min-height: 100vh;
   background-color: inherit;
