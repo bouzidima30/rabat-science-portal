@@ -110,17 +110,17 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
       
       <div className="flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-foreground dark:text-white">
+            <CardTitle className="text-2xl font-bold text-foreground">
               Connexion
             </CardTitle>
-            <CardDescription className="text-muted-foreground dark:text-gray-300">
+            <CardDescription className="text-muted-foreground">
               Accédez à votre espace personnel FSR
             </CardDescription>
           </CardHeader>
@@ -181,7 +181,7 @@ const Login = () => {
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground dark:text-gray-300">
+              <p className="text-sm text-muted-foreground">
                 Pas encore de compte ?{" "}
                 <Link to="/register" className="text-primary hover:underline font-medium">
                   Créer un compte

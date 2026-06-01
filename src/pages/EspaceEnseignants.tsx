@@ -63,17 +63,17 @@ const EspaceEnseignants = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Espace Enseignants
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Accédez à tous les services et documents nécessaires pour votre activité d'enseignement 
             et de recherche au sein de la Faculté des Sciences de Rabat.
           </p>
@@ -81,7 +81,7 @@ const EspaceEnseignants = () => {
 
         {/* Services en ligne */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             Services en Ligne
           </h2>
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -98,7 +98,7 @@ const EspaceEnseignants = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground dark:text-gray-300 mb-6">
+                    <p className="text-muted-foreground mb-6">
                       {service.description}
                     </p>
                     <Button 
@@ -117,7 +117,7 @@ const EspaceEnseignants = () => {
 
         {/* Documents et formulaires */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             Documents et Formulaires
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -132,15 +132,15 @@ const EspaceEnseignants = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground dark:text-gray-300 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {doc.description}
                   </p>
                   <div className="space-y-2">
                     {doc.fichiers.map((fichier, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-muted/30 dark:bg-gray-700 rounded-lg">
+                      <div key={idx} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                         <div className="flex items-center">
                           <Download className="h-4 w-4 text-muted-foreground mr-2" />
-                          <span className="text-sm text-muted-foreground dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             {fichier.nom}
                           </span>
                         </div>
@@ -166,7 +166,7 @@ const EspaceEnseignants = () => {
           </CardHeader>
           <CardContent>
             <div className="text-center">
-              <p className="text-lg text-muted-foreground dark:text-gray-300 mb-6">
+              <p className="text-lg text-muted-foreground mb-6">
                 Si vous souhaitez organiser un événement au sein de la faculté, 
                 veuillez renseigner le formulaire ci-dessous et le déposer au décanat.
               </p>
@@ -174,7 +174,7 @@ const EspaceEnseignants = () => {
                 <h3 className="text-lg font-semibold text-primary mb-4">
                   Procédure d'organisation
                 </h3>
-                <ol className="text-left space-y-2 text-muted-foreground dark:text-gray-300">
+                <ol className="text-left space-y-2 text-muted-foreground">
                   <li>1. Télécharger et remplir le formulaire de demande</li>
                   <li>2. Joindre tous les documents requis</li>
                   <li>3. Déposer le dossier complet au décanat</li>

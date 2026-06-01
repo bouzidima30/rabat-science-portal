@@ -215,17 +215,17 @@ const AdminClubs = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
           <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-xl">
             <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
               Clubs para-universitaires
             </h1>
-            <p className="text-muted-foreground dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground mt-1">
               Gérez les clubs affichés sur la page des activités para-universitaires
             </p>
           </div>
@@ -247,7 +247,7 @@ const AdminClubs = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {clubs.map((club) => (
             <Card key={club.id} className="overflow-hidden">
-              <div className="aspect-video bg-muted dark:bg-gray-800">
+              <div className="aspect-video bg-muted">
                 {club.image_url ? (
                   <OptimizedImage
                     src={club.image_url}
@@ -261,7 +261,7 @@ const AdminClubs = () => {
                 )}
               </div>
               <CardContent className="p-4">
-                <h3 className="font-semibold text-foreground dark:text-white mb-3 line-clamp-2">
+                <h3 className="font-semibold text-foreground mb-3 line-clamp-2">
                   {club.titre}
                 </h3>
                 <div className="flex gap-2">
@@ -338,7 +338,7 @@ const AdminClubs = () => {
                 JPG, PNG, WEBP ou GIF — 5 Mo maximum
               </p>
               {(file || existingImage) && (
-                <div className="mt-3 aspect-video bg-muted dark:bg-gray-800 rounded overflow-hidden">
+                <div className="mt-3 aspect-video bg-muted rounded overflow-hidden">
                   <img
                     src={file ? URL.createObjectURL(file) : existingImage!}
                     alt="Aperçu"

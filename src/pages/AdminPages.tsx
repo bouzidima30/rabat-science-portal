@@ -279,7 +279,7 @@ const AdminPages = () => {
 
   if (isLoading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -288,7 +288,7 @@ const AdminPages = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -297,10 +297,10 @@ const AdminPages = () => {
               <FileText className="h-8 w-8 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                 Gestion des Pages
               </h1>
-              <p className="text-muted-foreground dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground mt-1">
                 Créez et gérez les pages personnalisées du site
               </p>
             </div>
@@ -437,7 +437,7 @@ const AdminPages = () => {
               placeholder="Rechercher une page..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
+              className="pl-10 h-12 border-0 bg-muted/30 focus:bg-card dark:focus:bg-gray-700 transition-colors"
             />
           </div>
         </CardContent>
@@ -446,7 +446,7 @@ const AdminPages = () => {
       {/* Pages List */}
       <div className="space-y-6">
         {paginatedPages.map((page) => (
-          <Card key={page.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card dark:bg-gray-800">
+          <Card key={page.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex gap-4 flex-1">
@@ -454,7 +454,7 @@ const AdminPages = () => {
                     <img src={page.image_url} alt={page.titre} className="w-24 h-24 object-cover rounded-lg" />
                   )}
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-foreground dark:text-white mb-2">
+                    <h3 className="text-xl font-bold text-foreground mb-2">
                       {page.titre}
                     </h3>
                     <div className="flex items-center gap-3 mb-3">
@@ -469,7 +469,7 @@ const AdminPages = () => {
                         </Badge>
                       )}
                       <ContentStatusBadge status={page.status || 'draft'} />
-                      <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
+                      <div className="flex items-center text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(page.created_at).toLocaleDateString('fr-FR', {
                           year: 'numeric',
@@ -480,7 +480,7 @@ const AdminPages = () => {
                     </div>
                     <SafeHTMLRenderer 
                       content={page.contenu.substring(0, 200) + '...'}
-                      className="text-muted-foreground dark:text-gray-300 line-clamp-3"
+                      className="text-muted-foreground line-clamp-3"
                     />
                   </div>
                 </div>
@@ -507,7 +507,7 @@ const AdminPages = () => {
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
+              <h3 className="text-xl font-semibold text-muted-foreground mb-2">
                 Aucune page trouvée
               </h3>
               <p className="text-muted-foreground mb-6">

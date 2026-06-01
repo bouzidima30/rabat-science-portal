@@ -201,12 +201,12 @@ const VersionHistoryDialog = ({
                     </div>
                   </div>
                   
-                  <h4 className="font-medium text-foreground dark:text-white mb-2">
+                  <h4 className="font-medium text-foreground mb-2">
                     {getVersionTitle(version)}
                   </h4>
                   
                   {version.change_summary && (
-                    <p className="text-sm text-muted-foreground dark:text-gray-300 mb-2 italic">
+                    <p className="text-sm text-muted-foreground mb-2 italic">
                       "{version.change_summary}"
                     </p>
                   )}

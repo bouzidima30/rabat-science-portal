@@ -40,16 +40,16 @@ const Formations = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Formations
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             La Faculté des Sciences de Rabat propose une gamme complète de formations 
             scientifiques de haute qualité, du niveau Licence au Doctorat, ainsi que 
             des formations continues pour les professionnels.
@@ -67,13 +67,13 @@ const Formations = () => {
                     <div className={`p-3 rounded-full ${formation.color} mr-4`}>
                       <IconComponent className="h-6 w-6 text-white" />
                     </div>
-                    <CardTitle className="text-2xl text-foreground dark:text-white">
+                    <CardTitle className="text-2xl text-foreground">
                       {formation.title}
                     </CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground dark:text-gray-300 mb-6 leading-relaxed">
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
                     {formation.description}
                   </p>
                   <Link to={formation.link}>

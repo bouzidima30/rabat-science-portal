@@ -157,7 +157,7 @@ const AdminFichiers = () => {
 
   if (loading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -166,7 +166,7 @@ const AdminFichiers = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -175,10 +175,10 @@ const AdminFichiers = () => {
               <FolderOpen className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                 Gestion des Fichiers
               </h1>
-              <p className="text-muted-foreground dark:text-gray-300 mt-1">
+              <p className="text-muted-foreground mt-1">
                 Organisez et gérez tous vos documents
               </p>
             </div>
@@ -240,7 +240,7 @@ const AdminFichiers = () => {
               placeholder="Rechercher un fichier..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
+              className="pl-10 h-12 border-0 bg-muted/30 focus:bg-card dark:focus:bg-gray-700 transition-colors"
             />
           </div>
         </CardContent>
@@ -249,7 +249,7 @@ const AdminFichiers = () => {
       {/* Files List */}
       <div className="space-y-6">
         {paginatedFiles.map((file) => (
-          <Card key={file.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card dark:bg-gray-800">
+          <Card key={file.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-200 bg-card">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4 flex-1">
@@ -258,7 +258,7 @@ const AdminFichiers = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-foreground dark:text-white">
+                      <h3 className="text-lg font-semibold text-foreground">
                         {file.name}
                       </h3>
                       <div className="flex flex-wrap gap-2 sm:ml-4">
@@ -283,7 +283,7 @@ const AdminFichiers = () => {
                     
                     <div className="flex items-center space-x-3 mb-2">
                       {file.mime_type && (
-                        <Badge variant="secondary" className="bg-muted text-muted-foreground dark:bg-gray-700 dark:text-gray-300">
+                        <Badge variant="secondary" className="bg-muted text-muted-foreground">
                           {file.mime_type}
                         </Badge>
                       )}
@@ -295,7 +295,7 @@ const AdminFichiers = () => {
                           {file.category}
                         </Badge>
                       )}
-                      <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
+                      <div className="flex items-center text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(file.created_at).toLocaleDateString('fr-FR', {
                           year: 'numeric',
@@ -306,7 +306,7 @@ const AdminFichiers = () => {
                     </div>
                     
                     {file.description && (
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {file.description}
                       </p>
                     )}
@@ -321,7 +321,7 @@ const AdminFichiers = () => {
           <Card className="border-0 shadow-lg">
             <CardContent className="p-12 text-center">
               <FolderOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
+              <h3 className="text-xl font-semibold text-muted-foreground mb-2">
                 Aucun fichier trouvé
               </h3>
               <p className="text-muted-foreground mb-6">

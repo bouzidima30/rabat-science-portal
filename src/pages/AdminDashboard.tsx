@@ -149,7 +149,7 @@ const AdminDashboard = () => {
       count: "-",
       icon: History,
       bgColor: "bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/20 dark:to-gray-800/20",
-      textColor: "text-muted-foreground dark:text-muted-foreground",
+      textColor: "text-muted-foreground",
       link: "/admin/historique",
     },
     {
@@ -164,7 +164,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center space-x-4">
@@ -172,10 +172,10 @@ const AdminDashboard = () => {
             <Activity className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
               Tableau de Bord
             </h1>
-            <p className="text-muted-foreground dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground mt-1">
               Vue d'ensemble de l'administration du site
             </p>
           </div>
@@ -192,10 +192,10 @@ const AdminDashboard = () => {
                 <div className={`rounded-lg p-4 ${module.bgColor} mb-4`}>
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-foreground dark:text-white mb-1">
+                      <h3 className="font-semibold text-foreground mb-1">
                         {module.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-2">
+                      <p className="text-sm text-muted-foreground mb-2">
                         {module.description}
                       </p>
                       <div className="flex items-center gap-2">

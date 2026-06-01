@@ -34,7 +34,7 @@ const SearchInput = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className="pl-10 pr-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
+        className="pl-10 pr-10 h-12 border-0 bg-muted/30 focus:bg-card dark:focus:bg-gray-700 transition-colors"
       />
       {value && (
         <Button

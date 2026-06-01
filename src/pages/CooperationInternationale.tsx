@@ -28,7 +28,7 @@ const CooperationInternationale = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -40,16 +40,16 @@ const CooperationInternationale = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Coopération Internationale
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Découvrez nos partenariats et collaborations avec les institutions internationales
           </p>
         </div>
@@ -58,7 +58,7 @@ const CooperationInternationale = () => {
           {cooperations?.map((cooperation) => (
             <Card key={cooperation.id} className="shadow-lg hover:shadow-xl transition-shadow">
               {cooperation.image_url && (
-                <div className="aspect-video bg-muted dark:bg-gray-700 rounded-t-lg overflow-hidden">
+                <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
                   <img 
                     src={cooperation.image_url} 
                     alt={cooperation.titre}
@@ -71,25 +71,25 @@ const CooperationInternationale = () => {
                   {cooperation.titre}
                 </CardTitle>
                 {cooperation.domaine_recherche && (
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {cooperation.domaine_recherche}
                   </p>
                 )}
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground dark:text-gray-300 mb-4 line-clamp-3">
+                <p className="text-muted-foreground mb-4 line-clamp-3">
                   {cooperation.description}
                 </p>
                 
                 <div className="space-y-2 mb-4">
                   {cooperation.pays && cooperation.pays.length > 0 && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4" />
                       <span>{cooperation.pays.join(', ')}</span>
                     </div>
                   )}
                   
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     <span>
                       {cooperation.annee_debut}
@@ -112,10 +112,10 @@ const CooperationInternationale = () => {
         {!cooperations?.length && (
           <div className="text-center py-12">
             <Globe className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
+            <h3 className="text-xl font-semibold text-muted-foreground mb-2">
               Aucune coopération disponible
             </h3>
-            <p className="text-muted-foreground dark:text-muted-foreground">
+            <p className="text-muted-foreground">
               Les coopérations internationales seront bientôt disponibles.
             </p>
           </div>

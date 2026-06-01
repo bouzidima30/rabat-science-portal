@@ -95,7 +95,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <Navbar />
       
@@ -109,10 +109,10 @@ const Register = () => {
                 className="h-16 w-auto"
               />
             </div>
-            <CardTitle className="text-2xl font-bold text-foreground dark:text-white">
+            <CardTitle className="text-2xl font-bold text-foreground">
               Inscription
             </CardTitle>
-            <CardDescription className="text-muted-foreground dark:text-gray-300">
+            <CardDescription className="text-muted-foreground">
               Créez votre compte FSR
             </CardDescription>
           </CardHeader>
@@ -211,7 +211,7 @@ const Register = () => {
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground dark:text-gray-300">
+              <p className="text-sm text-muted-foreground">
                 Déjà un compte ?{" "}
                 <Link to="/login" className="text-primary hover:underline font-medium">
                   Se connecter

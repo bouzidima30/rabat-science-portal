@@ -30,16 +30,16 @@ const ActivitesParaUniversitaires = () => {
   });
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Activités Para-universitaires
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Découvrez tous les clubs et associations de la Faculté des Sciences de Rabat.
             Participez aux activités qui enrichiront votre parcours universitaire !
           </p>
@@ -58,7 +58,7 @@ const ActivitesParaUniversitaires = () => {
             {clubs.map((club) => (
               <Link key={club.id} to={`/club/${club.id}`} className="block group">
                 <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 h-full">
-                  <div className="aspect-video bg-muted dark:bg-gray-800">
+                  <div className="aspect-video bg-muted">
                     {club.image_url ? (
                       <OptimizedImage
                         src={club.image_url}
@@ -72,7 +72,7 @@ const ActivitesParaUniversitaires = () => {
                     )}
                   </div>
                   <CardContent className="p-5">
-                    <h2 className="text-lg font-semibold text-foreground dark:text-white group-hover:text-primary transition-colors">
+                    <h2 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                       {club.titre}
                     </h2>
                   </CardContent>

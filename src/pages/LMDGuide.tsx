@@ -8,17 +8,17 @@ import { BookOpen, GraduationCap, Award, Users, Info } from "lucide-react";
 
 const LMDGuide = () => {
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             LMD : Mode d'emploi
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-4xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-4xl mx-auto">
             La Faculté des Sciences de Rabat propose un catalogue riche en formations aussi bien
             pour les licences fondamentales, professionnelles ou d'excellence que pour les masters
             recherche et spécialisés. Vous découvrirez ici les normes régissant les enseignements
@@ -56,9 +56,9 @@ const LMDGuide = () => {
                   Cycle Licence
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 text-muted-foreground dark:text-gray-300">
+              <CardContent className="space-y-6 text-muted-foreground">
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     1. Organisation du cycle Licence
                   </h3>
                   <p>
@@ -77,7 +77,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     2. Validation du semestre
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -93,7 +93,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     3. Validation et obtention du diplôme de Licence
                   </h3>
                   <p>Une filière de cycle Licence est validée si l'une des conditions suivantes est satisfaite :</p>
@@ -112,7 +112,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     4. Affichage des notes et consultation des copies
                   </h3>
                   <p>
@@ -133,7 +133,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     5. Cas du semestre non validé
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -143,7 +143,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     6. Inscription au semestre
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -170,9 +170,9 @@ const LMDGuide = () => {
                   Cycle Master
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 text-muted-foreground dark:text-gray-300">
+              <CardContent className="space-y-6 text-muted-foreground">
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     1. Organisation du cycle Master
                   </h3>
                   <p>
@@ -183,7 +183,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     2. Progression de l'étudiant et inscription dans les modules
                   </h3>
                   <p>
@@ -198,7 +198,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     3. Stages d'initiation à la recherche en milieu professionnel
                   </h3>
                   <p>
@@ -215,7 +215,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     4. Note du stage
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -235,7 +235,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     5. Jury de la filière et obtention du diplôme de Master
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -248,7 +248,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     6. Les absences et retards
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -271,7 +271,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     7. Fraudes (Master)
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -303,9 +303,9 @@ const LMDGuide = () => {
                   Cycle Doctoral
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 text-muted-foreground dark:text-gray-300">
+              <CardContent className="space-y-6 text-muted-foreground">
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     Charte de la thèse
                   </h3>
                   <p>
@@ -316,7 +316,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     Cahier des normes pédagogiques du Doctorat
                   </h3>
                   <p>
@@ -328,7 +328,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     Présentation du CeDoc
                   </h3>
                   <p>
@@ -357,9 +357,9 @@ const LMDGuide = () => {
                   Informations générales sur le système LMD
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 text-muted-foreground dark:text-gray-300">
+              <CardContent className="space-y-6 text-muted-foreground">
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     1. Mention
                   </h3>
                   <p>Le diplôme de fin de cycle est délivré avec l'une des mentions suivantes :</p>
@@ -380,7 +380,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     2. Nature des évaluations
                   </h3>
                   <p>
@@ -391,7 +391,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     3. Organisation des évaluations
                   </h3>
                   <p>
@@ -403,7 +403,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     4. Pondération
                   </h3>
                   <p>
@@ -416,7 +416,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     5. Modalités de validation des modules et des rattrapages
                   </h3>
                   <p>
@@ -427,7 +427,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     6. Consultation des notes par l'étudiant
                   </h3>
                   <p>
@@ -437,7 +437,7 @@ const LMDGuide = () => {
                 </section>
 
                 <section>
-                  <h3 className="font-semibold text-lg text-foreground dark:text-white mb-2">
+                  <h3 className="font-semibold text-lg text-foreground mb-2">
                     7. Discipline
                   </h3>
                   <ul className="list-disc list-inside space-y-1">
@@ -459,7 +459,7 @@ const LMDGuide = () => {
         <Card className="bg-blue-50 dark:bg-blue-950/30 border-primary/30">
           <CardContent className="p-6 flex items-start gap-3">
             <BookOpen className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-            <p className="text-sm text-muted-foreground dark:text-gray-300">
+            <p className="text-sm text-muted-foreground">
               Contenu issu du cahier des normes pédagogiques nationales et du règlement intérieur
               de la Faculté des Sciences de Rabat – Université Mohammed V.
             </p>

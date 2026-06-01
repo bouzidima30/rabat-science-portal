@@ -37,7 +37,7 @@ const EvenementDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30">
         <TopBar />
         <ModernNavbar />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -50,12 +50,12 @@ const EvenementDetail = () => {
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+      <div className="min-h-screen bg-muted/30">
         <TopBar />
         <ModernNavbar />
         <div className="max-w-4xl mx-auto px-4 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-foreground dark:text-white mb-4">
+            <h1 className="text-2xl font-bold text-foreground mb-4">
               Événement non trouvé
             </h1>
             <Link to="/evenements">
@@ -72,7 +72,7 @@ const EvenementDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
       
@@ -88,7 +88,7 @@ const EvenementDetail = () => {
 
         <Card className="shadow-lg">
           {event.image_url && (
-            <div className="aspect-video bg-muted dark:bg-gray-700 rounded-t-lg overflow-hidden">
+            <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
               <img 
                 src={event.image_url} 
                 alt={event.titre}
@@ -101,7 +101,7 @@ const EvenementDetail = () => {
             <CardTitle className="text-3xl text-primary mb-4">
               {event.titre}
             </CardTitle>
-            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground dark:text-muted-foreground">
+            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 {formatDate(event.date_debut)}
@@ -128,7 +128,7 @@ const EvenementDetail = () => {
           <CardContent>
             {event.description && (
               <div className="prose dark:prose-invert max-w-none">
-                <p className="text-lg text-muted-foreground dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
                   {event.description}
                 </p>
               </div>

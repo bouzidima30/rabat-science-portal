@@ -235,10 +235,10 @@ const AdminCarousel = () => {
             <GripVertical className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
               Carousel Page d'Accueil
             </h1>
-            <p className="text-muted-foreground dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground mt-1">
               Gérez les actualités et vidéos YouTube affichées sur la page d'accueil
             </p>
           </div>
@@ -275,7 +275,7 @@ const AdminCarousel = () => {
       {/* News Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-foreground dark:text-white">Actualités du Carousel</h2>
+          <h2 className="text-2xl font-bold text-foreground">Actualités du Carousel</h2>
           <Button
             onClick={() => openForm('news')}
             disabled={newsItems.length >= 3}
@@ -297,7 +297,7 @@ const AdminCarousel = () => {
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />
                 )}
-                <h3 className="text-lg font-bold text-foreground dark:text-white mb-4">
+                <h3 className="text-lg font-bold text-foreground mb-4">
                   {item.news?.title}
                 </h3>
                 <div className="flex space-x-2">
@@ -336,7 +336,7 @@ const AdminCarousel = () => {
       {/* YouTube Section */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-foreground dark:text-white">Vidéos YouTube</h2>
+          <h2 className="text-2xl font-bold text-foreground">Vidéos YouTube</h2>
           <Button
             onClick={() => openForm('youtube')}
             disabled={youtubeItems.length >= 3}
@@ -351,13 +351,13 @@ const AdminCarousel = () => {
           {youtubeItems.map((item) => (
             <Card key={item.id} className="border-0 shadow-lg hover:shadow-xl transition-all">
               <CardContent className="p-6">
-                <div className="bg-muted dark:bg-gray-800 rounded-lg mb-4 h-48 flex items-center justify-center">
+                <div className="bg-muted rounded-lg mb-4 h-48 flex items-center justify-center">
                   <Youtube className="h-16 w-16 text-red-600" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground dark:text-white mb-2">
+                <h3 className="text-lg font-bold text-foreground mb-2">
                   {item.youtube_title}
                 </h3>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-4 truncate">
+                <p className="text-sm text-muted-foreground mb-4 truncate">
                   {item.youtube_url}
                 </p>
                 <div className="flex space-x-2">

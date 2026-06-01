@@ -194,16 +194,16 @@ const ProceduresNumeriques = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Procédures Numériques
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Les étudiants de la Faculté des Sciences de Rabat trouveront ici les
             différentes procédures pour accéder aux services numériques de la FSR
             et de l'Université Mohammed V.
@@ -242,7 +242,7 @@ const ProceduresNumeriques = () => {
 
         {/* Procédures principales */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             Services Numériques
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -261,7 +261,7 @@ const ProceduresNumeriques = () => {
                         </CardTitle>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                    <p className="text-sm text-muted-foreground">
                       {procedure.description}
                     </p>
                   </CardHeader>
@@ -278,7 +278,7 @@ const ProceduresNumeriques = () => {
                             {lien.internal ? (
                               <Link
                                 to={lien.url}
-                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary group"
+                                className="flex items-start text-sm text-muted-foreground hover:text-primary dark:hover:text-primary group"
                               >
                                 <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-primary flex-shrink-0" />
                                 <span className="group-hover:underline">
@@ -290,7 +290,7 @@ const ProceduresNumeriques = () => {
                                 href={lien.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-start text-sm text-muted-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary group"
+                                className="flex items-start text-sm text-muted-foreground hover:text-primary dark:hover:text-primary group"
                               >
                                 <ChevronRight className="h-4 w-4 mt-0.5 mr-2 text-primary flex-shrink-0" />
                                 <span>
@@ -298,7 +298,7 @@ const ProceduresNumeriques = () => {
                                     {lien.label}
                                   </span>
                                   {lien.info && (
-                                    <span className="text-xs text-muted-foreground dark:text-muted-foreground ml-1">
+                                    <span className="text-xs text-muted-foreground ml-1">
                                       ({lien.info})
                                     </span>
                                   )}

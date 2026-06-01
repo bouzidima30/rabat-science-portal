@@ -142,7 +142,7 @@ const SecurityTest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900 p-8">
+    <div className="min-h-screen bg-muted/30 p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center">
@@ -151,10 +151,10 @@ const SecurityTest = () => {
               <Shield className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Centre de Sécurité et Performance
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300">
+          <p className="text-lg text-muted-foreground">
             Tests complets de sécurité, analyse de performance et monitoring
           </p>
         </div>
@@ -177,7 +177,7 @@ const SecurityTest = () => {
                   {securityScore}/100
                 </div>
               </div>
-              <div className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
+              <div className="mt-2 text-sm text-muted-foreground">
                 {securityScore >= SECURITY_SCORE_THRESHOLDS.excellent ? "Excellent" : 
                  securityScore >= SECURITY_SCORE_THRESHOLDS.good ? "Bon" :
                  securityScore >= SECURITY_SCORE_THRESHOLDS.acceptable ? "Acceptable" : "À améliorer"}
@@ -458,9 +458,9 @@ const SecurityTest = () => {
                   {newsData && newsData.length > 0 ? (
                     <div className="space-y-2">
                       {newsData.slice(0, 3).map((news: any) => (
-                        <div key={news.id} className="p-3 bg-muted/30 dark:bg-gray-800 rounded-lg">
+                        <div key={news.id} className="p-3 bg-muted/30 rounded-lg">
                           <h4 className="font-medium text-sm">{news.title}</h4>
-                          <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                          <p className="text-xs text-muted-foreground">
                             {new Date(news.created_at).toLocaleDateString()}
                           </p>
                         </div>
@@ -487,9 +487,9 @@ const SecurityTest = () => {
                   {eventsData && eventsData.length > 0 ? (
                     <div className="space-y-2">
                       {eventsData.slice(0, 3).map((event: any) => (
-                        <div key={event.id} className="p-3 bg-muted/30 dark:bg-gray-800 rounded-lg">
+                        <div key={event.id} className="p-3 bg-muted/30 rounded-lg">
                           <h4 className="font-medium text-sm">{event.titre}</h4>
-                          <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                          <p className="text-xs text-muted-foreground">
                             {new Date(event.date_debut).toLocaleDateString()}
                           </p>
                         </div>

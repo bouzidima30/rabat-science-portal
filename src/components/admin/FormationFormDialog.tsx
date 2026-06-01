@@ -395,7 +395,7 @@ const FormationFormDialog = ({ isOpen, onClose, formation, onSuccess }: Formatio
               <Label htmlFor="document">Document de la formation</Label>
               <div className="mt-2 space-y-4">
                 {formData.document_url && (
-                  <div className="flex items-center space-x-2 p-3 bg-muted/30 dark:bg-gray-800 rounded-lg border">
+                  <div className="flex items-center space-x-2 p-3 bg-muted/30 rounded-lg border">
                     <FileText className="h-6 w-6 text-blue-600" />
                     <span className="flex-1 text-sm">{formData.document_name}</span>
                     <Button

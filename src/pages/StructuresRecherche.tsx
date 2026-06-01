@@ -376,7 +376,7 @@ const StructureCard = ({
   centre?: string;
   icon: typeof Building;
 }) => (
-  <AccordionItem value={acronyme} className="border rounded-lg px-4 bg-card dark:bg-gray-800">
+  <AccordionItem value={acronyme} className="border rounded-lg px-4 bg-card">
     <AccordionTrigger className="hover:no-underline py-4">
       <div className="flex items-start gap-3 text-left flex-1">
         <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -391,7 +391,7 @@ const StructureCard = ({
               </Badge>
             )}
           </div>
-          <h3 className="font-semibold text-foreground dark:text-white">{nom}</h3>
+          <h3 className="font-semibold text-foreground">{nom}</h3>
         </div>
       </div>
     </AccordionTrigger>
@@ -401,8 +401,8 @@ const StructureCard = ({
           <div className="flex items-start gap-2">
             <User className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
             <div>
-              <span className="font-semibold text-foreground dark:text-white">Responsable : </span>
-              <span className="text-muted-foreground dark:text-gray-300">{responsable}</span>
+              <span className="font-semibold text-foreground">Responsable : </span>
+              <span className="text-muted-foreground">{responsable}</span>
             </div>
           </div>
           {email && (
@@ -418,10 +418,10 @@ const StructureCard = ({
           )}
         </div>
         <div>
-          <p className="text-sm font-semibold text-foreground dark:text-white mb-1">
+          <p className="text-sm font-semibold text-foreground mb-1">
             Domaines de recherche :
           </p>
-          <p className="text-sm text-muted-foreground dark:text-gray-300 leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed">
             {domaines}
           </p>
         </div>
@@ -432,16 +432,16 @@ const StructureCard = ({
 
 const StructuresRecherche = () => {
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Structures de Recherche
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Vous trouverez ci-dessous l'ensemble des structures de recherche adossées à
             la Faculté des Sciences de Rabat ainsi que celles auxquelles certains
             chercheurs de l'établissement sont attachés.
@@ -450,25 +450,25 @@ const StructuresRecherche = () => {
 
         {/* Statistiques */}
         <div className="grid grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
-          <Card className="text-center bg-card dark:bg-gray-800">
+          <Card className="text-center bg-card">
             <CardContent className="p-4">
               <Building className="h-6 w-6 text-primary mx-auto mb-2" />
               <div className="text-3xl font-bold text-primary">{centres.length}</div>
-              <div className="text-xs text-muted-foreground dark:text-muted-foreground">Centres</div>
+              <div className="text-xs text-muted-foreground">Centres</div>
             </CardContent>
           </Card>
-          <Card className="text-center bg-card dark:bg-gray-800">
+          <Card className="text-center bg-card">
             <CardContent className="p-4">
               <FlaskConical className="h-6 w-6 text-primary mx-auto mb-2" />
               <div className="text-3xl font-bold text-primary">{laboratoires.length}</div>
-              <div className="text-xs text-muted-foreground dark:text-muted-foreground">Laboratoires</div>
+              <div className="text-xs text-muted-foreground">Laboratoires</div>
             </CardContent>
           </Card>
-          <Card className="text-center bg-card dark:bg-gray-800">
+          <Card className="text-center bg-card">
             <CardContent className="p-4">
               <Users className="h-6 w-6 text-primary mx-auto mb-2" />
               <div className="text-3xl font-bold text-primary">{equipes.length}</div>
-              <div className="text-xs text-muted-foreground dark:text-muted-foreground">Équipes</div>
+              <div className="text-xs text-muted-foreground">Équipes</div>
             </CardContent>
           </Card>
         </div>

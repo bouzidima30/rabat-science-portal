@@ -208,7 +208,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as NewsCategory)}
-                className="w-full p-2 border border-input rounded-md bg-card dark:bg-gray-800"
+                className="w-full p-2 border border-input rounded-md bg-card"
                 required
               >
                 {categories.map((cat) => (
@@ -224,7 +224,7 @@ const NewsForm = ({ news, onSuccess, onCancel }: NewsFormProps) => {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full p-2 border border-input rounded-md bg-card dark:bg-gray-800"
+                className="w-full p-2 border border-input rounded-md bg-card"
               >
                 <option value="draft">Brouillon</option>
                 <option value="pending_review">En attente de révision</option>

@@ -94,7 +94,7 @@ const AdminUtilisateurs = () => {
 
   if (isLoading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+      <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -103,7 +103,7 @@ const AdminUtilisateurs = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 dark:bg-gray-900 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-screen">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center space-x-4">
@@ -111,10 +111,10 @@ const AdminUtilisateurs = () => {
             <Users className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
               Gestion des Utilisateurs
             </h1>
-            <p className="text-muted-foreground dark:text-gray-300 mt-1">
+            <p className="text-muted-foreground mt-1">
               Gérez les comptes utilisateurs et leurs permissions
             </p>
           </div>
@@ -173,7 +173,7 @@ const AdminUtilisateurs = () => {
               placeholder="Rechercher des utilisateurs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 border-0 bg-muted/30 dark:bg-gray-800 focus:bg-card dark:focus:bg-gray-700 transition-colors"
+              className="pl-10 h-12 border-0 bg-muted/30 focus:bg-card dark:focus:bg-gray-700 transition-colors"
             />
           </div>
         </CardContent>
@@ -193,21 +193,21 @@ const AdminUtilisateurs = () => {
               {paginatedUsers.map((user) => (
                 <div 
                   key={user.id} 
-                  className="flex items-center justify-between p-6 border border-border dark:border-gray-700 rounded-xl hover:bg-muted/30 dark:hover:bg-gray-800/50 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="flex items-center justify-between p-6 border border-border rounded-xl hover:bg-muted/30 dark:hover:bg-gray-800/50 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
                       {user.full_name ? user.full_name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground dark:text-white text-lg">
+                      <h3 className="font-semibold text-foreground text-lg">
                         {user.full_name || 'Nom non défini'}
                       </h3>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Mail className="h-4 w-4" />
                         {user.email}
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground mt-1">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                         <Calendar className="h-4 w-4" />
                         Créé le {new Date(user.created_at).toLocaleDateString('fr-FR')}
                       </div>
@@ -246,7 +246,7 @@ const AdminUtilisateurs = () => {
           ) : (
             <div className="text-center py-12">
               <UserX className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
+              <h3 className="text-xl font-semibold text-muted-foreground mb-2">
                 {searchQuery ? 'Aucun utilisateur trouvé' : 'Aucun utilisateur'}
               </h3>
               <p className="text-muted-foreground">

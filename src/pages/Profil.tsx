@@ -111,14 +111,14 @@ const Profil = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-muted/30 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       
       <div className="py-12 px-4">
@@ -146,8 +146,8 @@ const Profil = () => {
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
                         <div>
-                          <p className="text-sm text-muted-foreground dark:text-muted-foreground">Email</p>
-                          <p className="font-medium text-foreground dark:text-white">{user.email}</p>
+                          <p className="text-sm text-muted-foreground">Email</p>
+                          <p className="font-medium text-foreground">{user.email}</p>
                         </div>
                       </div>
                     </div>
@@ -185,9 +185,9 @@ const Profil = () => {
                         type="email"
                         value={user.email || ''}
                         disabled
-                        className="h-12 bg-muted/30 dark:bg-gray-800"
+                        className="h-12 bg-muted/30"
                       />
-                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         L'adresse email ne peut pas être modifiée
                       </p>
                     </div>
@@ -276,7 +276,7 @@ const Profil = () => {
                           )}
                         </Button>
                       </div>
-                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         Le mot de passe doit contenir au moins 16 caractères avec majuscules, minuscules, chiffres et caractères spéciaux
                       </p>
                     </div>

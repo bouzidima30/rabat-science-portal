@@ -42,16 +42,16 @@ const Preselection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Listes de Présélection
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Consultez les listes de présélection pour les différents cycles d'études : 
             Licence d'Excellence, Master et Doctorat.
           </p>
@@ -82,22 +82,22 @@ const Preselection = () => {
                         <div key={sub.suffix}>
                           <div className="flex items-center gap-2 mb-3">
                             <SubIcon className="h-5 w-5 text-primary" />
-                            <h3 className="font-semibold text-foreground dark:text-gray-200">{sub.label}</h3>
+                            <h3 className="font-semibold text-foreground">{sub.label}</h3>
                           </div>
                           {subFiles.length === 0 ? (
                             <p className="text-muted-foreground text-sm pl-7 py-2">Aucun document disponible pour le moment.</p>
                           ) : (
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pl-7">
                               {subFiles.map((file) => (
-                                <div key={file.id} className="bg-muted/30 dark:bg-gray-700 p-3 rounded-lg">
+                                <div key={file.id} className="bg-muted/30 p-3 rounded-lg">
                                   <div className="flex items-start justify-between">
                                     <div className="flex items-start min-w-0">
                                       <FileText className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0" />
                                       <div className="min-w-0">
-                                        <h4 className="font-medium text-foreground dark:text-white mb-1 text-sm truncate">
+                                        <h4 className="font-medium text-foreground mb-1 text-sm truncate">
                                           {file.original_name}
                                         </h4>
-                                        <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                                        <p className="text-xs text-muted-foreground">
                                           {file.mime_type?.includes("pdf") ? "PDF" : file.original_name.split(".").pop()?.toUpperCase()} • {formatSize(file.file_size)}
                                         </p>
                                       </div>

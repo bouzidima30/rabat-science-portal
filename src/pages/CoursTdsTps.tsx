@@ -41,21 +41,21 @@ const CoursTdsTps = () => {
       case "Cours": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
       case "TD": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
       case "TP": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-      default: return "bg-muted text-foreground dark:bg-gray-900 dark:text-gray-200";
+      default: return "bg-muted text-foreground";
     }
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 dark:bg-gray-900">
+    <div className="min-h-screen bg-muted/30">
       <TopBar />
       <ModernNavbar />
       
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Cours / TDs / TPs
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Accédez aux supports de cours, travaux dirigés et travaux pratiques 
             de tous les niveaux d'études.
           </p>
@@ -99,23 +99,23 @@ const CoursTdsTps = () => {
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {niveau.matieres.map((matiere, matiereIndex) => (
-                    <div key={matiereIndex} className="bg-muted/30 dark:bg-gray-700 p-4 rounded-lg">
+                    <div key={matiereIndex} className="bg-muted/30 p-4 rounded-lg">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-start">
                           <FileText className="h-5 w-5 text-primary mr-3 mt-1" />
                           <div>
-                            <h4 className="font-medium text-foreground dark:text-white mb-1">
+                            <h4 className="font-medium text-foreground mb-1">
                               {matiere.nom}
                             </h4>
                             <div className="flex items-center gap-2 mb-2">
                               <span className={`text-xs px-2 py-1 rounded ${getTypeColor(matiere.type)}`}>
                                 {matiere.type}
                               </span>
-                              <span className="text-xs text-muted-foreground dark:text-muted-foreground">
+                              <span className="text-xs text-muted-foreground">
                                 {matiere.taille}
                               </span>
                             </div>
-                            <p className="text-xs text-muted-foreground dark:text-gray-300">
+                            <p className="text-xs text-muted-foreground">
                               {matiere.fichier}
                             </p>
                           </div>
