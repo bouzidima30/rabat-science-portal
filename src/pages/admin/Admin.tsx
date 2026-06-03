@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,12 +30,18 @@ import {
   Activity,
   MessageSquare,
   GripVertical,
-  Clock
+  Clock,
+  ChevronDown,
+  Newspaper,
+  FolderOpen,
+  BookOpen,
+  ShieldCheck
 } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
 const Admin = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const location = useLocation();
   const { user } = useAuth();
   const { isAdmin, isLoading: roleLoading } = useUserRole();
@@ -92,31 +99,88 @@ const Admin = () => {
     );
   }
 
-  const sidebarItems = [
-    { name: "Dashboard", path: "/admin", icon: LayoutDashboard, description: "Vue d'ensemble" },
-    { name: "Actualités", path: "/admin/actualites", icon: FileText, description: "Gestion des actualités" },
-    { name: "Événements", path: "/admin/evenements", icon: Calendar, description: "Calendrier des événements" },
-    { name: "Formations", path: "/admin/formations", icon: GraduationCap, description: "Programmes de formation" },
-    { name: "Coopérations", path: "/admin/cooperations", icon: HandHeart, description: "Partenariats" },
-    { name: "Pages", path: "/admin/pages", icon: FileStack, description: "Gestion des pages" },
-    { name: "Contact", path: "/admin/contact", icon: MessageSquare, description: "Messages de contact" },
-    { name: "Carousel", path: "/admin/carousel", icon: GripVertical, description: "Gestion des carousels" },
-    { name: "Emplois du Temps", path: "/admin/emploi-temps", icon: Clock, description: "Gestion des emplois du temps" },
-    { name: "Planning Évaluations", path: "/admin/planning-evaluations", icon: Calendar, description: "Planning & calendrier des évaluations" },
-    { name: "CeDoc", path: "/admin/cedoc", icon: FileText, description: "Documents CeDoc" },
-    { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
-    { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
-    { name: "Listes Examens", path: "/admin/listes-examens", icon: FileText, description: "Listes des examens par session" },
-    { name: "Présélection", path: "/admin/preselection", icon: GraduationCap, description: "Documents de présélection" },
-    { name: "Sections & Groupes", path: "/admin/sections-groupes", icon: Users, description: "Sections et groupes par session" },
-    { name: "Scolarité", path: "/admin/scolarite", icon: FileText, description: "Documents du service scolarité" },
-    { name: "Résultats Examens", path: "/admin/resultats", icon: FileText, description: "Résultats par session" },
-    { name: "Clubs para-uni.", path: "/admin/clubs", icon: Users, description: "Gestion des clubs para-universitaires" },
-    { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
-    { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
+  const sidebarGroups: Array<{
+    label: string;
+    icon: any;
+    items: Array<{ name: string; path: string; icon: any; description: string }>;
+  }> = [
+    {
+      label: "Tableau de bord",
+      icon: LayoutDashboard,
+      items: [
+        { name: "Dashboard", path: "/admin", icon: LayoutDashboard, description: "Vue d'ensemble" },
+      ],
+    },
+    {
+      label: "Contenu & Communication",
+      icon: Newspaper,
+      items: [
+        { name: "Actualités", path: "/admin/actualites", icon: FileText, description: "Gestion des actualités" },
+        { name: "Événements", path: "/admin/evenements", icon: Calendar, description: "Calendrier des événements" },
+        { name: "Pages", path: "/admin/pages", icon: FileStack, description: "Gestion des pages" },
+        { name: "Carousel", path: "/admin/carousel", icon: GripVertical, description: "Gestion des carousels" },
+        { name: "Contact", path: "/admin/contact", icon: MessageSquare, description: "Messages de contact" },
+      ],
+    },
+    {
+      label: "Formations & Recherche",
+      icon: GraduationCap,
+      items: [
+        { name: "Formations", path: "/admin/formations", icon: GraduationCap, description: "Programmes de formation" },
+        { name: "CeDoc", path: "/admin/cedoc", icon: FileText, description: "Documents CeDoc" },
+        { name: "Coopérations", path: "/admin/cooperations", icon: HandHeart, description: "Partenariats" },
+      ],
+    },
+    {
+      label: "Scolarité",
+      icon: BookOpen,
+      items: [
+        { name: "Emplois du Temps", path: "/admin/emploi-temps", icon: Clock, description: "Gestion des emplois du temps" },
+        { name: "Planning Évaluations", path: "/admin/planning-evaluations", icon: Calendar, description: "Planning & calendrier des évaluations" },
+        { name: "Listes Examens", path: "/admin/listes-examens", icon: FileText, description: "Listes des examens par session" },
+        { name: "Présélection", path: "/admin/preselection", icon: GraduationCap, description: "Documents de présélection" },
+        { name: "Sections & Groupes", path: "/admin/sections-groupes", icon: Users, description: "Sections et groupes par session" },
+        { name: "Scolarité", path: "/admin/scolarite", icon: FileText, description: "Documents du service scolarité" },
+        { name: "Résultats Examens", path: "/admin/resultats", icon: FileText, description: "Résultats par session" },
+      ],
+    },
+    {
+      label: "Fichiers & Documents",
+      icon: FolderOpen,
+      items: [
+        { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
+        { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
+      ],
+    },
+    {
+      label: "Vie Étudiante",
+      icon: Users,
+      items: [
+        { name: "Clubs para-uni.", path: "/admin/clubs", icon: Users, description: "Gestion des clubs para-universitaires" },
+      ],
+    },
+    {
+      label: "Administration",
+      icon: ShieldCheck,
+      items: [
+        { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
+        { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
+      ],
+    },
   ];
 
-  const currentPage = sidebarItems.find(item => item.path === location.pathname);
+  const allItems = sidebarGroups.flatMap((g) => g.items);
+  const currentPage = allItems.find((item) => item.path === location.pathname);
+
+  const isGroupOpen = (label: string) => {
+    if (openGroups[label] !== undefined) return openGroups[label];
+    const group = sidebarGroups.find((g) => g.label === label);
+    return group?.items.some((i) => i.path === location.pathname) ?? false;
+  };
+
+  const toggleGroup = (label: string) => {
+    setOpenGroups((prev) => ({ ...prev, [label]: !isGroupOpen(label) }));
+  };
 
   return (
     <AuthGuard requireAdmin>
@@ -149,34 +213,71 @@ const Admin = () => {
           </div>
           
           {/* Navigation - Scrollable */}
-          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            {sidebarItems.map((item) => {
-              const IconComponent = item.icon;
-              const isActive = location.pathname === item.path;
-              
+          <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+            {sidebarGroups.map((group) => {
+              const GroupIcon = group.icon;
+              const hasActive = group.items.some((i) => i.path === location.pathname);
+
+              // Single-item groups render as a flat link
+              if (group.items.length === 1) {
+                const item = group.items[0];
+                const IconComponent = item.icon;
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={group.label}
+                    to={item.path}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                      isActive
+                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg"
+                        : "text-muted-foreground hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-700"
+                    }`}
+                  >
+                    <IconComponent className={`h-5 w-5 mr-3 ${isActive ? "text-white" : "text-muted-foreground group-hover:text-blue-600"}`} />
+                    <span className="font-medium">{item.name}</span>
+                  </Link>
+                );
+              }
+
+              const open = isGroupOpen(group.label);
               return (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
-                    isActive
-                      ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg"
-                      : "text-muted-foreground hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-700"
-                  }`}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <IconComponent className={`h-5 w-5 mr-3 ${
-                    isActive ? "text-white" : "text-muted-foreground group-hover:text-blue-600"
-                  }`} />
-                  <div className="flex-1">
-                    <div className="font-medium">{item.name}</div>
-                    <div className={`text-xs ${
-                      isActive ? "text-blue-100" : "text-muted-foreground group-hover:text-blue-600"
-                    }`}>
-                      {item.description}
+                <Collapsible key={group.label} open={open} onOpenChange={() => toggleGroup(group.label)}>
+                  <CollapsibleTrigger
+                    className={`w-full group flex items-center px-4 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 ${
+                      hasActive
+                        ? "text-blue-700 dark:text-blue-400 bg-blue-50/60 dark:bg-blue-900/20"
+                        : "text-foreground hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-700"
+                    }`}
+                  >
+                    <GroupIcon className="h-5 w-5 mr-3 text-blue-600 dark:text-blue-400" />
+                    <span className="flex-1 text-left">{group.label}</span>
+                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                    <div className="mt-1 ml-4 pl-3 border-l border-border space-y-1">
+                      {group.items.map((item) => {
+                        const IconComponent = item.icon;
+                        const isActive = location.pathname === item.path;
+                        return (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => setSidebarOpen(false)}
+                            className={`group flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 ${
+                              isActive
+                                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
+                                : "text-muted-foreground hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-700"
+                            }`}
+                          >
+                            <IconComponent className={`h-4 w-4 mr-2.5 ${isActive ? "text-white" : "text-muted-foreground group-hover:text-blue-600"}`} />
+                            <span className="font-medium truncate">{item.name}</span>
+                          </Link>
+                        );
+                      })}
                     </div>
-                  </div>
-                </Link>
+                  </CollapsibleContent>
+                </Collapsible>
               );
             })}
           </nav>
