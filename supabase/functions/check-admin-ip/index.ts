@@ -40,8 +40,12 @@ Deno.serve(async (req) => {
       r.ip_address.trim()
     );
 
-    // If whitelist is empty, deny all by default for safety
-    const allowed = ip !== null && whitelist.includes(ip);
+    // Bootstrap: if no IPs are configured yet, allow access so the first
+    // admin can register their IP. Once at least one IP exists, enforce strictly.
+    const allowed =
+      whitelist.length === 0
+        ? true
+        : ip !== null && whitelist.includes(ip);
 
     return new Response(
       JSON.stringify({ allowed, ip, whitelistEmpty: whitelist.length === 0 }),
