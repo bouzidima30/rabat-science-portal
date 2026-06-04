@@ -165,6 +165,7 @@ const Admin = () => {
       items: [
         { name: "Utilisateurs", path: "/admin/utilisateurs", icon: Users, description: "Comptes utilisateurs" },
         { name: "Historique", path: "/admin/historique", icon: Activity, description: "Journal d'activité" },
+        { name: "Accès IP", path: "/admin/acces-ip", icon: ShieldCheck, description: "Liste blanche d'adresses IP" },
       ],
     },
   ];

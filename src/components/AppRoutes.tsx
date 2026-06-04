@@ -24,6 +24,7 @@ const AdminPages = lazy(() => import("../pages/admin/AdminPages"));
 const AdminFichiers = lazy(() => import("../pages/admin/AdminFichiers"));
 const AdminUploadFiles = lazy(() => import("../pages/admin/AdminUploadFiles"));
 const AdminHistorique = lazy(() => import("../pages/admin/AdminHistorique"));
+const AdminAccesIP = lazy(() => import("../pages/admin/AdminAccesIP"));
 const AdminContact = lazy(() => import("../pages/admin/AdminContact"));
 const AdminCarousel = lazy(() => import("../pages/admin/AdminCarousel"));
 const AdminEmploiTemps = lazy(() => import("../pages/admin/AdminEmploiTemps"));
@@ -173,6 +174,11 @@ const AppRoutes = () => {
           <Route path="historique" element={
             <Suspense fallback={<LoadingSpinner />}>
               <AdminHistorique />
+            </Suspense>
+          } />
+          <Route path="acces-ip" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminAccesIP />
             </Suspense>
           } />
           <Route path="contact" element={
