@@ -40,12 +40,9 @@ Deno.serve(async (req) => {
       r.ip_address.trim()
     );
 
-    // Bootstrap: if no IPs are configured yet, allow access so the first
-    // admin can register their IP. Once at least one IP exists, enforce strictly.
-    const allowed =
-      whitelist.length === 0
-        ? true
-        : ip !== null && whitelist.includes(ip);
+    // Strict enforcement: access is denied if the whitelist is empty
+    // or if the client IP is not explicitly listed.
+    const allowed = ip !== null && whitelist.includes(ip);
 
     return new Response(
       JSON.stringify({ allowed, ip, whitelistEmpty: whitelist.length === 0 }),
