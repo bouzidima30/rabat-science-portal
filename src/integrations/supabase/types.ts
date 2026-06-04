@@ -53,6 +53,36 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_ip_whitelist: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          ip_address: string
+          is_active: boolean
+          label: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          ip_address: string
+          is_active?: boolean
+          label?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          ip_address?: string
+          is_active?: boolean
+          label?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       carousel_config: {
         Row: {
           created_at: string
