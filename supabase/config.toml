@@ -1,1 +1,4 @@
 project_id = "swxpidinkniuvtusjtrh"
+
+[functions.check-admin-ip]
+verify_jwt = false
