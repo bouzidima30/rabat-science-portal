@@ -3,17 +3,19 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, X, FileText, Calendar, File, Users, GraduationCap } from "lucide-react";
+import { Search, X, FileText, Calendar, File, Users, GraduationCap, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { searchStaticPages } from "@/data/staticPages";
 
 interface SearchResult {
   id: string;
-  type: 'actualite' | 'evenement' | 'page' | 'cooperation' | 'formation';
+  type: 'actualite' | 'evenement' | 'page' | 'cooperation' | 'formation' | 'static';
   title: string;
   description?: string;
   url: string;
+  category?: string;
 }
 
 interface GlobalSearchProps {
@@ -30,6 +32,19 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
       if (!searchQuery || searchQuery.length < 2) return [];
       
       const results: SearchResult[] = [];
+
+      // Search static site pages (Mot du Doyen, Procédures, etc.)
+      const staticMatches = searchStaticPages(searchQuery, 8);
+      results.push(
+        ...staticMatches.map((p) => ({
+          id: p.url,
+          type: 'static' as const,
+          title: p.title,
+          description: p.description,
+          url: p.url,
+          category: p.category,
+        }))
+      );
 
       // Search actualités
       const { data: news } = await supabase
@@ -148,6 +163,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
       case 'page': return 'Page';
       case 'cooperation': return 'Coopération';
       case 'formation': return 'Formation';
+      case 'static': return 'Page';
       default: return type;
     }
   };
@@ -159,6 +175,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
       case 'page': return <File className="h-4 w-4" />;
       case 'cooperation': return <Users className="h-4 w-4" />;
       case 'formation': return <GraduationCap className="h-4 w-4" />;
+      case 'static': return <BookOpen className="h-4 w-4" />;
       default: return <File className="h-4 w-4" />;
     }
   };
@@ -170,6 +187,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
       case 'page': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
       case 'cooperation': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
       case 'formation': return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200';
+      case 'static': return 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200';
       default: return 'bg-muted text-foreground';
     }
   };
@@ -248,7 +266,7 @@ const GlobalSearch = ({ isOpen, onClose }: GlobalSearchProps) => {
                 Rechercher dans tout le contenu
               </p>
               <p className="text-sm text-muted-foreground">
-                Actualités • Événements • Pages • Coopérations • Formations
+                Actualités • Événements • Pages • Coopérations • Formations • Procédures
               </p>
             </div>
           )}
