@@ -21,7 +21,7 @@ const AdminUtilisateurs = lazy(() => import("../pages/admin/AdminUtilisateurs"))
 const AdminFormations = lazy(() => import("../pages/admin/AdminFormations"));
 const AdminCooperations = lazy(() => import("../pages/admin/AdminCooperations"));
 const AdminPages = lazy(() => import("../pages/admin/AdminPages"));
-const AdminFichiers = lazy(() => import("../pages/admin/AdminFichiers"));
+
 const AdminUploadFiles = lazy(() => import("../pages/admin/AdminUploadFiles"));
 const AdminHistorique = lazy(() => import("../pages/admin/AdminHistorique"));
 const AdminAccesIP = lazy(() => import("../pages/admin/AdminAccesIP"));
@@ -159,11 +159,6 @@ const AppRoutes = () => {
           <Route path="pages" element={
             <Suspense fallback={<LoadingSpinner />}>
               <AdminPages />
-            </Suspense>
-          } />
-          <Route path="fichiers" element={
-            <Suspense fallback={<LoadingSpinner />}>
-              <AdminFichiers />
             </Suspense>
           } />
           <Route path="upload-files" element={
