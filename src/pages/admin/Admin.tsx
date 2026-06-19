@@ -148,7 +148,7 @@ const Admin = () => {
       label: "Fichiers & Documents",
       icon: FolderOpen,
       items: [
-        { name: "Fichiers", path: "/admin/fichiers", icon: File, description: "Gestionnaire de documents" },
+        
         { name: "Upload Files", path: "/admin/upload-files", icon: Upload, description: "Télécharger des fichiers" },
       ],
     },

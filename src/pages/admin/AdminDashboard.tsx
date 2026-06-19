@@ -133,7 +133,7 @@ const AdminDashboard = () => {
   const coopPublished = useQuery(countQuery("dash-coop-pub", "cooperations", (q) => q.eq("status", "published")));
   const pagesTotal = useQuery(countQuery("dash-pages-total", "pages"));
   const pagesPublished = useQuery(countQuery("dash-pages-pub", "pages", (q) => q.eq("status", "published")));
-  const filesTotal = useQuery(countQuery("dash-files-total", "files"));
+  
   const usersTotal = useQuery(countQuery("dash-users-total", "profiles"));
   const unreadMessages = useQuery(countQuery("dash-msg-unread", "contact_messages", (q) => q.eq("status", "unread")));
 
@@ -242,15 +242,6 @@ const AdminDashboard = () => {
       link: "/admin/pages",
       loading: pagesTotal.isLoading,
     },
-    {
-      title: "Fichiers",
-      icon: FileUp,
-      total: filesTotal.data ?? 0,
-      published: filesTotal.data ?? 0,
-      drafts: 0,
-      link: "/admin/fichiers",
-      loading: filesTotal.isLoading,
-    },
   ];
 
   const formatRelative = (d: string) =>
@@ -310,13 +301,6 @@ const AdminDashboard = () => {
             hint="Formulaire de contact"
             icon={Mail}
             loading={unreadMessages.isLoading}
-          />
-          <KpiCard
-            label="Fichiers"
-            value={filesTotal.data ?? 0}
-            hint="Documents stockés"
-            icon={FileUp}
-            loading={filesTotal.isLoading}
           />
         </section>
 
