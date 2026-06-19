@@ -1,48 +1,43 @@
-## Objectif
+## Analyse
 
-Remplacer les couleurs codées en dur (`bg-gray-*`, `text-gray-*`, `bg-white`, `border-gray-*`, hex `#006be5`, etc.) par les **tokens sémantiques** déjà définis dans `src/index.css` et `tailwind.config.ts` (`background`, `foreground`, `muted`, `card`, `border`, `primary`, etc.).
+J'ai scanné le code (knip + ripgrep). Voici l'état réel :
 
-~102 fichiers concernés. Pour éviter les régressions visuelles, on procède par **vagues automatisées + vérifications**, pas en un seul commit aveugle.
+- **`console.log/debug/info` :** aucun dans `src/`. Seuls 5 `console.warn` légitimes (diagnostics de performance dans `usePerformanceMonitor` et `imageOptimization`). À **conserver**.
+- **Hooks/composants custom :** tous utilisés. Aucun dead code custom.
+- **Composants shadcn UI :** ~24 fichiers jamais importés (livrés par défaut mais inutilisés dans ce projet).
+- **Dépendances npm orphelines :** ~20 paquets liés à ces composants shadcn inutilisés + `@swc/core` (interdit par la règle Vite Babel).
+- **Réorganisation des dossiers :** la structure actuelle (`pages/{domaine}/`, `components/`, `components/admin/`, `hooks/`, `utils/`) est déjà cohérente et regroupée par feature. La changer toucherait des centaines d'imports pour zéro bénéfice fonctionnel — **non recommandé**.
 
-## Mapping appliqué
+## Plan d'action
+
+### 1. Supprimer les composants shadcn UI inutilisés
 
 ```text
-bg-white            → bg-card
-bg-gray-50          → bg-muted/30
-bg-gray-100         → bg-muted
-bg-gray-200         → bg-muted
-border-gray-100/200 → border-border
-border-gray-300     → border-input
-text-gray-400/500   → text-muted-foreground
-text-gray-600/700   → text-muted-foreground
-text-gray-800/900   → text-foreground
-hover:bg-gray-50    → hover:bg-muted/50
-hover:bg-gray-100   → hover:bg-muted
-#006be5 (inline)    → hsl(var(--primary))
+src/components/ui/
+  aspect-ratio.tsx       avatar.tsx          breadcrumb.tsx
+  calendar.tsx           chart.tsx           checkbox.tsx
+  command.tsx            context-menu.tsx    drawer.tsx
+  hover-card.tsx         input-otp.tsx       menubar.tsx
+  navigation-menu.tsx    popover.tsx         radio-group.tsx
+  resizable.tsx          scroll-area.tsx     sheet.tsx
+  sidebar.tsx            slider.tsx          toggle-group.tsx
+  toggle.tsx             use-toast.ts        (doublon de hooks/use-toast.ts)
+src/hooks/use-mobile.tsx   (doublon de useMobileDetection.tsx)
 ```
 
-`text-white` et `bg-black` sont **conservés** quand ils sont sur des gradients/overlays sombres (Hero, modals) — sinon remplacés par `text-primary-foreground`.
+### 2. Désinstaller les dépendances npm devenues orphelines
 
-## Fichiers exclus
+`@radix-ui/react-aspect-ratio`, `react-avatar`, `react-checkbox`, `react-context-menu`, `react-hover-card`, `react-menubar`, `react-navigation-menu`, `react-popover`, `react-radio-group`, `react-scroll-area`, `react-slider`, `react-toggle`, `react-toggle-group`, `cmdk`, `input-otp`, `react-day-picker`, `react-resizable-panels`, `recharts`, `vaul`, `@types/dompurify`, `@swc/core`, `@tailwindcss/typography`.
 
-- `src/components/ui/**` — primitives shadcn déjà tokenisées, on n'y touche pas
-- `src/utils/sanitize.ts`, `src/utils/contentSanitizer.ts` — hex valides pour sanitization HTML
-- `src/data/siemData.ts` — données de démo (badges colorés)
-- `src/components/LazyYouTubeEmbed.tsx` — `bg-red-600` est la couleur YouTube (marque)
-- `src/index.css` — déjà la source de vérité
+### 3. Vérification
 
-## Étapes
+- `bunx tsc --noEmit` doit passer.
+- Vérifier visuellement que la home, l'admin et une page publique se chargent.
 
-1. **Script sed ciblé** sur `src/pages/**` et `src/components/**` (hors exclusions) avec le mapping ci-dessus.
-2. **Vérification TypeScript** (`tsc --noEmit`) après la passe.
-3. **Inspection visuelle** des pages critiques via le preview : Accueil, Login, Contact, Footer, ModernNavbar, AdminDashboard.
-4. **Correctifs ciblés** pour les cas où le remplacement automatique casse le contraste (texte clair sur fond clair).
-5. **Rapport final** : fichiers modifiés, cas particuliers conservés, et liste des éventuels endroits restant à revoir manuellement.
+## Ce que je ne fais PAS (sauf demande explicite)
 
-## Hors scope
+- Réorganiser l'arborescence des dossiers (risque élevé, gain faible).
+- Toucher aux `console.warn` (diagnostics utiles).
+- Modifier la logique métier ou le design.
 
-- Refonte des composants (split de fichiers volumineux)
-- Changement de palette ou de tokens (on garde ceux d'`index.css` actuels)
-- Mode sombre : on s'appuie sur les tokens existants, pas de nouvelle pass de tuning
-
-Confirmez et je lance la vague 1.
+Veux-tu que j'exécute ce plan ?
