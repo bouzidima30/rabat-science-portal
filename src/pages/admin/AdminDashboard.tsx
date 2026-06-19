@@ -242,15 +242,6 @@ const AdminDashboard = () => {
       link: "/admin/pages",
       loading: pagesTotal.isLoading,
     },
-    {
-      title: "Fichiers",
-      icon: FileUp,
-      total: filesTotal.data ?? 0,
-      published: filesTotal.data ?? 0,
-      drafts: 0,
-      link: "/admin/fichiers",
-      loading: filesTotal.isLoading,
-    },
   ];
 
   const formatRelative = (d: string) =>
