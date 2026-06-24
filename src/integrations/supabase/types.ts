@@ -525,48 +525,6 @@ export type Database = {
           },
         ]
       }
-      file_quarantine: {
-        Row: {
-          created_by: string | null
-          file_id: string | null
-          id: string
-          quarantine_reason: string
-          released_at: string | null
-          scanned_at: string | null
-        }
-        Insert: {
-          created_by?: string | null
-          file_id?: string | null
-          id?: string
-          quarantine_reason: string
-          released_at?: string | null
-          scanned_at?: string | null
-        }
-        Update: {
-          created_by?: string | null
-          file_id?: string | null
-          id?: string
-          quarantine_reason?: string
-          released_at?: string | null
-          scanned_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "file_quarantine_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "file_quarantine_file_id_fkey"
-            columns: ["file_id"]
-            isOneToOne: true
-            referencedRelation: "files"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       files: {
         Row: {
           category: string | null
