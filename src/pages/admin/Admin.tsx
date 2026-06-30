@@ -192,20 +192,21 @@ const Admin = () => {
         } transition-all duration-300 ease-out lg:translate-x-0 border-r border-border flex flex-col`}>
           
           {/* Sidebar Header */}
-          <div className="h-16 px-6 border-b border-border bg-gradient-to-r from-blue-600 to-blue-700 flex-shrink-0">
+          <div className="h-20 px-5 border-b border-border bg-card flex-shrink-0">
             <div className="flex items-center justify-between h-full">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-card/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <LayoutDashboard className="h-6 w-6 text-white" />
+                <div className="p-2.5 bg-blue-100 dark:bg-blue-900/20 rounded-xl shadow-sm">
+                  <LayoutDashboard className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">Administration</h2>
+                  <h2 className="text-base font-bold text-foreground leading-tight">Administration</h2>
+                  <p className="text-xs text-muted-foreground">Panneau FSR</p>
                 </div>
               </div>
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden text-white hover:bg-card/20"
+                className="lg:hidden text-muted-foreground hover:text-blue-600"
                 onClick={() => setSidebarOpen(false)}
               >
                 <X className="h-5 w-5" />
@@ -284,12 +285,12 @@ const Admin = () => {
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-border flex-shrink-0">
-            <div className="text-center space-y-1">
-              <p className="text-xs font-medium text-muted-foreground">
+          <div className="p-4 border-t border-border flex-shrink-0 bg-gradient-to-r from-blue-50 to-blue-100/60 dark:from-blue-900/20 dark:to-blue-800/20">
+            <div className="text-center space-y-0.5">
+              <p className="text-xs font-semibold text-blue-700 dark:text-blue-300">
                 FSR Administration
               </p>
-              <p className="text-xs text-muted-foreground">© 2025</p>
+              <p className="text-[11px] text-muted-foreground">© 2025 Faculté des Sciences de Rabat</p>
             </div>
           </div>
         </div>
@@ -308,8 +309,16 @@ const Admin = () => {
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
+                {(() => {
+                  const PageIcon = currentPage?.icon || LayoutDashboard;
+                  return (
+                    <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex-shrink-0 hidden sm:flex">
+                      <PageIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    </div>
+                  );
+                })()}
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-base sm:text-xl font-semibold text-foreground truncate">
+                  <h1 className="text-base sm:text-xl font-bold text-foreground truncate">
                     {currentPage?.name || "Administration"}
                   </h1>
                   <p className="text-xs sm:text-sm text-muted-foreground truncate hidden sm:block">
@@ -320,8 +329,8 @@ const Admin = () => {
               
               <div className="flex items-center space-x-1 sm:space-x-3 flex-shrink-0">
                 <Link to="/">
-                  <Button variant="outline" size="sm" className="hidden sm:flex shadow-sm">
-                    <Home className="h-4 w-4 mr-2" />
+                  <Button variant="outline" size="sm" className="hidden sm:flex shadow-sm border-blue-200 hover:bg-blue-50 hover:border-blue-300 dark:border-blue-900/40 dark:hover:bg-blue-900/20">
+                    <Home className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" />
                     Accueil
                   </Button>
                 </Link>
